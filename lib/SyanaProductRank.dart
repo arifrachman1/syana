@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:syana/SyanaInputresi.dart';
 import 'package:syana/SyanaProductRankGrafikTim.dart';
 import 'package:syana/SyanaProductRankTerlaris.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class ProductRank extends StatefulWidget {
@@ -23,20 +23,25 @@ class ProductRankState extends State<ProductRank>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: background(),
+        decoration: appBackground(),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: <Widget>[
-            Container(
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: 
+                  Container(
               decoration: tabbarDecoration(),
               height: 50,
               margin: EdgeInsets.only(top: 35),
               child: TabBar(
+                isScrollable: true,
                 controller: tabController,
-                indicatorColor: Colors.teal,
-                unselectedLabelColor: Colors.teal[400],
-                labelColor: Colors.teal[400],
+                indicatorColor: AppTheme.teal,
+                unselectedLabelColor: AppTheme.teal,
+                labelColor: AppTheme.teal,
                 tabs: <Widget>[
                   Container(
                     constraints: BoxConstraints(maxWidth: 110),
@@ -64,6 +69,9 @@ class ProductRankState extends State<ProductRank>
                   ),
                 ],
               ),
+            ),
+                ),
+              ],
             ),
             Expanded(
               child: Container(

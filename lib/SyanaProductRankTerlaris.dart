@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class SyanaProductRankTerlaris extends StatefulWidget {
@@ -13,19 +14,20 @@ class RankState extends State<SyanaProductRankTerlaris> {
   // Komponen ListView
   // ==============================================
 
-
   List<List> terlaris = [
-    ['Cough and Flu EO Blend', 12021.0],
-    ['Cough and Flu EO Blend', 12021.0],
-    ['Cough and Flu EO Blend', 12021.0],
+    ['GBC', 12021.0],
+    ['Methi', 4999.0],
+    ['Cough and Flu EO Blend', 4841.0],
+    ['Pink Rose', 4841.0],
+    ['Himalayan Pink Salt', 4841.0],
+    ['Lavender EO', 3790.0],
+    ['Cleanser 100ml', 3555.0],
   ];
 
-  getTerlaris(index, index2){
+  getTerlaris(index, index2) {
     var selectedTerlaris = terlaris[index];
     return selectedTerlaris[index2];
   }
-
-
 
   // *
   // *
@@ -72,9 +74,9 @@ class RankState extends State<SyanaProductRankTerlaris> {
                       alignment: Alignment.center,
                       width: 40,
                       child: Text(
-                        (index+1).toString(),
+                        (index + 1).toString(),
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.text_light,
                           fontSize: 15,
                         ),
                       ),
@@ -85,7 +87,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
                       child: Icon(
                         Icons.image,
                         size: 60,
-                        color: Colors.teal[200],
+                        color: AppTheme.teal_light,
                       ),
                     ),
                     Expanded(
@@ -93,7 +95,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
                         getTerlaris(index, 0),
                         softWrap: true,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.text_light,
                           fontSize: 15,
                         ),
                       ),
@@ -104,7 +106,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
                         getTerlaris(index, 1).toString(),
                         softWrap: true,
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.text_light,
                           fontSize: 14,
                         ),
                       ),

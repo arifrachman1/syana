@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syana/SyanaInputdatapelanggan.dart';
 import 'package:syana/SyanaPenjualan.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class InputResi extends StatefulWidget {
@@ -25,7 +26,7 @@ class ResiState extends State<InputResi> {
       backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: Container(
-          decoration: background(),
+          decoration: appBackground(),
           height: MediaQuery.of(context).size.height,
           child: Container(
             margin: EdgeInsets.only(top: 50.0),
@@ -54,7 +55,7 @@ class ResiState extends State<InputResi> {
                                   child: Text(
                                     val,
                                     style: TextStyle(
-                                      color: Colors.black54,
+                                      color: AppTheme.text_dark,
                                     ),
                                   ),
                                 );
@@ -75,7 +76,7 @@ class ResiState extends State<InputResi> {
                     'Pilih metode input Resi',
                     style: TextStyle(
                       fontSize: 20.0,
-                      color: Colors.white,
+                      color: AppTheme.text_light,
                     ),
                   ),
                 ),
@@ -92,7 +93,7 @@ class ResiState extends State<InputResi> {
                             'MANUAL',
                           ),
                           shape: roundButton(),
-                          color: Colors.grey[200],
+                          color: AppTheme.btn_default,
                           onPressed: () {
                             Navigator.push(
                               context,
@@ -112,9 +113,14 @@ class ResiState extends State<InputResi> {
                         minWidth: 150,
                         height: 45,
                         child: RaisedButton(
-                          child: Text('OTOMATIS'),
+                          child: Text(
+                            'OTOMATIS',
+                            style: TextStyle(
+                              color: AppTheme.text_light,
+                            ),
+                          ),
                           shape: roundButton(),
-                          color: Colors.green[400],
+                          color: AppTheme.btn_success,
                           onPressed: () {
                             Navigator.push(
                               context,

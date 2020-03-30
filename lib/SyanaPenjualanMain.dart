@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syana/SyanaPenjualanTimhariini.dart';
 import 'package:syana/SyanaPerincian.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class PenjualanMain extends StatefulWidget {
@@ -9,17 +10,22 @@ class PenjualanMain extends StatefulWidget {
 }
 
 class PenjualanMainState extends State<PenjualanMain> {
-  final int count = 7;
-  List<bool> penjualan = List<bool>();
 
-  @override
-  void initState() {
-    setState(() {
-      for (var i = 0; i < this.count; i++) {
-        penjualan.add(false);
-      }
-    });
+  List<List> penjualan = [
+    ['(Better) Botanical Slimming Massage Oil', 0, 0],
+    ['(Hotter) Botanical Slimming Massage Oil Carolina', 0, 0],
+    ['(Kelapa) Evco Casa Di Sana', 0, 0],
+    ['(Natuna) Tea Tree Essential', 0, 0],
+    ['(Zaitun) Evco Casa Di Sana', 0, 0],
+    ['(Zaitun) Evco Casa Di Sana', 0, 0],
+    ['(Zaitun) Evco Casa Di Sana', 0, 0],
+  ];
+
+  getPenjualan(index, index2){
+    var selectedPenjualan = penjualan[index];
+    return selectedPenjualan[index2];
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +49,14 @@ class PenjualanMainState extends State<PenjualanMain> {
                       child: Icon(
                         Icons.image,
                         size: 60,
-                        color: Colors.teal[200],
+                        color: AppTheme.teal_light,
                       ),
                     ),
                     Expanded(
                       child: Text(
-                        '(Better) Botanical Slimming Message Oil',
+                        getPenjualan(index, 0),
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.text_light,
                           fontSize: 15,
                         ),
                         softWrap: true,
@@ -64,18 +70,18 @@ class PenjualanMainState extends State<PenjualanMain> {
                         children: <Widget>[
                           Icon(
                             Icons.expand_less,
-                            color: Colors.white,
+                            color: AppTheme.white,
                             size: 40,
                           ),
-                          Text('0',
+                          Text(getPenjualan(index, 1).toString(),
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppTheme.text_light,
                                 fontSize: 15,
                               ),
                               softWrap: true),
                           Icon(
                             Icons.expand_more,
-                            color: Colors.white,
+                            color: AppTheme.white,
                             size: 40,
                           ),
                         ],
@@ -89,18 +95,18 @@ class PenjualanMainState extends State<PenjualanMain> {
                         children: <Widget>[
                           Icon(
                             Icons.expand_less,
-                            color: Colors.white,
+                            color: AppTheme.white,
                             size: 40,
                           ),
-                          Text('0',
+                          Text(getPenjualan(index, 2).toString(),
                               style: TextStyle(
-                                color: Colors.white,
+                                color: AppTheme.text_light,
                                 fontSize: 15,
                               ),
                               softWrap: true),
                           Icon(
                             Icons.expand_more,
-                            color: Colors.white,
+                            color: AppTheme.white,
                             size: 40,
                           ),
                         ],
@@ -124,7 +130,7 @@ class PenjualanMainState extends State<PenjualanMain> {
                   hintText: 'Cari Produk',
                   icon: Icon(
                     Icons.search,
-                    color: Colors.teal,
+                    color: AppTheme.teal,
                   ),
                 ),
               ),
@@ -138,7 +144,7 @@ class PenjualanMainState extends State<PenjualanMain> {
                   Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Colors.yellow[400],
+                      color: AppTheme.yellow,
                       border: Border.all(
                         color: Colors.transparent,
                       ),
@@ -158,7 +164,7 @@ class PenjualanMainState extends State<PenjualanMain> {
                       'Terjual',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.black,
+                        color: AppTheme.text_dark,
                       ),
                     ),
                   ),
@@ -166,7 +172,7 @@ class PenjualanMainState extends State<PenjualanMain> {
                   Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: AppTheme.red,
                       border: Border.all(
                         color: Colors.transparent,
                       ),
@@ -186,7 +192,7 @@ class PenjualanMainState extends State<PenjualanMain> {
                       'Free',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white,
+                        color: AppTheme.text_light,
                       ),
                     ),
                   ),
@@ -203,7 +209,7 @@ class PenjualanMainState extends State<PenjualanMain> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               FloatingActionButton(
-                backgroundColor: Colors.yellow[400],
+                backgroundColor: AppTheme.yellow,
                 foregroundColor: Colors.black,
                 tooltip: 'Add',
                 child: Icon(
@@ -229,7 +235,7 @@ class PenjualanMainState extends State<PenjualanMain> {
                     'KEMBALI',
                   ),
                   shape: roundButton(),
-                  color: Colors.grey[200],
+                  color: AppTheme.btn_default,
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -240,10 +246,12 @@ class PenjualanMainState extends State<PenjualanMain> {
                 child: RaisedButton(
                   child: Text(
                     'LANJUT',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: AppTheme.text_light,
+                    ),
                   ),
                   shape: roundButton(),
-                  color: Colors.green[400],
+                  color: AppTheme.btn_success,
                   onPressed: () {
                     Navigator.push(
                       context,

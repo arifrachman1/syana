@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syana/SyanaPromo.dart';
 import './main.dart';
 import 'dart:async';
+import 'package:syana/utils/AppTheme.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class TambahpromobaruSelanjutnya extends StatefulWidget {
@@ -81,7 +82,7 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: background(),
+        decoration: appBackground(),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Container(
@@ -97,7 +98,7 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppTheme.text_light,
                     ),
                   ),
                 ),
@@ -109,7 +110,7 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Radio(
-                        activeColor: Colors.yellow[400],
+                        activeColor: AppTheme.yellow,
                         value: 0,
                         groupValue: this.selectedButton,
                         onChanged: (int value) {
@@ -118,10 +119,12 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                       ),
                       Text(
                         'Limited Time',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: AppTheme.text_light,
+                        ),
                       ),
                       Radio(
-                        activeColor: Colors.yellow[400],
+                        activeColor: AppTheme.yellow,
                         value: 1,
                         groupValue: this.selectedButton,
                         onChanged: (int value) {
@@ -130,7 +133,9 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                       ),
                       Text(
                         'Lifetime',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: AppTheme.text_light,
+                        ),
                       )
                     ],
                   ),
@@ -147,7 +152,7 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                               child: Text(
                                 'Judul Promo :',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                 ),
                               ),
                             ),
@@ -174,7 +179,9 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 'Tanggal Mulai Promo :',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                ),
                               ),
                             ),
                             Container(
@@ -183,7 +190,7 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                               decoration: inputDecoration(),
                               width: MediaQuery.of(context).size.width,
                               child: RaisedButton(
-                                color: Colors.white,
+                                color: AppTheme.white,
                                 elevation: 0.0,
                                 shape: roundButton(),
                                 onPressed: () => selectDateMulaiPromo(context),
@@ -206,7 +213,9 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 'Tanggal Akhir Promo :',
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                ),
                               ),
                             ),
                             Container(
@@ -215,7 +224,7 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                               decoration: inputDecoration(),
                               width: MediaQuery.of(context).size.width,
                               child: RaisedButton(
-                                color: Colors.white,
+                                color: AppTheme.white,
                                 elevation: 0.0,
                                 shape: roundButton(),
                                 onPressed: () => selectDateAkhirPromo(context),
@@ -245,7 +254,7 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                             'KEMBALI',
                           ),
                           shape: roundButton(),
-                          color: Colors.grey[200],
+                          color: AppTheme.btn_default,
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -260,10 +269,12 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                         child: RaisedButton(
                           child: Text(
                             'SELANJUTNYA',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(
+                              color: AppTheme.text_light,
+                            ),
                           ),
                           shape: roundButton(),
-                          color: Colors.green[400],
+                          color: AppTheme.btn_success,
                           onPressed: () {
                             Navigator.push(
                               context,

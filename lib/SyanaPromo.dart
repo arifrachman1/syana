@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/SyanaTambahpromobaru.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class Promo extends StatefulWidget {
@@ -14,11 +15,10 @@ class PromoState extends State<Promo> {
     ['teslft3', 'Lifetime', '-'],
   ];
 
-  getPromo(index, index2){
+  getPromo(index, index2) {
     var selectedPromo = promo[index];
     return selectedPromo[index2];
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class PromoState extends State<Promo> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: background(),
+        decoration: appBackground(),
         child: Stack(
           children: <Widget>[
             Container(
@@ -65,7 +65,7 @@ class PromoState extends State<Promo> {
                                 getPromo(index, 0),
                                 style: TextStyle(
                                   fontSize: 20,
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                 ),
                               ),
                             ),
@@ -75,7 +75,7 @@ class PromoState extends State<Promo> {
                                 getPromo(index, 1),
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                 ),
                               ),
                             ),
@@ -85,7 +85,7 @@ class PromoState extends State<Promo> {
                                 getPromo(index, 2),
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                 ),
                               ),
                             ),
@@ -99,7 +99,7 @@ class PromoState extends State<Promo> {
                             PopupMenuButton(
                               icon: Icon(
                                 Icons.more_vert,
-                                color: Colors.white,
+                                color: AppTheme.white,
                               ),
                               itemBuilder: (BuildContext context) => [
                                 PopupMenuItem(
@@ -122,7 +122,7 @@ class PromoState extends State<Promo> {
               margin: EdgeInsets.only(bottom: 20, right: 10),
               alignment: Alignment.bottomRight,
               child: FloatingActionButton(
-                backgroundColor: Colors.yellow[400],
+                backgroundColor: AppTheme.yellow,
                 foregroundColor: Colors.black,
                 tooltip: 'Add',
                 child: Icon(Icons.add),

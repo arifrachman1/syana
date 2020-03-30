@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class PenjualanTimHariIni extends StatefulWidget {
@@ -7,16 +8,16 @@ class PenjualanTimHariIni extends StatefulWidget {
 }
 
 class PenjualanState extends State<PenjualanTimHariIni> {
-  final int count = 7;
-  List<bool> penjualan = List<bool>();
+  
+  List<List> penjualanTim = [
+    ['Shoppe', '8819912058031444', '2020-03-13 13:27:07'],
+    ['Shoppe', '8819912058031445', '2020-03-13 13:27:08'],
+    ['Shoppe', '8819912058031446', '2020-03-13 13:27:09'],
+  ];
 
-  @override
-  void initState() {
-    setState(() {
-      for (var i = 0; i < this.count; i++) {
-        penjualan.add(false);
-      }
-    });
+  getPenjualanTim(index, index2){
+    var selectedPenjualanTim = penjualanTim[index];
+    return selectedPenjualanTim[index2];
   }
 
   @override
@@ -30,14 +31,14 @@ class PenjualanState extends State<PenjualanTimHariIni> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.only(top: 15, left: 15, right: 15),
-        decoration: background(),
+        decoration: appBackground(),
         child: Stack(
           children: <Widget>[
             Container(
               margin: EdgeInsets.only(top: 60),
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: penjualan.length,
+                itemCount: penjualanTim.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     height: 110,
@@ -49,9 +50,9 @@ class PenjualanState extends State<PenjualanTimHariIni> {
                           alignment: Alignment.topLeft,
                           margin: EdgeInsets.only(top: 10, left: 7),
                           child: Text(
-                            'Shoppe',
+                            getPenjualanTim(index, 0),
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 12.0,
                             ),
                           ),
@@ -60,9 +61,9 @@ class PenjualanState extends State<PenjualanTimHariIni> {
                           margin: EdgeInsets.only(left: 7, top: 7),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            '8819912058031444',
+                            getPenjualanTim(index, 1),
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 20,
                             ),
                           ),
@@ -71,9 +72,9 @@ class PenjualanState extends State<PenjualanTimHariIni> {
                           margin: EdgeInsets.only(left: 7, bottom: 7),
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            '2020-03-13 13:27:07',
+                            getPenjualanTim(index, 2),
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 12,
                               fontStyle: FontStyle.italic,
                             ),
@@ -95,7 +96,7 @@ class PenjualanState extends State<PenjualanTimHariIni> {
                   hintText: 'Cari Produk',
                   icon: Icon(
                     Icons.search,
-                    color: Colors.teal,
+                    color: AppTheme.teal,
                   ),
                 ),
               ),

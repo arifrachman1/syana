@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './SyanaTambahpromobaruSelanjutnya.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class Tambahpromobaru extends StatefulWidget {
@@ -39,7 +40,7 @@ class TambahState extends State<Tambahpromobaru> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: background(),
+        decoration: appBackground(),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Container(
@@ -53,7 +54,7 @@ class TambahState extends State<Tambahpromobaru> {
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppTheme.text_light,
                   ),
                 ),
                 Container(
@@ -74,7 +75,7 @@ class TambahState extends State<Tambahpromobaru> {
                             child: Text(
                               val,
                               style: TextStyle(
-                                color: Colors.black54,
+                                color: AppTheme.text_dark,
                               ),
                             ),
                           );
@@ -101,7 +102,7 @@ class TambahState extends State<Tambahpromobaru> {
                             child: Text(
                               val,
                               style: TextStyle(
-                                color: Colors.black54,
+                                color: AppTheme.text_dark,
                               ),
                             ),
                           );
@@ -123,7 +124,7 @@ class TambahState extends State<Tambahpromobaru> {
                       hint: Text(
                         'pilih kategori',
                         style: TextStyle(
-                          color: Colors.black54,
+                          color: AppTheme.text_dark,
                         ),
                       ),
                       items: kategori.map(
@@ -133,7 +134,7 @@ class TambahState extends State<Tambahpromobaru> {
                             child: Text(
                               val,
                               style: TextStyle(
-                                color: Colors.black54,
+                                color: AppTheme.text_dark,
                               ),
                             ),
                           );
@@ -164,7 +165,7 @@ class TambahState extends State<Tambahpromobaru> {
                       border: InputBorder.none,
                       hintText: 'Masukkan jumlah minimum',
                       hintStyle: TextStyle(
-                        color: Colors.black38,
+                        color: AppTheme.text_dark,
                       ),
                     ),
                   ),
@@ -178,7 +179,7 @@ class TambahState extends State<Tambahpromobaru> {
                       border: InputBorder.none,
                       hintText: 'Masukkan jumlah item free',
                       hintStyle: TextStyle(
-                        color: Colors.black38,
+                        color: AppTheme.text_dark,
                       ),
                     ),
                   ),
@@ -190,10 +191,12 @@ class TambahState extends State<Tambahpromobaru> {
                     child: RaisedButton(
                       child: Text(
                         'SELANJUTNYA',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(
+                          color: AppTheme.text_light,
+                        ),
                       ),
                       shape: roundButton(),
-                      color: Colors.green[400],
+                      color: AppTheme.btn_success,
                       onPressed: () {
                         Navigator.push(
                           context,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syana/utils/AppTheme.dart';
 import 'main.dart';
 
 class Perincian extends StatefulWidget {
@@ -7,6 +8,44 @@ class Perincian extends StatefulWidget {
 }
 
 class PerincianState extends State<Perincian> {
+
+
+    List<List> perincian = [
+    ['(Better) Botanical Slimming Massage Oil', 1, 0],
+    ['(Hotter) Botanical Slimming Massage Oil Carolina', 2, 0],
+    ['(Kelapa) Evco Casa Di Sana', 1, 0],
+    ['(Natuna) Tea Tree Essential', 3, 0],
+    ['(Zaitun) Evco Casa Di Sana', 2, 0],
+    ['(Zaitun) Evco Casa Di Sana', 2, 0],
+    ['(Zaitun) Evco Casa Di Sana', 2, 0],
+  ];
+
+  getPerincian(index, index2){
+    var selectedPerincian = perincian[index];
+    return selectedPerincian[index2];
+  }
+
+  getTotalPerincianTerjual(){
+    int total = 0;
+    for(var i = 0; i < perincian.length; i++){
+      var selectedPerincian = perincian[i];
+      total = total + (selectedPerincian[1]);
+    }
+    return total;
+  }
+
+  getTotalPerincianFree(){
+    int total = 0;
+    for(var i = 0; i < perincian.length; i++){
+      var selectedPerincian = perincian[i];
+      total = total + (selectedPerincian[2]);
+    }
+    return total;
+  }
+
+
+
+
   // *
   // *
   // komponen dropdown jasa pengiriman
@@ -22,18 +61,6 @@ class PerincianState extends State<Perincian> {
     });
   }
 
-  final int count = 6;
-  List<bool> produk = List<bool>();
-
-  @override
-  void initState() {
-    setState(() {
-      for (var i = 0; i < this.count; i++) {
-        produk.add(false);
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +71,7 @@ class PerincianState extends State<Perincian> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        decoration: background(),
+        decoration: appBackground(),
         child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(top: 20),
@@ -61,7 +88,7 @@ class PerincianState extends State<Perincian> {
                         child: Text(
                           'IRVAN SEMBARANY',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.text_light,
                             fontSize: 15,
                           ),
                         ),
@@ -74,11 +101,11 @@ class PerincianState extends State<Perincian> {
                   margin: EdgeInsets.only(top: 25),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      iconEnabledColor: Colors.white,
+                      iconEnabledColor: AppTheme.white,
                       hint: Text(
                         'Pilih Jasa Pengiriman',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.text_light,
                           fontSize: 12,
                         ),
                       ),
@@ -120,7 +147,7 @@ class PerincianState extends State<Perincian> {
                         child: Text(
                           'Jual',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.text_light,
                             fontSize: 13,
                           ),
                           textAlign: TextAlign.center,
@@ -131,7 +158,7 @@ class PerincianState extends State<Perincian> {
                         child: Text(
                           'Free',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.text_light,
                             fontSize: 13,
                           ),
                           textAlign: TextAlign.center,
@@ -144,7 +171,7 @@ class PerincianState extends State<Perincian> {
                   height: 400,
                   child: ListView.builder(
                     shrinkWrap: true,
-                    itemCount: produk.length,
+                    itemCount: perincian.length,
                     itemBuilder: (BuildContext contex, int index) {
                       return Container(
                         alignment: Alignment.topCenter,
@@ -154,9 +181,9 @@ class PerincianState extends State<Perincian> {
                             Expanded(
                               child: Container(
                                 child: Text(
-                                  '(Better) Botanical Slimming Massage Oil',
+                                  getPerincian(index, 0),
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppTheme.text_light,
                                     fontSize: 13,
                                   ),
                                   softWrap: true,
@@ -166,9 +193,9 @@ class PerincianState extends State<Perincian> {
                             Container(
                               width: 70,
                               child: Text(
-                                '1',
+                                getPerincian(index, 1).toString(),
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                   fontSize: 13,
                                 ),
                                 textAlign: TextAlign.center,
@@ -177,9 +204,9 @@ class PerincianState extends State<Perincian> {
                             Container(
                               width: 70,
                               child: Text(
-                                '0',
+                                getPerincian(index, 2).toString(),
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                   fontSize: 13,
                                 ),
                                 textAlign: TextAlign.center,
@@ -200,7 +227,7 @@ class PerincianState extends State<Perincian> {
                           child: Text(
                             'Total',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 13,
                             ),
                             softWrap: true,
@@ -210,9 +237,9 @@ class PerincianState extends State<Perincian> {
                       Container(
                         width: 70,
                         child: Text(
-                          '0',
+                          getTotalPerincianTerjual().toString(),
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.text_light,
                             fontSize: 13,
                           ),
                           textAlign: TextAlign.center,
@@ -222,9 +249,9 @@ class PerincianState extends State<Perincian> {
                       Container(
                         width: 70,
                         child: Text(
-                          '0',
+                          getTotalPerincianFree().toString(),
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.text_light,
                             fontSize: 13,
                           ),
                           textAlign: TextAlign.center,
@@ -239,7 +266,7 @@ class PerincianState extends State<Perincian> {
                   child: RaisedButton(
                     child: Text('Simpan'),
                     shape: roundButton(),
-                    color: Colors.yellow[400],
+                    color: AppTheme.yellow,
                     onPressed: () {},
                   ),
                 ),

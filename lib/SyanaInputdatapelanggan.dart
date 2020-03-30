@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syana/SyanaPenjualan.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
+
 
 class InputDataPelanggan extends StatefulWidget {
   @override
@@ -21,7 +23,7 @@ class MasukkanState extends State<InputDataPelanggan> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Container(
-        decoration: background(),
+        decoration: appBackground(),
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Container(
@@ -37,7 +39,7 @@ class MasukkanState extends State<InputDataPelanggan> {
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppTheme.text_light,
                     ),
                   ),
                 ),
@@ -52,33 +54,21 @@ class MasukkanState extends State<InputDataPelanggan> {
                         margin: EdgeInsets.only(top: 25),
                         decoration: inputDecoration(),
                         child: TextField(
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 10.0),
-                            border: InputBorder.none,
-                            hintText: '2147483647',
-                          ),
+                          decoration: textFieldDecoration('2147483647'),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 25),
                         decoration: inputDecoration(),
                         child: TextField(
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 10.0),
-                            border: InputBorder.none,
-                            hintText: 'Irvan Swmbarany',
-                          ),
+                          decoration: textFieldDecoration('Irvan Sembarany'),
                         ),
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 25),
                         decoration: inputDecoration(),
                         child: TextField(
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 10.0),
-                            border: InputBorder.none,
-                            hintText: '26171',
-                          ),
+                          decoration: textFieldDecoration('26171'),
                         ),
                       ),
                     ],
@@ -97,7 +87,7 @@ class MasukkanState extends State<InputDataPelanggan> {
                             'KEMBALI',
                           ),
                           shape: roundButton(),
-                          color: Colors.grey[200],
+                          color: AppTheme.btn_default,
                           onPressed: () {
                             Navigator.pop(context);
                           },
@@ -113,11 +103,11 @@ class MasukkanState extends State<InputDataPelanggan> {
                           child: Text(
                             'SIMPAN',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                           ),
                           shape: roundButton(),
-                          color: Colors.green[400],
+                          color: AppTheme.btn_success,
                           onPressed: () {
                             Navigator.push(
                               context,

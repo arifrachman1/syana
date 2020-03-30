@@ -9,6 +9,7 @@ import 'package:syana/SyanaProductRank.dart';
 import 'package:syana/SyanaPromo.dart';
 import 'package:syana/SyanaStok.dart';
 import './main.dart';
+import 'package:syana/utils/AppTheme.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -63,10 +64,10 @@ class HomeState extends State<Home> {
         ],
         currentIndex: selectedIndex,
         type: BottomNavigationBarType.fixed,
-        // fixedColor: Colors.white,
-        selectedItemColor: Colors.white,
-        backgroundColor: Colors.teal[700],
-        unselectedItemColor: Colors.teal[200],
+        // fixedColor: AppTheme.white,
+        selectedItemColor: AppTheme.white,
+        backgroundColor: AppTheme.teal_dark,
+        unselectedItemColor: AppTheme.teal_light,
         onTap: onTapBottom,
       ),
       body: pages.elementAt(selectedIndex),
@@ -98,8 +99,7 @@ class HomePageState extends State<HomePage> {
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      // padding: EdgeInsets.only(bottom: 10),
-      decoration: background(),
+      decoration: appBackground(),
       child: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.only(top: 50.0),
@@ -115,8 +115,8 @@ class HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Transform.rotate(
                       angle: pi / 15,
-                      child: Icon(Icons.star,
-                          color: Colors.yellow[400], size: 150),
+                      child:
+                          Icon(Icons.star, color: AppTheme.yellow, size: 150),
                     ),
                     Positioned(
                       right: 20,
@@ -127,7 +127,7 @@ class HomePageState extends State<HomePage> {
                             'H-18',
                             style: TextStyle(
                               fontSize: 27,
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               shadows: [shadowText()],
                             ),
                           ),
@@ -135,7 +135,7 @@ class HomePageState extends State<HomePage> {
                             'All-Team',
                             style: TextStyle(
                               fontSize: 18,
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               shadows: [shadowText()],
                             ),
                           ),
@@ -143,18 +143,18 @@ class HomePageState extends State<HomePage> {
                             '17',
                             style: TextStyle(
                               fontSize: 45,
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               shadows: [shadowText()],
                             ),
                           ),
                           Row(
                             children: <Widget>[
-                              Icon(Icons.arrow_drop_down, color: Colors.red),
+                              Icon(Icons.arrow_drop_down, color: AppTheme.red),
                               Text(
                                 '7.773',
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                   shadows: [shadowText()],
                                 ),
                               ),
@@ -178,14 +178,14 @@ class HomePageState extends State<HomePage> {
                           Text(
                             '2',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 40,
                             ),
                           ),
                           Text(
                             'Bulan ini',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 17,
                             ),
                           ),
@@ -195,7 +195,7 @@ class HomePageState extends State<HomePage> {
                     Container(
                       height: 120,
                       child: VerticalDivider(
-                        color: Colors.yellow,
+                        color: AppTheme.yellow,
                         thickness: 2,
                         width: 20,
                       ),
@@ -206,14 +206,14 @@ class HomePageState extends State<HomePage> {
                           Text(
                             '1',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 40,
                             ),
                           ),
                           Text(
                             'Hari ini',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 17,
                             ),
                           ),
@@ -232,7 +232,7 @@ class HomePageState extends State<HomePage> {
                   'Total paket terkirim',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Colors.yellow,
+                    color: AppTheme.yellow,
                   ),
                 ),
               ),
@@ -251,14 +251,14 @@ class HomePageState extends State<HomePage> {
                           Text(
                             '138922',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 17,
                             ),
                           ),
                           Text(
                             'Grand Total Poin',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 15,
                             ),
                           ),
@@ -270,11 +270,13 @@ class HomePageState extends State<HomePage> {
                         children: <Widget>[
                           Text(
                             '138922',
-                            style: TextStyle(color: Colors.white, fontSize: 17),
+                            style: TextStyle(
+                                color: AppTheme.text_light, fontSize: 17),
                           ),
                           Text(
                             'Grand Total Paket',
-                            style: TextStyle(color: Colors.white, fontSize: 15),
+                            style: TextStyle(
+                                color: AppTheme.text_light, fontSize: 15),
                           ),
                         ],
                       ),
@@ -289,7 +291,7 @@ class HomePageState extends State<HomePage> {
                 alignment: Alignment.center,
                 child: RaisedButton(
                   child: Text('KONFIGURASI PROMO'),
-                  color: Colors.yellow[300],
+                  color: AppTheme.yellow,
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -337,14 +339,14 @@ class HomePageState extends State<HomePage> {
                   Text(
                     'New Customers',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppTheme.text_light,
                     ),
                   ),
                   IconButton(
                     padding: EdgeInsets.only(top: 0),
                     icon: Icon(
                       Icons.file_download,
-                      color: Colors.white,
+                      color: AppTheme.text_light,
                     ),
                     onPressed: null,
                   ),
@@ -355,7 +357,7 @@ class HomePageState extends State<HomePage> {
               padding: EdgeInsets.only(left: 5, right: 5),
               child: Divider(
                 thickness: 2,
-                color: Colors.white,
+                color: AppTheme.white,
               ),
             ),
             Container(
@@ -376,7 +378,7 @@ class HomePageState extends State<HomePage> {
                                 'Healthy Noona',
                                 softWrap: true,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                   fontSize: 17,
                                 ),
                                 textAlign: TextAlign.right,
@@ -385,7 +387,7 @@ class HomePageState extends State<HomePage> {
                                 '0',
                                 softWrap: true,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                   fontSize: 15,
                                 ),
                                 textAlign: TextAlign.right,
@@ -400,7 +402,7 @@ class HomePageState extends State<HomePage> {
                               IconButton(
                                 icon: Icon(
                                   Icons.arrow_drop_down,
-                                  color: Colors.red,
+                                  color: AppTheme.red,
                                 ),
                                 onPressed: null,
                               ),
@@ -409,7 +411,7 @@ class HomePageState extends State<HomePage> {
                                 softWrap: true,
                                 textAlign: TextAlign.right,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                   fontSize: 15,
                                 ),
                               ),
@@ -421,7 +423,7 @@ class HomePageState extends State<HomePage> {
                           child: Text(
                             'Hari ini',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -440,7 +442,7 @@ class HomePageState extends State<HomePage> {
                             '0',
                             softWrap: true,
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 40,
                             ),
                             textAlign: TextAlign.right,
@@ -453,7 +455,7 @@ class HomePageState extends State<HomePage> {
                               IconButton(
                                 icon: Icon(
                                   Icons.arrow_drop_down,
-                                  color: Colors.red,
+                                  color: AppTheme.red,
                                 ),
                                 onPressed: null,
                               ),
@@ -461,7 +463,7 @@ class HomePageState extends State<HomePage> {
                                 '0',
                                 softWrap: true,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppTheme.text_light,
                                   fontSize: 15,
                                 ),
                                 textAlign: TextAlign.right,
@@ -474,7 +476,7 @@ class HomePageState extends State<HomePage> {
                           child: Text(
                             'Bulan ini',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -499,7 +501,7 @@ class HomePageState extends State<HomePage> {
                           child: Text(
                             'Paket Hari Ini',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -508,7 +510,7 @@ class HomePageState extends State<HomePage> {
                           child: Text(
                             '0',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -524,7 +526,7 @@ class HomePageState extends State<HomePage> {
                           child: Text(
                             'Paket Kemarin',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -533,7 +535,7 @@ class HomePageState extends State<HomePage> {
                           child: Text(
                             '0',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -549,7 +551,7 @@ class HomePageState extends State<HomePage> {
                           child: Text(
                             'Paket Bulan Ini',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                             textAlign: TextAlign.left,
                           ),
@@ -558,7 +560,7 @@ class HomePageState extends State<HomePage> {
                           child: Text(
                             '0',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                             ),
                             textAlign: TextAlign.center,
                           ),

@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:syana/utils/AppTheme.dart';
 import 'main.dart';
 
 String promoItem = 'Healthy Noona';
@@ -41,7 +42,7 @@ class GrafikTimState extends State<GrafikTim> {
                         Text(
                           'Data dari ',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.text_light,
                             fontSize: 14,
                           ),
                           softWrap: true,
@@ -49,7 +50,7 @@ class GrafikTimState extends State<GrafikTim> {
                         Text(
                           '07-08-2019',
                           style: TextStyle(
-                            color: Colors.orange[200],
+                            color: AppTheme.orange_light,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
@@ -58,7 +59,7 @@ class GrafikTimState extends State<GrafikTim> {
                         Text(
                           ' hingga ',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.text_light,
                             fontSize: 14,
                           ),
                           softWrap: true,
@@ -66,7 +67,7 @@ class GrafikTimState extends State<GrafikTim> {
                         Text(
                           '13-03-2020',
                           style: TextStyle(
-                            color: Colors.yellow[300],
+                            color: AppTheme.yellow,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
@@ -85,7 +86,7 @@ class GrafikTimState extends State<GrafikTim> {
                     child: Text(
                       'Pilih Tim',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppTheme.text_light,
                         fontSize: 14,
                       ),
                       softWrap: true,
@@ -96,11 +97,11 @@ class GrafikTimState extends State<GrafikTim> {
                     padding: EdgeInsets.only(left: 15, right: 15),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
-                        iconEnabledColor: Colors.white,
+                        iconEnabledColor: AppTheme.white,
                         hint: Text(
                           promoItem,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppTheme.text_light,
                             fontSize: 14,
                           ),
                         ),
@@ -136,7 +137,7 @@ class GrafikTimState extends State<GrafikTim> {
             margin: EdgeInsets.only(bottom: 20, right: 10),
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
-              backgroundColor: Colors.yellow[400],
+              backgroundColor: AppTheme.yellow,
               foregroundColor: Colors.black,
               tooltip: 'Add',
               child: Icon(Icons.filter_list),
@@ -196,8 +197,8 @@ class ChartState extends State<Chart> {
           borderRadius: const BorderRadius.all(Radius.circular(18)),
           gradient: LinearGradient(
             colors: [
-              Colors.teal,
-              Colors.teal[200],
+              AppTheme.teal,
+              AppTheme.teal_light,
             ],
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
@@ -213,7 +214,7 @@ class ChartState extends State<Chart> {
               Text(
                 'Penjualan',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppTheme.text_light,
                   fontSize: 16,
                 ),
                 textAlign: TextAlign.center,
@@ -224,7 +225,7 @@ class ChartState extends State<Chart> {
               Text(
                 promoItem,
                 style: TextStyle(
-                    color: Colors.white,
+                    color: AppTheme.text_light,
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2),
@@ -271,7 +272,7 @@ class ChartState extends State<Chart> {
           showTitles: true,
           reservedSize: 22,
           textStyle: TextStyle(
-            color: Colors.white,
+            color: AppTheme.text_light,
             fontWeight: FontWeight.bold,
             fontSize: 9,
           ),
@@ -295,7 +296,7 @@ class ChartState extends State<Chart> {
         leftTitles: SideTitles(
           showTitles: true,
           textStyle: TextStyle(
-            color: Colors.white,
+            color: AppTheme.text_light,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
@@ -326,7 +327,7 @@ class ChartState extends State<Chart> {
             width: 4,
           ),
           left: BorderSide(
-            color: Colors.white,
+            color: AppTheme.white,
           ),
           right: BorderSide(
             color: Colors.transparent,
@@ -395,7 +396,7 @@ class ChartState extends State<Chart> {
           showTitles: true,
           reservedSize: 22,
           textStyle: TextStyle(
-            color: Colors.white,
+            color: AppTheme.text_light,
             fontWeight: FontWeight.bold,
             fontSize: 7,
           ),
@@ -419,7 +420,7 @@ class ChartState extends State<Chart> {
         leftTitles: SideTitles(
           showTitles: true,
           textStyle: TextStyle(
-            color: Colors.white,
+            color: AppTheme.text_light,
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
@@ -450,7 +451,7 @@ class ChartState extends State<Chart> {
             width: 4,
           ),
           left: BorderSide(
-            color: Colors.white,
+            color: AppTheme.white,
           ),
           right: BorderSide(
             color: Colors.transparent,

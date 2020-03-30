@@ -4,6 +4,7 @@ import 'package:syana/SyanaPenjualanMain.dart';
 import 'package:syana/SyanaPenjualanTimhariini.dart';
 import 'package:syana/SyanaProductRankTerlaris.dart';
 import 'package:syana/SyanaStokMain.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class Penjualan extends StatefulWidget {
@@ -25,7 +26,7 @@ class PenjualanState extends State<Penjualan>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: background(),
+        decoration: appBackground(),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -36,9 +37,9 @@ class PenjualanState extends State<Penjualan>
               decoration: tabbarDecoration(),
               child: TabBar(
                 controller: tabController,
-                indicatorColor: Colors.teal,
-                unselectedLabelColor: Colors.teal[400],
-                labelColor: Colors.teal[400],
+                indicatorColor: AppTheme.teal,
+                unselectedLabelColor: AppTheme.teal,
+                labelColor: AppTheme.teal,
                 tabs: <Widget>[
                   Container(
                     constraints: BoxConstraints(maxWidth: 110),

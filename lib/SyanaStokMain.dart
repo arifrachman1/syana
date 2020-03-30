@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
 class StokMain extends StatefulWidget {
@@ -7,13 +8,17 @@ class StokMain extends StatefulWidget {
 }
 
 class StokMainState extends State<StokMain> {
-
   List<List> stok = [
     ['(Better) Botanical Slimming Message Oil', '9 SP', 181],
-    ['(Better) Botanical Slimming Message Oil', '9 SP', 181],
+    ['(Hotter) Botanical Slimming Massage Oil Carolina', '7 SP', 89],
+    ['(Kelapa) Evco Casa Di Sana', '0.7 SP', 6],
+    ['(Natuna) Tea Tree Essential', '1 SP', -71],
+    ['(Zaitun) Evco Casa Di Sana', '0.7 SP', -57],
+    ['(Zaitun) Evco WAKANDA 100ml', '0.5 SP', 30],
+    ['(Zaitun) Evco WAKANDA 100ml', '0.5 SP', 30],
   ];
 
-  getStok(index, index2){
+  getStok(index, index2) {
     var selectedStok = stok[index];
     return selectedStok[index2];
   }
@@ -40,7 +45,7 @@ class StokMainState extends State<StokMain> {
                       child: Icon(
                         Icons.image,
                         size: 60,
-                        color: Colors.teal[200],
+                        color: AppTheme.teal_light,
                       ),
                     ),
                     Expanded(
@@ -51,7 +56,7 @@ class StokMainState extends State<StokMain> {
                           Text(
                             getStok(index, 0),
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 15,
                             ),
                             softWrap: true,
@@ -59,7 +64,7 @@ class StokMainState extends State<StokMain> {
                           Text(
                             getStok(index, 1),
                             style: TextStyle(
-                              color: Colors.white,
+                              color: AppTheme.text_light,
                               fontSize: 13,
                               fontStyle: FontStyle.italic,
                             ),
@@ -74,7 +79,7 @@ class StokMainState extends State<StokMain> {
                       child: Text(
                         getStok(index, 2).toString(),
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppTheme.text_light,
                           fontSize: 15,
                         ),
                       ),
@@ -95,7 +100,7 @@ class StokMainState extends State<StokMain> {
               hintText: 'Cari Produk',
               icon: Icon(
                 Icons.search,
-                color: Colors.teal,
+                color: AppTheme.teal,
               ),
             ),
           ),
@@ -104,7 +109,7 @@ class StokMainState extends State<StokMain> {
           margin: EdgeInsets.only(bottom: 25, right: 10),
           alignment: Alignment.bottomRight,
           child: FloatingActionButton(
-            backgroundColor: Colors.yellow[400],
+            backgroundColor: AppTheme.yellow,
             foregroundColor: Colors.black,
             tooltip: 'Add',
             child: Icon(Icons.filter_list),
