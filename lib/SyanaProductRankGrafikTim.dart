@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'main.dart';
 
-String promoItem = 'Healthy Noona';
-int selected = 0;
+String selectedPromo;
+int selectedGrafik = 0;
 
 class GrafikTim extends StatefulWidget {
   @override
@@ -16,9 +16,14 @@ class GrafikTimState extends State<GrafikTim> {
 
   void onChangedPromo(String value) {
     setState(() {
-      promoItem = value;
-      selected = promo.indexOf(value);
+      selectedPromo = value;
+      selectedGrafik = promo.indexOf(value);
     });
+  }
+
+  @override
+  void initState(){
+    selectedPromo = promo[0];
   }
 
   @override
@@ -99,7 +104,7 @@ class GrafikTimState extends State<GrafikTim> {
                       child: DropdownButton(
                         iconEnabledColor: AppTheme.white,
                         hint: Text(
-                          promoItem,
+                          selectedPromo,
                           style: TextStyle(
                             color: AppTheme.text_light,
                             fontSize: 14,
@@ -223,7 +228,7 @@ class ChartState extends State<Chart> {
                 height: 4,
               ),
               Text(
-                promoItem,
+                selectedPromo,
                 style: TextStyle(
                     color: AppTheme.text_light,
                     fontSize: 32,
@@ -238,7 +243,7 @@ class ChartState extends State<Chart> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0, left: 6.0),
                   child: LineChart(
-                    showChart(selected),
+                    showChart(selectedGrafik),
                     swapAnimationDuration: Duration(milliseconds: 400),
                   ),
                 ),

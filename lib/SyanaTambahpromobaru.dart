@@ -13,26 +13,33 @@ class TambahState extends State<Tambahpromobaru> {
   List<String> promo2 = ['Healthy Noona', 'Bunda Cerdas'];
   List<String> kategori = ['kategori 1', 'kategori 2'];
 
-  String promoItem = 'Promo produk sejenis';
-  String promo2Item = 'Healthy Noona';
-  String kategoriItem = 'kategori 1';
+  String selectedPromo;
+  String selectedPromo2;
+  String selectedKategori;
 
   void onChangedPromo(String value) {
     setState(() {
-      promoItem = value;
+      selectedPromo = value;
     });
   }
 
   void onChangedPromo2(String value) {
     setState(() {
-      promo2Item = value;
+      selectedPromo2 = value;
     });
   }
 
   void onChangedKategori(String value) {
     setState(() {
-      kategoriItem = value;
+      selectedKategori = value;
     });
+  }
+
+  @override
+  void initState(){
+    selectedPromo = promo[0];
+    selectedPromo2 = promo2[0];
+    // selectedKategori = kategori[0];
   }
 
   @override
@@ -67,7 +74,7 @@ class TambahState extends State<Tambahpromobaru> {
                   decoration: inputDecoration(),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      value: promoItem,
+                      value: selectedPromo,
                       items: promo.map(
                         (String val) {
                           return DropdownMenuItem(
@@ -94,7 +101,7 @@ class TambahState extends State<Tambahpromobaru> {
                   decoration: inputDecoration(),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      value: promo2Item,
+                      value: selectedPromo2,
                       items: promo2.map(
                         (String val) {
                           return DropdownMenuItem(
@@ -127,6 +134,7 @@ class TambahState extends State<Tambahpromobaru> {
                           color: AppTheme.text_dark,
                         ),
                       ),
+                      value: selectedKategori,
                       items: kategori.map(
                         (String val) {
                           return DropdownMenuItem(

@@ -12,12 +12,17 @@ class InputResi extends StatefulWidget {
 class ResiState extends State<InputResi> {
   List<String> toko = ['Tokopedia', 'Shoppe'];
 
-  String tokoItem = 'Tokopedia';
+  String selectedToko;
 
   void onChangedToko(value) {
     setState(() {
-      this.tokoItem = value;
+      this.selectedToko = value;
     });
+  }
+
+  @override
+  void initState(){
+    selectedToko = toko[0];
   }
 
   @override
@@ -47,7 +52,7 @@ class ResiState extends State<InputResi> {
                         decoration: inputDecoration(),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton(
-                            value: tokoItem,
+                            value: selectedToko,
                             items: toko.map(
                               (String val) {
                                 return DropdownMenuItem(

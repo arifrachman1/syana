@@ -53,12 +53,17 @@ class PerincianState extends State<Perincian> {
 
   List<String> jasa = ['J&T Express', 'JNE Reguler'];
 
-  String jasaItem = 'not-set';
+  String selectedJasa = 'not-set';
 
   void onChangedJasa(String value) {
     setState(() {
-      jasaItem = value;
+      selectedJasa = value;
     });
+  }
+
+  @override
+  void initState(){
+    selectedJasa = jasa[0];
   }
 
   @override
@@ -133,7 +138,7 @@ class PerincianState extends State<Perincian> {
                   margin: EdgeInsets.only(top: 15),
                   padding: EdgeInsets.only(left: 10),
                   decoration: inputDecoration(),
-                  child: Text(jasaItem),
+                  child: Text(selectedJasa),
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 20),
