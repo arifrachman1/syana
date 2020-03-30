@@ -2,31 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
-class SyanaProductRankTerlaris extends StatefulWidget {
+class SyanaProductRankTopFree extends StatefulWidget {
   @override
-  RankState createState() => RankState();
+  SyanaProductRankTopFreeState createState() => SyanaProductRankTopFreeState();
 }
 
-class RankState extends State<SyanaProductRankTerlaris> {
+class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
   // *
   // *
   // *
   // Komponen ListView
   // ==============================================
 
-  List<List> terlaris = [
-    ['GBC', 12021.0, '-'],
-    ['Methi', 4999.0, '-'],
-    ['Cough and Flu EO Blend', 4841.0, '-'],
-    ['Pink Rose', 4841.0, '-'],
-    ['Himalayan Pink Salt', 4841.0, '-'],
-    ['Lavender EO', 3790.0, '-'],
-    ['Cleanser 100ml', 3555.0, '-'],
+  List<List> topFree = [
+    ['Natuna Midnite Kiss Coconut Liobalm', 6037.0, '-'],
+    ['Pink Rose', 2504.0, '-'],
+    ['Masker Winter Sonata', 2467.0, '-'],
+    ['GBC', 2375.0, '-'],
+    ['CCS Ori', 2348.0, '-'],
+    ['Rose Water', 1942.0, '-'],
+    ["Masker Madaline's Gold Dust", 1870.0, '-'],
   ];
 
-  getTerlaris(index, index2) {
-    var selectedTerlaris = terlaris[index];
-    return selectedTerlaris[index2];
+  getTopFree(index, index2) {
+    var selectedTopFree = topFree[index];
+    return selectedTopFree[index2];
   }
 
   // *
@@ -68,7 +68,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
           margin: EdgeInsets.only(top: 50),
           child: ListView.builder(
             shrinkWrap: true,
-            itemCount: terlaris.length,
+            itemCount: topFree.length,
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 decoration: listBackground(),
@@ -102,7 +102,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            getTerlaris(index, 0),
+                            getTopFree(index, 0),
                             softWrap: true,
                             style: TextStyle(
                               color: AppTheme.text_light,
@@ -110,7 +110,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
                             ),
                           ),
                           Text(
-                            getTerlaris(index, 2),
+                            getTopFree(index, 2),
                             softWrap: true,
                             style: TextStyle(
                               color: AppTheme.text_light,
@@ -124,7 +124,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
                       alignment: Alignment.center,
                       width: 80,
                       child: Text(
-                        getTerlaris(index, 1).toString(),
+                        getTopFree(index, 1).toString(),
                         softWrap: true,
                         style: TextStyle(
                           color: AppTheme.text_light,

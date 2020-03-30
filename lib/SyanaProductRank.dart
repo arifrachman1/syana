@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syana/SyanaProductRankGrafikTim.dart';
+import 'package:syana/SyanaProductRankTerbaik.dart';
 import 'package:syana/SyanaProductRankTerlaris.dart';
+import 'package:syana/SyanaProductRankTopFree.dart';
 import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
@@ -16,7 +18,7 @@ class ProductRankState extends State<ProductRank>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 3, initialIndex: 0);
+    tabController = TabController(vsync: this, length: 5, initialIndex: 1);
   }
 
   @override
@@ -44,7 +46,13 @@ class ProductRankState extends State<ProductRank>
                 labelColor: AppTheme.teal,
                 tabs: <Widget>[
                   Container(
-                    constraints: BoxConstraints(maxWidth: 110),
+                    child: Text(
+                      'Top FREE',
+                      softWrap: false,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  Container(
                     child: Text(
                       'Terlaris',
                       softWrap: false,
@@ -52,7 +60,13 @@ class ProductRankState extends State<ProductRank>
                     ),
                   ),
                   Container(
-                    constraints: BoxConstraints(maxWidth: 110),
+                    child: Text(
+                      'Terbaik',
+                      softWrap: false,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  Container(
                     child: Text(
                       'Grafik Tim',
                       softWrap: false,
@@ -60,7 +74,6 @@ class ProductRankState extends State<ProductRank>
                     ),
                   ),
                   Container(
-                    constraints: BoxConstraints(maxWidth: 110),
                     child: Text(
                       'Grafik Global',
                       softWrap: false,
@@ -79,7 +92,9 @@ class ProductRankState extends State<ProductRank>
                 child: TabBarView(
                   controller: tabController,
                   children: <Widget>[
+                    SyanaProductRankTopFree(),
                     SyanaProductRankTerlaris(),
+                    SyanaProductRankTerbaik(),
                     GrafikTim(),
                     SyanaProductRankTerlaris(),
                   ],
