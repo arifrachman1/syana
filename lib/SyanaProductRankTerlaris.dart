@@ -78,55 +78,59 @@ class RankState extends State<SyanaProductRankTerlaris> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Container(
-                width: 190,
-                padding: EdgeInsets.only(left: 10),
-                decoration: inputDecorationShadow(),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    value: selectedWaktu,
-                    items: waktu.map(
-                      (String val) {
-                        return DropdownMenuItem(
-                          value: val,
-                          child: Text(
-                            val,
-                            style: TextStyle(
-                              fontSize: 15,
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(right: 10),
+                  padding: EdgeInsets.only(left: 10),
+                  decoration: inputDecorationShadow(),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: selectedWaktu,
+                      items: waktu.map(
+                        (String val) {
+                          return DropdownMenuItem(
+                            value: val,
+                            child: Text(
+                              val,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (String value) {
+                        onChangedWaktu(value);
                       },
-                    ).toList(),
-                    onChanged: (String value) {
-                      onChangedWaktu(value);
-                    },
+                    ),
                   ),
                 ),
               ),
-              Container(
-                width: 190,
-                padding: EdgeInsets.only(left: 10),
-                decoration: inputDecorationShadow(),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    value: selectedCakupan,
-                    items: cakupan.map(
-                      (String val) {
-                        return DropdownMenuItem(
-                          value: val,
-                          child: Text(
-                            val,
-                            style: TextStyle(
-                              fontSize: 15,
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 10),
+                  padding: EdgeInsets.only(left: 10),
+                  decoration: inputDecorationShadow(),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: selectedCakupan,
+                      items: cakupan.map(
+                        (String val) {
+                          return DropdownMenuItem(
+                            value: val,
+                            child: Text(
+                              val,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (String value) {
+                        onChangedCakupan(value);
                       },
-                    ).toList(),
-                    onChanged: (String value) {
-                      onChangedCakupan(value);
-                    },
+                    ),
                   ),
                 ),
               ),
