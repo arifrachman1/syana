@@ -10,7 +10,6 @@ class PenjualanMain extends StatefulWidget {
 }
 
 class PenjualanMainState extends State<PenjualanMain> {
-
   List<List> penjualan = [
     ['(Better) Botanical Slimming Massage Oil', 0, 0],
     ['(Hotter) Botanical Slimming Massage Oil Carolina', 0, 0],
@@ -21,103 +20,15 @@ class PenjualanMainState extends State<PenjualanMain> {
     ['(Zaitun) Evco Casa Di Sana', 0, 0],
   ];
 
-  getPenjualan(index, index2){
+  getPenjualan(index, index2) {
     var selectedPenjualan = penjualan[index];
     return selectedPenjualan[index2];
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(top: 60, bottom: 75),
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: ListView.builder(
-            shrinkWrap: true,
-            itemCount: penjualan.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                decoration: listBackground(),
-                height: 110,
-                margin: EdgeInsets.only(top: 15),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      width: 70,
-                      child: Icon(
-                        Icons.image,
-                        size: 60,
-                        color: AppTheme.teal_light,
-                      ),
-                    ),
-                    Expanded(
-                      child: Text(
-                        getPenjualan(index, 0),
-                        style: TextStyle(
-                          color: AppTheme.text_light,
-                          fontSize: 15,
-                        ),
-                        softWrap: true,
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 70,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.expand_less,
-                            color: AppTheme.white,
-                            size: 40,
-                          ),
-                          Text(getPenjualan(index, 1).toString(),
-                              style: TextStyle(
-                                color: AppTheme.text_light,
-                                fontSize: 15,
-                              ),
-                              softWrap: true),
-                          Icon(
-                            Icons.expand_more,
-                            color: AppTheme.white,
-                            size: 40,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 70,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.expand_less,
-                            color: AppTheme.white,
-                            size: 40,
-                          ),
-                          Text(getPenjualan(index, 2).toString(),
-                              style: TextStyle(
-                                color: AppTheme.text_light,
-                                fontSize: 15,
-                              ),
-                              softWrap: true),
-                          Icon(
-                            Icons.expand_more,
-                            color: AppTheme.white,
-                            size: 40,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
         Column(
           children: <Widget>[
             Container(
@@ -136,7 +47,7 @@ class PenjualanMainState extends State<PenjualanMain> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 15),
+              margin: EdgeInsets.only(top: 15, bottom: 10),
               padding: EdgeInsets.only(left: 10, right: 13),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -201,11 +112,102 @@ class PenjualanMainState extends State<PenjualanMain> {
             ),
           ],
         ),
+        Expanded(
+          child: Container(
+            margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            child: ListView.builder(
+              padding: EdgeInsets.all(0),
+              shrinkWrap: true,
+              itemCount: penjualan.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  decoration: listBackground(),
+                  height: 110,
+                  margin: EdgeInsets.only(bottom: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        width: 70,
+                        child: Icon(
+                          Icons.image,
+                          size: 60,
+                          color: AppTheme.teal_light,
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          getPenjualan(index, 0),
+                          style: TextStyle(
+                            color: AppTheme.text_light,
+                            fontSize: 15,
+                          ),
+                          softWrap: true,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: 70,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.expand_less,
+                              color: AppTheme.white,
+                              size: 40,
+                            ),
+                            Text(getPenjualan(index, 1).toString(),
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 15,
+                                ),
+                                softWrap: true),
+                            Icon(
+                              Icons.expand_more,
+                              color: AppTheme.white,
+                              size: 40,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        width: 70,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.expand_less,
+                              color: AppTheme.white,
+                              size: 40,
+                            ),
+                            Text(getPenjualan(index, 2).toString(),
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 15,
+                                ),
+                                softWrap: true),
+                            Icon(
+                              Icons.expand_more,
+                              color: AppTheme.white,
+                              size: 40,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
         Container(
-          margin: EdgeInsets.only(bottom: 12, right: 10, left: 10),
-          alignment: Alignment.bottomCenter,
+          margin: EdgeInsets.only(
+            bottom: 12,
+            right: 10,
+            left: 10,
+          ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               FloatingActionButton(

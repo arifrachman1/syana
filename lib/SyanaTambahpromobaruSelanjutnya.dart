@@ -3,7 +3,6 @@ import 'package:syana/SyanaPromo.dart';
 import './main.dart';
 import 'dart:async';
 import 'package:syana/utils/AppTheme.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class TambahpromobaruSelanjutnya extends StatefulWidget {
   @override
@@ -14,9 +13,9 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
   DateTime selectedDateMulaiPromo = DateTime.now();
   DateTime selectedDateAkhirPromo = DateTime.now();
 
-  String dayAwalPromo = "DD";
-  String monthAwalPromo = "MM";
-  String yearAwalPromo = "YY";
+  String dayMulaiPromo = "DD";
+  String monthMulaiPromo = "MM";
+  String yearMulaiPromo = "YY";
 
   String dayAkhirPromo = "DD";
   String monthAkhirPromo = "MM";
@@ -29,20 +28,21 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateMulaiPromo)
-      setState(() {
-        selectedDateMulaiPromo = picked;
-        var tes = picked.toString();
-        getDay(val) {
-          String dayTime = val.split('-')[2];
-          String day = dayTime.split(' ')[0];
-          return day;
-        }
+      setState(
+        () {
+          selectedDateMulaiPromo = picked;
+          var toSplit = picked.toString();
+          getDay(val) {
+            String dayTime = val.split('-')[2];
+            String day = dayTime.split(' ')[0];
+            return day;
+          }
 
-        ;
-        dayAwalPromo = getDay(tes);
-        monthAwalPromo = tes.split('-')[1];
-        yearAwalPromo = tes.split('-')[0];
-      });
+          dayMulaiPromo = getDay(toSplit);
+          monthMulaiPromo = toSplit.split('-')[1];
+          yearMulaiPromo = toSplit.split('-')[0];
+        },
+      );
   }
 
   Future<Null> selectDateAkhirPromo(BuildContext context) async {
@@ -52,20 +52,21 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateAkhirPromo)
-      setState(() {
-        selectedDateAkhirPromo = picked;
-        var tes = picked.toString();
-        getDay(val) {
-          String dayTime = val.split('-')[2];
-          String day = dayTime.split(' ')[0];
-          return day;
-        }
+      setState(
+        () {
+          selectedDateAkhirPromo = picked;
+          var toSplit = picked.toString();
+          getDay(val) {
+            String dayTime = val.split('-')[2];
+            String day = dayTime.split(' ')[0];
+            return day;
+          }
 
-        ;
-        dayAkhirPromo = getDay(tes);
-        monthAkhirPromo = tes.split('-')[1];
-        yearAkhirPromo = tes.split('-')[0];
-      });
+          dayAkhirPromo = getDay(toSplit);
+          monthAkhirPromo = toSplit.split('-')[1];
+          yearAkhirPromo = toSplit.split('-')[0];
+        },
+      );
   }
 
   // =====================================
@@ -184,22 +185,22 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                                 ),
                               ),
                             ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              margin: EdgeInsets.only(top: 10),
-                              decoration: inputDecoration(),
-                              width: MediaQuery.of(context).size.width,
-                              child: RaisedButton(
-                                color: AppTheme.white,
-                                elevation: 0.0,
-                                shape: roundButton(),
-                                onPressed: () => selectDateMulaiPromo(context),
-                                child: Text(dayAwalPromo +
+                            GestureDetector(
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                margin: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.only(left: 10),
+                                decoration: inputDecoration(),
+                                height: 50,
+                                child: Text(dayMulaiPromo +
                                     ' - ' +
-                                    monthAwalPromo +
+                                    monthMulaiPromo +
                                     ' - ' +
-                                    yearAwalPromo),
+                                    yearMulaiPromo),
                               ),
+                              onTap: () {
+                                selectDateMulaiPromo(context);
+                              },
                             ),
                           ],
                         ),
@@ -218,22 +219,22 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                                 ),
                               ),
                             ),
-                            Container(
-                              alignment: Alignment.centerLeft,
-                              margin: EdgeInsets.only(top: 10),
-                              decoration: inputDecoration(),
-                              width: MediaQuery.of(context).size.width,
-                              child: RaisedButton(
-                                color: AppTheme.white,
-                                elevation: 0.0,
-                                shape: roundButton(),
-                                onPressed: () => selectDateAkhirPromo(context),
+                            GestureDetector(
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                margin: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.only(left: 10),
+                                decoration: inputDecoration(),
+                                height: 50,
                                 child: Text(dayAkhirPromo +
                                     ' - ' +
                                     monthAkhirPromo +
                                     ' - ' +
                                     yearAkhirPromo),
                               ),
+                              onTap: () {
+                                selectDateAkhirPromo(context);
+                              },
                             ),
                           ],
                         ),

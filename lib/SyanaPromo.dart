@@ -13,6 +13,12 @@ class PromoState extends State<Promo> {
     ['teslft1', 'Lifetime', '-'],
     ['teslft2', 'Lifetime', '-'],
     ['teslft3', 'Lifetime', '-'],
+    ['teslft4', 'Lifetime', '-'],
+    ['teslft5', 'Lifetime', '-'],
+    ['teslft6', 'Lifetime', '-'],
+    ['teslft7', 'Lifetime', '-'],
+    ['teslft8', 'Lifetime', '-'],
+    ['teslft9', 'Lifetime', '-'],
   ];
 
   getPromo(index, index2) {

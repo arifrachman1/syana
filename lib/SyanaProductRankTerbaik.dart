@@ -61,12 +61,75 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return Column(
       children: <Widget>[
         Container(
+          margin: EdgeInsets.only(bottom: 10),
           padding: EdgeInsets.only(left: 10, right: 10),
-          margin: EdgeInsets.only(top: 50),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                width: 190,
+                padding: EdgeInsets.only(left: 10),
+                decoration: inputDecorationShadow(),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: selectedWaktu,
+                    items: waktu.map(
+                      (String val) {
+                        return DropdownMenuItem(
+                          value: val,
+                          child: Text(
+                            val,
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (String value) {
+                      onChangedWaktu(value);
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                width: 190,
+                padding: EdgeInsets.only(left: 10),
+                decoration: inputDecorationShadow(),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    value: selectedCakupan,
+                    items: cakupan.map(
+                      (String val) {
+                        return DropdownMenuItem(
+                          value: val,
+                          child: Text(
+                            val,
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (String value) {
+                      onChangedCakupan(value);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: 
+          Container(
+          margin: EdgeInsets.only(top: 10, right: 10, left: 10),
           child: ListView.builder(
+            padding: EdgeInsets.all(0),
             shrinkWrap: true,
             itemCount: terbaik.length,
             itemBuilder: (BuildContext context, int index) {
@@ -138,65 +201,6 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
             },
           ),
         ),
-        Container(
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                width: 190,
-                padding: EdgeInsets.only(left: 10),
-                decoration: inputDecorationShadow(),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    value: selectedWaktu,
-                    items: waktu.map(
-                      (String val) {
-                        return DropdownMenuItem(
-                          value: val,
-                          child: Text(
-                            val,
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (String value) {
-                      onChangedWaktu(value);
-                    },
-                  ),
-                ),
-              ),
-              Container(
-                width: 190,
-                padding: EdgeInsets.only(left: 10),
-                decoration: inputDecorationShadow(),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    value: selectedCakupan,
-                    items: cakupan.map(
-                      (String val) {
-                        return DropdownMenuItem(
-                          value: val,
-                          child: Text(
-                            val,
-                            style: TextStyle(
-                              fontSize: 15,
-                            ),
-                          ),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (String value) {
-                      onChangedCakupan(value);
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ],
     );
