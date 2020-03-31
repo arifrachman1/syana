@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syana/SyanaInputresi.dart';
 import 'package:syana/SyanaProductRankTerlaris.dart';
+import 'package:syana/SyanaStokBarangKeluar.dart';
+import 'package:syana/SyanaStokBarangMasuk.dart';
 import 'package:syana/SyanaStokMain.dart';
 import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
@@ -80,9 +82,9 @@ class StokState extends State<Stok> with SingleTickerProviderStateMixin {
                 child: TabBarView(
                   controller: tabController,
                   children: <Widget>[
-                    SyanaProductRankTerlaris(),
+                    SyanaStokBarangMasuk(),
                     StokMain(),
-                    SyanaProductRankTerlaris(),
+                    SyanaStokBarangKeluar(),
                   ],
                 ),
               ),

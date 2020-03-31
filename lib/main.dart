@@ -78,6 +78,24 @@ inputDecorationShadow() {
     ],
   );
 }
+//style input dengan shadow
+dateDecorationShadow() {
+  return BoxDecoration(
+    color: Colors.blueGrey[900],
+    border: Border.all(
+      color: Colors.blueGrey[900],
+    ),
+    borderRadius: BorderRadius.circular(8.0),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.black45,
+        blurRadius: 5,
+        offset: Offset(1, 2),
+      ),
+    ],
+  );
+}
+
 
 roundDecorationShadow() {
   return BoxDecoration(
