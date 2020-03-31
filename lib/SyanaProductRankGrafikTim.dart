@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'main.dart';
 
 String selectedTim;
@@ -22,7 +23,7 @@ class GrafikTimState extends State<GrafikTim> {
   }
 
   @override
-  void initState(){
+  void initState() {
     selectedTim = tim[0];
   }
 
@@ -99,32 +100,27 @@ class GrafikTimState extends State<GrafikTim> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.only(left: 15, right: 15),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        iconEnabledColor: AppTheme.white,
-                        hint: Text(
-                          selectedTim,
-                          style: TextStyle(
-                            color: AppTheme.text_light,
-                            fontSize: 14,
-                          ),
-                        ),
-                        items: tim.map(
-                          (String val) {
-                            return DropdownMenuItem(
-                              value: val,
-                              child: Text(
-                                val,
-                                style: TextStyle(fontSize: 13),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                        onChanged: (String value) {
-                          onChangedPromo(value);
+                    padding: EdgeInsets.only(left: 5, right: 15),
+                    child: SearchableDropdown(
+                      isExpanded: true,
+                      underline: NotGiven(),
+                      style: TextStyle(color: AppTheme.text_light),
+                      iconEnabledColor: AppTheme.white,
+                      value: tim[0],
+                      items: tim.map(
+                        (String val) {
+                          return DropdownMenuItem(
+                            value: val,
+                            child: Text(
+                              val,
+                              style: TextStyle(fontSize: 13),
+                            ),
+                          );
                         },
-                      ),
+                      ).toList(),
+                      onChanged: (String value) {
+                        onChangedPromo(value);
+                      },
                     ),
                   ),
                   Divider(
@@ -210,7 +206,10 @@ class ChartState extends State<Chart> {
           ),
         ),
         child: Container(
-          padding: EdgeInsets.only(left: 10, right: 10,),
+          padding: EdgeInsets.only(
+            left: 10,
+            right: 10,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[

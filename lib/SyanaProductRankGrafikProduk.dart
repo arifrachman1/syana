@@ -12,6 +12,9 @@ class GrafikProduk extends StatefulWidget {
 }
 
 class GrafikProdukState extends State<GrafikProduk> {
+
+  int totalProdukTerjual = 1329;
+
   List<String> produk = [
     '(Natuna) Tea Tree Essential',
     '(Hotter) Botanical Slimming Massage Oil Carolina',
@@ -149,6 +152,30 @@ class GrafikProdukState extends State<GrafikProduk> {
                   Container(
                     margin: EdgeInsets.only(top: 30),
                     child: Chart(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 20, bottom: 100,),
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          totalProdukTerjual.toString(),
+                          style: TextStyle(
+                            color: AppTheme.text_light,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Produk Terjual',
+                          style: TextStyle(
+                            color: AppTheme.text_light,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

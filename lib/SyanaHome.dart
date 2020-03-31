@@ -115,8 +115,11 @@ class HomePageState extends State<HomePage> {
                   children: <Widget>[
                     Transform.rotate(
                       angle: pi / 15,
-                      child:
-                          Icon(Icons.star, color: AppTheme.yellow, size: 150),
+                      child: Icon(
+                        Icons.star,
+                        color: AppTheme.yellow,
+                        size: 150,
+                      ),
                     ),
                     Positioned(
                       right: 20,
