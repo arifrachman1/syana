@@ -10,11 +10,11 @@ class Tambahpromobaru extends StatefulWidget {
 
 class TambahState extends State<Tambahpromobaru> {
   List<String> promo = ['Promo produk sejenis', 'Promo 2'];
-  List<String> promo2 = ['Healthy Noona', 'Bunda Cerdas'];
+  List<String> tim = ['Healthy Noona', 'Bunda Cerdas'];
   List<String> kategori = ['kategori 1', 'kategori 2'];
 
   String selectedPromo;
-  String selectedPromo2;
+  String selectedTim;
   String selectedKategori;
 
   void onChangedPromo(String value) {
@@ -23,9 +23,9 @@ class TambahState extends State<Tambahpromobaru> {
     });
   }
 
-  void onChangedPromo2(String value) {
+  void onChangedTim(String value) {
     setState(() {
-      selectedPromo2 = value;
+      selectedTim = value;
     });
   }
 
@@ -38,7 +38,7 @@ class TambahState extends State<Tambahpromobaru> {
   @override
   void initState(){
     selectedPromo = promo[0];
-    selectedPromo2 = promo2[0];
+    selectedTim = tim[0];
     // selectedKategori = kategori[0];
   }
 
@@ -101,8 +101,8 @@ class TambahState extends State<Tambahpromobaru> {
                   decoration: inputDecoration(),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      value: selectedPromo2,
-                      items: promo2.map(
+                      value: selectedTim,
+                      items: tim.map(
                         (String val) {
                           return DropdownMenuItem(
                             value: val,
@@ -116,7 +116,7 @@ class TambahState extends State<Tambahpromobaru> {
                         },
                       ).toList(),
                       onChanged: (String value) {
-                        onChangedPromo2(value);
+                        onChangedTim(value);
                       },
                     ),
                   ),

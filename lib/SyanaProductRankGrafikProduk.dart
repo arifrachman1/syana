@@ -3,27 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'main.dart';
 
-String selectedTim;
+String selectedProduk;
 int selectedGrafik = 0;
 
-class GrafikTim extends StatefulWidget {
+class GrafikProduk extends StatefulWidget {
   @override
-  GrafikTimState createState() => GrafikTimState();
+  GrafikProdukState createState() => GrafikProdukState();
 }
 
-class GrafikTimState extends State<GrafikTim> {
-  List<String> tim = ['Healthy Noona', 'Bunda Cerdas'];
+class GrafikProdukState extends State<GrafikProduk> {
+  List<String> produk = [
+    '(Natuna) Tea Tree Essential',
+    '(Hotter) Botanical Slimming Massage Oil Carolina',
+  ];
 
   void onChangedPromo(String value) {
     setState(() {
-      selectedTim = value;
-      selectedGrafik = tim.indexOf(value);
+      selectedProduk = value;
+      selectedGrafik = produk.indexOf(value);
     });
   }
 
   @override
-  void initState(){
-    selectedTim = tim[0];
+  void initState() {
+    selectedProduk = produk[0];
   }
 
   @override
@@ -103,20 +106,33 @@ class GrafikTimState extends State<GrafikTim> {
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
                         iconEnabledColor: AppTheme.white,
-                        hint: Text(
-                          selectedTim,
-                          style: TextStyle(
-                            color: AppTheme.text_light,
-                            fontSize: 14,
+                        hint: Container(
+                          width: MediaQuery.of(context).size.width / 1.5,
+                          child: Text(
+                            selectedProduk,
+                            style: TextStyle(
+                              color: AppTheme.text_light,
+                              fontSize: 14,
+                            ),
+                            softWrap: true,
                           ),
                         ),
-                        items: tim.map(
+                        items: produk.map(
                           (String val) {
                             return DropdownMenuItem(
                               value: val,
-                              child: Text(
-                                val,
-                                style: TextStyle(fontSize: 13),
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                  bottom: 5,
+                                ),
+                                width: MediaQuery.of(context).size.width / 1.5,
+                                child: Text(
+                                  val,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                  softWrap: true,
+                                ),
                               ),
                             );
                           },
@@ -229,10 +245,10 @@ class ChartState extends State<Chart> {
                 height: 4,
               ),
               Text(
-                selectedTim,
+                selectedProduk,
                 style: TextStyle(
                     color: AppTheme.text_light,
-                    fontSize: 22,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2),
                 textAlign: TextAlign.center,
@@ -308,15 +324,15 @@ class ChartState extends State<Chart> {
           ),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 0:
+              case 1:
                 return '0';
-              case 2:
+              case 3:
                 return '200';
-              case 4:
+              case 5:
                 return '400';
-              case 6:
+              case 7:
                 return '600';
-              case 8:
+              case 9:
                 return '800';
             }
             return '';
@@ -354,17 +370,17 @@ class ChartState extends State<Chart> {
   List<LineChartBarData> linesBarData1() {
     LineChartBarData lineChartBarData1 = const LineChartBarData(
       spots: [
-        FlSpot(0, 0),
-        FlSpot(0.2, 1),
+        FlSpot(0, 1),
+        FlSpot(0.2, 1.5),
         FlSpot(0.4, 4),
-        FlSpot(0.6, 0),
-        FlSpot(0.8, 0),
-        FlSpot(1, 0),
-        FlSpot(1.2, 0),
-        FlSpot(1.4, 0),
-        FlSpot(1.6, 3),
-        FlSpot(1.8, 3),
-        FlSpot(2, 3),
+        FlSpot(0.6, 2),
+        FlSpot(0.8, 2),
+        FlSpot(1, 2.2),
+        FlSpot(1.2, 8),
+        FlSpot(1.4, 6),
+        FlSpot(1.6, 2),
+        FlSpot(1.8, 9),
+        FlSpot(2, 1.8),
       ],
       isCurved: false,
       colors: [
@@ -432,15 +448,15 @@ class ChartState extends State<Chart> {
           ),
           getTitles: (value) {
             switch (value.toInt()) {
-              case 0:
+              case 1:
                 return '0';
-              case 2:
+              case 3:
                 return '200';
-              case 4:
+              case 5:
                 return '400';
-              case 6:
+              case 7:
                 return '600';
-              case 8:
+              case 9:
                 return '800';
             }
             return '';
@@ -478,17 +494,17 @@ class ChartState extends State<Chart> {
   List<LineChartBarData> linesBarData2() {
     LineChartBarData lineChartBarData2 = const LineChartBarData(
       spots: [
-        FlSpot(0, 1),
-        FlSpot(0.2, 1),
-        FlSpot(0.4, 3),
-        FlSpot(0.6, 2),
-        FlSpot(0.8, 1),
-        FlSpot(1, 0),
-        FlSpot(1.2, 0),
-        FlSpot(1.4, 0),
-        FlSpot(1.6, 2),
-        FlSpot(1.8, 3),
-        FlSpot(2, 0),
+        FlSpot(0, 9),
+        FlSpot(0.2, 1.5),
+        FlSpot(0.4, 4),
+        FlSpot(0.6, 7),
+        FlSpot(0.8, 4),
+        FlSpot(1, 3),
+        FlSpot(1.2, 8),
+        FlSpot(1.4, 6),
+        FlSpot(1.6, 7),
+        FlSpot(1.8, 9),
+        FlSpot(2, 1.8),
       ],
       isCurved: false,
       colors: [

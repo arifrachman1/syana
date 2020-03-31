@@ -3,28 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'main.dart';
 
-String selectedTim;
+String selectedPromo;
 int selectedGrafik = 0;
 
-class GrafikTim extends StatefulWidget {
+class GrafikGlobal extends StatefulWidget {
   @override
-  GrafikTimState createState() => GrafikTimState();
+  GrafikGlobalState createState() => GrafikGlobalState();
 }
 
-class GrafikTimState extends State<GrafikTim> {
-  List<String> tim = ['Healthy Noona', 'Bunda Cerdas'];
+class GrafikGlobalState extends State<GrafikGlobal> {
 
-  void onChangedPromo(String value) {
-    setState(() {
-      selectedTim = value;
-      selectedGrafik = tim.indexOf(value);
-    });
-  }
+  int totalProdukTerjual = 19;
 
-  @override
-  void initState(){
-    selectedTim = tim[0];
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +43,7 @@ class GrafikTimState extends State<GrafikTim> {
                           softWrap: true,
                         ),
                         Text(
-                          '07-08-2019',
+                          '01-03-2020',
                           style: TextStyle(
                             color: AppTheme.orange_light,
                             fontSize: 14,
@@ -70,7 +60,7 @@ class GrafikTimState extends State<GrafikTim> {
                           softWrap: true,
                         ),
                         Text(
-                          '13-03-2020',
+                          '31-03-2020',
                           style: TextStyle(
                             color: AppTheme.yellow,
                             fontSize: 14,
@@ -81,58 +71,33 @@ class GrafikTimState extends State<GrafikTim> {
                       ],
                     ),
                   ),
-                  Divider(
-                    thickness: 1,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10),
-                    padding: EdgeInsets.only(left: 15, right: 15),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Pilih Tim',
-                      style: TextStyle(
-                        color: AppTheme.text_light,
-                        fontSize: 14,
-                      ),
-                      softWrap: true,
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.only(left: 15, right: 15),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        iconEnabledColor: AppTheme.white,
-                        hint: Text(
-                          selectedTim,
-                          style: TextStyle(
-                            color: AppTheme.text_light,
-                            fontSize: 14,
-                          ),
-                        ),
-                        items: tim.map(
-                          (String val) {
-                            return DropdownMenuItem(
-                              value: val,
-                              child: Text(
-                                val,
-                                style: TextStyle(fontSize: 13),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                        onChanged: (String value) {
-                          onChangedPromo(value);
-                        },
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    thickness: 1,
-                  ),
                   Container(
                     margin: EdgeInsets.only(top: 30),
                     child: Chart(),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 20),
+                    alignment: Alignment.center,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          totalProdukTerjual.toString(),
+                          style: TextStyle(
+                            color: AppTheme.text_light,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Produk Terjual',
+                          style: TextStyle(
+                            color: AppTheme.text_light,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -176,27 +141,12 @@ class Chart extends StatefulWidget {
 }
 
 class ChartState extends State<Chart> {
-  // int showData = 0;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   isShowingMainData = true;
-  // }
-
-  showChart(int value) {
-    switch (value) {
-      case 0:
-        return chart1();
-      case 1:
-        return chart2();
-    }
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.15,
+      aspectRatio: 1.1,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(18)),
@@ -210,7 +160,6 @@ class ChartState extends State<Chart> {
           ),
         ),
         child: Container(
-          padding: EdgeInsets.only(left: 10, right: 10,),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
@@ -218,23 +167,12 @@ class ChartState extends State<Chart> {
                 height: 37,
               ),
               Text(
-                'Penjualan',
+                'Grafik Global',
                 style: TextStyle(
                   color: AppTheme.text_light,
-                  fontSize: 16,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Text(
-                selectedTim,
-                style: TextStyle(
-                    color: AppTheme.text_light,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(
@@ -244,7 +182,7 @@ class ChartState extends State<Chart> {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16.0, left: 6.0),
                   child: LineChart(
-                    showChart(selectedGrafik),
+                    chart(),
                     swapAnimationDuration: Duration(milliseconds: 400),
                   ),
                 ),
@@ -259,7 +197,7 @@ class ChartState extends State<Chart> {
     );
   }
 
-  LineChartData chart1() {
+  LineChartData chart() {
     return LineChartData(
       lineTouchData: LineTouchData(
         touchTooltipData: LineTouchTooltipData(
@@ -279,22 +217,24 @@ class ChartState extends State<Chart> {
           reservedSize: 22,
           textStyle: TextStyle(
             color: AppTheme.text_light,
-            fontWeight: FontWeight.bold,
-            fontSize: 9,
+            // fontWeight: FontWeight.bold,
+            fontSize: 8,
           ),
-          margin: 10,
+          margin: 12,
           getTitles: (value) {
             switch (value.toInt()) {
-              case 0:
-                return 'Aug-08';
-              case 3:
-                return 'Sep-11';
-              case 6:
-                return 'Oct-16';
-              case 9:
-                return 'Nov-20';
+              case 4:
+                return 'Mar-04';
+              case 8:
+                return 'Mar-08';
               case 12:
-                return 'Dec-24';
+                return 'Mar-12';
+              case 16:
+                return 'Mar-16';
+              case 20:
+                return 'Mar-20';
+              case 24:
+                return 'Mar-24';
             }
             return '';
           },
@@ -310,14 +250,16 @@ class ChartState extends State<Chart> {
             switch (value.toInt()) {
               case 0:
                 return '0';
-              case 2:
-                return '200';
-              case 4:
-                return '400';
+              case 3:
+                return '3';
               case 6:
-                return '600';
-              case 8:
-                return '800';
+                return '6';
+              case 9:
+                return '9';
+              case 12:
+                return '12';
+              case 15:
+                return '15';
             }
             return '';
           },
@@ -344,8 +286,8 @@ class ChartState extends State<Chart> {
         ),
       ),
       minX: 0,
-      maxX: 15,
-      maxY: 10,
+      maxX: 31,
+      maxY: 17,
       minY: 0,
       lineBarsData: linesBarData1(),
     );
@@ -355,16 +297,27 @@ class ChartState extends State<Chart> {
     LineChartBarData lineChartBarData1 = const LineChartBarData(
       spots: [
         FlSpot(0, 0),
-        FlSpot(0.2, 1),
-        FlSpot(0.4, 4),
-        FlSpot(0.6, 0),
-        FlSpot(0.8, 0),
         FlSpot(1, 0),
-        FlSpot(1.2, 0),
-        FlSpot(1.4, 0),
-        FlSpot(1.6, 3),
-        FlSpot(1.8, 3),
-        FlSpot(2, 3),
+        FlSpot(2, 0),
+        FlSpot(3, 0),
+        FlSpot(4, 0),
+        FlSpot(5, 0),
+        FlSpot(6, 0),
+        FlSpot(7, 0),
+        FlSpot(8, 0),
+        FlSpot(9, 3),
+        FlSpot(10, 0),
+        FlSpot(11, 0),
+        FlSpot(12, 0),
+        FlSpot(13, 2),
+        FlSpot(14, 0),
+        FlSpot(15, 0),
+        FlSpot(16, 0),
+        FlSpot(17, 14),
+        FlSpot(18, 0),
+        FlSpot(19, 0),
+        FlSpot(20, 0),
+        
       ],
       isCurved: false,
       colors: [
@@ -380,130 +333,6 @@ class ChartState extends State<Chart> {
 
     return [
       lineChartBarData1,
-    ];
-  }
-
-  LineChartData chart2() {
-    return LineChartData(
-      lineTouchData: LineTouchData(
-        touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
-        ),
-        touchCallback: (LineTouchResponse touchResponse) {
-          print(touchResponse);
-        },
-        handleBuiltInTouches: true,
-      ),
-      gridData: const FlGridData(
-        show: false,
-      ),
-      titlesData: FlTitlesData(
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          textStyle: TextStyle(
-            color: AppTheme.text_light,
-            fontWeight: FontWeight.bold,
-            fontSize: 7,
-          ),
-          margin: 10,
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 0:
-                return 'Aug-08';
-              case 3:
-                return 'Sep-11';
-              case 6:
-                return 'Oct-16';
-              case 9:
-                return 'Nov-20';
-              case 12:
-                return 'Dec-24';
-            }
-            return '';
-          },
-        ),
-        leftTitles: SideTitles(
-          showTitles: true,
-          textStyle: TextStyle(
-            color: AppTheme.text_light,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 0:
-                return '0';
-              case 2:
-                return '200';
-              case 4:
-                return '400';
-              case 6:
-                return '600';
-              case 8:
-                return '800';
-            }
-            return '';
-          },
-          margin: 8,
-          reservedSize: 30,
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border(
-          bottom: BorderSide(
-            color: const Color(0xff4e4965),
-            width: 4,
-          ),
-          left: BorderSide(
-            color: AppTheme.white,
-          ),
-          right: BorderSide(
-            color: Colors.transparent,
-          ),
-          top: BorderSide(
-            color: Colors.transparent,
-          ),
-        ),
-      ),
-      minX: 0,
-      maxX: 15,
-      maxY: 10,
-      minY: 0,
-      lineBarsData: linesBarData2(),
-    );
-  }
-
-  List<LineChartBarData> linesBarData2() {
-    LineChartBarData lineChartBarData2 = const LineChartBarData(
-      spots: [
-        FlSpot(0, 1),
-        FlSpot(0.2, 1),
-        FlSpot(0.4, 3),
-        FlSpot(0.6, 2),
-        FlSpot(0.8, 1),
-        FlSpot(1, 0),
-        FlSpot(1.2, 0),
-        FlSpot(1.4, 0),
-        FlSpot(1.6, 2),
-        FlSpot(1.8, 3),
-        FlSpot(2, 0),
-      ],
-      isCurved: false,
-      colors: [
-        Colors.yellow,
-      ],
-      barWidth: 4,
-      isStrokeCapRound: true,
-      dotData: FlDotData(show: true, dotColor: Colors.yellow),
-      belowBarData: BarAreaData(
-        show: false,
-      ),
-    );
-
-    return [
-      lineChartBarData2,
     ];
   }
 }

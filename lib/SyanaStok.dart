@@ -36,7 +36,6 @@ class StokState extends State<Stok> with SingleTickerProviderStateMixin {
                     height: 50,
                     margin: EdgeInsets.only(top: 30),
                     child: TabBar(
-                      isScrollable: true,
                       controller: tabController,
                       indicatorColor: AppTheme.teal,
                       unselectedLabelColor: AppTheme.teal,

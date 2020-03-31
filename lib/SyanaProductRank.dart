@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:syana/SyanaProductRankGrafikGlobal.dart';
+import 'package:syana/SyanaProductRankGrafikProduk.dart';
 import 'package:syana/SyanaProductRankGrafikTim.dart';
 import 'package:syana/SyanaProductRankTerbaik.dart';
 import 'package:syana/SyanaProductRankTerlaris.dart';
@@ -18,7 +20,7 @@ class ProductRankState extends State<ProductRank>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 5, initialIndex: 1);
+    tabController = TabController(vsync: this, length: 7, initialIndex: 1);
   }
 
   @override
@@ -68,6 +70,13 @@ class ProductRankState extends State<ProductRank>
                   ),
                   Container(
                     child: Text(
+                      'Grafik Global',
+                      softWrap: false,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
                       'Grafik Tim',
                       softWrap: false,
                       style: TextStyle(fontSize: 13),
@@ -75,7 +84,14 @@ class ProductRankState extends State<ProductRank>
                   ),
                   Container(
                     child: Text(
-                      'Grafik Global',
+                      'Grafik Produk',
+                      softWrap: false,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                      'Top Return',
                       softWrap: false,
                       style: TextStyle(fontSize: 13),
                     ),
@@ -95,7 +111,9 @@ class ProductRankState extends State<ProductRank>
                     SyanaProductRankTopFree(),
                     SyanaProductRankTerlaris(),
                     SyanaProductRankTerbaik(),
+                    GrafikGlobal(),
                     GrafikTim(),
+                    GrafikProduk(),
                     SyanaProductRankTerlaris(),
                   ],
                 ),
