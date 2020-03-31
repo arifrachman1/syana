@@ -1,89 +1,18 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:syana/SyanaHomeStarSeller.dart';
-import 'package:syana/SyanaInputdatapelanggan.dart';
-import 'package:syana/SyanaInputresi.dart';
-import 'package:syana/SyanaPenjualan.dart';
-import 'package:syana/SyanaPenjualanTimhariini.dart';
-import 'package:syana/SyanaProductRank.dart';
-import 'package:syana/SyanaPromo.dart';
-import 'package:syana/SyanaStok.dart';
-import './main.dart';
-import 'package:syana/utils/AppTheme.dart';
+import 'dart:math';
+import 'SyanaPromo.dart';
+import 'main.dart';
+import 'utils/AppTheme.dart';
 
-class Home extends StatefulWidget {
+class SyanaHomeStarSeller extends StatefulWidget {
   @override
-  HomeState createState() => HomeState();
+  _SyanaHomeStarSellerState createState() => _SyanaHomeStarSellerState();
 }
 
-class HomeState extends State<Home> {
-  //page komponen bottom navigation bar
-  final pages = [
-    Stok(),
-    InputResi(),
-    HomePage(),
-    ProductRank(),
-    SyanaHomeStarSeller(),
-  ];
+class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
 
-  int selectedIndex = 3;
-
-  void onTapBottom(int index) {
-    setState(() {
-      selectedIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dns),
-            title: Text('Stok'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_basket),
-            title: Text('Penjualan'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.assessment),
-            title: Text('Grafik'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            title: Text('Akun'),
-          ),
-        ],
-        currentIndex: selectedIndex,
-        type: BottomNavigationBarType.fixed,
-        // fixedColor: AppTheme.white,
-        selectedItemColor: AppTheme.white,
-        backgroundColor: AppTheme.teal_dark,
-        unselectedItemColor: AppTheme.teal_light,
-        onTap: onTapBottom,
-      ),
-      body: pages.elementAt(selectedIndex),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  HomePageState createState() => HomePageState();
-}
-
-class HomePageState extends State<HomePage> {
   //komponen listview
-  final int count = 3;
+  final int count = 1;
   List<bool> penjualan = List<bool>();
 
   @override
@@ -310,16 +239,14 @@ class HomePageState extends State<HomePage> {
                 ),
               ),
               list(),
-              list(),
-              list(),
+              
             ],
           ),
         ),
       ),
     );
   }
-
-  // *
+   // *
   // *
   // *
   // Tampilan promo
@@ -365,7 +292,7 @@ class HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(left: 10, right: 10),
+              padding: EdgeInsets.only(left: 10, right: 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
@@ -580,4 +507,5 @@ class HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }
