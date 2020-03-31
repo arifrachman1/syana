@@ -5,6 +5,7 @@ import 'package:syana/SyanaProductRankGrafikTim.dart';
 import 'package:syana/SyanaProductRankTerbaik.dart';
 import 'package:syana/SyanaProductRankTerlaris.dart';
 import 'package:syana/SyanaProductRankTopFree.dart';
+import 'package:syana/SyanaProductRankTopReturn.dart';
 import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
@@ -114,7 +115,7 @@ class ProductRankState extends State<ProductRank>
                     GrafikGlobal(),
                     GrafikTim(),
                     GrafikProduk(),
-                    SyanaProductRankTerlaris(),
+                    SyanaProductRankTopReturn(),
                   ],
                 ),
               ),
