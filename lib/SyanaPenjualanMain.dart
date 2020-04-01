@@ -204,8 +204,8 @@ class PenjualanMainState extends State<PenjualanMain> {
         Container(
           margin: EdgeInsets.only(
             bottom: 12,
-            right: 10,
-            left: 10,
+            right: 5,
+            left: 5,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -229,41 +229,46 @@ class PenjualanMainState extends State<PenjualanMain> {
                   );
                 },
               ),
-              Container(width: 20),
-              ButtonTheme(
-                minWidth: 130,
-                child: RaisedButton(
-                  child: Text(
-                    'KEMBALI',
+              Container(
+                width: buttonWidth(context),
+                child: AspectRatio(
+                  aspectRatio: buttonRatio(),
+                  child: RaisedButton(
+                    child: Text(
+                      'KEMBALI',
+                    ),
+                    shape: roundButton(),
+                    color: AppTheme.btn_default,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
-                  shape: roundButton(),
-                  color: AppTheme.btn_default,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
                 ),
               ),
-              ButtonTheme(
-                minWidth: 130,
-                child: RaisedButton(
-                  child: Text(
-                    'LANJUT',
-                    style: TextStyle(
-                      color: AppTheme.text_light,
-                    ),
-                  ),
-                  shape: roundButton(),
-                  color: AppTheme.btn_success,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return Perincian();
-                        },
+              Container(
+                width: buttonWidth(context),
+                child: AspectRatio(
+                  aspectRatio: buttonRatio(),
+                  child: RaisedButton(
+                    child: Text(
+                      'LANJUT',
+                      style: TextStyle(
+                        color: AppTheme.text_light,
                       ),
-                    );
-                  },
+                    ),
+                    shape: roundButton(),
+                    color: AppTheme.btn_success,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return Perincian();
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],

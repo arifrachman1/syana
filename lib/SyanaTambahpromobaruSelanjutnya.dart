@@ -246,46 +246,48 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                   padding: EdgeInsets.only(left: 15, right: 15),
                   margin: EdgeInsets.only(top: 60),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      ButtonTheme(
-                        minWidth: 150,
-                        height: 45,
-                        child: RaisedButton(
-                          child: Text(
-                            'KEMBALI',
+                      Container(
+                        width: buttonWidth(context),
+                        child: AspectRatio(
+                          aspectRatio: buttonRatio(),
+                          child: RaisedButton(
+                            child: Text(
+                              'KEMBALI',
+                            ),
+                            shape: roundButton(),
+                            color: AppTheme.btn_default,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
-                          shape: roundButton(),
-                          color: AppTheme.btn_default,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
                         ),
                       ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      ButtonTheme(
-                        minWidth: 150,
-                        height: 45,
-                        child: RaisedButton(
-                          child: Text(
-                            'SELANJUTNYA',
-                            style: TextStyle(
-                              color: AppTheme.text_light,
-                            ),
-                          ),
-                          shape: roundButton(),
-                          color: AppTheme.btn_success,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return Promo();
-                                },
+                      Container(
+                        width: buttonWidth(context),
+                        child: AspectRatio(
+                          aspectRatio: buttonRatio(),
+                          child: RaisedButton(
+                            child: Text(
+                              'SELANJUTNYA',
+                              style: TextStyle(
+                                color: AppTheme.text_light,
                               ),
-                            );
-                          },
+                            ),
+                            shape: roundButton(),
+                            color: AppTheme.btn_success,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return Promo();
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],

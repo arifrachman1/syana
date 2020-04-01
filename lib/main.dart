@@ -145,7 +145,7 @@ buttonRatio(){
 }
 
 buttonWidth(context){
-  return MediaQuery.of(context).size.width *0.35;
+  return MediaQuery.of(context).size.width *0.38;
 }
 
 class MyApp extends StatelessWidget {
