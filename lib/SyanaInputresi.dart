@@ -90,52 +90,62 @@ class ResiState extends State<InputResi> {
                   margin: EdgeInsets.only(top: 15),
                   child: Row(
                     children: <Widget>[
-                      ButtonTheme(
-                        minWidth: 150,
-                        height: 45,
-                        child: RaisedButton(
-                          child: Text(
-                            'MANUAL',
-                          ),
-                          shape: roundButton(),
-                          color: AppTheme.btn_default,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return InputDataPelanggan();
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      ),
                       Expanded(
-                        child: Container(),
-                      ),
-                      ButtonTheme(
-                        minWidth: 150,
-                        height: 45,
-                        child: RaisedButton(
-                          child: Text(
-                            'OTOMATIS',
-                            style: TextStyle(
-                              color: AppTheme.text_light,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ButtonTheme(
+                            minWidth: 150,
+                            height: 45,
+                            child: RaisedButton(
+                              child: Text(
+                                'MANUAL',
+                              ),
+                              shape: roundButton(),
+                              color: AppTheme.btn_default,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                      return InputDataPelanggan();
+                                    },
+                                  ),
+                                );
+                              },
                             ),
                           ),
-                          shape: roundButton(),
-                          color: AppTheme.btn_success,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return Penjualan();
-                                },
+                        ),
+                      ),
+                      // Expanded(
+                      //   child: Container(),
+                      // ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ButtonTheme(
+                            minWidth: 150,
+                            height: 45,
+                            child: RaisedButton(
+                              child: Text(
+                                'OTOMATIS',
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                ),
                               ),
-                            );
-                          },
+                              shape: roundButton(),
+                              color: AppTheme.btn_success,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                      return Penjualan();
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ),
                     ],
