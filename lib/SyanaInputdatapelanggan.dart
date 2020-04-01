@@ -3,7 +3,6 @@ import 'package:syana/SyanaPenjualan.dart';
 import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
-
 class InputDataPelanggan extends StatefulWidget {
   @override
   MasukkanState createState() => MasukkanState();
@@ -21,7 +20,6 @@ class MasukkanState extends State<InputDataPelanggan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Container(
         decoration: appBackground(),
         height: MediaQuery.of(context).size.height,
@@ -78,46 +76,48 @@ class MasukkanState extends State<InputDataPelanggan> {
                   margin: EdgeInsets.only(top: 15),
                   padding: EdgeInsets.only(left: 15, right: 15),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      ButtonTheme(
-                        minWidth: 150,
-                        height: 45,
-                        child: RaisedButton(
-                          child: Text(
-                            'KEMBALI',
+                      Container(
+                        width: buttonWidth(context),
+                        child: AspectRatio(
+                          aspectRatio: buttonRatio(),
+                          child: RaisedButton(
+                            child: Text(
+                              'KEMBALI',
+                            ),
+                            shape: roundButton(),
+                            color: AppTheme.btn_default,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
                           ),
-                          shape: roundButton(),
-                          color: AppTheme.btn_default,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
                         ),
                       ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      ButtonTheme(
-                        minWidth: 150,
-                        height: 45,
-                        child: RaisedButton(
-                          child: Text(
-                            'SIMPAN',
-                            style: TextStyle(
-                              color: AppTheme.text_light,
-                            ),
-                          ),
-                          shape: roundButton(),
-                          color: AppTheme.btn_success,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return Penjualan();
-                                },
+                      Container(
+                        width: buttonWidth(context),
+                        child: AspectRatio(
+                          aspectRatio: buttonRatio(),
+                          child: RaisedButton(
+                            child: Text(
+                              'SIMPAN',
+                              style: TextStyle(
+                                color: AppTheme.text_light,
                               ),
-                            );
-                          },
+                            ),
+                            shape: roundButton(),
+                            color: AppTheme.btn_success,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return Penjualan();
+                                  },
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],

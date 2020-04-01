@@ -140,6 +140,14 @@ roundButton() {
   );
 }
 
+buttonRatio(){
+  return 7/2;
+}
+
+buttonWidth(context){
+  return MediaQuery.of(context).size.width *0.35;
+}
+
 class MyApp extends StatelessWidget {
 
   @override

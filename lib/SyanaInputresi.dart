@@ -21,18 +21,17 @@ class ResiState extends State<InputResi> {
   }
 
   @override
-  void initState(){
+  void initState() {
     selectedToko = toko[0];
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        child: Container(
-          decoration: appBackground(),
-          height: MediaQuery.of(context).size.height,
+      body: Container(
+        decoration: appBackground(),
+        height: MediaQuery.of(context).size.height,
+        child: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.only(top: 50.0),
             padding:
@@ -86,81 +85,56 @@ class ResiState extends State<InputResi> {
                   ),
                 ),
                 Container(
-                  // padding: EdgeInsets.only(left: 15, right: 15),
-                  margin: EdgeInsets.only(top: 15),
+                  margin: EdgeInsets.only(top: 25),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(left: 5.0),
-                          child: AspectRatio(
-                            aspectRatio: 15 / 4,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                ButtonTheme(
-                                  minWidth: 140,
-                                  height: 45,
-                                  child: RaisedButton(
-                                    child: Text(
-                                      'MANUAL',
-                                    ),
-                                    shape: roundButton(),
-                                    color: AppTheme.btn_default,
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) {
-                                            return InputDataPelanggan();
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
+                      Container(
+                        width: buttonWidth(context),
+                        child: AspectRatio(
+                          aspectRatio: buttonRatio(),
+                          child: RaisedButton(
+                            child: Text(
+                              'MANUAL',
                             ),
+                            shape: roundButton(),
+                            color: AppTheme.btn_default,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return InputDataPelanggan();
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
-                      // Expanded(
-                      //   child: Container(),
-                      // ),
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.only(right: 5.0),
-                          child: AspectRatio(
-                            aspectRatio: 15 / 4,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: <Widget>[
-                                ButtonTheme(
-                                  minWidth: 140,
-                                  height: 45,
-                                  child: RaisedButton(
-                                    child: Text(
-                                      'OTOMATIS',
-                                      style: TextStyle(
-                                        color: AppTheme.text_light,
-                                      ),
-                                    ),
-                                    shape: roundButton(),
-                                    color: AppTheme.btn_success,
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) {
-                                            return Penjualan();
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
+                      Container(
+                        width: buttonWidth(context),
+                        child: AspectRatio(
+                          aspectRatio: buttonRatio(),
+                          child: RaisedButton(
+                            child: Text(
+                              'OTOMATIS',
+                              style: TextStyle(
+                                color: AppTheme.text_light,
+                              ),
                             ),
+                            shape: roundButton(),
+                            color: AppTheme.btn_success,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return Penjualan();
+                                  },
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
