@@ -350,7 +350,7 @@ class HomePageState extends State<HomePage> {
                       style: TextStyle(
                         color: AppTheme.text_light,
                       ),
-                      textScaleFactor: textScale,
+                      textScaleFactor: 1,
                     ),
                     IconButton(
                       padding: EdgeInsets.only(top: 0),
