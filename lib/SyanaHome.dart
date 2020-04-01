@@ -335,7 +335,7 @@ class HomePageState extends State<HomePage> {
       child: Column(
         children: <Widget>[
           Flexible(
-            flex: 1,
+            flex: 10,
             child: Container(
               margin: EdgeInsets.only(top: 5, bottom: 3),
               child: Row(
@@ -368,7 +368,7 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           Flexible(
-            flex: 5,
+            flex: 50,
             child: Container(
               padding: EdgeInsets.only(left: 10, right: 10),
               child: Row(
@@ -532,7 +532,7 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           Flexible(
-            flex: 4,
+            flex: 30,
             child: Container(
               margin: EdgeInsets.only(top: 10, bottom: 10),
               padding: EdgeInsets.only(left: 10),
