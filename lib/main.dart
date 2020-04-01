@@ -79,6 +79,7 @@ inputDecorationShadow() {
     ],
   );
 }
+
 //style input dengan shadow
 dateDecorationShadow() {
   return BoxDecoration(
@@ -96,7 +97,6 @@ dateDecorationShadow() {
     ],
   );
 }
-
 
 roundDecorationShadow() {
   return BoxDecoration(
@@ -140,21 +140,7 @@ roundButton() {
   );
 }
 
-
-
-
-
-
-
 class MyApp extends StatelessWidget {
-
-    @override
-  void initState() {
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-  }
 
   @override
   Widget build(BuildContext context) {

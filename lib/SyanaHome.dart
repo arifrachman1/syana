@@ -82,12 +82,24 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
 
   //komponen listview
   final int count = 3;
 
+  var textScale;
+
   @override
   Widget build(BuildContext context) {
+    textScale = MediaQuery.of(context).textScaleFactor;
+
     return Container(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
@@ -318,7 +330,7 @@ class HomePageState extends State<HomePage> {
   list() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height / 2.8,
+      height: MediaQuery.of(context).size.height * 0.37,
       margin: EdgeInsets.only(top: 30),
       padding: EdgeInsets.only(left: 15, right: 15),
       child: Container(
@@ -338,6 +350,7 @@ class HomePageState extends State<HomePage> {
                       style: TextStyle(
                         color: AppTheme.text_light,
                       ),
+                      textScaleFactor: textScale,
                     ),
                     IconButton(
                       padding: EdgeInsets.only(top: 0),
