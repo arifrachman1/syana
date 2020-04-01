@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'SyanaHome.dart';
 import 'package:syana/utils/AppTheme.dart';
 
@@ -146,6 +147,15 @@ roundButton() {
 
 
 class MyApp extends StatelessWidget {
+
+    @override
+  void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

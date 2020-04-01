@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/SyanaHomeStarSeller.dart';
 import 'package:syana/SyanaInputdatapelanggan.dart';
@@ -27,7 +27,7 @@ class HomeState extends State<Home> {
     SyanaHomeStarSeller(),
   ];
 
-  int selectedIndex = 3;
+  int selectedIndex = 2;
 
   void onTapBottom(int index) {
     setState(() {
@@ -82,18 +82,9 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+
   //komponen listview
   final int count = 3;
-  List<bool> penjualan = List<bool>();
-
-  @override
-  void initState() {
-    setState(() {
-      for (var i = 0; i < this.count; i++) {
-        penjualan.add(false);
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -327,7 +318,7 @@ class HomePageState extends State<HomePage> {
   list() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 300,
+      height: MediaQuery.of(context).size.height / 2.8,
       margin: EdgeInsets.only(top: 30),
       padding: EdgeInsets.only(left: 15, right: 15),
       child: Container(
@@ -422,6 +413,7 @@ class HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
                                     IconButton(
+                                      padding: EdgeInsets.only(top: 0),
                                       icon: Icon(
                                         Icons.arrow_drop_down,
                                         color: AppTheme.red,
@@ -489,6 +481,7 @@ class HomePageState extends State<HomePage> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: <Widget>[
                                     IconButton(
+                                      padding: EdgeInsets.only(top: 0),
                                       icon: Icon(
                                         Icons.arrow_drop_down,
                                         color: AppTheme.red,
@@ -540,7 +533,10 @@ class HomePageState extends State<HomePage> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                        margin: EdgeInsets.only(left: 5, right: 5,),
+                        margin: EdgeInsets.only(
+                          left: 5,
+                          right: 5,
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
@@ -569,7 +565,10 @@ class HomePageState extends State<HomePage> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                        margin: EdgeInsets.only(left: 5, right: 5,),
+                        margin: EdgeInsets.only(
+                          left: 5,
+                          right: 5,
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
@@ -598,7 +597,10 @@ class HomePageState extends State<HomePage> {
                     Flexible(
                       flex: 1,
                       child: Container(
-                        margin: EdgeInsets.only(left: 5, right: 5,),
+                        margin: EdgeInsets.only(
+                          left: 5,
+                          right: 5,
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
