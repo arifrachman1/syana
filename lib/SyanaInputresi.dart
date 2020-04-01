@@ -89,29 +89,32 @@ class ResiState extends State<InputResi> {
                   padding: EdgeInsets.only(left: 15, right: 15),
                   margin: EdgeInsets.only(top: 15),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ButtonTheme(
-                            minWidth: 150,
-                            height: 45,
-                            child: RaisedButton(
-                              child: Text(
-                                'MANUAL',
+                        child: Container(
+                          child: AspectRatio(
+                            aspectRatio: 16 / 5,
+                            child: ButtonTheme(
+                              // minWidth: 150,
+                              // height: 45,
+                              child: RaisedButton(
+                                child: Text(
+                                  'MANUAL',
+                                ),
+                                shape: roundButton(),
+                                color: AppTheme.btn_default,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                        return InputDataPelanggan();
+                                      },
+                                    ),
+                                  );
+                                },
                               ),
-                              shape: roundButton(),
-                              color: AppTheme.btn_default,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                                      return InputDataPelanggan();
-                                    },
-                                  ),
-                                );
-                              },
                             ),
                           ),
                         ),
@@ -120,30 +123,32 @@ class ResiState extends State<InputResi> {
                       //   child: Container(),
                       // ),
                       Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ButtonTheme(
-                            minWidth: 150,
-                            height: 45,
-                            child: RaisedButton(
-                              child: Text(
-                                'OTOMATIS',
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                ),
-                              ),
-                              shape: roundButton(),
-                              color: AppTheme.btn_success,
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                                      return Penjualan();
-                                    },
+                        child: Container(
+                          child: AspectRatio(
+                            aspectRatio: 16 / 5,
+                            child: ButtonTheme(
+                              // minWidth: 150,
+                              // height: 45,
+                              child: RaisedButton(
+                                child: Text(
+                                  'OTOMATIS',
+                                  style: TextStyle(
+                                    color: AppTheme.text_light,
                                   ),
-                                );
-                              },
+                                ),
+                                shape: roundButton(),
+                                color: AppTheme.btn_success,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                        return Penjualan();
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ),
