@@ -267,21 +267,24 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
         child: Column(
           children: <Widget>[
             Flexible(
-              flex: 1,
+              flex: 2,
               child: Container(
-                margin: EdgeInsets.only(top: 5, bottom: 3),
+                margin: EdgeInsets.only(top: 5, bottom: 2),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Text(
-                      'New Customers',
-                      style: TextStyle(
-                        color: AppTheme.text_light,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.0,),
+                      child: Text(
+                        'New Customers',
+                        style: TextStyle(
+                          color: AppTheme.text_light,
+                        ),
                       ),
                     ),
                     IconButton(
-                      padding: EdgeInsets.only(top: 0),
+                      padding: EdgeInsets.only(top: 0,),
                       icon: Icon(
                         Icons.file_download,
                         color: AppTheme.text_light,
@@ -293,7 +296,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(left: 5, right: 5),
+              padding: EdgeInsets.only(left: 5, right: 5, top: 5.0),
               child: Divider(
                 thickness: 2,
                 color: AppTheme.white,
