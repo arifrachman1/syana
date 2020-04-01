@@ -243,15 +243,14 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 15, right: 15),
                   margin: EdgeInsets.only(top: 60),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
-                        width: buttonWidth(context),
+                        width: buttonWidthWide(context),
                         child: AspectRatio(
-                          aspectRatio: buttonRatio(),
+                          aspectRatio: buttonRatioWide(),
                           child: RaisedButton(
                             child: Text(
                               'KEMBALI',
@@ -265,9 +264,9 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                         ),
                       ),
                       Container(
-                        width: buttonWidth(context),
+                        width: buttonWidthWide(context),
                         child: AspectRatio(
-                          aspectRatio: buttonRatio(),
+                          aspectRatio: buttonRatioWide(),
                           child: RaisedButton(
                             child: Text(
                               'SELANJUTNYA',

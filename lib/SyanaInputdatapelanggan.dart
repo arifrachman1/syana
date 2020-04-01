@@ -74,7 +74,6 @@ class MasukkanState extends State<InputDataPelanggan> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 15),
-                  padding: EdgeInsets.only(left: 15, right: 15),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[

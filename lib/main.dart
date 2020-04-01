@@ -140,13 +140,28 @@ roundButton() {
   );
 }
 
+
+//===========================geometri widget=================================================
+
 buttonRatio(){
   return 7/2;
 }
 
-buttonWidth(context){
-  return MediaQuery.of(context).size.width *0.38;
+buttonRatioWide(){
+  return 11/3;
 }
+
+buttonWidth(context){
+  return MediaQuery.of(context).size.width *0.36;
+}
+
+buttonWidthWide(context){
+  return MediaQuery.of(context).size.width *0.39;
+}
+
+listHeight(context){}
+
+//===========================================================================================
 
 class MyApp extends StatelessWidget {
 

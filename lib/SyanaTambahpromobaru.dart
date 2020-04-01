@@ -36,7 +36,7 @@ class TambahState extends State<Tambahpromobaru> {
   }
 
   @override
-  void initState(){
+  void initState() {
     selectedPromo = promo[0];
     selectedTim = tim[0];
     // selectedKategori = kategori[0];
@@ -194,27 +194,30 @@ class TambahState extends State<Tambahpromobaru> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 20),
-                  child: ButtonTheme(
-                    height: 45,
-                    child: RaisedButton(
-                      child: Text(
-                        'SELANJUTNYA',
-                        style: TextStyle(
-                          color: AppTheme.text_light,
-                        ),
-                      ),
-                      shape: roundButton(),
-                      color: AppTheme.btn_success,
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return TambahpromobaruSelanjutnya();
-                            },
+                  child: Container(
+                    width: buttonWidthWide(context),
+                    child: AspectRatio(
+                      aspectRatio: buttonRatioWide(),
+                      child: RaisedButton(
+                        child: Text(
+                          'SELANJUTNYA',
+                          style: TextStyle(
+                            color: AppTheme.text_light,
                           ),
-                        );
-                      },
+                        ),
+                        shape: roundButton(),
+                        color: AppTheme.btn_success,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return TambahpromobaruSelanjutnya();
+                              },
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
