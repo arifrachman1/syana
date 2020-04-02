@@ -90,7 +90,7 @@ class GrafikTimState extends State<GrafikTim> {
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 10),
-                    padding: EdgeInsets.only(left: 15, right: 15),
+                    padding: EdgeInsets.only(left: 13, right: 15),
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Pilih Tim',
@@ -103,27 +103,47 @@ class GrafikTimState extends State<GrafikTim> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.only(left: 5, right: 15),
-                    child: SearchableDropdown(
-                      isExpanded: true,
-                      underline: NotGiven(),
-                      style: TextStyle(color: AppTheme.text_light),
-                      iconEnabledColor: AppTheme.white,
-                      value: tim[0],
-                      items: tim.map(
-                        (String val) {
-                          return DropdownMenuItem(
-                            value: val,
-                            child: Text(
-                              val,
-                              style: TextStyle(fontSize: 13),
+                    padding: EdgeInsets.only(left: 13, right: 15),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        iconEnabledColor: AppTheme.white,
+                        hint: Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: Text(
+                            selectedTim,
+                            style: TextStyle(
+                              color: AppTheme.text_light,
+                              fontSize: 14,
                             ),
-                          );
+                            softWrap: true,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        items: tim.map(
+                          (String val) {
+                            return DropdownMenuItem(
+                              value: val,
+                              child: Container(
+                                margin: EdgeInsets.only(
+                                  bottom: 5,
+                                ),
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                child: Text(
+                                  val,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                  softWrap: true,
+                                ),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (String value) {
+                          onChangedPromo(value);
                         },
-                      ).toList(),
-                      onChanged: (String value) {
-                        onChangedPromo(value);
-                      },
+                      ),
                     ),
                   ),
                   Divider(

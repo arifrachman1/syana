@@ -95,7 +95,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 10),
-                    padding: EdgeInsets.only(left: 15, right: 15),
+                    padding: EdgeInsets.only(left: 13, right: 15),
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Pilih Tim',
@@ -108,7 +108,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.only(left: 15, right: 15),
+                    padding: EdgeInsets.only(left: 13, right: 15),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton(
                         iconEnabledColor: AppTheme.white,
