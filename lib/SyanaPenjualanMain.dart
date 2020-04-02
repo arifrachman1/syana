@@ -53,7 +53,6 @@ class PenjualanMainState extends State<PenjualanMain> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Container(
-                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: AppTheme.yellow,
                       border: Border.all(
@@ -69,19 +68,24 @@ class PenjualanMainState extends State<PenjualanMain> {
                         ),
                       ],
                     ),
-                    width: 65,
-                    height: 25,
-                    child: Text(
-                      'Terjual',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppTheme.text_dark,
+                    height: MediaQuery.of(context).size.height * 0.03,
+                    child: AspectRatio(
+                      aspectRatio: 2.5 / 1,
+                      child: Center(
+                        child: Text(
+                          'Terjual',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.text_dark,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                  Container(width: 5),
                   Container(
-                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width * 0.01,
+                  ),
+                  Container(
                     decoration: BoxDecoration(
                       color: AppTheme.red,
                       border: Border.all(
@@ -97,13 +101,17 @@ class PenjualanMainState extends State<PenjualanMain> {
                         ),
                       ],
                     ),
-                    width: 65,
-                    height: 25,
-                    child: Text(
-                      'Free',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppTheme.text_light,
+                    height: MediaQuery.of(context).size.height * 0.03,
+                    child: AspectRatio(
+                      aspectRatio: 2.5 / 1,
+                      child: Center(
+                        child: Text(
+                          'Free',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.text_light,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -122,76 +130,87 @@ class PenjualanMainState extends State<PenjualanMain> {
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   decoration: listBackground(),
-                  height: 110,
+                  height: listHeight(context),
                   margin: EdgeInsets.only(bottom: 15),
                   child: Row(
                     children: <Widget>[
-                      Container(
-                        width: 70,
-                        child: Icon(
-                          Icons.image,
-                          size: 60,
-                          color: AppTheme.teal_light,
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          getPenjualan(index, 0),
-                          style: TextStyle(
-                            color: AppTheme.text_light,
-                            fontSize: 15,
+                      Flexible(
+                        flex: 17,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Icon(
+                            Icons.image,
+                            size: 60,
+                            color: AppTheme.teal_light,
                           ),
-                          softWrap: true,
                         ),
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        width: 70,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.expand_less,
-                              color: AppTheme.white,
-                              size: 40,
+                      Flexible(
+                        flex: 49,
+                        fit: FlexFit.tight,
+                        child: Container(
+                          child: Text(
+                            getPenjualan(index, 0),
+                            style: TextStyle(
+                              color: AppTheme.text_light,
+                              fontSize: 15,
                             ),
-                            Text(getPenjualan(index, 1).toString(),
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 15,
-                                ),
-                                softWrap: true),
-                            Icon(
-                              Icons.expand_more,
-                              color: AppTheme.white,
-                              size: 40,
-                            ),
-                          ],
+                            softWrap: true,
+                          ),
                         ),
                       ),
-                      Container(
-                        alignment: Alignment.center,
-                        width: 70,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.expand_less,
-                              color: AppTheme.white,
-                              size: 40,
-                            ),
-                            Text(getPenjualan(index, 2).toString(),
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 15,
-                                ),
-                                softWrap: true),
-                            Icon(
-                              Icons.expand_more,
-                              color: AppTheme.white,
-                              size: 40,
-                            ),
-                          ],
+                      Flexible(
+                        flex: 17,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.expand_less,
+                                color: AppTheme.white,
+                                size: 40,
+                              ),
+                              Text(getPenjualan(index, 1).toString(),
+                                  style: TextStyle(
+                                    color: AppTheme.text_light,
+                                    fontSize: 15,
+                                  ),
+                                  softWrap: true),
+                              Icon(
+                                Icons.expand_more,
+                                color: AppTheme.white,
+                                size: 40,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 17,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.expand_less,
+                                color: AppTheme.white,
+                                size: 40,
+                              ),
+                              Text(getPenjualan(index, 2).toString(),
+                                  style: TextStyle(
+                                    color: AppTheme.text_light,
+                                    fontSize: 15,
+                                  ),
+                                  softWrap: true),
+                              Icon(
+                                Icons.expand_more,
+                                color: AppTheme.white,
+                                size: 40,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

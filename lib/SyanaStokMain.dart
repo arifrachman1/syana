@@ -54,19 +54,27 @@ class StokMainState extends State<StokMain> {
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
                       decoration: listBackground(),
-                      height: 90,
+                      height: listHeightSmall(context),
                       margin: EdgeInsets.only(bottom: 15),
                       child: Row(
                         children: <Widget>[
-                          Container(
-                            width: 70,
+                          Flexible(
+                            flex: 17,
+                            child:
+                            Container(
+                              alignment: Alignment.center,
                             child: Icon(
                               Icons.image,
                               size: 60,
                               color: AppTheme.teal_light,
                             ),
                           ),
-                          Expanded(
+                          ),
+                          Flexible(
+                            flex: 66,
+                            fit: FlexFit.tight,
+                            child:
+                            Container(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -91,9 +99,12 @@ class StokMainState extends State<StokMain> {
                               ],
                             ),
                           ),
-                          Container(
+                          ),
+                          Flexible(
+                            flex: 17,
+                            child:
+                            Container(
                             alignment: Alignment.center,
-                            width: 60,
                             child: Text(
                               getStok(index, 2).toString(),
                               style: TextStyle(
@@ -102,6 +113,10 @@ class StokMainState extends State<StokMain> {
                               ),
                             ),
                           ),
+                          ),
+                          
+                          
+                          
                         ],
                       ),
                     );

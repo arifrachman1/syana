@@ -159,7 +159,17 @@ buttonWidthWide(context){
   return MediaQuery.of(context).size.width *0.39;
 }
 
-listHeight(context){}
+listHeight(context){
+  return MediaQuery.of(context).size.width *0.28;
+}
+
+listHeightSmall(context){
+  return MediaQuery.of(context).size.width *0.23;
+}
+
+listHeightLarge(context){
+  return MediaQuery.of(context).size.width *0.29;
+}
 
 //===========================================================================================
 

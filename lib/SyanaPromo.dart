@@ -60,10 +60,15 @@ class PromoState extends State<Promo> {
                   return Container(
                     padding: EdgeInsets.only(left: 10, top: 20, bottom: 20),
                     decoration: listBackground(),
+                    height: listHeightLarge(context),
                     margin: EdgeInsets.only(top: 7, bottom: 7),
                     child: Row(
                       children: <Widget>[
-                        Column(
+                        Flexible(
+                          fit: FlexFit.tight,
+                          flex: 85, 
+                          child: 
+                          Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Container(
@@ -97,27 +102,30 @@ class PromoState extends State<Promo> {
                             ),
                           ],
                         ),
-                        Expanded(
-                          child: Container(),
                         ),
-                        Column(
-                          children: <Widget>[
-                            PopupMenuButton(
-                              icon: Icon(
-                                Icons.more_vert,
-                                color: AppTheme.white,
-                              ),
-                              itemBuilder: (BuildContext context) => [
-                                PopupMenuItem(
-                                  child: Text('opsi 1'),
-                                ),
-                                PopupMenuItem(
-                                  child: Text('opsi 2'),
-                                ),
-                              ],
+                        Flexible(
+                          flex: 15,
+                          child: 
+                          Container(
+                          alignment: Alignment.center,
+                          child: PopupMenuButton(
+                            icon: Icon(
+                              Icons.more_vert,
+                              color: AppTheme.white,
                             ),
-                          ],
+                            itemBuilder: (BuildContext context) => [
+                              PopupMenuItem(
+                                child: Text('opsi 1'),
+                              ),
+                              PopupMenuItem(
+                                child: Text('opsi 2'),
+                              ),
+                            ],
+                          ),
                         ),
+                        ),
+                        
+                        
                       ],
                     ),
                   );

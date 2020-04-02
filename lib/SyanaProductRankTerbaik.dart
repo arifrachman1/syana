@@ -8,6 +8,173 @@ class SyanaProductRankTerbaik extends StatefulWidget {
 }
 
 class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
+
+  // *
+  // *
+  // *
+  // Komponen DatePicker
+  // ==============================================
+  DateTime selectedDateFrom = DateTime.now();
+  DateTime selectedDateTo = DateTime.now();
+
+  String dayFrom = "DD";
+  String monthFrom = "MM";
+  String yearFrom = "YY";
+
+  String dayTo = "DD";
+  String monthTo = "MM";
+  String yearTo = "YY";
+
+  Future<Null> selectDateFrom(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDateFrom,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDateFrom)
+      setState(
+        () {
+          selectedDateFrom = picked;
+          var toSplit = picked.toString();
+          getDay(val) {
+            String dayTime = val.split('-')[2];
+            String day = dayTime.split(' ')[0];
+            return day;
+          }
+
+          dayFrom = getDay(toSplit);
+          monthFrom = toSplit.split('-')[1];
+          yearFrom = toSplit.split('-')[0];
+        },
+      );
+  }
+
+  Future<Null> selectDateTo(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDateTo,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDateTo)
+      setState(
+        () {
+          selectedDateTo = picked;
+          var toSplit = picked.toString();
+          getDay(val) {
+            String dayTime = val.split('-')[2];
+            String day = dayTime.split(' ')[0];
+            return day;
+          }
+
+          dayTo = getDay(toSplit);
+          monthTo = toSplit.split('-')[1];
+          yearTo = toSplit.split('-')[0];
+        },
+      );
+  }
+
+  showsDatePicker(index) {
+    if (index == 7) {
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Text(
+                          'From',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      // margin: EdgeInsets.only(top: 10),
+                      // padding: EdgeInsets.only(left: 10),
+                      decoration: dateDecorationShadow(),
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Icon(
+                            Icons.date_range,
+                            color: AppTheme.white,
+                          ),
+                          Text(
+                            dayFrom + ' - ' + monthFrom + ' - ' + yearFrom,
+                            style: TextStyle(color: AppTheme.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      selectDateFrom(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.03,
+            ),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Text(
+                          'To',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      decoration: dateDecorationShadow(),
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Icon(
+                            Icons.date_range,
+                            color: AppTheme.white,
+                          ),
+                          Text(
+                            dayTo + ' - ' + monthTo + ' - ' + yearTo,
+                            style: TextStyle(color: AppTheme.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      selectDateTo(context);
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
+
   // *
   // *
   // *
@@ -66,64 +233,76 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
         Container(
           margin: EdgeInsets.only(bottom: 10),
           padding: EdgeInsets.only(left: 10, right: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Column(
             children: <Widget>[
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(right: 10),
-                  padding: EdgeInsets.only(left: 10),
-                  decoration: inputDecorationShadow(),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      value: selectedWaktu,
-                      items: waktu.map(
-                        (String val) {
-                          return DropdownMenuItem(
-                            value: val,
-                            child: Text(
-                              val,
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                          );
-                        },
-                      ).toList(),
-                      onChanged: (String value) {
-                        onChangedWaktu(value);
-                      },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 10),
+                      decoration: inputDecorationShadow(),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: selectedWaktu,
+                          items: waktu.map(
+                            (String val) {
+                              return DropdownMenuItem(
+                                value: val,
+                                child: Text(
+                                  val,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                          onChanged: (String value) {
+                            onChangedWaktu(value);
+                          },
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.03,
+                  ),
+                  Expanded(
+                    child: Container(
+                      // width: 150,
+                      padding: EdgeInsets.only(left: 10),
+                      decoration: inputDecorationShadow(),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: selectedCakupan,
+                          items: cakupan.map(
+                            (String val) {
+                              return DropdownMenuItem(
+                                value: val,
+                                child: Text(
+                                  val,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList(),
+                          onChanged: (String value) {
+                            onChangedCakupan(value);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.only(left: 10),
-                  padding: EdgeInsets.only(left: 10),
-                  decoration: inputDecorationShadow(),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      value: selectedCakupan,
-                      items: cakupan.map(
-                        (String val) {
-                          return DropdownMenuItem(
-                            value: val,
-                            child: Text(
-                              val,
-                              style: TextStyle(
-                                fontSize: 15,
-                              ),
-                            ),
-                          );
-                        },
-                      ).toList(),
-                      onChanged: (String value) {
-                        onChangedCakupan(value);
-                      },
-                    ),
-                  ),
-                ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.01,
+              ),
+              showsDatePicker(
+                waktu.indexOf(selectedWaktu),
               ),
             ],
           ),
@@ -139,66 +318,76 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
             itemBuilder: (BuildContext context, int index) {
               return Container(
                 decoration: listBackground(),
-                height: 80,
+                height: listHeightSmall(context),
                 margin: EdgeInsets.only(bottom: 15),
                 child: Row(
                   children: <Widget>[
-                    Container(
-                      alignment: Alignment.center,
-                      width: 40,
-                      child: Text(
-                        (index + 1).toString(),
-                        style: TextStyle(
-                          color: AppTheme.text_light,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      width: 70,
-                      child: Icon(
-                        Icons.image,
-                        size: 60,
-                        color: AppTheme.teal_light,
-                      ),
-                    ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            getTerbaik(index, 0),
-                            softWrap: true,
+                    Flexible(
+                        flex: 10,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            (index + 1).toString(),
                             style: TextStyle(
                               color: AppTheme.text_light,
                               fontSize: 15,
                             ),
                           ),
-                          Text(
-                            getTerbaik(index, 2),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 17,
+                        child: Container(
+                          alignment: Alignment.centerLeft,
+                          child: Icon(
+                            Icons.image,
+                            size: 60,
+                            color: AppTheme.teal_light,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 53,
+                        fit: FlexFit.tight,
+                        child: Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                getTerbaik(index, 0),
+                                softWrap: true,
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              Text(
+                                getTerbaik(index, 2),
+                                softWrap: true,
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 20,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: Text(
+                            getTerbaik(index, 1).toString(),
                             softWrap: true,
                             style: TextStyle(
                               color: AppTheme.text_light,
-                              fontSize: 15,
+                              fontSize: 14,
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: 80,
-                      child: Text(
-                        getTerbaik(index, 1).toString(),
-                        softWrap: true,
-                        style: TextStyle(
-                          color: AppTheme.text_light,
-                          fontSize: 14,
                         ),
                       ),
-                    ),
                   ],
                 ),
               );
