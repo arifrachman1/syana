@@ -75,7 +75,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                     height: MediaQuery.of(context).size.height * 0.04,
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width,
+                    height: grafikHeight(context),
                     child: Chart(),
                   ),
                   Container(
