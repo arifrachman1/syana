@@ -43,10 +43,10 @@ class GrafikProdukState extends State<GrafikProduk> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: 70,
+                    height: MediaQuery.of(context).size.height * 0.08,
                     decoration: listBackground(),
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 10, bottom: 25),
+                    margin: EdgeInsets.only(top: 10,),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -87,6 +87,9 @@ class GrafikProdukState extends State<GrafikProduk> {
                       ],
                     ),
                   ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                  ),
                   Divider(
                     thickness: 1,
                   ),
@@ -110,7 +113,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                       child: DropdownButton(
                         iconEnabledColor: AppTheme.white,
                         hint: Container(
-                          width: MediaQuery.of(context).size.width / 1.5,
+                          width: MediaQuery.of(context).size.width * 0.8,
                           child: Text(
                             selectedProduk,
                             style: TextStyle(
@@ -118,6 +121,8 @@ class GrafikProdukState extends State<GrafikProduk> {
                               fontSize: 14,
                             ),
                             softWrap: true,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         items: produk.map(
@@ -128,7 +133,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                                 margin: EdgeInsets.only(
                                   bottom: 5,
                                 ),
-                                width: MediaQuery.of(context).size.width / 1.5,
+                                width: MediaQuery.of(context).size.width * 0.8,
                                 child: Text(
                                   val,
                                   style: TextStyle(
@@ -150,7 +155,10 @@ class GrafikProdukState extends State<GrafikProduk> {
                     thickness: 1,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 30),
+                    height: MediaQuery.of(context).size.height * 0.04,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
                     child: Chart(),
                   ),
                   Container(

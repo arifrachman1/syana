@@ -38,10 +38,10 @@ class GrafikTimState extends State<GrafikTim> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: 70,
+                    height: MediaQuery.of(context).size.height * 0.08,
                     decoration: listBackground(),
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 10, bottom: 25),
+                    margin: EdgeInsets.only(top: 10,),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -81,6 +81,9 @@ class GrafikTimState extends State<GrafikTim> {
                         ),
                       ],
                     ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.03,
                   ),
                   Divider(
                     thickness: 1,
@@ -127,7 +130,10 @@ class GrafikTimState extends State<GrafikTim> {
                     thickness: 1,
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 30),
+                    height: MediaQuery.of(context).size.height * 0.04,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
                     child: Chart(),
                   ),
                 ],

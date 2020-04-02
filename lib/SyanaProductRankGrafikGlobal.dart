@@ -27,7 +27,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    height: 70,
+                    height: MediaQuery.of(context).size.height * 0.08,
                     decoration: listBackground(),
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(top: 10, bottom: 25),
@@ -72,7 +72,10 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 30),
+                    height: MediaQuery.of(context).size.height * 0.04,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
                     child: Chart(),
                   ),
                   Container(

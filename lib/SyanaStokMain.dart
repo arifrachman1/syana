@@ -46,7 +46,7 @@ class StokMainState extends State<StokMain> {
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+                margin: EdgeInsets.only(top: 10, right: 10, left: 10,),
                 child: ListView.builder(
                   padding: EdgeInsets.all(0),
                   shrinkWrap: true,
@@ -60,63 +60,57 @@ class StokMainState extends State<StokMain> {
                         children: <Widget>[
                           Flexible(
                             flex: 17,
-                            child:
-                            Container(
+                            child: Container(
                               alignment: Alignment.center,
-                            child: Icon(
-                              Icons.image,
-                              size: 60,
-                              color: AppTheme.teal_light,
+                              child: Icon(
+                                Icons.image,
+                                size: 60,
+                                color: AppTheme.teal_light,
+                              ),
                             ),
-                          ),
                           ),
                           Flexible(
                             flex: 66,
                             fit: FlexFit.tight,
-                            child:
-                            Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  getStok(index, 0),
-                                  style: TextStyle(
-                                    color: AppTheme.text_light,
-                                    fontSize: 15,
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    getStok(index, 0),
+                                    style: TextStyle(
+                                      color: AppTheme.text_light,
+                                      fontSize: 15,
+                                    ),
+                                    softWrap: true,
                                   ),
-                                  softWrap: true,
-                                ),
-                                Text(
-                                  getStok(index, 1),
-                                  style: TextStyle(
-                                    color: AppTheme.text_light,
-                                    fontSize: 13,
-                                    fontStyle: FontStyle.italic,
+                                  Text(
+                                    getStok(index, 1),
+                                    style: TextStyle(
+                                      color: AppTheme.text_light,
+                                      fontSize: 13,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                    softWrap: true,
                                   ),
-                                  softWrap: true,
-                                ),
-                              ],
-                            ),
-                          ),
-                          ),
-                          Flexible(
-                            flex: 17,
-                            child:
-                            Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              getStok(index, 2).toString(),
-                              style: TextStyle(
-                                color: AppTheme.text_light,
-                                fontSize: 15,
+                                ],
                               ),
                             ),
                           ),
+                          Flexible(
+                            flex: 17,
+                            child: Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                getStok(index, 2).toString(),
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ),
                           ),
-                          
-                          
-                          
                         ],
                       ),
                     );
