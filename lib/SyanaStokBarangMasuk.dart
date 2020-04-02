@@ -73,6 +73,106 @@ class RankState extends State<SyanaStokBarangMasuk> {
         },
       );
   }
+  showsDatePicker(index) {
+    if (index == 7) {
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Text(
+                          'From',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      // margin: EdgeInsets.only(top: 10),
+                      // padding: EdgeInsets.only(left: 10),
+                      decoration: dateDecorationShadow(),
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Icon(
+                            Icons.date_range,
+                            color: AppTheme.white,
+                          ),
+                          Text(
+                            dayFrom + ' - ' + monthFrom + ' - ' + yearFrom,
+                            style: TextStyle(color: AppTheme.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      selectDateFrom(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.03,
+            ),
+            Expanded(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Text(
+                          'To',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      decoration: dateDecorationShadow(),
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Icon(
+                            Icons.date_range,
+                            color: AppTheme.white,
+                          ),
+                          Text(
+                            dayTo + ' - ' + monthTo + ' - ' + yearTo,
+                            style: TextStyle(color: AppTheme.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      selectDateTo(context);
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
 
   // *
   // *
@@ -209,101 +309,8 @@ class RankState extends State<SyanaStokBarangMasuk> {
               Container(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 5.0),
-                              child: Text(
-                                'From',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            // margin: EdgeInsets.only(top: 10),
-                            // padding: EdgeInsets.only(left: 10),
-                            decoration: dateDecorationShadow(),
-                            height: 30,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.date_range,
-                                  color: AppTheme.white,
-                                ),
-                                Text(
-                                  dayFrom +
-                                      ' - ' +
-                                      monthFrom +
-                                      ' - ' +
-                                      yearFrom,
-                                  style: TextStyle(color: AppTheme.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            selectDateFrom(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 5.0),
-                              child: Text(
-                                'To',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          child: Container(
-                            alignment: Alignment.centerLeft,
-                            decoration: dateDecorationShadow(),
-                            height: 30,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Icon(
-                                  Icons.date_range,
-                                  color: AppTheme.white,
-                                ),
-                                Text(
-                                  dayTo + ' - ' + monthTo + ' - ' + yearTo,
-                                  style: TextStyle(color: AppTheme.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onTap: () {
-                            selectDateTo(context);
-                          },
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+              showsDatePicker(
+                waktu.indexOf(selectedWaktu),
               ),
             ],
           ),
