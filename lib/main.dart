@@ -164,7 +164,7 @@ listHeight(context){
 }
 
 listHeightSmall(context){
-  return MediaQuery.of(context).size.height *0.12;
+  return MediaQuery.of(context).size.height *0.11;
 }
 
 listHeightLarge(context){
