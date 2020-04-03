@@ -162,7 +162,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                     child: Chart(),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 20, bottom: 100,),
+                    margin: EdgeInsets.only(top: 20,),
                     alignment: Alignment.center,
                     child: Column(
                       children: <Widget>[
@@ -184,6 +184,9 @@ class GrafikProdukState extends State<GrafikProduk> {
                         ),
                       ],
                     ),
+                  ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.3,
                   ),
                 ],
               ),

@@ -102,6 +102,9 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                       ],
                     ),
                   ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.3,
+                  ),
                 ],
               ),
             ),

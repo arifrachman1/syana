@@ -156,6 +156,9 @@ class GrafikTimState extends State<GrafikTim> {
                     height: grafikHeight(context),
                     child: Chart(),
                   ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.3,
+                  ),
                 ],
               ),
             ),
