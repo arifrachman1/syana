@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:syana/SyanaInputresi.dart';
-import 'package:syana/SyanaProductRankTerlaris.dart';
-import 'package:syana/SyanaStokBarangKeluar.dart';
-import 'package:syana/SyanaStokBarangMasuk.dart';
-import 'package:syana/SyanaStokMain.dart';
+import 'package:syana/SyanaAbout.dart';
 import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
-class Stok extends StatefulWidget {
+class SyanaAkun extends StatefulWidget {
   @override
-  StokState createState() => StokState();
+  SyanaAkunState createState() => SyanaAkunState();
 }
 
-class StokState extends State<Stok> with SingleTickerProviderStateMixin {
+class SyanaAkunState extends State<SyanaAkun>
+    with SingleTickerProviderStateMixin {
   TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 3, initialIndex: 1);
+    tabController = TabController(
+      vsync: this,
+      length: 4,
+      initialIndex: 1,
+    );
   }
 
   @override
@@ -45,7 +46,7 @@ class StokState extends State<Stok> with SingleTickerProviderStateMixin {
                       tabs: <Widget>[
                         Container(
                           child: Text(
-                            'Barang Masuk',
+                            'About Syana',
                             style: TextStyle(fontSize: 13),
                             softWrap: true,
                             textAlign: TextAlign.center,
@@ -53,7 +54,7 @@ class StokState extends State<Stok> with SingleTickerProviderStateMixin {
                         ),
                         Container(
                           child: Text(
-                            'Stok',
+                            'Profil',
                             style: TextStyle(fontSize: 13),
                             softWrap: true,
                             textAlign: TextAlign.center,
@@ -61,7 +62,15 @@ class StokState extends State<Stok> with SingleTickerProviderStateMixin {
                         ),
                         Container(
                           child: Text(
-                            'Barang Keluar',
+                            'Syana Trip',
+                            style: TextStyle(fontSize: 13),
+                            softWrap: true,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            'My Points',
                             style: TextStyle(fontSize: 13),
                             softWrap: true,
                             textAlign: TextAlign.center,
@@ -75,13 +84,14 @@ class StokState extends State<Stok> with SingleTickerProviderStateMixin {
             ),
             Expanded(
               child: Container(
-                margin: EdgeInsets.only(top: 10.0),
+                margin: EdgeInsets.only(top: 10),
                 child: TabBarView(
                   controller: tabController,
                   children: <Widget>[
-                    SyanaStokBarangMasuk(),
-                    StokMain(),
-                    SyanaStokBarangKeluar(),
+                    SyanaAbout(),
+                    Text('sdf'),
+                    Text('sdf'),
+                    Text('sdf'),
                   ],
                 ),
               ),

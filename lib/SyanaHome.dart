@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:syana/SyanaAkun.dart';
 import 'package:syana/SyanaHomeStarSeller.dart';
 import 'package:syana/SyanaInputdatapelanggan.dart';
 import 'package:syana/SyanaInputresi.dart';
@@ -24,7 +25,7 @@ class HomeState extends State<Home> {
     InputResi(),
     HomePage(),
     ProductRank(),
-    SyanaHomeStarSeller(),
+    SyanaAkun(),
   ];
 
   int selectedIndex = 2;
