@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/SyanaAbout.dart';
+import 'package:syana/SyanaTrip.dart';
 import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
@@ -90,7 +91,7 @@ class SyanaAkunState extends State<SyanaAkun>
                   children: <Widget>[
                     SyanaAbout(),
                     Text('sdf'),
-                    Text('sdf'),
+                    SyanaTrip(),
                     Text('sdf'),
                   ],
                 ),
