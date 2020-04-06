@@ -42,9 +42,7 @@ class SyanaTripState extends State<SyanaTrip> {
                           decoration: listBackground(),
                           child: FittedBox(
                             fit: BoxFit.fill,
-                            child: Icon(
-                              Icons.image,
-                              color: AppTheme.teal_light,
+                            child: Image(image: AssetImage('images/papuma.jpg'),
                             ),
                           ),
                         ),
@@ -117,9 +115,7 @@ class SyanaTripState extends State<SyanaTrip> {
                       decoration: listBackground(),
                       child: FittedBox(
                         fit: BoxFit.fill,
-                        child: Icon(
-                          Icons.image,
-                          color: AppTheme.teal_light,
+                        child: Image(image: AssetImage('images/papuma.jpg'),
                         ),
                       ),
                     ),
@@ -135,9 +131,7 @@ class SyanaTripState extends State<SyanaTrip> {
                       decoration: listBackground(),
                       child: FittedBox(
                         fit: BoxFit.fill,
-                        child: Icon(
-                          Icons.image,
-                          color: AppTheme.teal_light,
+                        child: Image(image: AssetImage('images/papuma.jpg'),
                         ),
                       ),
                     ),
@@ -160,9 +154,7 @@ class SyanaTripState extends State<SyanaTrip> {
                           decoration: listBackground(),
                           child: FittedBox(
                             fit: BoxFit.fill,
-                            child: Icon(
-                              Icons.image,
-                              color: AppTheme.teal_light,
+                            child: Image(image: AssetImage('images/papuma.jpg'),
                             ),
                           ),
                         ),

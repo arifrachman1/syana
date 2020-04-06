@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syana/SyanaFAQ.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'main.dart';
 
@@ -8,7 +9,8 @@ class SyanaAbout extends StatefulWidget {
 }
 
 class SyanaAboutState extends State<SyanaAbout> {
-  String aboutText = "Tentang Syana";
+  String aboutText =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce lobortis vestibulum fringilla. Proin mauris sem, iaculis pharetra finibus in, aliquam at est. Sed placerat, est quis luctus fermentum, lorem augue commodo velit, id tincidunt arcu erat quis risus. Proin vestibulum dolor sit amet ex efficitur, sed tincidunt sem tincidunt. Sed auctor mi ac ultrices porta. Mauris luctus gravida purus, laoreet ornare metus lobortis eget. Pellentesque nibh odio, tempor ut odio in, consequat dignissim libero. Etiam tristique pellentesque malesuada. Donec aliquam tortor vel risus semper, sed ornare massa sollicitudin. Cras non felis pretium, condimentum turpis a, iaculis nisi. Cras porta maximus sem sit amet aliquet. Aenean urna sapien, vestibulum eget mollis nec, posuere sed ex. ";
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +53,16 @@ class SyanaAboutState extends State<SyanaAbout> {
                       color: AppTheme.text_dark,
                     ),
                   ),
-                  onPressed: (){},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context){
+                          return SyanaFAQ();
+                        },
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
