@@ -39,6 +39,11 @@ dev_dependencies:
 flutter:
   assets:
     - images/papuma.jpg
+    - images/pasput.jpg
+    - images/flower.jpg
+    - images/mountain.jpg
+    - images/suket.jpg
+    - images/city.jpg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

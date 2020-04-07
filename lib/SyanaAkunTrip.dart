@@ -2,18 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'main.dart';
 
-class SyanaTrip extends StatefulWidget {
+class SyanaAkunTrip extends StatefulWidget {
   @override
-  SyanaTripState createState() => SyanaTripState();
+  SyanaAkunTripState createState() => SyanaAkunTripState();
 }
 
-class SyanaTripState extends State<SyanaTrip> {
-  List tripTerbaru = [];
+class SyanaAkunTripState extends State<SyanaAkunTrip> {
+  List tripTerbaru = ['papuma.jpg', 'city.jpg', ''];
+  List tripFavorite = ['mountain.jpg', '', 'pasput.jpg'];
+
+  imageTripTerbaru(index) {
+    var filename = tripTerbaru[index];
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.asset(
+        'images/' + filename.toString(),
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+  
+  imageTripFavorite(index) {
+    var filename = tripFavorite[index];
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.asset(
+        'images/' + filename.toString(),
+        fit: BoxFit.cover,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10,),
+      padding: EdgeInsets.only(
+        left: 10,
+        right: 10,
+      ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -40,11 +66,15 @@ class SyanaTripState extends State<SyanaTrip> {
                         aspectRatio: 16 / 10,
                         child: Container(
                           decoration: listBackground(),
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Image(image: AssetImage('images/papuma.jpg'),
-                            ),
-                          ),
+                          child: tripTerbaru[0].isEmpty
+                              ? FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Icon(
+                                    Icons.image,
+                                    color: AppTheme.teal_light,
+                                  ),
+                                )
+                              : imageTripTerbaru(0),
                         ),
                       ),
                     ),
@@ -113,11 +143,15 @@ class SyanaTripState extends State<SyanaTrip> {
                     aspectRatio: 1,
                     child: Container(
                       decoration: listBackground(),
-                      child: FittedBox(
-                        fit: BoxFit.fill,
-                        child: Image(image: AssetImage('images/papuma.jpg'),
-                        ),
-                      ),
+                      child: tripTerbaru[1].isEmpty
+                          ? FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Icon(
+                                Icons.image,
+                                color: AppTheme.teal_light,
+                              ),
+                            )
+                          : imageTripTerbaru(1),
                     ),
                   ),
                 ),
@@ -129,11 +163,15 @@ class SyanaTripState extends State<SyanaTrip> {
                     aspectRatio: 1,
                     child: Container(
                       decoration: listBackground(),
-                      child: FittedBox(
-                        fit: BoxFit.fill,
-                        child: Image(image: AssetImage('images/papuma.jpg'),
-                        ),
-                      ),
+                      child: tripTerbaru[2].isEmpty
+                          ? FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Icon(
+                                Icons.image,
+                                color: AppTheme.teal_light,
+                              ),
+                            )
+                          : imageTripTerbaru(2),
                     ),
                   ),
                 ),
@@ -152,11 +190,15 @@ class SyanaTripState extends State<SyanaTrip> {
                         aspectRatio: 16 / 10,
                         child: Container(
                           decoration: listBackground(),
-                          child: FittedBox(
-                            fit: BoxFit.fill,
-                            child: Image(image: AssetImage('images/papuma.jpg'),
-                            ),
-                          ),
+                          child: tripFavorite[0].isEmpty
+                              ? FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Icon(
+                                    Icons.image,
+                                    color: AppTheme.teal_light,
+                                  ),
+                                )
+                              : imageTripFavorite(0),
                         ),
                       ),
                     ),
@@ -225,13 +267,15 @@ class SyanaTripState extends State<SyanaTrip> {
                     aspectRatio: 1,
                     child: Container(
                       decoration: listBackground(),
-                      child: FittedBox(
-                        fit: BoxFit.fill,
-                        child: Icon(
-                          Icons.image,
-                          color: AppTheme.teal_light,
-                        ),
-                      ),
+                      child: tripFavorite[1].isEmpty
+                              ? FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Icon(
+                                    Icons.image,
+                                    color: AppTheme.teal_light,
+                                  ),
+                                )
+                              : imageTripFavorite(1),
                     ),
                   ),
                 ),
@@ -243,13 +287,15 @@ class SyanaTripState extends State<SyanaTrip> {
                     aspectRatio: 1,
                     child: Container(
                       decoration: listBackground(),
-                      child: FittedBox(
-                        fit: BoxFit.fill,
-                        child: Icon(
-                          Icons.image,
-                          color: AppTheme.teal_light,
-                        ),
-                      ),
+                      child: tripFavorite[2].isEmpty
+                              ? FittedBox(
+                                  fit: BoxFit.fitHeight,
+                                  child: Icon(
+                                    Icons.image,
+                                    color: AppTheme.teal_light,
+                                  ),
+                                )
+                              : imageTripFavorite(2),
                     ),
                   ),
                 ),

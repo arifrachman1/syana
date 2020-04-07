@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'main.dart';
 
-class SyanaFAQ extends StatefulWidget {
+class SyanaAkunAboutFAQ extends StatefulWidget {
   @override
-  SyanaFAQState createState() => SyanaFAQState();
+  SyanaAkunAboutFAQState createState() => SyanaAkunAboutFAQState();
 }
 
-class SyanaFAQState extends State<SyanaFAQ> {
+class SyanaAkunAboutFAQState extends State<SyanaAkunAboutFAQ> {
   List<List> question = [
-    ['asd', 'ads', 9]
+    
   ];
 
   getQuestion(index, index2) {

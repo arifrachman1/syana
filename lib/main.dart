@@ -23,9 +23,6 @@ appBackground() {
 listBackground() {
   return BoxDecoration(
     color: AppTheme.teal,
-    border: Border.all(
-      color: AppTheme.teal,
-    ),
     borderRadius: BorderRadius.circular(12),
   );
 }

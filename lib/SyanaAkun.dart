@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:syana/SyanaAbout.dart';
-import 'package:syana/SyanaTrip.dart';
+import 'package:syana/SyanaAkunAbout.dart';
+import 'package:syana/SyanaAkunTrip.dart';
 import 'package:syana/utils/AppTheme.dart';
 import './main.dart';
 
@@ -89,9 +89,9 @@ class SyanaAkunState extends State<SyanaAkun>
                 child: TabBarView(
                   controller: tabController,
                   children: <Widget>[
-                    SyanaAbout(),
+                    SyanaAkunAbout(),
                     Text('sdf'),
-                    SyanaTrip(),
+                    SyanaAkunTrip(),
                     Text('sdf'),
                   ],
                 ),
