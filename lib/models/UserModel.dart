@@ -52,10 +52,5 @@ class UserModel{
     _id = value;
   }
 
-  @override
-  String toString() {
-    return 'UserModel{_id: $_id, _name: $_name, _fullName: $_fullName, _dateTimeJoined: $_dateTimeJoined, _idRole: $_idRole, _idTeam: $_idTeam, _accessToken: $_accessToken}';
-  }
-
 
 }

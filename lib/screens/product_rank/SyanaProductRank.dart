@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/product_rank/SyanaProductRankGlobal.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/product_rank/SyanaProductRankProduct.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/product_rank/SyanaProductRankGrafikTim.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/product_rank/SyanaProductRankTerbaik.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/product_rank/SyanaProductRankTerlaris.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/product_rank/SyanaProductRankTopFree.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/product_rank/SyanaProductRankTopReturn.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankGlobal.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankGrafikTim.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankProduct.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankTerbaik.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankTerlaris.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankTopFree.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankTopReturn.dart';
 import 'package:syana/utils/AppTheme.dart';
 import '../../main.dart';
 

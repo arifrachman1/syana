@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/profile/SyanaAkunAboutFAQ.dart';
 import 'package:syana/utils/AppTheme.dart';
 import '../../main.dart';
 

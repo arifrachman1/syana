@@ -112,11 +112,4 @@ class HomeDataModel {
   set totalPackageSentThisMonth(value) {
     _totalPackageSentThisMonth = value;
   }
-
-  @override
-  String toString() {
-    return 'HomeDataModel{_day: $_day, _totalPackageSentToday: $_totalPackageSentToday, _totalPackageSentThisMonth: $_totalPackageSentThisMonth, _myTeamPackageSentToday: $_myTeamPackageSentToday, _allTeamPointThisMonth: $_allTeamPointThisMonth, _allTeamPointLastMonth: $_allTeamPointLastMonth, _grandTotalPoint: $_grandTotalPoint, _grandTotalPackage: $_grandTotalPackage, _grandTotalPointTeam: $_grandTotalPointTeam, _grandTotalPackageTeam: $_grandTotalPackageTeam, _myTeamQuote: $_myTeamQuote, _detail: $_detail}';
-  }
-
-
 }

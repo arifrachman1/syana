@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/sale/SyanaEcommerce.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/product_rank/SyanaProductRankTerlaris.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/inventory/SyanaStockExt.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/inventory/SyanaStockIn.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/inventory/SyanaStokMain.dart';
+import 'package:syana/screens/inventory/SyanaStockExt.dart';
+import 'package:syana/screens/inventory/SyanaStockIn.dart';
+import 'package:syana/screens/inventory/SyanaStokMain.dart';
 import 'package:syana/utils/AppTheme.dart';
 import '../../main.dart';
 

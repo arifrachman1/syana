@@ -23,10 +23,5 @@ class EcommerceModel{
     _id = value.toString();
   }
 
-  @override
-  String toString() {
-    return 'EcommerceModel{_id: $_id, _name: $_name, _status: $_status}';
-  }
-
 
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/promo/SyanaTambahpromobaru.dart';
+import 'package:syana/screens/promo/SyanaTambahpromobaru.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';

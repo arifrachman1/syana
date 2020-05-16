@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/profile/SyanaAkunAbout.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/profile/SyanaAkunProfil.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/profile/SyanaAkunTrip.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/profile/SyanaAkunMyPoints.dart';
+import 'package:syana/screens/profile/SyanaAkunAbout.dart';
+import 'package:syana/screens/profile/SyanaAkunMyPoints.dart';
+import 'package:syana/screens/profile/SyanaAkunProfil.dart';
+import 'package:syana/screens/profile/SyanaAkunTrip.dart';
 import 'package:syana/utils/AppTheme.dart';
 import '../../main.dart';
 

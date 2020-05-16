@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:syana/screens/promo/SyanaPromo.dart';
 import 'package:syana/utils/Dimens.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/promo/SyanaPromo.dart';
 import '../../main.dart';
 import 'dart:async';
 import 'package:syana/utils/AppTheme.dart';
