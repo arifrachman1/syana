@@ -20,7 +20,7 @@ class Dimens{
   }
 
   static listHeight(context){
-    return MediaQuery.of(context).size.height *0.13;
+    return MediaQuery.of(context).size.height *0.15;
   }
 
   static listHeightSmall(context){

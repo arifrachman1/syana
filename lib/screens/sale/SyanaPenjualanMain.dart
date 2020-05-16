@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'file:///E:/workspace/flutter_project/syana/lib/screens/sale/SyanaPenjualanTimhariini.dart';
-import 'file:///E:/workspace/flutter_project/syana/lib/screens/sale/SyanaPerincian.dart';
+import 'file:///E:/workspace/flutter_project/syana/lib/screens/sale/SyanaConfirmation.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -32,6 +32,7 @@ class PenjualanMainState extends State<PenjualanMain> {
       children: <Widget>[
         Column(
           children: <Widget>[
+            /*search bar*/
             Container(
               margin: EdgeInsets.only(left: 10, right: 10),
               padding: EdgeInsets.only(left: 10),
@@ -47,6 +48,7 @@ class PenjualanMainState extends State<PenjualanMain> {
                 ),
               ),
             ),
+            /*label sold & free*/
             Container(
               margin: EdgeInsets.only(top: 15, bottom: 10),
               padding: EdgeInsets.only(left: 10, right: 13),
@@ -121,6 +123,7 @@ class PenjualanMainState extends State<PenjualanMain> {
             ),
           ],
         ),
+        /*item*/
         Expanded(
           child: Container(
             margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
@@ -221,6 +224,7 @@ class PenjualanMainState extends State<PenjualanMain> {
             ),
           ),
         ),
+        /*bottom buttons */
         Container(
           margin: EdgeInsets.only(
             bottom: 12,
@@ -279,14 +283,14 @@ class PenjualanMainState extends State<PenjualanMain> {
                     shape: AppTheme.roundButton(),
                     color: AppTheme.btn_success,
                     onPressed: () {
-                      Navigator.push(
+                      /*Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (BuildContext context) {
                             return Perincian();
                           },
                         ),
-                      );
+                      );*/
                     },
                   ),
                 ),

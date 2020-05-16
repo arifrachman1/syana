@@ -6,6 +6,8 @@ import 'package:syana/models/UserModel.dart';
 import 'package:syana/screens/credentials/Login.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 
 class HomeOwnerController {
   UserModel _userModel;
@@ -63,6 +65,7 @@ class HomeOwnerController {
         HomeDataModel homeDataModel = new HomeDataModel.Owner(
             data['day'].toString(),
             data['total_packet_sent_today'].toString(),
+            data['total_packet_sent_this_month'].toString(),
             data['all_team_point_this_month'].toString(),
             data['all_team_point_last_month'].toString(),
             data['grand_total_point'].toString(),
@@ -73,6 +76,12 @@ class HomeOwnerController {
 
         setDataCallback(homeDataModel);
       }
+    }else{
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
     }
     loadingStateCallback();
   }

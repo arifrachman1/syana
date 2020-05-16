@@ -61,8 +61,6 @@ class HomeStarSellerController {
               element['name_team'] ?? ""));
         });
 
-        print(details[0].pointYesterday);
-
         HomeDataModel homeDataModel = new HomeDataModel.starSeller(
             data['day'].toString(),
             data['total_packet_sent_today'].toString(),
