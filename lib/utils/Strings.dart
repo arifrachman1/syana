@@ -10,6 +10,8 @@ class Strings{
   /*login*/
   static final String DIALOG_MESSAGE_INSUFFICENT_CREDENTIALS = "Email atau password kosong.";
 
+  /*sale*/
+  static final String DIALOG_MESSAGE_CUSTOMER_SAVED = "Data pelanggan berhasil disimpan";
 
   static final String DIALOG_MESSAGE_INSUFFICENT_INPUT = "Data input tidak lengkap.";
   static final String DIALOG_MESSAGE_INSUFFICENT_ITEM = "Item kosong. Tambahkan item terlebih dahulu.";

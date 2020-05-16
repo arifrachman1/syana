@@ -1,8 +1,13 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/models/UserModel.dart';
+import 'package:syana/screens/home/SyanaHomeOwner.dart';
+import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
+import 'package:syana/screens/inventory/SyanaStokMain.dart';
+import 'package:syana/screens/sale/SyanaEcommerce.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 
 import 'GlobalVars.dart';
@@ -35,6 +40,13 @@ class GlobalFunctions {
       data = _localResp.data;
     } on DioError catch (e) {
       print(e.response.data.toString());
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    } catch (e){
+      print(e);
       CustomDialog.getDialog(
           title: Strings.DIALOG_TITLE_ERROR,
           message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
@@ -90,5 +102,39 @@ class GlobalFunctions {
     }
 
     return param;
+  }
+
+  static dynamic generateJsonFromList(List<dynamic> list){
+    String jsonFromList = "";
+    jsonFromList = jsonEncode(list.map((e) => e.toJson()).toList());
+    return jsonFromList;
+  }
+
+  static navigate(context, whereTo) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int idRole = prefs.get(GlobalVars.idRoleKey);
+    if(whereTo == 0){
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+        return StokMain();
+      }), (route) => false);
+    }else if(whereTo == 1){
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+        return SyanaEcommerce();
+      }), (route) => false);
+    }else if(whereTo == 2){
+      if(idRole == 4){
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+          return SyanaHomeOwner();
+        }), (route) => false);
+      }else if(idRole == 2 || idRole == 1){
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+          return SyanaHomeStarSeller();
+        }), (route) => false);
+      }
+    }else if(whereTo == 3){
+      
+    }else{
+      
+    }
   }
 }

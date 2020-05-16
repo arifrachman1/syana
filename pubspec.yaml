@@ -29,6 +29,8 @@ dependencies:
   intl: ^0.16.1
   dio: ^3.0.9
   shared_preferences: ^0.5.7
+  barcode_scan: ^2.0.0
+  flutter_typeahead: ^1.8.0
 
 dev_dependencies:
   flutter_test:

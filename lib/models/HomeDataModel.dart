@@ -1,7 +1,10 @@
 import 'package:syana/models/HomeDataDetailModel.dart';
 
 class HomeDataModel {
-  String _day, _totalPackageSentToday, _myTeamPackageSentToday;
+  String _day,
+      _totalPackageSentToday,
+      _totalPackageSentThisMonth,
+      _myTeamPackageSentToday;
   String _allTeamPointThisMonth,
       _allTeamPointLastMonth,
       _grandTotalPoint,
@@ -13,16 +16,30 @@ class HomeDataModel {
 
   HomeDataModel();
 
-  HomeDataModel.starSeller(this._day, this._totalPackageSentToday,
-      this._myTeamPackageSentToday, this._allTeamPointThisMonth,
-      this._allTeamPointLastMonth, this._grandTotalPoint,
-      this._grandTotalPackage, this._grandTotalPointTeam,
-      this._grandTotalPackageTeam, this._myTeamQuote, this._detail);
+  HomeDataModel.starSeller(
+      this._day,
+      this._totalPackageSentToday,
+      this._myTeamPackageSentToday,
+      this._allTeamPointThisMonth,
+      this._allTeamPointLastMonth,
+      this._grandTotalPoint,
+      this._grandTotalPackage,
+      this._grandTotalPointTeam,
+      this._grandTotalPackageTeam,
+      this._myTeamQuote,
+      this._detail);
 
-  HomeDataModel.Owner(this._day, this._totalPackageSentToday,
-      this._allTeamPointThisMonth, this._allTeamPointLastMonth,
-      this._grandTotalPoint, this._grandTotalPackage, this._grandTotalPointTeam,
-      this._grandTotalPackageTeam, this._detail);
+  HomeDataModel.Owner(
+      this._day,
+      this._totalPackageSentToday,
+      this._totalPackageSentThisMonth,
+      this._allTeamPointThisMonth,
+      this._allTeamPointLastMonth,
+      this._grandTotalPoint,
+      this._grandTotalPackage,
+      this._grandTotalPointTeam,
+      this._grandTotalPackageTeam,
+      this._detail);
 
   List<HomeDataDetailModel> get detail => _detail;
 
@@ -60,13 +77,13 @@ class HomeDataModel {
     _grandTotalPoint = value;
   }
 
-  get allTeamPointLastMonth => int.parse(_allTeamPointLastMonth);
+  get allTeamPointLastMonth => double.parse(_allTeamPointLastMonth);
 
   set allTeamPointLastMonth(value) {
     _allTeamPointLastMonth = value;
   }
 
-  get allTeamPointThisMonth => int.parse(_allTeamPointThisMonth);
+  get allTeamPointThisMonth => double.parse(_allTeamPointThisMonth);
 
   set allTeamPointThisMonth(value) {
     _allTeamPointThisMonth = value;
@@ -88,6 +105,17 @@ class HomeDataModel {
 
   set day(value) {
     _day = value;
+  }
+
+  get totalPackageSentThisMonth => _totalPackageSentThisMonth;
+
+  set totalPackageSentThisMonth(value) {
+    _totalPackageSentThisMonth = value;
+  }
+
+  @override
+  String toString() {
+    return 'HomeDataModel{_day: $_day, _totalPackageSentToday: $_totalPackageSentToday, _totalPackageSentThisMonth: $_totalPackageSentThisMonth, _myTeamPackageSentToday: $_myTeamPackageSentToday, _allTeamPointThisMonth: $_allTeamPointThisMonth, _allTeamPointLastMonth: $_allTeamPointLastMonth, _grandTotalPoint: $_grandTotalPoint, _grandTotalPackage: $_grandTotalPackage, _grandTotalPointTeam: $_grandTotalPointTeam, _grandTotalPackageTeam: $_grandTotalPackageTeam, _myTeamQuote: $_myTeamQuote, _detail: $_detail}';
   }
 
 

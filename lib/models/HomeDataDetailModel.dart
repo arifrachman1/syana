@@ -61,5 +61,10 @@ class HomeDataDetailModel {
     _idTeam = value;
   }
 
+  @override
+  String toString() {
+    return 'HomeDataDetailModel{_idTeam: $_idTeam, _packageToday: $_packageToday, _packageYesterday: $_packageYesterday, _packageThisMonth: $_packageThisMonth, _pointThisMonth: $_pointThisMonth, _pointLastMonth: $_pointLastMonth, _pointToday: $_pointToday, _pointYesterday: $_pointYesterday, _teamName: $_teamName}';
+  }
+
 
 }
