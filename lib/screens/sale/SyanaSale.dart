@@ -15,9 +15,9 @@ class Sale extends StatefulWidget {
 }
 
 class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
-  TabController tabController;
+  TabController _tabController;
   SaleController _saleController;
-  bool isLoading = false;
+  bool _isLoading = false;
 
   List<ProductModel> products = new List();
 
@@ -49,7 +49,7 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
     categories = await _saleController.getCategoriesFromProducts(products);
     print("categories length : " + categories.length.toString());
     setState(() {
-      tabController = TabController(
+      _tabController = TabController(
           vsync: this, length: categories.length, initialIndex: 0);
     });
     await generateTabs();
@@ -60,7 +60,7 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
 
   void setLoadingState() {
     setState(() {
-      isLoading = isLoading ? isLoading = false : isLoading = true;
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
     });
   }
 
@@ -178,7 +178,7 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
+      body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Container(
               decoration: AppTheme.appBackground(),
@@ -191,7 +191,7 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
                     margin: EdgeInsets.only(top: 30),
                     decoration: AppTheme.tabbarDecoration(),
                     child: TabBar(
-                        controller: tabController,
+                        controller: _tabController,
                         indicatorColor: AppTheme.teal,
                         unselectedLabelColor: AppTheme.teal,
                         labelColor: AppTheme.teal,
@@ -203,7 +203,7 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
                     child: Container(
                       margin: EdgeInsets.only(top: 10.0),
                       child: TabBarView(
-                          controller: tabController, children: pages),
+                          controller: _tabController, children: pages),
                     ),
                   ),
                   Expanded(
