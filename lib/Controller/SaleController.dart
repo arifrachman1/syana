@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:syana/models/CourierModel.dart';
 import 'package:syana/models/EcommerceModel.dart';
 import 'package:syana/models/ProductModel.dart';
+import 'package:syana/models/TransactionHistoryModel.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
@@ -173,6 +174,40 @@ class SaleController {
 
         if (products.isNotEmpty) {
           setDataCallback(products);
+        }
+      }
+    } else {}
+  }
+
+  /*get history*/
+  getHistoryProducts(context, loadingStateCallback, setDataCallback) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params =
+    GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-list-sales",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List historiesFromApi = data['sales'];
+        List<TransactionHistoryModel> historiesProduct = new List();
+
+        historiesFromApi.forEach((element) {
+          historiesProduct.add(new TransactionHistoryModel.getHistory(
+            element['transaction_number'],
+            element['datetime_created'],
+            element['name_ecommerce']
+          ));
+        });
+
+        if (historiesProduct.isNotEmpty) {
+          setDataCallback(historiesProduct);
         }
       }
     } else {}
