@@ -7,6 +7,7 @@ import 'package:syana/screens/product_rank/SyanaProductRankTerlaris.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTopFree.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTopReturn.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/widgets/CustomBottomNav.dart';
 import '../../main.dart';
 
 class ProductRank extends StatefulWidget {
@@ -27,6 +28,7 @@ class ProductRankState extends State<ProductRank>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: CustomBottomNav.getBottomNav(context, 3),
       body: Container(
         decoration: AppTheme.appBackground(),
         height: MediaQuery.of(context).size.height,
