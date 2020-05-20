@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/screens/home/SyanaHomeOwner.dart';
 import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
+import 'package:syana/screens/inventory/SyanaStock.dart';
 import 'package:syana/screens/inventory/SyanaStokMain.dart';
 import 'package:syana/screens/sale/SyanaEcommerce.dart';
 import 'package:syana/widgets/CustomDialog.dart';
@@ -115,7 +116,7 @@ class GlobalFunctions {
     int idRole = prefs.get(GlobalVars.idRoleKey);
     if(whereTo == 0){
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
-        return StokMain();
+        return Stok();
       }), (route) => false);
     }else if(whereTo == 1){
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){

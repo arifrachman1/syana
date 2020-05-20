@@ -13,7 +13,7 @@ class CustomTextInput {
       hint,
       textInputType,
       isPasswordField,
-      key}) {
+      key, icon}) {
     return Container(
       width: ScreenSizeHelper.getDisplayWidth(context) * (widthFactor ?? 1),
       height: 56,
@@ -27,7 +27,8 @@ class CustomTextInput {
         decoration: InputDecoration(
             contentPadding: EdgeInsets.only(left: 10.0),
             border: InputBorder.none,
-            hintText: hint ?? "Text"),
+            hintText: hint ?? "Text",
+        icon: icon ?? null),
       ),
     );
   }

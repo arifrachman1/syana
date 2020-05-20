@@ -22,10 +22,14 @@ class ProductModel {
     _saleNumber = "0";
   }
 
-
   ProductModel.productList(this._id, this._name, this._image, this._idCategory,
       this._sku, this._price, this._categoryName, this._saleNumber,
       this._freeNumber);
+
+
+  ProductModel.productStock(this._id, this._status, this._name, this._image,
+      this._point, this._stock, this._criticalStock, this._weight, this._sku,
+      this._price);
 
   get rankValue => _rankValue;
 
