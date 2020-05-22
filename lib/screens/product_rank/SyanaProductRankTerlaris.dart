@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syana/Controller/InventoryController.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -19,6 +21,8 @@ class RankState extends State<SyanaProductRankTerlaris> {
   DateTime selectedDateFrom = DateTime.now();
   DateTime selectedDateTo = DateTime.now();
 
+  DateFormat formatDate = DateFormat("yyyy-MM-dd");
+
   String dayFrom = "DD";
   String monthFrom = "MM";
   String yearFrom = "YY";
@@ -26,6 +30,8 @@ class RankState extends State<SyanaProductRankTerlaris> {
   String dayTo = "DD";
   String monthTo = "MM";
   String yearTo = "YY";
+  String _dateFrom = "";
+  String _dateTo = "";
 
   Future<Null> selectDateFrom(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -49,6 +55,14 @@ class RankState extends State<SyanaProductRankTerlaris> {
           yearFrom = toSplit.split('-')[0];
         },
       );
+    _dateFrom = formatDate.format(selectedDateFrom);
+    if (_dateFrom != "" && _dateTo != "") {
+      rankProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "2", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
   Future<Null> selectDateTo(BuildContext context) async {
@@ -73,6 +87,14 @@ class RankState extends State<SyanaProductRankTerlaris> {
           yearTo = toSplit.split('-')[0];
         },
       );
+    _dateTo = formatDate.format(selectedDateTo);
+    if (_dateFrom != "" && _dateTo != "") {
+      rankProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "2", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
   showsDatePicker(index) {
@@ -190,32 +212,21 @@ class RankState extends State<SyanaProductRankTerlaris> {
     'Grand Total',
     'Tentukan sendiri'
   ];
-  List<String> cakupan = ['Global', 'Lokal'];
-
-  String selectedTime;
-  String selectedCakupan;
-  String currentTime;
-
-  void onChangedWaktu(value) {
-    setState(() {
-      this.selectedTime = value;
-      currentTime = waktu.indexOf(value).toString();
-    });
-    initDataRank();
-  }
-
-  void onChangedCakupan(value) {
-    setState(() {
-      this.selectedCakupan = value;
-    });
-  }
 
   // ===== API Component/Variables
+  String selectedTime;
+  String selectedCakupan;
+  String _currentTimes;
+
+  int _currentTeams = 0;
 
   SaleController _saleController;
+  InventoryController _inventoryController;
+
   bool _isLoading = false;
 
   List<ProductModel> rankProducts = new List();
+  List<DropdownMenuItem> teams = new List();
 
   @override
   void dispose() {
@@ -228,19 +239,20 @@ class RankState extends State<SyanaProductRankTerlaris> {
     // TODO: implement initState
     super.initState();
     _saleController = new SaleController();
+    _inventoryController = new InventoryController();
+
     selectedTime = waktu[0];
-    selectedCakupan = cakupan[0];
-    currentTime = 0.toString();
+    _currentTimes = 0.toString();
+
     initDataRank();
-    print("initstate");
-    print("date from "+ selectedDateFrom.toString());
   }
 
   initDataRank() async {
     setLoadingState();
-    await _saleController.getRankProducts(
-        context, setLoadingState, setData, "2", currentTime, "", "", "20");
-    //getHistoryProducts(context, setLoadingState, setData);
+    await _saleController.getRankProducts(context, setLoadingState, setData,
+        "2", _currentTimes, "", "", _currentTeams);
+    await _inventoryController.getTeams(
+        context, setLoadingState, setDropdownData);
     print("list length : " + rankProducts.length.toString());
     setLoadingState();
   }
@@ -249,6 +261,33 @@ class RankState extends State<SyanaProductRankTerlaris> {
     setState(() {
       _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
     });
+  }
+
+  //Dropdown Filter Teams
+  void setDropdownData(data) {
+    if (data is List<DropdownMenuItem> && data.isNotEmpty) {
+      setState(() {
+        teams = data;
+        _currentTeams = teams[0].value;
+      });
+    }
+  }
+
+  //OnChanged Dropdown Filter Time
+  void onChangedWaktu(value) async {
+    setState(() {
+      this.selectedTime = value;
+      _currentTimes = waktu.indexOf(value).toString();
+      _dateFrom = "";
+      _dateTo = "";
+    });
+    if (_currentTimes != "7") {
+      rankProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "2", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
   setData(data) {
@@ -263,91 +302,92 @@ class RankState extends State<SyanaProductRankTerlaris> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(bottom: 10),
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Column(
+    return _isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Column(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: selectedTime,
-                          items: waktu.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (String value) {
-                            onChangedWaktu(value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
-                  Expanded(
-                    child: Container(
-                      // width: 150,
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: selectedCakupan,
-                          items: cakupan.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (String value) {
-                            onChangedCakupan(value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.01,
+                margin: EdgeInsets.only(bottom: 10),
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(left: 10),
+                            decoration: AppTheme.inputDecorationShadow(),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                value: selectedTime,
+                                items: waktu.map(
+                                  (String val) {
+                                    return DropdownMenuItem(
+                                      value: val,
+                                      child: Text(
+                                        val,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
+                                onChanged: (String value) {
+                                  onChangedWaktu(value);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.03,
+                        ),
+                        Expanded(
+                          child: Container(
+                              // width: 150,
+                              padding: EdgeInsets.only(left: 10),
+                              decoration: AppTheme.inputDecorationShadow(),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  items: teams,
+                                  value: _currentTeams,
+                                  onChanged: (value) async {
+                                    setState(() {
+                                      _currentTeams = value;
+                                    });
+                                    setLoadingState();
+                                    rankProducts.clear();
+                                    await _saleController.getRankProducts(
+                                        context,
+                                        setLoadingState,
+                                        setData,
+                                        "2",
+                                        _currentTimes,
+                                        _dateFrom,
+                                        _dateTo,
+                                        _currentTeams);
+                                    setLoadingState();
+                                  },
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    showsDatePicker(
+                      waktu.indexOf(selectedTime),
+                    ),
+                  ],
+                ),
               ),
-              showsDatePicker(
-                waktu.indexOf(selectedTime),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: _isLoading
-              ? Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Container(
+              Expanded(
+                child: Container(
                   margin: EdgeInsets.only(top: 10, right: 10, left: 10),
                   child: ListView.builder(
                     padding: EdgeInsets.all(0),
@@ -355,7 +395,11 @@ class RankState extends State<SyanaProductRankTerlaris> {
                     itemCount: rankProducts.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        decoration: AppTheme.listBackground(),
+                        decoration: BoxDecoration(
+                          color:
+                              index < 3 ? AppTheme.teal_light : AppTheme.teal,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                         height: Dimens.listHeightSmall(context),
                         margin: EdgeInsets.only(bottom: 15),
                         child: Row(
@@ -367,7 +411,9 @@ class RankState extends State<SyanaProductRankTerlaris> {
                                 child: Text(
                                   (index + 1).toString(),
                                   style: TextStyle(
-                                    color: AppTheme.text_light,
+                                    color: index < 3
+                                        ? AppTheme.text_darker
+                                        : AppTheme.text_light,
                                     fontSize: 15,
                                   ),
                                 ),
@@ -380,7 +426,9 @@ class RankState extends State<SyanaProductRankTerlaris> {
                                 child: Icon(
                                   Icons.image,
                                   size: 60,
-                                  color: AppTheme.teal_light,
+                                  color: index < 3
+                                      ? AppTheme.teal
+                                      : AppTheme.teal_light,
                                 ),
                               ),
                             ),
@@ -396,7 +444,9 @@ class RankState extends State<SyanaProductRankTerlaris> {
                                       rankProducts[index].name,
                                       softWrap: true,
                                       style: TextStyle(
-                                        color: AppTheme.text_light,
+                                        color: index < 3
+                                            ? AppTheme.text_darker
+                                            : AppTheme.text_light,
                                         fontSize: 15,
                                       ),
                                     ),
@@ -404,7 +454,9 @@ class RankState extends State<SyanaProductRankTerlaris> {
                                       rankProducts[index].sku,
                                       softWrap: true,
                                       style: TextStyle(
-                                        color: AppTheme.text_light,
+                                        color: index < 3
+                                            ? AppTheme.text_darker
+                                            : AppTheme.text_light,
                                         fontSize: 15,
                                       ),
                                     ),
@@ -420,7 +472,9 @@ class RankState extends State<SyanaProductRankTerlaris> {
                                   rankProducts[index].rankValue,
                                   softWrap: true,
                                   style: TextStyle(
-                                    color: AppTheme.text_light,
+                                    color: index < 3
+                                        ? AppTheme.text_darker
+                                        : AppTheme.text_light,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -432,8 +486,8 @@ class RankState extends State<SyanaProductRankTerlaris> {
                     },
                   ),
                 ),
-        ),
-      ],
-    );
+              ),
+            ],
+          );
   }
 }

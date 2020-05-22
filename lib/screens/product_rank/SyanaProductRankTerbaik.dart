@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syana/Controller/InventoryController.dart';
+import 'package:syana/Controller/SaleController.dart';
+import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -18,6 +22,8 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
   DateTime selectedDateFrom = DateTime.now();
   DateTime selectedDateTo = DateTime.now();
 
+  DateFormat formatDate = DateFormat("yyyy-MM-dd");
+
   String dayFrom = "DD";
   String monthFrom = "MM";
   String yearFrom = "YY";
@@ -25,6 +31,8 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
   String dayTo = "DD";
   String monthTo = "MM";
   String yearTo = "YY";
+  String _dateFrom = "";
+  String _dateTo = "";
 
   Future<Null> selectDateFrom(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -34,7 +42,7 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateFrom)
       setState(
-        () {
+            () {
           selectedDateFrom = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -48,6 +56,14 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
           yearFrom = toSplit.split('-')[0];
         },
       );
+    _dateFrom = formatDate.format(selectedDateFrom);
+    if (_dateFrom != "" && _dateTo != "") {
+      rankBestProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "3", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
   Future<Null> selectDateTo(BuildContext context) async {
@@ -58,7 +74,7 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateTo)
       setState(
-        () {
+            () {
           selectedDateTo = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -72,6 +88,14 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
           yearTo = toSplit.split('-')[0];
         },
       );
+    _dateTo = formatDate.format(selectedDateTo);
+    if (_dateFrom != "" && _dateTo != "") {
+      rankBestProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "3", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
   showsDatePicker(index) {
@@ -175,28 +199,6 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
     }
   }
 
-
-  // *
-  // *
-  // *
-  // Komponen ListView
-  // ==============================================
-
-  List<List> terbaik = [
-    ['Natuna Midnite Kiss Coconut Liobalm', 6037.0, '-'],
-    ['Pink Rose', 2504.0, '-'],
-    ['Masker Winter Sonata', 2467.0, '-'],
-    ['GBC', 2375.0, '-'],
-    ['CCS Ori', 2348.0, '-'],
-    ['Rose Water', 1942.0, '-'],
-    ["Masker Madaline's Gold Dust", 1870.0, '-'],
-  ];
-
-  getTerbaik(index, index2) {
-    var selectedTerbaik = terbaik[index];
-    return selectedTerbaik[index2];
-  }
-
   // *
   // *
   // Komponen Dropdown button
@@ -207,29 +209,105 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
   String selectedWaktu;
   String selectedCakupan;
 
-  @override
-  void initState(){
-    selectedWaktu = waktu[6];
-    selectedCakupan = cakupan[0];
-  }
-
-  void onChangedWaktu(value) {
-    setState(() {
-      this.selectedWaktu = value;
-    });
-  }
-
   void onChangedCakupan(value) {
     setState(() {
       this.selectedCakupan = value;
     });
   }
 
+  // ===== API Component/Variables
+  String selectedTime;
+  String _currentTimes;
+
+  int _currentTeams = 0;
+
+  SaleController _saleController;
+  InventoryController _inventoryController;
+
+  bool _isLoading = false;
+
+  List<ProductModel> rankBestProducts = new List();
+  List<DropdownMenuItem> teams = new List();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _saleController = new SaleController();
+    _inventoryController = new InventoryController();
+
+    selectedTime = waktu[0];
+    _currentTimes = 0.toString();
+
+    initDataRank();
+  }
+
+  initDataRank() async {
+    setLoadingState();
+    await _saleController.getRankProducts(context, setLoadingState, setData,
+        "3", _currentTimes, "", "", _currentTeams);
+    await _inventoryController.getTeams(
+        context, setLoadingState, setDropdownData);
+    print("list length : " + rankBestProducts.length.toString());
+    setLoadingState();
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
+
+  //Dropdown Filter Teams
+  void setDropdownData(data) {
+    if (data is List<DropdownMenuItem> && data.isNotEmpty) {
+      setState(() {
+        teams = data;
+        _currentTeams = teams[0].value;
+      });
+    }
+  }
+
+  //OnChanged Dropdown Filter Time
+  void onChangedWaktu(value) async {
+    setState(() {
+      this.selectedTime = value;
+      _currentTimes = waktu.indexOf(value).toString();
+      _dateFrom = "";
+      _dateTo = "";
+    });
+    if (_currentTimes != "7") {
+      rankBestProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "3", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
+  }
+
+  setData(data) {
+    if (data is List<ProductModel> && data.isNotEmpty) {
+      setState(() {
+        rankBestProducts = data;
+      });
+    }
+  }
+
   // ============================================
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return _isLoading
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : Column(
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(bottom: 10),
@@ -245,9 +323,9 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
                       decoration: AppTheme.inputDecorationShadow(),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
-                          value: selectedWaktu,
+                          value: selectedTime,
                           items: waktu.map(
-                            (String val) {
+                                (String val) {
                               return DropdownMenuItem(
                                 value: val,
                                 child: Text(
@@ -272,30 +350,31 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
                   Expanded(
                     child: Container(
                       // width: 150,
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: selectedCakupan,
-                          items: cakupan.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              );
+                        padding: EdgeInsets.only(left: 10),
+                        decoration: AppTheme.inputDecorationShadow(),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            items: teams,
+                            value: _currentTeams,
+                            onChanged: (value) async {
+                              setState(() {
+                                _currentTeams = value;
+                              });
+                              setLoadingState();
+                              rankBestProducts.clear();
+                              await _saleController.getRankProducts(
+                                  context,
+                                  setLoadingState,
+                                  setData,
+                                  "3",
+                                  _currentTimes,
+                                  _dateFrom,
+                                  _dateTo,
+                                  _currentTeams);
+                              setLoadingState();
                             },
-                          ).toList(),
-                          onChanged: (String value) {
-                            onChangedCakupan(value);
-                          },
-                        ),
-                      ),
-                    ),
+                          ),
+                        )),
                   ),
                 ],
               ),
@@ -303,34 +382,39 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
               showsDatePicker(
-                waktu.indexOf(selectedWaktu),
+                waktu.indexOf(selectedTime),
               ),
             ],
           ),
         ),
         Expanded(
-          child: 
-          Container(
-          margin: EdgeInsets.only(top: 10, right: 10, left: 10),
-          child: ListView.builder(
-            padding: EdgeInsets.all(0),
-            shrinkWrap: true,
-            itemCount: terbaik.length,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                decoration: AppTheme.listBackground(),
-                height: Dimens.listHeightSmall(context),
-                margin: EdgeInsets.only(bottom: 15),
-                child: Row(
-                  children: <Widget>[
-                    Flexible(
+          child: Container(
+            margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+            child: ListView.builder(
+              padding: EdgeInsets.all(0),
+              shrinkWrap: true,
+              itemCount: rankBestProducts.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color:
+                    index < 3 ? AppTheme.teal_light : AppTheme.teal,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  height: Dimens.listHeightSmall(context),
+                  margin: EdgeInsets.only(bottom: 15),
+                  child: Row(
+                    children: <Widget>[
+                      Flexible(
                         flex: 10,
                         child: Container(
                           alignment: Alignment.center,
                           child: Text(
                             (index + 1).toString(),
                             style: TextStyle(
-                              color: AppTheme.text_light,
+                              color: index < 3
+                                  ? AppTheme.text_darker
+                                  : AppTheme.text_light,
                               fontSize: 15,
                             ),
                           ),
@@ -343,7 +427,9 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
                           child: Icon(
                             Icons.image,
                             size: 60,
-                            color: AppTheme.teal_light,
+                            color: index < 3
+                                ? AppTheme.teal
+                                : AppTheme.teal_light,
                           ),
                         ),
                       ),
@@ -356,18 +442,22 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                getTerbaik(index, 0),
+                                rankBestProducts[index].name,
                                 softWrap: true,
                                 style: TextStyle(
-                                  color: AppTheme.text_light,
+                                  color: index < 3
+                                      ? AppTheme.text_darker
+                                      : AppTheme.text_light,
                                   fontSize: 15,
                                 ),
                               ),
                               Text(
-                                getTerbaik(index, 2),
+                                rankBestProducts[index].sku,
                                 softWrap: true,
                                 style: TextStyle(
-                                  color: AppTheme.text_light,
+                                  color: index < 3
+                                      ? AppTheme.text_darker
+                                      : AppTheme.text_light,
                                   fontSize: 15,
                                 ),
                               ),
@@ -380,21 +470,23 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
                         child: Container(
                           alignment: Alignment.center,
                           child: Text(
-                            getTerbaik(index, 1).toString(),
+                            rankBestProducts[index].rankValue,
                             softWrap: true,
                             style: TextStyle(
-                              color: AppTheme.text_light,
+                              color: index < 3
+                                  ? AppTheme.text_darker
+                                  : AppTheme.text_light,
                               fontSize: 14,
                             ),
                           ),
                         ),
                       ),
-                  ],
-                ),
-              );
-            },
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
-        ),
         ),
       ],
     );

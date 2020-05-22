@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syana/Controller/InventoryController.dart';
+import 'package:syana/Controller/SaleController.dart';
+import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -17,6 +21,8 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
   DateTime selectedDateFrom = DateTime.now();
   DateTime selectedDateTo = DateTime.now();
 
+  DateFormat formatDate = DateFormat("yyyy-MM-dd");
+
   String dayFrom = "DD";
   String monthFrom = "MM";
   String yearFrom = "YY";
@@ -24,6 +30,8 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
   String dayTo = "DD";
   String monthTo = "MM";
   String yearTo = "YY";
+  String _dateFrom = "";
+  String _dateTo = "";
 
   Future<Null> selectDateFrom(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -33,7 +41,7 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateFrom)
       setState(
-        () {
+            () {
           selectedDateFrom = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -47,6 +55,14 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
           yearFrom = toSplit.split('-')[0];
         },
       );
+    _dateFrom = formatDate.format(selectedDateFrom);
+    if (_dateFrom != "" && _dateTo != "") {
+      rankFreeProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "1", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
   Future<Null> selectDateTo(BuildContext context) async {
@@ -57,7 +73,7 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateTo)
       setState(
-        () {
+            () {
           selectedDateTo = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -71,6 +87,14 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
           yearTo = toSplit.split('-')[0];
         },
       );
+    _dateTo = formatDate.format(selectedDateTo);
+    if (_dateFrom != "" && _dateTo != "") {
+      rankFreeProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "1", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
   showsDatePicker(index) {
@@ -214,30 +238,105 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
   String selectedWaktu;
   String selectedCakupan;
 
-  @override
-  void initState() {
-    super.initState();
-    selectedWaktu = waktu[6];
-    selectedCakupan = cakupan[0];
-  }
-
-  void onChangedWaktu(value) {
-    setState(() {
-      this.selectedWaktu = value;
-    });
-  }
-
   void onChangedCakupan(value) {
     setState(() {
       this.selectedCakupan = value;
     });
   }
 
+  // ===== API Component/Variables
+  String selectedTime;
+  String _currentTimes;
+
+  int _currentTeams = 0;
+
+  SaleController _saleController;
+  InventoryController _inventoryController;
+
+  bool _isLoading = false;
+
+  List<ProductModel> rankFreeProducts = new List();
+  List<DropdownMenuItem> teams = new List();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _saleController = new SaleController();
+    _inventoryController = new InventoryController();
+
+    selectedTime = waktu[0];
+    _currentTimes = 0.toString();
+
+    initDataRank();
+  }
+
+  initDataRank() async {
+    setLoadingState();
+    await _saleController.getRankProducts(context, setLoadingState, setData,
+        "1", _currentTimes, "", "", _currentTeams);
+    await _inventoryController.getTeams(
+        context, setLoadingState, setDropdownData);
+    print("list length : " + rankFreeProducts.length.toString());
+    setLoadingState();
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
+
+  //Dropdown Filter Teams
+  void setDropdownData(data) {
+    if (data is List<DropdownMenuItem> && data.isNotEmpty) {
+      setState(() {
+        teams = data;
+        _currentTeams = teams[0].value;
+      });
+    }
+  }
+
+  //OnChanged Dropdown Filter Time
+  void onChangedWaktu(value) async {
+    setState(() {
+      this.selectedTime = value;
+      _currentTimes = waktu.indexOf(value).toString();
+      _dateFrom = "";
+      _dateTo = "";
+    });
+    if (_currentTimes != "7") {
+      rankFreeProducts.clear();
+      setLoadingState();
+      await _saleController.getRankProducts(context, setLoadingState, setData,
+          "1", _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
+  }
+
+  setData(data) {
+    if (data is List<ProductModel> && data.isNotEmpty) {
+      setState(() {
+        rankFreeProducts = data;
+      });
+    }
+  }
+
   // ============================================
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return _isLoading
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : Column(
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(bottom: 10),
@@ -253,9 +352,9 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
                       decoration: AppTheme.inputDecorationShadow(),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
-                          value: selectedWaktu,
+                          value: selectedTime,
                           items: waktu.map(
-                            (String val) {
+                                (String val) {
                               return DropdownMenuItem(
                                 value: val,
                                 child: Text(
@@ -280,30 +379,31 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
                   Expanded(
                     child: Container(
                       // width: 150,
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: selectedCakupan,
-                          items: cakupan.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              );
+                        padding: EdgeInsets.only(left: 10),
+                        decoration: AppTheme.inputDecorationShadow(),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            items: teams,
+                            value: _currentTeams,
+                            onChanged: (value) async {
+                              setState(() {
+                                _currentTeams = value;
+                              });
+                              setLoadingState();
+                              rankFreeProducts.clear();
+                              await _saleController.getRankProducts(
+                                  context,
+                                  setLoadingState,
+                                  setData,
+                                  "1",
+                                  _currentTimes,
+                                  _dateFrom,
+                                  _dateTo,
+                                  _currentTeams);
+                              setLoadingState();
                             },
-                          ).toList(),
-                          onChanged: (String value) {
-                            onChangedCakupan(value);
-                          },
-                        ),
-                      ),
-                    ),
+                          ),
+                        )),
                   ),
                 ],
               ),
@@ -311,7 +411,7 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
               showsDatePicker(
-                waktu.indexOf(selectedWaktu),
+                waktu.indexOf(selectedTime),
               ),
             ],
           ),
@@ -322,10 +422,14 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
             child: ListView.builder(
               padding: EdgeInsets.all(0),
               shrinkWrap: true,
-              itemCount: topFree.length,
+              itemCount: rankFreeProducts.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  decoration: AppTheme.listBackground(),
+                  decoration: BoxDecoration(
+                    color:
+                    index < 3 ? AppTheme.teal_light : AppTheme.teal,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   height: Dimens.listHeightSmall(context),
                   margin: EdgeInsets.only(bottom: 15),
                   child: Row(
@@ -337,7 +441,9 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
                           child: Text(
                             (index + 1).toString(),
                             style: TextStyle(
-                              color: AppTheme.text_light,
+                              color: index < 3
+                                  ? AppTheme.text_darker
+                                  : AppTheme.text_light,
                               fontSize: 15,
                             ),
                           ),
@@ -350,7 +456,9 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
                           child: Icon(
                             Icons.image,
                             size: 60,
-                            color: AppTheme.teal_light,
+                            color: index < 3
+                                ? AppTheme.teal
+                                : AppTheme.teal_light,
                           ),
                         ),
                       ),
@@ -363,18 +471,22 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                getTopFree(index, 0),
+                                rankFreeProducts[index].name,
                                 softWrap: true,
                                 style: TextStyle(
-                                  color: AppTheme.text_light,
+                                  color: index < 3
+                                      ? AppTheme.text_darker
+                                      : AppTheme.text_light,
                                   fontSize: 15,
                                 ),
                               ),
                               Text(
-                                getTopFree(index, 2),
+                                rankFreeProducts[index].sku,
                                 softWrap: true,
                                 style: TextStyle(
-                                  color: AppTheme.text_light,
+                                  color: index < 3
+                                      ? AppTheme.text_darker
+                                      : AppTheme.text_light,
                                   fontSize: 15,
                                 ),
                               ),
@@ -387,10 +499,12 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
                         child: Container(
                           alignment: Alignment.center,
                           child: Text(
-                            getTopFree(index, 1).toString(),
+                            rankFreeProducts[index].rankValue,
                             softWrap: true,
                             style: TextStyle(
-                              color: AppTheme.text_light,
+                              color: index < 3
+                                  ? AppTheme.text_darker
+                                  : AppTheme.text_light,
                               fontSize: 14,
                             ),
                           ),

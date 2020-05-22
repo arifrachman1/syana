@@ -16,19 +16,9 @@ class PenjualanState extends State<PenjualanTimHariIni> {
 
   List<TransactionHistoryModel> productHistories = new List();
   List<TransactionHistoryModel> filteredProductHistories = new List();
+  List<TransactionHistoryModel> filteredProductHistoriesBefore = new List();
 
   String searchFilter = "";
-
-  List<List> penjualanTim = [
-    ['Shoppe', '8819912058031444', '2020-03-13 13:27:07'],
-    ['Shoppe', '8819912058031445', '2020-03-13 13:27:08'],
-    ['Shoppe', '8819912058031446', '2020-03-13 13:27:09'],
-  ];
-
-  getPenjualanTim(index, index2) {
-    var selectedPenjualanTim = penjualanTim[index];
-    return selectedPenjualanTim[index2];
-  }
 
   @override
   void dispose() {
@@ -43,6 +33,18 @@ class PenjualanState extends State<PenjualanTimHariIni> {
     _saleController = new SaleController();
     initDataHistories();
     print("initstate");
+    _searchController.addListener(() {
+      if (_searchController.text.isEmpty) {
+        setState(() {
+          searchFilter = "";
+          filteredProductHistories = productHistories;
+        });
+      } else {
+        setState(() {
+          searchFilter = _searchController.text;
+        });
+      }
+    });
   }
 
   initDataHistories() async {
@@ -62,12 +64,34 @@ class PenjualanState extends State<PenjualanTimHariIni> {
     if (data is List<TransactionHistoryModel> && data.isNotEmpty) {
       setState(() {
         productHistories = data;
+        filteredProductHistories = productHistories;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (searchFilter.isNotEmpty) {
+      List<TransactionHistoryModel> temp = new List();
+
+      if (filteredProductHistories.isEmpty) {
+        filteredProductHistories = filteredProductHistoriesBefore;
+      }
+
+      filteredProductHistories.forEach((value) {
+        if (value.transactionNumber
+                .toLowerCase()
+                .contains(searchFilter.toLowerCase()) ||
+            value.nameEcommerce
+                .toLowerCase()
+                .contains(searchFilter.toLowerCase())) {
+          temp.add(value);
+          filteredProductHistoriesBefore = temp;
+        }
+      });
+      filteredProductHistories = temp;
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen[200],
@@ -103,7 +127,7 @@ class PenjualanState extends State<PenjualanTimHariIni> {
                       child: ListView.builder(
                         padding: EdgeInsets.all(0),
                         shrinkWrap: true,
-                        itemCount: productHistories.length,
+                        itemCount: filteredProductHistories.length,
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
                             height: 110,
@@ -115,7 +139,8 @@ class PenjualanState extends State<PenjualanTimHariIni> {
                                   alignment: Alignment.topLeft,
                                   margin: EdgeInsets.only(top: 10, left: 7),
                                   child: Text(
-                                    productHistories[index].nameEcommerce,
+                                    filteredProductHistories[index]
+                                        .nameEcommerce,
                                     style: TextStyle(
                                       color: AppTheme.text_light,
                                       fontSize: 12.0,
@@ -126,7 +151,8 @@ class PenjualanState extends State<PenjualanTimHariIni> {
                                   margin: EdgeInsets.only(left: 7, top: 7),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    productHistories[index].transactionNumber,
+                                    filteredProductHistories[index]
+                                        .transactionNumber,
                                     style: TextStyle(
                                       color: AppTheme.text_light,
                                       fontSize: 20,
@@ -137,7 +163,8 @@ class PenjualanState extends State<PenjualanTimHariIni> {
                                   margin: EdgeInsets.only(left: 7, bottom: 7),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    productHistories[index].datetimeCreated,
+                                    filteredProductHistories[index]
+                                        .datetimeCreated,
                                     style: TextStyle(
                                       color: AppTheme.text_light,
                                       fontSize: 12,
