@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Dimens{
   //===========================geometri widget=================================================
+  static double formHeight = 56;
 
   static buttonRatio(){
     return 7/2;

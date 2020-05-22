@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:syana/models/CustomerModel.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 
 class CustomTextInput {
@@ -16,8 +17,9 @@ class CustomTextInput {
       key, icon}) {
     return Container(
       width: ScreenSizeHelper.getDisplayWidth(context) * (widthFactor ?? 1),
-      height: 56,
+      height: Dimens.formHeight,
       margin: EdgeInsets.only(top: 25),
+      padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: AppTheme.inputDecoration(),
       child: TextField(
         key: key ?? null,
