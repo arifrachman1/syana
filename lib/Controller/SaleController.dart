@@ -186,7 +186,7 @@ class SaleController {
     }
 
     var params =
-    GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
 
     final data = await GlobalFunctions.dioGetCall(
         path: GlobalVars.apiUrl + "get-list-sales",
@@ -200,14 +200,50 @@ class SaleController {
 
         historiesFromApi.forEach((element) {
           historiesProduct.add(new TransactionHistoryModel.getHistory(
-            element['transaction_number'],
-            element['datetime_created'],
-            element['name_ecommerce']
-          ));
+              element['transaction_number'],
+              element['datetime_created'],
+              element['name_ecommerce']));
         });
 
         if (historiesProduct.isNotEmpty) {
           setDataCallback(historiesProduct);
+        }
+      }
+    } else {}
+  }
+
+  /*get rank*/
+  getRankProducts(context, loadingStateCallback, setDataCallback, dataType,
+      filterTime, timeFrom, timeTo, idTeam) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ["data_type", "filter_time", "time_from", "time_to", "id_team"],
+        [dataType, filterTime, timeFrom, timeTo, idTeam]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-product-rank",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List rankFromApi = data['product'];
+        List<ProductModel> rankProducts = new List();
+
+        rankFromApi.forEach((element) {
+          rankProducts.add(new ProductModel.productRank(
+              element['id'],
+              element['name'],
+              element['image'],
+              element['sku'],
+              element['rank_value']));
+        });
+
+        if (rankProducts.isNotEmpty) {
+          setDataCallback(rankProducts);
         }
       }
     } else {}
@@ -262,7 +298,8 @@ class SaleController {
       List details) async {
     FormData formData;
     print(details);
-    String paramDetail = GlobalFunctions.generateJsonParam(["detail"], [details]);
+    String paramDetail =
+        GlobalFunctions.generateJsonParam(["detail"], [details]);
     print(paramDetail);
     Map param = GlobalFunctions.generateMapParam([
       "id_employee",
@@ -295,7 +332,7 @@ class SaleController {
             message: Strings.DIALOG_MESSAGE_TRANSACTION_SUCCESS,
             context: context,
             popCount: 1);
-      }else{
+      } else {
         CustomDialog.getDialog(
             title: Strings.DIALOG_TITLE_ERROR,
             message: data['message'],
@@ -303,7 +340,7 @@ class SaleController {
             popCount: 1);
         print(data['message']);
       }
-    }else{
+    } else {
       CustomDialog.getDialog(
           title: Strings.DIALOG_TITLE_ERROR,
           message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,

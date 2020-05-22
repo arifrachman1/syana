@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:syana/Controller/SaleController.dart';
+import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -176,27 +178,6 @@ class RankState extends State<SyanaProductRankTerlaris> {
 
   // *
   // *
-  // *
-  // Komponen ListView
-  // ==============================================
-
-  List<List> terlaris = [
-    ['GBC', 12021.0, '-'],
-    ['Methi', 4999.0, '-'],
-    ['Cough and Flu EO Blend', 4841.0, '-'],
-    ['Pink Rose', 4841.0, '-'],
-    ['Himalayan Pink Salt', 4841.0, '-'],
-    ['Lavender EO', 3790.0, '-'],
-    ['Cleanser 100ml', 3555.0, '-'],
-  ];
-
-  getTerlaris(index, index2) {
-    var selectedTerlaris = terlaris[index];
-    return selectedTerlaris[index2];
-  }
-
-  // *
-  // *
   // Komponen Dropdown button
   // ===========================================
   List<String> waktu = [
@@ -211,25 +192,71 @@ class RankState extends State<SyanaProductRankTerlaris> {
   ];
   List<String> cakupan = ['Global', 'Lokal'];
 
-  String selectedWaktu;
+  String selectedTime;
   String selectedCakupan;
-
-  @override
-  void initState() {
-    selectedWaktu = waktu[6];
-    selectedCakupan = cakupan[0];
-  }
+  String currentTime;
 
   void onChangedWaktu(value) {
     setState(() {
-      this.selectedWaktu = value;
+      this.selectedTime = value;
+      currentTime = waktu.indexOf(value).toString();
     });
+    initDataRank();
   }
 
   void onChangedCakupan(value) {
     setState(() {
       this.selectedCakupan = value;
     });
+  }
+
+  // ===== API Component/Variables
+
+  SaleController _saleController;
+  bool _isLoading = false;
+
+  List<ProductModel> rankProducts = new List();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _saleController = new SaleController();
+    selectedTime = waktu[0];
+    selectedCakupan = cakupan[0];
+    currentTime = 0.toString();
+    initDataRank();
+    print("initstate");
+    print("date from "+ selectedDateFrom.toString());
+  }
+
+  initDataRank() async {
+    setLoadingState();
+    await _saleController.getRankProducts(
+        context, setLoadingState, setData, "2", currentTime, "", "", "20");
+    //getHistoryProducts(context, setLoadingState, setData);
+    print("list length : " + rankProducts.length.toString());
+    setLoadingState();
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
+
+  setData(data) {
+    if (data is List<ProductModel> && data.isNotEmpty) {
+      setState(() {
+        rankProducts = data;
+      });
+    }
   }
 
   // ============================================
@@ -252,7 +279,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
                       decoration: AppTheme.inputDecorationShadow(),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
-                          value: selectedWaktu,
+                          value: selectedTime,
                           items: waktu.map(
                             (String val) {
                               return DropdownMenuItem(
@@ -310,97 +337,101 @@ class RankState extends State<SyanaProductRankTerlaris> {
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
               showsDatePicker(
-                waktu.indexOf(selectedWaktu),
+                waktu.indexOf(selectedTime),
               ),
             ],
           ),
         ),
         Expanded(
-          child: Container(
-            margin: EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: ListView.builder(
-              padding: EdgeInsets.all(0),
-              shrinkWrap: true,
-              itemCount: terlaris.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  decoration: AppTheme.listBackground(),
-                  height: Dimens.listHeightSmall(context),
-                  margin: EdgeInsets.only(bottom: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Flexible(
-                        flex: 10,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            (index + 1).toString(),
-                            style: TextStyle(
-                              color: AppTheme.text_light,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 17,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Icon(
-                            Icons.image,
-                            size: 60,
-                            color: AppTheme.teal_light,
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 53,
-                        fit: FlexFit.tight,
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                getTerlaris(index, 0),
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 15,
+          child: _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Container(
+                  margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(0),
+                    shrinkWrap: true,
+                    itemCount: rankProducts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        decoration: AppTheme.listBackground(),
+                        height: Dimens.listHeightSmall(context),
+                        margin: EdgeInsets.only(bottom: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Flexible(
+                              flex: 10,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  (index + 1).toString(),
+                                  style: TextStyle(
+                                    color: AppTheme.text_light,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
-                              Text(
-                                getTerlaris(index, 2),
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 15,
+                            ),
+                            Flexible(
+                              flex: 17,
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Icon(
+                                  Icons.image,
+                                  size: 60,
+                                  color: AppTheme.teal_light,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 20,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            getTerlaris(index, 1).toString(),
-                            softWrap: true,
-                            style: TextStyle(
-                              color: AppTheme.text_light,
-                              fontSize: 14,
                             ),
-                          ),
+                            Flexible(
+                              flex: 53,
+                              fit: FlexFit.tight,
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      rankProducts[index].name,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      rankProducts[index].sku,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 20,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  rankProducts[index].rankValue,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    color: AppTheme.text_light,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
+                ),
         ),
       ],
     );

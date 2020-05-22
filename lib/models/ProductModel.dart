@@ -31,6 +31,9 @@ class ProductModel {
       this._point, this._stock, this._criticalStock, this._weight, this._sku,
       this._price);
 
+  ProductModel.productRank(this._id, this._name, this._image, this._sku,
+      this._rankValue);
+
   get rankValue => _rankValue;
 
   set rankValue(value) {

@@ -41,7 +41,7 @@ class PenjualanState extends State<PenjualanTimHariIni> {
     // TODO: implement initState
     super.initState();
     _saleController = new SaleController();
-
+    initDataHistories();
     print("initstate");
   }
 
