@@ -112,6 +112,26 @@ class GlobalFunctions {
     return jsonFromList;
   }
 
+  static dynamic generateDropdownMenuItem({@required List childs, List values}){
+    List<DropdownMenuItem> temp = new List();
+    if(childs.isNotEmpty){
+      if(values != null && childs.length == values.length){
+        int i = 0;
+        childs.forEach((element) {
+          temp.add(new DropdownMenuItem(child: Text(element), value: values[i]));
+          i++;
+        });
+      }else{
+        int i = 0;
+        childs.forEach((element) {
+          temp.add(new DropdownMenuItem(child: Text(element), value: i,));
+          i++;
+        });
+      }
+    }
+    return temp;
+  }
+
   static navigate(context, whereTo) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int idRole = prefs.get(GlobalVars.idRoleKey);

@@ -77,7 +77,7 @@ class StokState extends State<Stok> with SingleTickerProviderStateMixin {
                 child: TabBarView(
                   controller: tabController,
                   children: <Widget>[
-                    SyanaStokBarangMasuk(),
+                    SyanaStockIn(),
                     StokMain(),
                     SyanaStokBarangKeluar(),
                   ],

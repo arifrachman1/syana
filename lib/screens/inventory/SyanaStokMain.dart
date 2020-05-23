@@ -49,7 +49,7 @@ class StokMainState extends State<StokMain> {
   }
 
   _initSearch() async {
-    await _inventoryController.getStock(context, setLoadingState, setData, '1', 0);
+    await _inventoryController.getStock(context, setLoadingState, setData, '1', null);
     await _inventoryController.getTeams(
         context, setLoadingState, setDropdownData);
 

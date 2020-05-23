@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:syana/Controller/InventoryController.dart';
+import 'package:syana/models/ProductModel.dart';
+import 'package:syana/models/TeamModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/GlobalFunctions.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomBottomNav.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 
-class SyanaStokBarangMasuk extends StatefulWidget {
+class SyanaStockIn extends StatefulWidget {
   @override
-  RankState createState() => RankState();
+  StockInState createState() => StockInState();
 }
 
-class RankState extends State<SyanaStokBarangMasuk> {
+class StockInState extends State<SyanaStockIn> {
   // *
   // *
   // *
@@ -30,7 +37,7 @@ class RankState extends State<SyanaStokBarangMasuk> {
         initialDate: selectedDateFrom,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDateFrom)
+    if (picked != null)
       setState(
         () {
           selectedDateFrom = picked;
@@ -54,7 +61,7 @@ class RankState extends State<SyanaStokBarangMasuk> {
         initialDate: selectedDateTo,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDateTo)
+    if (picked != null && selectedDateTo.isAfter(selectedDateFrom)) {
       setState(
         () {
           selectedDateTo = picked;
@@ -70,9 +77,35 @@ class RankState extends State<SyanaStokBarangMasuk> {
           yearTo = toSplit.split('-')[0];
         },
       );
+      _inventoryController.getAddition(
+          context,
+          setLoadingState,
+          setData,
+          _isAsc ? "1" : "2",
+          _currentTimeFilter,
+          yearFrom + "-" + monthFrom + "-" + dayFrom,
+          yearTo + "-" + monthTo + "-" + dayTo,
+          _currentTeam);
+    } else {
+      setState(() {
+        dayFrom = "DD";
+        monthFrom = "MM";
+        yearFrom = "YY";
+
+        dayTo = "DD";
+        monthTo = "MM";
+        yearTo = "YY";
+      });
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_WARNING,
+          message: Strings.DIALOG_MESSAGE_INVALID_TIME_FILTER,
+          context: context,
+          popCount: 1);
+    }
   }
+
   showsDatePicker(index) {
-    if (index == 7) {
+    if (index == 3) {
       return Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,36 +230,81 @@ class RankState extends State<SyanaStokBarangMasuk> {
   // *
   // Komponen Dropdown button
   // ===========================================
-  List<String> waktu = [
+  List<String> _timeFilterss = [
     'Hari ini',
     'Minggu ini',
     'Bulan ini',
-    'Kemarin',
-    'Minggu lalu',
-    'Bulan lalu',
-    'Grand Total',
     'Tentukan sendiri'
   ];
-  List<String> cakupan = ['Global', 'Lokal'];
+  List<String> _teamss = ['Global', 'Lokal'];
 
-  String selectedWaktu;
-  String selectedCakupan;
+  int _currentTimeFilter;
+  int _currentTeam;
+
+  InventoryController _inventoryController;
+  List<DropdownMenuItem> _teams = new List();
+  List<DropdownMenuItem> _timeFilter = new List();
+  List<ProductModel> additions = new List();
+  bool _isLoading = false, _isAsc = true;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   void initState() {
-    selectedWaktu = waktu[6];
-    selectedCakupan = cakupan[0];
+    _inventoryController = new InventoryController();
+    /*_currentTimeFilter = _timeFilter[0];*/
+    _initTeams();
+    /*_currentTeams = _teams[0];*/
+  }
+
+  _initTeams() async {
+    await _inventoryController.getAddition(
+        context, setLoadingState, setData, "1", 0, "", "", null);
+    await _inventoryController.getTeams(context, setLoadingState, setTeamsData);
+
+    /*generate time filter dropdown and its value*/
+    _timeFilter = GlobalFunctions.generateDropdownMenuItem(
+        childs: ["Hari ini", "Minggu ini", "Bulan ini", "Tentukan Sendiri"]);
+    print(_timeFilter);
+    _currentTimeFilter = _timeFilter[0].value;
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
+
+  void setData(data) {
+    if (data is List<ProductModel>) {
+      setState(() {
+        additions = data;
+      });
+    }
+  }
+
+  void setTeamsData(data) {
+    if (data is List<DropdownMenuItem> && data.isNotEmpty) {
+      setState(() {
+        _teams = data;
+        _currentTeam = data[0].value;
+      });
+    }
   }
 
   void onChangedWaktu(value) {
     setState(() {
-      this.selectedWaktu = value;
+      this._currentTimeFilter = value;
     });
   }
 
   void onChangedCakupan(value) {
     setState(() {
-      this.selectedCakupan = value;
+      this._currentTeam = value;
     });
   }
 
@@ -234,162 +312,229 @@ class RankState extends State<SyanaStokBarangMasuk> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(bottom: 10),
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: selectedWaktu,
-                          items: waktu.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (String value) {
-                            onChangedWaktu(value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
-                  Expanded(
-                    child: Container(
-                      // width: 150,
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: selectedCakupan,
-                          items: cakupan.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (String value) {
-                            onChangedCakupan(value);
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              showsDatePicker(
-                waktu.indexOf(selectedWaktu),
-              ),
-            ],
-          ),
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        bottomNavigationBar: CustomBottomNav.getBottomNav(context, 0),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppTheme.yellow,
+          foregroundColor: Colors.black,
+          tooltip: 'Add',
+          child: Icon(Icons.filter_list),
+          onPressed: () {
+            setState(() {
+              _isAsc = _isAsc ? false : true;
+            });
+
+            _inventoryController.getAddition(context, setLoadingState, setData,
+                _isAsc ? "1" : "2", _currentTimeFilter, _currentTimeFilter == 3
+                    ? (yearFrom == "YY" && monthFrom == "MM" && dayFrom == "DD"
+                    ? ""
+                    : (yearFrom + "-" + monthFrom + "-" + dayFrom))
+                    : "",
+                _currentTimeFilter == 3
+                    ? (yearTo == "YY" && monthTo == "MM" && dayTo == "DD"
+                    ? ""
+                    : (yearTo + "-" + monthTo + "-" + dayTo))
+                    : "", _currentTeam);
+          },
         ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: ListView.builder(
-              padding: EdgeInsets.all(0),
-              shrinkWrap: true,
-              itemCount: barangMasuk.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  decoration: AppTheme.listBackground(),
-                  height: Dimens.listHeightSmall(context),
-                  margin: EdgeInsets.only(bottom: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Flexible(
-                        flex: 17,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.image,
-                            size: 60,
-                            color: AppTheme.teal_light,
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 63,
-                        fit: FlexFit.tight,
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+        body: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : RefreshIndicator(
+                onRefresh: () {
+                  _inventoryController.getAddition(
+                      context,
+                      setLoadingState,
+                      setData,
+                      _isAsc ? "1" : "2",
+                      _currentTimeFilter,
+                      _currentTimeFilter == 3
+                          ? (yearFrom == "YY" && monthFrom == "MM" && dayFrom == "DD"
+                          ? ""
+                          : (yearFrom + "-" + monthFrom + "-" + dayFrom))
+                          : "",
+                      _currentTimeFilter == 3
+                          ? (yearTo == "YY" && monthTo == "MM" && dayTo == "DD"
+                          ? ""
+                          : (yearTo + "-" + monthTo + "-" + dayTo))
+                          : "",
+                      _currentTeam);
+                },
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      padding: EdgeInsets.only(left: 10, right: 10),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
-                                getBarangMasuk(index, 0),
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 15,
+                              Expanded(
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  decoration: AppTheme.inputDecorationShadow(),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      value: _currentTimeFilter,
+                                      items: _timeFilter,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _currentTimeFilter = value;
+                                        });
+                                        _inventoryController.getAddition(
+                                            context,
+                                            setLoadingState,
+                                            setData,
+                                            _isAsc ? "1" : "2",
+                                            _currentTimeFilter,
+                                            _currentTimeFilter == 3
+                                                ? (yearFrom == "YY" && monthFrom == "MM" && dayFrom == "DD"
+                                                ? ""
+                                                : (yearFrom + "-" + monthFrom + "-" + dayFrom))
+                                                : "",
+                                            _currentTimeFilter == 3
+                                                ? (yearTo == "YY" && monthTo == "MM" && dayTo == "DD"
+                                                ? ""
+                                                : (yearTo + "-" + monthTo + "-" + dayTo))
+                                                : "",
+                                            _currentTeam);
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
-                              Text(
-                                getBarangMasuk(index, 1) +
-                                    ' | ' +
-                                    getBarangMasuk(index, 2),
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 15,
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.03,
+                              ),
+                              Expanded(
+                                child: Container(
+                                  // width: 150,
+                                  padding: EdgeInsets.only(left: 10),
+                                  decoration: AppTheme.inputDecorationShadow(),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      value: _currentTeam,
+                                      items: _teams,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _currentTeam = value;
+                                        });
+                                        _inventoryController.getAddition(
+                                            context,
+                                            setLoadingState,
+                                            setData,
+                                            "1",
+                                            _currentTimeFilter,
+                                            yearFrom +
+                                                "-" +
+                                                monthFrom +
+                                                "-" +
+                                                dayFrom,
+                                            yearTo +
+                                                "-" +
+                                                monthTo +
+                                                "-" +
+                                                dayTo,
+                                            _currentTeam);
+                                      },
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 20,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            getBarangMasuk(index, 3).toString(),
-                            softWrap: true,
-                            style: TextStyle(
-                              color: AppTheme.text_light,
-                              fontSize: 14,
-                            ),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.01,
                           ),
+                          showsDatePicker(_currentTimeFilter),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+                        child: ListView.builder(
+                          padding: EdgeInsets.all(0),
+                          shrinkWrap: true,
+                          itemCount: additions.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              decoration: AppTheme.listBackground(),
+                              height: Dimens.listHeightSmall(context),
+                              margin: EdgeInsets.only(bottom: 15),
+                              child: Row(
+                                children: <Widget>[
+                                  Flexible(
+                                    flex: 17,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Icon(
+                                        Icons.image,
+                                        size: 60,
+                                        color: AppTheme.teal_light,
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 63,
+                                    fit: FlexFit.tight,
+                                    child: Container(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            additions[index].name,
+                                            softWrap: true,
+                                            style: TextStyle(
+                                              color: AppTheme.text_light,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                          Text(
+                                            additions[index].point +
+                                                ' | ' +
+                                                (additions[index].sku != null
+                                                    ? additions[index].sku != ""
+                                                        ? additions[index].sku
+                                                        : "-"
+                                                    : "-"),
+                                            softWrap: true,
+                                            style: TextStyle(
+                                              color: AppTheme.text_light,
+                                              fontSize: 15,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 20,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        additions[index].stock,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
+                    ),
+                  ],
+                ),
+              ));
   }
 }

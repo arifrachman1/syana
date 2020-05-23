@@ -16,14 +16,23 @@ class InventoryController {
     _userModel = await GlobalFunctions.getPersistence();
   }
 
-  getStock(context, loadingStateCallback, setDataCallback, sortOrder, teamId) async {
+  getStock(
+      context, loadingStateCallback, setDataCallback, sortOrder, teamId) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
-    var params = GlobalFunctions.generateMapParam(
-        ['id_employee', 'sort_order', 'id_team'],
-        [_userModel.id.toString(), sortOrder, teamId == 0 ? _userModel.idTeam.toString() : teamId.toString()]);
+    var params = GlobalFunctions.generateMapParam([
+      'id_employee',
+      'sort_order',
+      'id_team'
+    ], [
+      _userModel.id.toString(),
+      sortOrder,
+      teamId == null
+          ? _userModel.idTeam.toString()
+          : teamId == 0 ? "global" : teamId.toString()
+    ]);
 
     print(params);
     loadingStateCallback();
@@ -62,6 +71,117 @@ class InventoryController {
     loadingStateCallback();
   }
 
+  getAddition(context, loadingStateCallback, setDataCallback, sortOrder,
+      timeFilter, timeFrom, timeTo, teamId) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam([
+      'filter_time',
+      'time_from',
+      'time_to',
+      'id_team',
+      'sort_order'
+    ], [
+      timeFilter.toString(),
+      timeFrom,
+      timeTo,
+      teamId == null ? _userModel.idTeam.toString() : teamId.toString(),
+      sortOrder
+    ]);
+
+    print(params);
+
+    loadingStateCallback();
+    final data = await GlobalFunctions.dioGetCall(
+        context: context,
+        path: GlobalVars.apiUrl + "get-addition",
+        params: params);
+
+    if (data != null) {
+      print(data);
+      if (data['status'] == 1) {
+        List additionsFromApi = data['product'];
+        List<ProductModel> additions = new List();
+
+        if (additionsFromApi.isNotEmpty) {
+          additionsFromApi.forEach((element) {
+            additions.add(new ProductModel.productStock(
+                element['id'].toString(),
+                element['status'].toString(),
+                element['name'].toString(),
+                element['image'].toString(),
+                element['point'].toString(),
+                element['stock'].toString(),
+                element['critical_stock'].toString(),
+                element['weight'].toString(),
+                element['sku'].toString(),
+                element['price'].toString()));
+          });
+        }
+
+        setDataCallback(additions);
+      }
+    }
+    loadingStateCallback();
+  }
+
+  getSaleHistory(context, loadingStateCallback, setDataCallback, sortOrder,
+      timeFilter, timeFrom, timeTo, teamId) async {
+    if(_userModel == null){
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam([
+      'filter_time',
+      'time_from',
+      'time_to',
+      'id_team',
+      'sort_order'
+    ], [
+      timeFilter.toString(),
+      timeFrom,
+      timeTo,
+      teamId == null ? _userModel.idTeam.toString() : teamId.toString(),
+      sortOrder
+    ]);
+
+    print(params);
+
+    loadingStateCallback();
+    final data = await GlobalFunctions.dioGetCall(
+        context: context,
+        path: GlobalVars.apiUrl + "get-addition",
+        params: params);
+
+    if(data != null){
+      if(data['status'] == 1){
+        List historyFromApi = data['product'];
+        List<ProductModel> history = new List();
+
+        if (historyFromApi.isNotEmpty) {
+          historyFromApi.forEach((element) {
+            history.add(new ProductModel.productStock(
+                element['id'].toString(),
+                element['status'].toString(),
+                element['name'].toString(),
+                element['image'].toString(),
+                element['point'].toString(),
+                element['stock'].toString(),
+                element['critical_stock'].toString(),
+                element['weight'].toString(),
+                element['sku'].toString(),
+                element['price'].toString()));
+          });
+        }
+
+        setDataCallback(history);
+      }
+    }
+    loadingStateCallback();
+  }
+
   getTeams(context, loadingStateCallback, setDataCallback) async {
     if (_userModel == null) {
       await _getPersistence();
@@ -81,8 +201,8 @@ class InventoryController {
 
         if (teamsFromApi.isNotEmpty) {
           teamsFromApi.forEach((element) {
-            teams.add(
-                new TeamModel.teamsDropdown(element['id'].toString(), element['name'].toString()));
+            teams.add(new TeamModel.teamsDropdown(
+                element['id'].toString(), element['name'].toString()));
           });
         }
 
@@ -99,6 +219,10 @@ class InventoryController {
 
   _generateDropdownItems(List<TeamModel> objects) {
     List<DropdownMenuItem> temp = new List();
+    temp.add(new DropdownMenuItem(
+      child: Text("Global"),
+      value: 0,
+    ));
     if (objects.isNotEmpty) {
       objects.forEach((element) {
         temp.add(new DropdownMenuItem(
