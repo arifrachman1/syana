@@ -202,10 +202,10 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                           ),
                                         ),
                                         Text(
-                                          'Total Paket Terkirim',
+                                          'Total Paket\nTerkirim',
                                           style: TextStyle(
                                             color: AppTheme.text_light,
-                                            fontSize: 17,
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ],
@@ -234,10 +234,10 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                           ),
                                         ),
                                         Text(
-                                          'Paket Dari Tim Saya',
+                                          'Paket Dari\nTim Saya',
                                           style: TextStyle(
                                             color: AppTheme.text_light,
-                                            fontSize: 17,
+                                            fontSize: 14,
                                           ),
                                         ),
                                       ],
