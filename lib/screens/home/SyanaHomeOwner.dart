@@ -196,7 +196,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                               ? _homeDataModel
                                                   .totalPackageSentThisMonth
                                                   .toString()
-                                              : '2',
+                                              : '-',
                                           style: TextStyle(
                                             color: AppTheme.text_light,
                                             fontSize: 40,
@@ -228,7 +228,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                               ? _homeDataModel
                                                   .totalPackageSentToday
                                                   .toString()
-                                              : '1',
+                                              : '-',
                                           style: TextStyle(
                                             color: AppTheme.text_light,
                                             fontSize: 40,

@@ -89,7 +89,7 @@ class HomeDataModel {
     _allTeamPointThisMonth = value;
   }
 
-  get myTeamPackageSentToday => int.parse(_myTeamPackageSentToday);
+  get myTeamPackageSentToday => _myTeamPackageSentToday != null ? int.parse(_myTeamPackageSentToday) : 0;
 
   set myTeamPackageSentToday(value) {
     _myTeamPackageSentToday = value;

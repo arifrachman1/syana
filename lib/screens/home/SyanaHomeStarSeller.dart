@@ -195,7 +195,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                               ? _homeDataModel
                                                   .totalPackageSentToday
                                                   .toString()
-                                              : '2',
+                                              : '-',
                                           style: TextStyle(
                                             color: AppTheme.text_light,
                                             fontSize: 40,
@@ -227,7 +227,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                               ? _homeDataModel
                                                   .myTeamPackageSentToday
                                                   .toString()
-                                              : '1',
+                                              : '-',
                                           style: TextStyle(
                                             color: AppTheme.text_light,
                                             fontSize: 40,

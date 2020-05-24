@@ -165,7 +165,7 @@ class CustomerInputState extends State<CustomerInput> {
                     CustomTextInput.getCustomTextField(
                         context: context,
                         controller: _nameController,
-                        hint: "Nama Peanggan",
+                        hint: "Nama Pelanggan",
                         textInputType: TextInputType.text),
                     CustomTextInput.getCustomAutoCompleteField(
                         context: context,

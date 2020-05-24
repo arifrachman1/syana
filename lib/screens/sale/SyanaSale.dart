@@ -6,6 +6,8 @@ import 'package:syana/screens/sale/SyanaConfirmation.dart';
 import 'package:syana/screens/sale/SyanaPenjualanTimhariini.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 import 'package:syana/widgets/SaleWidgets.dart';
 import '../../main.dart';
 
@@ -266,18 +268,29 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
                                 shape: AppTheme.roundButton(),
                                 color: AppTheme.btn_success,
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                        return Confirmation(
-                                            _saleController
-                                                .getSelectedProduct(),
-                                            _saleController.getTotal(true),
-                                            _saleController.getTotal(false));
-                                      },
-                                    ),
-                                  );
+                                  if (_saleController
+                                      .getSelectedProduct()
+                                      .isNotEmpty) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return Confirmation(
+                                              _saleController
+                                                  .getSelectedProduct(),
+                                              _saleController.getTotal(true),
+                                              _saleController.getTotal(false));
+                                        },
+                                      ),
+                                    );
+                                  } else {
+                                    CustomDialog.getDialog(
+                                        title: Strings.DIALOG_TITLE_WARNING,
+                                        message: Strings
+                                            .DIALOG_MESSAGE_INSUFFICENT_ITEM,
+                                        context: context,
+                                        popCount: 1);
+                                  }
                                 },
                               ),
                             ),
@@ -347,59 +360,59 @@ class _SaleInnerState extends State<SaleInnerWidget> {
   add(index, isSale) {
     /*update view*/
     int number = isSale
-        ? int.parse(categorizedProducts[index].saleNumber)
-        : int.parse(categorizedProducts[index].freeNumber);
+        ? int.parse(filteredProducts[index].saleNumber)
+        : int.parse(filteredProducts[index].freeNumber);
 
     number++;
 
     /*to update the widget's(view) number*/
     setState(() {
       isSale
-          ? categorizedProducts[index].saleNumber = number
-          : categorizedProducts[index].freeNumber = number;
+          ? filteredProducts[index].saleNumber = number
+          : filteredProducts[index].freeNumber = number;
     });
     /*update view*/
 
     /*pass the selected product(s) to the controller*/
     if (number == 1) {
-      widget.saleController.addSelectedProduct(categorizedProducts[index]);
+      widget.saleController.addSelectedProduct(filteredProducts[index]);
     } else {
       isSale
-          ? widget.saleController.setSaleNumber(categorizedProducts[index],
-              int.parse(categorizedProducts[index].saleNumber))
-          : widget.saleController.setFreeNumber(categorizedProducts[index],
-              int.parse(categorizedProducts[index].freeNumber));
+          ? widget.saleController.setSaleNumber(filteredProducts[index],
+              int.parse(filteredProducts[index].saleNumber))
+          : widget.saleController.setFreeNumber(filteredProducts[index],
+              int.parse(filteredProducts[index].freeNumber));
     }
   }
 
   remove(index, isSale) {
     /*update view*/
     int number = isSale
-        ? int.parse(categorizedProducts[index].saleNumber)
-        : int.parse(categorizedProducts[index].freeNumber);
+        ? int.parse(filteredProducts[index].saleNumber)
+        : int.parse(filteredProducts[index].freeNumber);
     number--;
     /*to update widget's(view) number*/
     setState(() {
       isSale
-          ? categorizedProducts[index].saleNumber = number
-          : categorizedProducts[index].freeNumber = number;
+          ? filteredProducts[index].saleNumber = number
+          : filteredProducts[index].freeNumber = number;
     });
     /*update view*/
 
     /*pass the desired object to controller to substract its value or remove it when the value hits 0*/
     if (number >= 0) {
       isSale
-          ? widget.saleController.setSaleNumber(categorizedProducts[index],
-              int.parse(categorizedProducts[index].saleNumber))
-          : widget.saleController.setFreeNumber(categorizedProducts[index],
-              int.parse(categorizedProducts[index].freeNumber));
+          ? widget.saleController.setSaleNumber(filteredProducts[index],
+              int.parse(filteredProducts[index].saleNumber))
+          : widget.saleController.setFreeNumber(filteredProducts[index],
+              int.parse(filteredProducts[index].freeNumber));
       /*after we decrese the number, then we check whether there is a zero number or not*/
       widget.saleController.checkZeroNumber();
     } else {
       setState(() {
         isSale
-            ? categorizedProducts[index].saleNumber = 0
-            : categorizedProducts[index].freeNumber = 0;
+            ? filteredProducts[index].saleNumber = 0
+            : filteredProducts[index].freeNumber = 0;
         /*categorizedProducts[index].saleNumber = 0;*/
       });
     }
