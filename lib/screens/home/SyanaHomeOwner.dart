@@ -139,7 +139,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                               ? _homeDataModel
                                                   .allTeamPointThisMonth
                                                   .toString()
-                                              : '17',
+                                              : '-',
                                           style: TextStyle(
                                             fontSize: 45,
                                             color: AppTheme.text_light,
@@ -164,7 +164,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                                   ? _homeDataModel
                                                       .allTeamPointLastMonth
                                                       .toString()
-                                                  : '7.773',
+                                                  : '-',
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 color: AppTheme.text_light,
@@ -331,7 +331,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                        return Promo();
+                                        return SyanaPromo();
                                       },
                                     ),
                                   );

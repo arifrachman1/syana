@@ -389,7 +389,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                        return Promo();
+                                        return SyanaPromo();
                                       },
                                     ),
                                   );
