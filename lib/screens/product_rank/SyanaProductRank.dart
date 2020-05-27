@@ -4,7 +4,10 @@ import 'package:syana/screens/product_rank/SyanaProductRankGrafikTim.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankProduct.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTerbaik.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTerlaris.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankTop50Customer.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTopFree.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankTopKurir.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankTopLokasi.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTopReturn.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
@@ -22,7 +25,7 @@ class ProductRankState extends State<ProductRank>
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 7, initialIndex: 1);
+    tabController = TabController(vsync: this, length: 10, initialIndex: 1);
   }
 
   @override
@@ -99,6 +102,27 @@ class ProductRankState extends State<ProductRank>
                       style: TextStyle(fontSize: 13),
                     ),
                   ),
+                  Container(
+                    child: Text(
+                      'Top Kurir',
+                      softWrap: false,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                      'Top Lokasi',
+                      softWrap: false,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                      'Top 50 Customer',
+                      softWrap: false,
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -118,6 +142,9 @@ class ProductRankState extends State<ProductRank>
                     GrafikTim(),
                     GrafikProduk(),
                     SyanaProductRankTopReturn(),
+                    SyanaProductRankTopKurir(),
+                    SyanaProductRankTopLokasi(),
+                    SyanaProductRankTop50Customer(),
                   ],
                 ),
               ),

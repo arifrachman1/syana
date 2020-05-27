@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syana/Controller/InventoryController.dart';
+import 'package:syana/Controller/SaleController.dart';
+import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -18,6 +22,8 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
   DateTime selectedDateFrom = DateTime.now();
   DateTime selectedDateTo = DateTime.now();
 
+  DateFormat formatDate = DateFormat("yyyy-MM-dd");
+
   String dayFrom = "DD";
   String monthFrom = "MM";
   String yearFrom = "YY";
@@ -25,6 +31,8 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
   String dayTo = "DD";
   String monthTo = "MM";
   String yearTo = "YY";
+  String _dateFrom = "";
+  String _dateTo = "";
 
   Future<Null> selectDateFrom(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -34,7 +42,7 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateFrom)
       setState(
-        () {
+            () {
           selectedDateFrom = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -48,6 +56,14 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
           yearFrom = toSplit.split('-')[0];
         },
       );
+    _dateFrom = formatDate.format(selectedDateFrom);
+    if (_dateFrom != "" && _dateTo != "") {
+      rankTopReturn.clear();
+      setLoadingState();
+      await _saleController.getTopReturn(context, setLoadingState, setData,
+          _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
   Future<Null> selectDateTo(BuildContext context) async {
@@ -58,7 +74,7 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateTo)
       setState(
-        () {
+            () {
           selectedDateTo = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -72,6 +88,14 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
           yearTo = toSplit.split('-')[0];
         },
       );
+    _dateTo = formatDate.format(selectedDateTo);
+    if (_dateFrom != "" && _dateTo != "") {
+      rankTopReturn.clear();
+      setLoadingState();
+      await _saleController.getTopReturn(context, setLoadingState, setData,
+          _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      setLoadingState();
+    }
   }
 
 
@@ -216,29 +240,105 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
   String selectedWaktu;
   String selectedCakupan;
 
-  @override
-  void initState() {
-    selectedWaktu = waktu[6];
-    selectedCakupan = cakupan[0];
-  }
-
-  void onChangedWaktu(value) {
-    setState(() {
-      this.selectedWaktu = value;
-    });
-  }
-
   void onChangedCakupan(value) {
     setState(() {
       this.selectedCakupan = value;
     });
   }
 
+  // ===== API Component/Variables
+  String selectedTime;
+  String _currentTimes;
+
+  int _currentTeams = 0;
+
+  SaleController _saleController;
+  InventoryController _inventoryController;
+
+  bool _isLoading = false;
+
+  List<ProductModel> rankTopReturn = new List();
+  List<DropdownMenuItem> teams = new List();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _saleController = new SaleController();
+    _inventoryController = new InventoryController();
+
+    selectedTime = waktu[0];
+    _currentTimes = 0.toString();
+
+    initDataRank();
+  }
+
+  initDataRank() async {
+    setLoadingState();
+    await _saleController.getTopReturn(context, setLoadingState, setData,
+        _currentTimes, "", "", _currentTeams);
+    await _inventoryController.getTeams(
+        context, setLoadingState, setDropdownData);
+    print("list length : " + rankTopReturn.length.toString());
+    setLoadingState();
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
+
+  //Dropdown Filter Teams
+  void setDropdownData(data) {
+    if (data is List<DropdownMenuItem> && data.isNotEmpty) {
+      setState(() {
+        teams = data;
+        _currentTeams = teams[0].value;
+      });
+    }
+  }
+
+  //OnChanged Dropdown Filter Time
+  void onChangedWaktu(value) async {
+    setState(() {
+      this.selectedTime = value;
+      _currentTimes = waktu.indexOf(value).toString();
+      _dateFrom = "";
+      _dateTo = "";
+    });
+    if (_currentTimes != "7") {
+      rankTopReturn.clear();
+      setLoadingState();
+      await _saleController.getTopReturn(context, setLoadingState, setData,
+          _currentTimes, "", "", _currentTeams);
+      setLoadingState();
+    }
+  }
+
+  setData(data) {
+    if (data is List<ProductModel> && data.isNotEmpty) {
+      setState(() {
+        rankTopReturn = data;
+      });
+    }
+  }
+
   // ============================================
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return _isLoading
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : Column(
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(bottom: 10),
@@ -254,9 +354,9 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
                       decoration: AppTheme.inputDecorationShadow(),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
-                          value: selectedWaktu,
+                          value: selectedTime,
                           items: waktu.map(
-                            (String val) {
+                                (String val) {
                               return DropdownMenuItem(
                                 value: val,
                                 child: Text(
@@ -281,30 +381,30 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
                   Expanded(
                     child: Container(
                       // width: 150,
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: selectedCakupan,
-                          items: cakupan.map(
-                            (String val) {
-                              return DropdownMenuItem(
-                                value: val,
-                                child: Text(
-                                  val,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              );
+                        padding: EdgeInsets.only(left: 10),
+                        decoration: AppTheme.inputDecorationShadow(),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            items: teams,
+                            value: _currentTeams,
+                            onChanged: (value) async {
+                              setState(() {
+                                _currentTeams = value;
+                              });
+                              setLoadingState();
+                              rankTopReturn.clear();
+                              await _saleController.getTopReturn(
+                                  context,
+                                  setLoadingState,
+                                  setData,
+                                  _currentTimes,
+                                  _dateFrom,
+                                  _dateTo,
+                                  _currentTeams);
+                              setLoadingState();
                             },
-                          ).toList(),
-                          onChanged: (String value) {
-                            onChangedCakupan(value);
-                          },
-                        ),
-                      ),
-                    ),
+                          ),
+                        )),
                   ),
                 ],
               ),
@@ -312,7 +412,7 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
               showsDatePicker(
-                waktu.indexOf(selectedWaktu),
+                waktu.indexOf(selectedTime),
               ),
             ],
           ),
@@ -323,10 +423,14 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
             child: ListView.builder(
               padding: EdgeInsets.all(0),
               shrinkWrap: true,
-              itemCount: topReturn.length,
+              itemCount: rankTopReturn.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  decoration: AppTheme.listBackground(),
+                  decoration: BoxDecoration(
+                    color:
+                    index < 3 ? AppTheme.teal_light : AppTheme.teal,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                   height: Dimens.listHeightSmall(context),
                   margin: EdgeInsets.only(bottom: 15),
                   child: Row(
@@ -338,20 +442,11 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
                           child: Text(
                             (index + 1).toString(),
                             style: TextStyle(
-                              color: AppTheme.text_light,
+                              color: index < 3
+                                  ? AppTheme.text_darker
+                                  : AppTheme.text_light,
                               fontSize: 15,
                             ),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 17,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Icon(
-                            Icons.image,
-                            size: 60,
-                            color: AppTheme.teal_light,
                           ),
                         ),
                       ),
@@ -364,18 +459,12 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                getTopReturn(index, 0),
+                                rankTopReturn[index].name,
                                 softWrap: true,
                                 style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Text(
-                                getTopReturn(index, 2),
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
+                                  color: index < 3
+                                      ? AppTheme.text_darker
+                                      : AppTheme.text_light,
                                   fontSize: 15,
                                 ),
                               ),
@@ -388,10 +477,12 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
                         child: Container(
                           alignment: Alignment.center,
                           child: Text(
-                            getTopReturn(index, 1).toString(),
+                            rankTopReturn[index].rankValue,
                             softWrap: true,
                             style: TextStyle(
-                              color: AppTheme.text_light,
+                              color: index < 3
+                                  ? AppTheme.text_darker
+                                  : AppTheme.text_light,
                               fontSize: 14,
                             ),
                           ),

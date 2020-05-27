@@ -249,6 +249,142 @@ class SaleController {
     } else {}
   }
 
+  /*get top return*/
+  getTopReturn(context, loadingStateCallback, setDataCallback,
+      filterTime, timeFrom, timeTo, idTeam) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "id_team"],
+        [filterTime, timeFrom, timeTo, idTeam]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-top-return",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List rankFromApi = data['data'];
+        List<ProductModel> rankProducts = new List();
+
+        rankFromApi.forEach((element) {
+          rankProducts.add(new ProductModel.rankTopData(
+              element['value'],
+              element['rank_value']));
+        });
+
+        if (rankProducts.isNotEmpty) {
+          setDataCallback(rankProducts);
+        }
+      }
+    } else {}
+  }
+
+  /*get top courier*/
+  getTopCourier(context, loadingStateCallback, setDataCallback,
+      filterTime, timeFrom, timeTo, idTeam) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "id_team"],
+        [filterTime, timeFrom, timeTo, idTeam]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-top-courier",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List rankFromApi = data['data'];
+        List<ProductModel> rankProducts = new List();
+
+        rankFromApi.forEach((element) {
+          rankProducts.add(new ProductModel.rankTopData(
+              element['value'],
+              element['rank_value']));
+        });
+
+        if (rankProducts.isNotEmpty) {
+          setDataCallback(rankProducts);
+        }
+      }
+    } else {}
+  }
+
+  /*get top 50 customer*/
+  getTop50Customer(context, loadingStateCallback, setDataCallback,
+      filterTime, timeFrom, timeTo, idTeam) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "id_team"],
+        [filterTime, timeFrom, timeTo, idTeam]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-top-50-customer",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List rankFromApi = data['data'];
+        List<ProductModel> rankProducts = new List();
+
+        rankFromApi.forEach((element) {
+          rankProducts.add(new ProductModel.rankTopData(
+              element['value'],
+              element['rank_value']));
+        });
+
+        if (rankProducts.isNotEmpty) {
+          setDataCallback(rankProducts);
+        }
+      }
+    } else {}
+  }
+
+  /*get top location*/
+  getTopLocation(context, loadingStateCallback, setDataCallback,
+      filterTime, timeFrom, timeTo, idTeam, type) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "id_team", "type"],
+        [filterTime, timeFrom, timeTo, idTeam, type]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-top-city",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List rankFromApi = data['data'];
+        List<ProductModel> rankProducts = new List();
+
+        rankFromApi.forEach((element) {
+          rankProducts.add(new ProductModel.rankTopData(
+              element['value'],
+              element['rank_value']));
+        });
+
+        if (rankProducts.isNotEmpty) {
+          setDataCallback(rankProducts);
+        }
+      }
+    } else {}
+  }
+
   /*strip categories from products*/
   getCategoriesFromProducts(List products) {
     Map<String, String> categories = new Map();
