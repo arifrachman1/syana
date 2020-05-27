@@ -282,7 +282,7 @@ class TambahSelanjutnyaState extends State<TambahpromobaruSelanjutnya> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return Promo();
+                                    return SyanaPromo();
                                   },
                                 ),
                               );
