@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syana/Controller/HomeStarSellerController.dart';
 import 'package:syana/models/HomeDataModel.dart';
+import 'package:syana/screens/trace/SyanaTrace.dart';
+import 'package:syana/screens/trace/SyanaTraceInput.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
 import 'dart:math';
@@ -67,6 +69,19 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
         width: MediaQuery.of(context).size.width,
         decoration: AppTheme.appBackground(),
         child: Scaffold(
+            floatingActionButton: FloatingActionButton(
+                child: Icon(Icons.add),
+                backgroundColor: AppTheme.yellow,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return SyanaHomeTrace();
+                      },
+                    ),
+                  );
+                }),
             backgroundColor: Colors.transparent,
             bottomNavigationBar: CustomBottomNav.getBottomNav(context, 2),
             body: isLoading
@@ -134,9 +149,10 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                           ),
                                         ),
                                         Text(
-                                           _homeDataModel != null
+                                          _homeDataModel != null
                                               ? _homeDataModel
-                                                  .allTeamPointThisMonth.round()
+                                                  .allTeamPointThisMonth
+                                                  .round()
                                                   .toString()
                                               : '17',
                                           style: TextStyle(

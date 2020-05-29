@@ -1,5 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syana/Controller/SaleController.dart';
+import 'package:syana/models/ChartDataModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -13,9 +16,155 @@ class GrafikGlobal extends StatefulWidget {
 }
 
 class GrafikGlobalState extends State<GrafikGlobal> {
-
   int totalProdukTerjual = 19;
+  DateFormat formatDate = DateFormat("yyyy-MM-dd");
+  DateTime timeStart = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime timeEnd = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
 
+  String _currentTimeStart;
+  String _currentTimeEnd;
+
+  //Build Chart
+
+  LineChartData chart() {
+    return LineChartData(
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
+        ),
+        touchCallback: (LineTouchResponse touchResponse) {
+          print(touchResponse);
+        },
+        handleBuiltInTouches: true,
+      ),
+      gridData: const FlGridData(
+        show: false,
+      ),
+      titlesData: FlTitlesData(
+        bottomTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 22,
+          interval: 10,
+          textStyle: TextStyle(
+            color: AppTheme.text_light,
+            // fontWeight: FontWeight.bold,
+            fontSize: 8,
+          ),
+          margin: 12,
+        ),
+        leftTitles: SideTitles(
+          showTitles: true,
+          textStyle: TextStyle(
+            color: AppTheme.text_light,
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+          ),
+          interval: 5,
+          margin: 8,
+          reservedSize: 30,
+        ),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border(
+          bottom: BorderSide(
+            color: const Color(0xff4e4965),
+            width: 4,
+          ),
+          left: BorderSide(
+            color: AppTheme.white,
+          ),
+          right: BorderSide(
+            color: Colors.transparent,
+          ),
+          top: BorderSide(
+            color: Colors.transparent,
+          ),
+        ),
+      ),
+      minX: 0,
+      maxX: 31,
+      maxY: 17,
+      minY: 0,
+      lineBarsData: linesBarData1(),
+    );
+  }
+  LineChartBarData lineChartBarData1;
+  linesBarData1() {
+    lineChartBarData1 = const LineChartBarData(
+      spots: [
+        FlSpot(13, 2),
+        FlSpot(14, 0),
+        FlSpot(15, 0),
+        FlSpot(16, 0),
+        FlSpot(17, 14),
+        FlSpot(18, 0),
+        FlSpot(19, 0),
+        FlSpot(30, 0),
+      ],
+      isCurved: false,
+      colors: [
+        Colors.yellow,
+      ],
+      barWidth: 4,
+      isStrokeCapRound: true,
+      dotData: FlDotData(show: true, dotColor: Colors.yellow),
+      belowBarData: BarAreaData(
+        show: false,
+      ),
+    );
+
+    return [
+      lineChartBarData1,
+    ];
+  }
+
+  // API Implementation
+
+  SaleController _saleController;
+  bool _isLoading = false;
+  List<ChartDataModel> chartGlobal = new List();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _saleController = new SaleController();
+    _currentTimeStart = formatDate.format(timeStart);
+    _currentTimeEnd = formatDate.format(timeEnd);
+    initDataChart();
+  }
+
+  initDataChart() async {
+    setLoadingState();
+    await _saleController.getChartDataGlobal(context, setLoadingState, setData,
+        "1", "1", _currentTimeStart, _currentTimeEnd);
+    print("list length : " + chartGlobal.length.toString());
+    setLoadingState();
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
+
+  setData(data) {
+    if (data is List<ChartDataModel> && data.isNotEmpty) {
+      setState(() {
+        chartGlobal = data;
+        for(int i=0;i<chartGlobal.length;i++){
+          lineChartBarData1.spots.add(FlSpot(1,double.parse(chartGlobal[i].chartValue)));
+        }
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +193,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                           softWrap: true,
                         ),
                         Text(
-                          '01-03-2020',
+                          _currentTimeStart,
                           style: TextStyle(
                             color: AppTheme.orange_light,
                             fontSize: 14,
@@ -61,7 +210,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                           softWrap: true,
                         ),
                         Text(
-                          '31-03-2020',
+                          _currentTimeEnd,
                           style: TextStyle(
                             color: AppTheme.yellow,
                             fontSize: 14,
@@ -77,7 +226,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                   ),
                   Container(
                     height: Dimens.grafikHeight(context),
-                    child: Chart(),
+                    child: buildChart(),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 20),
@@ -134,24 +283,8 @@ class GrafikGlobalState extends State<GrafikGlobal> {
       ),
     );
   }
-}
 
-// *
-// *
-// *
-// Chart
-// ================================================
-
-class Chart extends StatefulWidget {
-  @override
-  ChartState createState() => ChartState();
-}
-
-class ChartState extends State<Chart> {
- 
-
-  @override
-  Widget build(BuildContext context) {
+  Widget buildChart() {
     return AspectRatio(
       aspectRatio: 1.1,
       child: Container(
@@ -202,144 +335,5 @@ class ChartState extends State<Chart> {
         ),
       ),
     );
-  }
-
-  LineChartData chart() {
-    return LineChartData(
-      lineTouchData: LineTouchData(
-        touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
-        ),
-        touchCallback: (LineTouchResponse touchResponse) {
-          print(touchResponse);
-        },
-        handleBuiltInTouches: true,
-      ),
-      gridData: const FlGridData(
-        show: false,
-      ),
-      titlesData: FlTitlesData(
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          textStyle: TextStyle(
-            color: AppTheme.text_light,
-            // fontWeight: FontWeight.bold,
-            fontSize: 8,
-          ),
-          margin: 12,
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 4:
-                return 'Mar-04';
-              case 8:
-                return 'Mar-08';
-              case 12:
-                return 'Mar-12';
-              case 16:
-                return 'Mar-16';
-              case 20:
-                return 'Mar-20';
-              case 24:
-                return 'Mar-24';
-            }
-            return '';
-          },
-        ),
-        leftTitles: SideTitles(
-          showTitles: true,
-          textStyle: TextStyle(
-            color: AppTheme.text_light,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 0:
-                return '0';
-              case 3:
-                return '3';
-              case 6:
-                return '6';
-              case 9:
-                return '9';
-              case 12:
-                return '12';
-              case 15:
-                return '15';
-            }
-            return '';
-          },
-          margin: 8,
-          reservedSize: 30,
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border(
-          bottom: BorderSide(
-            color: const Color(0xff4e4965),
-            width: 4,
-          ),
-          left: BorderSide(
-            color: AppTheme.white,
-          ),
-          right: BorderSide(
-            color: Colors.transparent,
-          ),
-          top: BorderSide(
-            color: Colors.transparent,
-          ),
-        ),
-      ),
-      minX: 0,
-      maxX: 31,
-      maxY: 17,
-      minY: 0,
-      lineBarsData: linesBarData1(),
-    );
-  }
-
-  List<LineChartBarData> linesBarData1() {
-    LineChartBarData lineChartBarData1 = const LineChartBarData(
-      spots: [
-        FlSpot(0, 0),
-        FlSpot(1, 0),
-        FlSpot(2, 0),
-        FlSpot(3, 0),
-        FlSpot(4, 0),
-        FlSpot(5, 0),
-        FlSpot(6, 0),
-        FlSpot(7, 0),
-        FlSpot(8, 0),
-        FlSpot(9, 3),
-        FlSpot(10, 0),
-        FlSpot(11, 0),
-        FlSpot(12, 0),
-        FlSpot(13, 2),
-        FlSpot(14, 0),
-        FlSpot(15, 0),
-        FlSpot(16, 0),
-        FlSpot(17, 14),
-        FlSpot(18, 0),
-        FlSpot(19, 0),
-        FlSpot(20, 0),
-        
-      ],
-      isCurved: false,
-      colors: [
-        Colors.yellow,
-      ],
-      barWidth: 4,
-      isStrokeCapRound: true,
-      dotData: FlDotData(show: true, dotColor: Colors.yellow),
-      belowBarData: BarAreaData(
-        show: false,
-      ),
-    );
-
-    return [
-      lineChartBarData1,
-    ];
   }
 }

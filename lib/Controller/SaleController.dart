@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:syana/models/ChartDataModel.dart';
 import 'package:syana/models/CourierModel.dart';
 import 'package:syana/models/EcommerceModel.dart';
 import 'package:syana/models/ProductModel.dart';
+import 'package:syana/models/TraceModel.dart';
 import 'package:syana/models/TransactionHistoryModel.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
@@ -250,8 +252,8 @@ class SaleController {
   }
 
   /*get top return*/
-  getTopReturn(context, loadingStateCallback, setDataCallback,
-      filterTime, timeFrom, timeTo, idTeam) async {
+  getTopReturn(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -272,8 +274,7 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.rankTopData(
-              element['value'],
-              element['rank_value']));
+              element['value'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -284,8 +285,8 @@ class SaleController {
   }
 
   /*get top courier*/
-  getTopCourier(context, loadingStateCallback, setDataCallback,
-      filterTime, timeFrom, timeTo, idTeam) async {
+  getTopCourier(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -306,8 +307,7 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.rankTopData(
-              element['value'],
-              element['rank_value']));
+              element['value'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -318,8 +318,8 @@ class SaleController {
   }
 
   /*get top 50 customer*/
-  getTop50Customer(context, loadingStateCallback, setDataCallback,
-      filterTime, timeFrom, timeTo, idTeam) async {
+  getTop50Customer(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -340,8 +340,7 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.rankTopData(
-              element['value'],
-              element['rank_value']));
+              element['value'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -352,8 +351,8 @@ class SaleController {
   }
 
   /*get top location*/
-  getTopLocation(context, loadingStateCallback, setDataCallback,
-      filterTime, timeFrom, timeTo, idTeam, type) async {
+  getTopLocation(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, idTeam, type) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -374,8 +373,7 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.rankTopData(
-              element['value'],
-              element['rank_value']));
+              element['value'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -525,5 +523,166 @@ class SaleController {
       });
     }
     return temp;
+  }
+
+  //Trace - Products Dropdown
+  getProductsDropdown(context, loadingStateCallback, setDataCallback) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params =
+        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+
+    loadingStateCallback();
+    final data = await GlobalFunctions.dioGetCall(
+        context: context,
+        params: params,
+        path: GlobalVars.apiUrl + "get-list-product");
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List productsFromApi = data['product'];
+        List<ProductModel> products = new List();
+
+        if (productsFromApi.isNotEmpty) {
+          productsFromApi.forEach((element) {
+            products.add(new ProductModel.productsDropdown(
+                element['id'].toString(), element['name'].toString()));
+          });
+        }
+
+        List<DropdownMenuItem> productDropdownItems =
+            _generateDropdownItems(products);
+
+        if (productDropdownItems.isNotEmpty) {
+          setDataCallback(productDropdownItems);
+        }
+      }
+    }
+    loadingStateCallback();
+  }
+
+  _generateDropdownItems(List<ProductModel> objects) {
+    List<DropdownMenuItem> temp = new List();
+    temp.add(new DropdownMenuItem(
+      child: Text("Pilih Produk"),
+      value: 0,
+    ));
+    if (objects.isNotEmpty) {
+      objects.forEach((element) {
+        temp.add(new DropdownMenuItem(
+          child: Text(element.name),
+          value: int.parse(element.id),
+        ));
+      });
+    }
+    return temp;
+  }
+
+  //Trace - Add Trace
+  sendTrace(
+      context, loadingStateCallback, productId, traceDate, trace, type) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ["product_id", "trace_date", "trace", "type", "id_employee"],
+        [productId, traceDate, trace, type, _userModel.id]);
+
+    FormData formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        path: GlobalVars.apiUrl + "set-trace",
+        params: formData);
+
+    print(GlobalVars.apiUrl + "set-trace");
+    print(params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_SUCCESS,
+            message: Strings.DIALOG_MESSAGE_CUSTOMER_SAVED,
+            context: context,
+            popCount: 1);
+      }
+    }
+  }
+
+  //Trace - Get Trace List Data
+  getTraceListData(context, loadingStateCallback, setDataCallback) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params =
+        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-trace-by-employee",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List traceFromApi = data['trace'];
+        List<TraceModel> traceLists = new List();
+
+        traceFromApi.forEach((element) {
+          traceLists.add(new TraceModel.traceData(
+              element['trace_id'],
+              element['product_id'],
+              element['employee_team_id'],
+              element['employee_id'],
+              element['trace_date'],
+              element['trace'],
+              element['product_name'],
+              element['team_name'],
+              element['employee_name']));
+        });
+
+        if (traceLists.isNotEmpty) {
+          setDataCallback(traceLists);
+        }
+      }
+    } else {}
+  }
+
+  /*get chart global*/
+  getChartDataGlobal(context, loadingStateCallback, setDataCallback, dataType,
+      filterType, timeStart, timeEnd) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ["data_type", "filter_type", "time_start", "time_end"],
+        [dataType, filterType, timeStart, timeEnd]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-chart-data",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == "1") {
+        List chartFromApi = data['data'];
+        List<ChartDataModel> chartGlobal = new List();
+
+        chartFromApi.forEach((element) {
+          chartGlobal.add(new ChartDataModel.chartData(
+              element['value'], element['date']));
+        });
+
+        if (chartGlobal.isNotEmpty) {
+          setDataCallback(chartGlobal);
+        }
+      }
+    } else {}
   }
 }

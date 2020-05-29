@@ -50,6 +50,9 @@ class ProductModel {
 
   ProductModel.rankTopData(this._name, this._rankValue);
 
+  ProductModel.productsDropdown(
+      this._id, this._name);
+
   get rankValue => _rankValue;
 
   set rankValue(value) {

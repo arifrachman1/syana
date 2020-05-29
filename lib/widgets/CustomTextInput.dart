@@ -14,7 +14,7 @@ class CustomTextInput {
       hint,
       textInputType,
       isPasswordField,
-      key, icon}) {
+      key, icon, enabled}) {
     return Container(
       width: ScreenSizeHelper.getDisplayWidth(context) * (widthFactor ?? 1),
       height: Dimens.formHeight,
@@ -30,7 +30,8 @@ class CustomTextInput {
             contentPadding: EdgeInsets.only(left: 10.0),
             border: InputBorder.none,
             hintText: hint ?? "Text",
-        icon: icon ?? null),
+        icon: icon ?? null,
+        enabled: enabled ?? true),
       ),
     );
   }
