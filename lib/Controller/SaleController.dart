@@ -5,6 +5,7 @@ import 'package:syana/models/ChartDataModel.dart';
 import 'package:syana/models/CourierModel.dart';
 import 'package:syana/models/EcommerceModel.dart';
 import 'package:syana/models/ProductModel.dart';
+import 'package:syana/models/TeamModel.dart';
 import 'package:syana/models/TraceModel.dart';
 import 'package:syana/models/TransactionHistoryModel.dart';
 import 'package:syana/models/UserModel.dart';
@@ -553,7 +554,7 @@ class SaleController {
         }
 
         List<DropdownMenuItem> productDropdownItems =
-            _generateDropdownItems(products);
+            _generateDropdownProducts(products);
 
         if (productDropdownItems.isNotEmpty) {
           setDataCallback(productDropdownItems);
@@ -563,7 +564,7 @@ class SaleController {
     loadingStateCallback();
   }
 
-  _generateDropdownItems(List<ProductModel> objects) {
+  _generateDropdownProducts(List<ProductModel> objects) {
     List<DropdownMenuItem> temp = new List();
     temp.add(new DropdownMenuItem(
       child: Text("Pilih Produk"),
@@ -653,16 +654,69 @@ class SaleController {
     } else {}
   }
 
-  /*get chart global*/
-  getChartDataGlobal(context, loadingStateCallback, setDataCallback, dataType,
-      filterType, timeStart, timeEnd) async {
+  //Trace - Get All Trace
+  getAllTrace(context, setDataCallback, selectedDate) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
-    var params = GlobalFunctions.generateMapParam(
-        ["data_type", "filter_type", "time_start", "time_end"],
-        [dataType, filterType, timeStart, timeEnd]);
+    var params =
+        GlobalFunctions.generateMapParam(["trace_date"], [selectedDate]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-all-trace",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List traceFromApi = data['trace'];
+        List<TraceModel> traceLists = new List();
+
+        traceFromApi.forEach((element) {
+          traceLists.add(new TraceModel.traceData(
+              element['trace_id'],
+              element['product_id'],
+              element['employee_team_id'],
+              element['employee_id'],
+              element['trace_date'],
+              element['trace'],
+              element['product_name'],
+              element['team_name'],
+              element['employee_name']));
+        });
+
+        if (traceLists.isNotEmpty) {
+          setDataCallback(traceLists);
+        }
+      }
+    } else {}
+  }
+
+  //Chart
+
+  /*get chart*/
+  getChartData(context, loadingStateCallback, setDataCallback, dataType,
+      filterType, timeStart, timeEnd, idTeam, idProduct) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam([
+      "data_type",
+      "filter_type",
+      "time_start",
+      "time_end",
+      "id_employee_team",
+      "id_product"
+    ], [
+      dataType,
+      filterType,
+      timeStart,
+      timeEnd,
+      idTeam,
+      idProduct
+    ]);
 
     final data = await GlobalFunctions.dioGetCall(
         path: GlobalVars.apiUrl + "get-chart-data",
@@ -675,13 +729,72 @@ class SaleController {
         List<ChartDataModel> chartGlobal = new List();
 
         chartFromApi.forEach((element) {
-          chartGlobal.add(new ChartDataModel.chartData(
-              element['value'], element['date']));
+          if (filterType == "3") {
+            chartGlobal.add(new ChartDataModel.chartTypeInt(
+                element['value'], element['date']));
+          } else {
+            chartGlobal.add(new ChartDataModel.chartData(
+                element['value'], element['date']));
+          }
         });
 
         if (chartGlobal.isNotEmpty) {
           setDataCallback(chartGlobal);
         }
+      }
+    } else {}
+  }
+
+  //Get Dropdown Teams without "Global"
+  getTeams(context, loadingStateCallback, setDataCallback) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params =
+        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+
+    loadingStateCallback();
+    final data = await GlobalFunctions.dioGetCall(
+        context: context, params: params, path: GlobalVars.apiUrl + "get-team");
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List teamsFromApi = data['team'];
+        List<TeamModel> teams = new List();
+
+        if (teamsFromApi.isNotEmpty) {
+          teamsFromApi.forEach((element) {
+            teams.add(new TeamModel.teamsDropdown(
+                element['id'].toString(), element['name'].toString()));
+          });
+        }
+
+        if (teams.isNotEmpty) {
+          setDataCallback(teams);
+        }
+      }
+    }
+    loadingStateCallback();
+  }
+
+  //Filter - MAX
+  checkMaxFilter(context, setDataCallback) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-first-and-last-date", context: context);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        ChartDataModel dateMaxMin = new ChartDataModel.checkMaxMin(
+          data['max'],
+          data['min'],
+        );
+
+        setDataCallback(dateMaxMin);
       }
     } else {}
   }
