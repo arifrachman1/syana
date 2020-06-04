@@ -53,6 +53,8 @@ class ProductModel {
   ProductModel.productsDropdown(
       this._id, this._name);
 
+  ProductModel.productSuggestions(this._id, this._name, this._sku);
+
   get rankValue => _rankValue;
 
   set rankValue(value) {

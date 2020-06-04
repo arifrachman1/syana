@@ -282,7 +282,7 @@ class SyanaProductRankTopFreeState extends State<SyanaProductRankTopFree> {
     await _saleController.getRankProducts(context, setLoadingState, setData,
         "1", _currentTimes, "", "", _currentTeams);
     await _inventoryController.getTeams(
-        context, setLoadingState, setDropdownData);
+        context, setLoadingState, setDropdownData, true);
     print("list length : " + rankFreeProducts.length.toString());
     setLoadingState();
   }

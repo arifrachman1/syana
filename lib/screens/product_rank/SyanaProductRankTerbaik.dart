@@ -253,7 +253,7 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
     await _saleController.getRankProducts(context, setLoadingState, setData,
         "3", _currentTimes, "", "", _currentTeams);
     await _inventoryController.getTeams(
-        context, setLoadingState, setDropdownData);
+        context, setLoadingState, setDropdownData, true);
     print("list length : " + rankBestProducts.length.toString());
     setLoadingState();
   }

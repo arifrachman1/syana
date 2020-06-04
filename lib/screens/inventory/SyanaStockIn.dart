@@ -264,7 +264,7 @@ class StockInState extends State<SyanaStockIn> {
   _initTeams() async {
     await _inventoryController.getAddition(
         context, setLoadingState, setData, "1", 0, "", "", null);
-    await _inventoryController.getTeams(context, setLoadingState, setTeamsData);
+    await _inventoryController.getTeams(context, setLoadingState, setTeamsData, true);
 
     /*generate time filter dropdown and its value*/
     _timeFilter = GlobalFunctions.generateDropdownMenuItem(

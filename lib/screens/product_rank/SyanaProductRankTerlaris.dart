@@ -252,7 +252,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
     await _saleController.getRankProducts(context, setLoadingState, setData,
         "2", _currentTimes, "", "", _currentTeams);
     await _inventoryController.getTeams(
-        context, setLoadingState, setDropdownData);
+        context, setLoadingState, setDropdownData, true);
     print("list length : " + rankProducts.length.toString());
     setLoadingState();
   }

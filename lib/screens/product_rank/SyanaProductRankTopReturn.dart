@@ -284,7 +284,7 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
     await _saleController.getTopReturn(context, setLoadingState, setData,
         _currentTimes, "", "", _currentTeams);
     await _inventoryController.getTeams(
-        context, setLoadingState, setDropdownData);
+        context, setLoadingState, setDropdownData, true);
     print("list length : " + rankTopReturn.length.toString());
     setLoadingState();
   }

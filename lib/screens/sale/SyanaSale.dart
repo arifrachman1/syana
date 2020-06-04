@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:syana/Controller/PromoController.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/ProductModel.dart';
+import 'package:syana/models/PromoModel.dart';
 import 'package:syana/screens/sale/SyanaConfirmation.dart';
 import 'package:syana/screens/sale/SyanaPenjualanTimhariini.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -19,9 +21,11 @@ class Sale extends StatefulWidget {
 class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
   TabController _tabController;
   SaleController _saleController;
-  bool _isLoading = false;
+  PromoController _promoController;
+  bool _isLoading = false, _isDataLoaded = false;
 
   List<ProductModel> products = new List();
+  List<PromoModel> promos = new List();
 
   Map<String, String> categories = new Map();
   List<Widget> tabs = new List();
@@ -38,16 +42,19 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    setLoadingState();
     _saleController = new SaleController();
+    _promoController = new PromoController();
 
     print("initstate");
     initTabs();
   }
 
   initTabs() async {
-    setLoadingState();
     await _saleController.getProducts(context, setLoadingState, setData);
+
     print("products length : " + products.length.toString());
+
     categories = await _saleController.getCategoriesFromProducts(products);
     print("categories length : " + categories.length.toString());
     setState(() {
@@ -56,13 +63,19 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
     });
     await generateTabs();
     await generatePages();
-
     setLoadingState();
+    setDataLoaded();
   }
 
   void setLoadingState() {
     setState(() {
       _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
+
+  setDataLoaded() {
+    setState(() {
+      _isDataLoaded = _isDataLoaded ? false : true;
     });
   }
 
@@ -103,80 +116,13 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
         }
 
         setState(() {
-          pages.add(SaleInnerWidget(
-              key == "0" ? products : categorizedProducts, _saleController));
+          pages.add(SaleInnerWidget(key == "0" ? products : categorizedProducts,
+              _saleController, promos, _promoController));
         });
       });
     }
   }
 
-  /*add(index, isSale) {
-    int number = isSale
-        ? int.parse(products[index].saleNumber)
-        : int.parse(products[index].freeNumber);
-    number++;
-    setState(() {
-      isSale
-          ? products[index].saleNumber = number
-          : products[index].freeNumber = number;
-    });
-
-    print(products[index].toString());
-
-    if ((isSale
-        ? products[index].saleNumber == 1
-        : products[index].freeNumber == 1)) {
-      */ /*check whether selected products has the added products*/ /*
-      */ /*in before the selected products has the added products, */ /*
-      if (selectedProducts.contains(products[index])) {
-        setState(() {
-          isSale
-              ? selectedProducts[selectedProducts.indexOf(products[index])]
-                  .saleNumber++
-              : selectedProducts[selectedProducts.indexOf(products[index])]
-                  .freeNumber++;
-        });
-      } else {
-        setState(() {
-          selectedProducts.add(products[index]);
-        });
-      }
-    } else {
-      setState(() {
-        isSale
-            ? selectedProducts[index].saleNumber = products[index].saleNumber
-            : selectedProducts[index].freeNumber = products[index].freeNumber;
-      });
-    }
-
-    print(selectedProducts.toString());
-  }
-
-  remove(index, isSale) {
-    setState(() {
-      isSale ? products[index].saleNumber-- : products[index].freeNumber--;
-    });
-
-    if ((isSale
-        ? products[index].saleNumber >= 0
-        : products[index].freeNumber >= 0)) {
-      if ((isSale
-          ? products[index].saleNumber == 0
-          : products[index].freeNumber == 0)) {
-        setState(() {
-          selectedProducts.removeAt(index);
-        });
-      } else {
-        setState(() {
-          selectedProducts[index].saleNumber = products[index].saleNumber;
-        });
-      }
-    } else {
-      setState(() {
-        products[index].saleNumber = 0;
-      });
-    }
-  }*/
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -310,9 +256,12 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
 /*I separated the 'inner' widget so that they could filter each assigned products*/
 class SaleInnerWidget extends StatefulWidget {
   List<ProductModel> categorizedProducts;
+  List<PromoModel> promos;
   SaleController saleController;
+  PromoController promoController;
 
-  SaleInnerWidget(this.categorizedProducts, this.saleController);
+  SaleInnerWidget(this.categorizedProducts, this.saleController, this.promos,
+      this.promoController);
 
   _SaleInnerState createState() => _SaleInnerState();
 }
@@ -325,7 +274,12 @@ class _SaleInnerState extends State<SaleInnerWidget> {
   List<ProductModel> filteredProducts = new List();
   List<ProductModel> filteredProductsBefore = new List();
 
+  List<PromoModel> _promos = new List();
+
   String searchFilter = "";
+  double _totalPrice = 0;
+
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -337,6 +291,9 @@ class _SaleInnerState extends State<SaleInnerWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    widget.promoController
+        .getPromoForSales(context, setLoadingState, setPromos);
 
     setState(() {
       categorizedProducts = widget.categorizedProducts;
@@ -355,6 +312,20 @@ class _SaleInnerState extends State<SaleInnerWidget> {
         });
       }
     });
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
+
+  setPromos(data) {
+    if (data is List<PromoModel>) {
+      setState(() {
+        _promos = data;
+      });
+    }
   }
 
   add(index, isSale) {
@@ -383,6 +354,50 @@ class _SaleInnerState extends State<SaleInnerWidget> {
           : widget.saleController.setFreeNumber(filteredProducts[index],
               int.parse(filteredProducts[index].freeNumber));
     }
+
+    /*promo checking*/
+    if (isSale) {
+      _totalPrice += double.parse(filteredProducts[index].price);
+      Map _promoStatus = widget.promoController.checkAvailablePromo(
+          filteredProducts[index].id,
+          int.parse(filteredProducts[index].saleNumber),
+          _promos,
+          _totalPrice);
+      print("function finished");
+      if (_promoStatus.isEmpty) {
+        print("no return value...");
+      } else {
+        _promoStatus.forEach((key, value) {
+          print(key + ":" + value.toString());
+        });
+
+        if (_promoStatus['status'] == true) {
+          print("status : true");
+          addFreeItemFromPromo(
+              _promoStatus['freeProduct'], _promoStatus['freeAmount']);
+        }
+      }
+    }
+  }
+
+  addFreeItemFromPromo(productId, productSize) {
+    filteredProducts.forEach((element) {
+      if (element.id == productId) {
+        for (int i = 0; i < int.parse(productSize); i++) {
+          add(filteredProducts.indexOf(element), false);
+        }
+      }
+    });
+  }
+
+  removeFreeItemFromPromo(productId, productSize) {
+    filteredProducts.forEach((element) {
+      if (element.id == productId) {
+        for (int i = 0; i < int.parse(productSize); i++) {
+          remove(filteredProducts.indexOf(element), false);
+        }
+      }
+    });
   }
 
   remove(index, isSale) {
@@ -416,6 +431,30 @@ class _SaleInnerState extends State<SaleInnerWidget> {
         /*categorizedProducts[index].saleNumber = 0;*/
       });
     }
+
+    /*promo checking*/
+    if (isSale && (int.parse(filteredProducts[index].saleNumber) != 0)) {
+      if (_totalPrice != 0) {
+        _totalPrice -= double.parse(filteredProducts[index].price);
+      }
+      Map _promoStatus = widget.promoController.checkAvailablePromo(
+          filteredProducts[index].id,
+          int.parse(filteredProducts[index].saleNumber),
+          _promos,
+          _totalPrice);
+      print("function finished");
+      if (_promoStatus.isEmpty) {
+        print("no return value...");
+      } else {
+        _promoStatus.forEach((key, value) {
+          print(key + ":" + value.toString());
+        });
+        if (_promoStatus['status'] == false) {
+          removeFreeItemFromPromo(
+              _promoStatus['freeProduct'], _promoStatus['freeAmount']);
+        }
+      }
+    }
   }
 
   @override
@@ -438,216 +477,219 @@ class _SaleInnerState extends State<SaleInnerWidget> {
       filteredProducts = temp;
     }
 
-    return Column(
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            /*search bar*/
-            Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
-              padding: EdgeInsets.only(left: 10),
-              decoration: AppTheme.inputDecorationShadow(),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Cari Produk',
-                  icon: Icon(
-                    Icons.search,
-                    color: AppTheme.teal,
-                  ),
-                ),
-              ),
-            ),
-            /*label sold & free*/
-            Container(
-              margin: EdgeInsets.only(top: 15, bottom: 10),
-              padding: EdgeInsets.only(left: 10, right: 13),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+    return _isLoading
+        ? Center(child: CircularProgressIndicator())
+        : Column(
+            children: <Widget>[
+              Column(
                 children: <Widget>[
+                  /*search bar*/
                   Container(
-                    decoration: BoxDecoration(
-                      color: AppTheme.yellow,
-                      border: Border.all(
-                        color: Colors.transparent,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black45,
-                          blurRadius: 3,
-                          spreadRadius: 3 / 4,
-                          offset: Offset(1, 2),
-                        ),
-                      ],
-                    ),
-                    height: MediaQuery.of(context).size.height * 0.03,
-                    child: AspectRatio(
-                      aspectRatio: 2.5 / 1,
-                      child: Center(
-                        child: Text(
-                          'Terjual',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppTheme.text_dark,
-                          ),
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    padding: EdgeInsets.only(left: 10),
+                    decoration: AppTheme.inputDecorationShadow(),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Cari Produk',
+                        icon: Icon(
+                          Icons.search,
+                          color: AppTheme.teal,
                         ),
                       ),
                     ),
                   ),
+                  /*label sold & free*/
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.01,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppTheme.red,
-                      border: Border.all(
-                        color: Colors.transparent,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black45,
-                          blurRadius: 3,
-                          spreadRadius: 3 / 4,
-                          offset: Offset(1, 2),
-                        ),
-                      ],
-                    ),
-                    height: MediaQuery.of(context).size.height * 0.03,
-                    child: AspectRatio(
-                      aspectRatio: 2.5 / 1,
-                      child: Center(
-                        child: Text(
-                          'Free',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppTheme.text_light,
+                    margin: EdgeInsets.only(top: 15, bottom: 10),
+                    padding: EdgeInsets.only(left: 10, right: 13),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppTheme.yellow,
+                            border: Border.all(
+                              color: Colors.transparent,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black45,
+                                blurRadius: 3,
+                                spreadRadius: 3 / 4,
+                                offset: Offset(1, 2),
+                              ),
+                            ],
+                          ),
+                          height: MediaQuery.of(context).size.height * 0.03,
+                          child: AspectRatio(
+                            aspectRatio: 2.5 / 1,
+                            child: Center(
+                              child: Text(
+                                'Terjual',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: AppTheme.text_dark,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.01,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: AppTheme.red,
+                            border: Border.all(
+                              color: Colors.transparent,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black45,
+                                blurRadius: 3,
+                                spreadRadius: 3 / 4,
+                                offset: Offset(1, 2),
+                              ),
+                            ],
+                          ),
+                          height: MediaQuery.of(context).size.height * 0.03,
+                          child: AspectRatio(
+                            aspectRatio: 2.5 / 1,
+                            child: Center(
+                              child: Text(
+                                'Free',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: AppTheme.text_light,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-        /*item*/
-        Expanded(
-          child: Container(
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-              child: ListView.builder(
-                padding: EdgeInsets.all(0),
-                shrinkWrap: true,
-                itemCount: filteredProducts.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    decoration: AppTheme.listBackground(),
-                    height: Dimens.listHeight(context),
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: Row(
-                      children: <Widget>[
-                        Flexible(
-                          flex: 17,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Icon(
-                              Icons.image,
-                              size: 60,
-                              color: AppTheme.teal_light,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 49,
-                          fit: FlexFit.tight,
-                          child: Container(
-                            child: Text(
-                              filteredProducts[index].name,
-                              style: TextStyle(
-                                color: AppTheme.text_light,
-                                fontSize: 15,
-                              ),
-                              softWrap: true,
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          flex: 17,
-                          fit: FlexFit.tight,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+              /*item*/
+              Expanded(
+                child: Container(
+                    margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: ListView.builder(
+                      padding: EdgeInsets.all(0),
+                      shrinkWrap: true,
+                      itemCount: filteredProducts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          decoration: AppTheme.listBackground(),
+                          height: Dimens.listHeight(context),
+                          margin: EdgeInsets.only(bottom: 15),
+                          child: Row(
                             children: <Widget>[
-                              IconButton(
-                                icon: Icon(
-                                  Icons.expand_less,
-                                  color: AppTheme.white,
-                                  size: 24,
+                              Flexible(
+                                flex: 17,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Icon(
+                                    Icons.image,
+                                    size: 60,
+                                    color: AppTheme.teal_light,
+                                  ),
                                 ),
-                                onPressed: () => add(index, true),
                               ),
-                              Text(filteredProducts[index].saleNumber,
-                                  style: TextStyle(
-                                    color: AppTheme.text_light,
-                                    fontSize: 14,
-                                  ),
-                                  softWrap: true),
-                              IconButton(
-                                icon: Icon(
-                                  Icons.expand_more,
-                                  color: AppTheme.white,
-                                  size: 24,
-                                ),
-                                onPressed: () => remove(index, true),
-                              )
-                            ],
-                          ),
-                        ),
-                        Flexible(
-                          flex: 17,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.expand_less,
-                                    color: AppTheme.white,
-                                    size: 24,
-                                  ),
-                                  onPressed: () => add(index, false),
-                                ),
-                                Text(filteredProducts[index].freeNumber,
+                              Flexible(
+                                flex: 49,
+                                fit: FlexFit.tight,
+                                child: Container(
+                                  child: Text(
+                                    filteredProducts[index].name,
                                     style: TextStyle(
                                       color: AppTheme.text_light,
-                                      fontSize: 14,
+                                      fontSize: 15,
                                     ),
-                                    softWrap: true),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.expand_more,
-                                    color: AppTheme.white,
-                                    size: 24,
+                                    softWrap: true,
                                   ),
-                                  onPressed: () => remove(index, false),
                                 ),
-                              ],
-                            ),
+                              ),
+                              Flexible(
+                                flex: 17,
+                                fit: FlexFit.tight,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.expand_less,
+                                        color: AppTheme.white,
+                                        size: 24,
+                                      ),
+                                      onPressed: () => add(index, true),
+                                    ),
+                                    Text(filteredProducts[index].saleNumber,
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 14,
+                                        ),
+                                        softWrap: true),
+                                    IconButton(
+                                      icon: Icon(
+                                        Icons.expand_more,
+                                        color: AppTheme.white,
+                                        size: 24,
+                                      ),
+                                      onPressed: () => remove(index, true),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Flexible(
+                                flex: 17,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.expand_less,
+                                          color: AppTheme.white,
+                                          size: 24,
+                                        ),
+                                        onPressed: () => add(index, false),
+                                      ),
+                                      Text(filteredProducts[index].freeNumber,
+                                          style: TextStyle(
+                                            color: AppTheme.text_light,
+                                            fontSize: 14,
+                                          ),
+                                          softWrap: true),
+                                      IconButton(
+                                        icon: Icon(
+                                          Icons.expand_more,
+                                          color: AppTheme.white,
+                                          size: 24,
+                                        ),
+                                        onPressed: () => remove(index, false),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              )),
-        ),
-      ],
-    );
+                        );
+                      },
+                    )),
+              ),
+            ],
+          );
   }
 }

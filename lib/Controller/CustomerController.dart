@@ -48,7 +48,7 @@ class CustomerController {
 
         return customerSuggestions;
       }
-    } else {}
+    }
   }
 
   Future<List> getZipCode(context, zipCode) async {

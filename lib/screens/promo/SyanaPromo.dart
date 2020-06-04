@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PromoController.dart';
 import 'package:syana/models/PromoModel.dart';
-import 'package:syana/screens/promo/SyanaTambahpromobaru.dart';
+import 'package:syana/screens/promo/SyanaAddPromo.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -25,9 +25,10 @@ class SyanaPromoState extends State<SyanaPromo> {
   ];
 
   List<PromoModel> _promos = new List();
+  List<PromoModel> _filteredPromos = new List();
   PromoController _promoController;
 
-  bool _isLoading = false;
+  bool _isLoading = false, _showDisabled = false;
 
   @override
   void dispose() {
@@ -44,8 +45,9 @@ class SyanaPromoState extends State<SyanaPromo> {
   }
 
   _initData() async {
-    await _promoController.getPromo(context, setLoadingState, setData);
-    await _promoController.filterOutPromo(setData, setLoadingState, _promos, false);
+    await _promoController.getListPromo(context, setLoadingState, setData);
+    await _promoController.filterOutPromo(
+        setData, setLoadingState, _promos, false);
   }
 
   void setLoadingState() {
@@ -54,10 +56,16 @@ class SyanaPromoState extends State<SyanaPromo> {
     });
   }
 
-  setData(data) {
-    if (data is List<PromoModel>) {
+  setData(data, isDisabledPromo, isInit) {
+    if (data is List<PromoModel> && !isDisabledPromo && isInit) {
       setState(() {
         _promos = data;
+      });
+    }
+
+    if (data is List<PromoModel> && isDisabledPromo && !isInit) {
+      setState(() {
+        _filteredPromos = data;
       });
     }
   }
@@ -70,6 +78,22 @@ class SyanaPromoState extends State<SyanaPromo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: AppTheme.yellow,
+          foregroundColor: Colors.black,
+          tooltip: 'Add',
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return SyanaAddPromo();
+                },
+              ),
+            );
+          },
+        ),
         appBar: AppBar(
           backgroundColor: Colors.lightGreen[200],
           title: Text('Promo'),
@@ -80,7 +104,11 @@ class SyanaPromoState extends State<SyanaPromo> {
                 ),
                 color: Colors.black,
                 onPressed: () {
-                  _promoController.filterOutPromo(setData, setLoadingState, _promos, true);
+                  setState(() {
+                    _showDisabled = _showDisabled ? false : true;
+                  });
+                  _promoController.filterOutPromo(
+                      setData, setLoadingState, _promos, _showDisabled);
                 }),
           ],
         ),
@@ -102,7 +130,7 @@ class SyanaPromoState extends State<SyanaPromo> {
                         ),
                         child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: _promos.length,
+                          itemCount: _filteredPromos.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               padding: EdgeInsets.only(
@@ -121,7 +149,7 @@ class SyanaPromoState extends State<SyanaPromo> {
                                       children: <Widget>[
                                         Container(
                                           child: Text(
-                                            _promos[index].title,
+                                            _filteredPromos[index].title,
                                             style: TextStyle(
                                               fontSize: 20,
                                               color: AppTheme.text_light,
@@ -131,11 +159,15 @@ class SyanaPromoState extends State<SyanaPromo> {
                                         Container(
                                           margin: EdgeInsets.only(top: 5),
                                           child: Text(
-                                            _promos[index].length == 1
-                                                ? (_promos[index].startDate +
+                                            _filteredPromos[index].length == 1
+                                                ? (_filteredPromos[index]
+                                                        .startDate +
                                                     " s/d " +
-                                                    _promos[index].endDate)
-                                                : _promos[index].length == 2
+                                                    _filteredPromos[index]
+                                                        .endDate)
+                                                : _filteredPromos[index]
+                                                            .length ==
+                                                        2
                                                     ? "Lifetime"
                                                     : "-",
                                             style: TextStyle(
@@ -163,7 +195,7 @@ class SyanaPromoState extends State<SyanaPromo> {
                                       alignment: Alignment.center,
                                       child: PopupMenuButton(
                                         onSelected: (value) {
-                                          switch(value){
+                                          switch (value) {
                                             case 1:
                                               break;
                                             case 2:
@@ -193,26 +225,11 @@ class SyanaPromoState extends State<SyanaPromo> {
                           },
                         ),
                       ),
-                      Container(
+                      /*Container(
                         margin: EdgeInsets.only(bottom: 20, right: 10),
                         alignment: Alignment.bottomRight,
-                        child: FloatingActionButton(
-                          backgroundColor: AppTheme.yellow,
-                          foregroundColor: Colors.black,
-                          tooltip: 'Add',
-                          child: Icon(Icons.add),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) {
-                                  return Tambahpromobaru();
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                        child: 
+                      ),*/
                     ],
                   ),
                 ),

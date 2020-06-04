@@ -253,7 +253,7 @@ class SyanaProductRankTop50CustomerState extends State<SyanaProductRankTop50Cust
     await _saleController.getTopCourier(context, setLoadingState, setData,
         _currentTimes, "", "", _currentTeams);
     await _inventoryController.getTeams(
-        context, setLoadingState, setDropdownData);
+        context, setLoadingState, setDropdownData, true);
     print("list length : " + rankTop50Customer.length.toString());
     setLoadingState();
   }

@@ -17,6 +17,9 @@ class Strings{
   /*inventory*/
   static final String DIALOG_MESSAGE_INVALID_TIME_FILTER = "Filter waktu tidak valid.";
 
+  /*promo*/
+  static final String DIALOG_MESSAGE_INSUFFICENT_PROMO_SETTING = "Data promo yang dimasukkan tidak lengkap.";
+
   static final String DIALOG_MESSAGE_INSUFFICENT_INPUT = "Data input tidak lengkap.";
   static final String DIALOG_MESSAGE_TRANSACTION_SUCCESS = "Terima kasih. Pesanan anda telah kami terima.";
   static final String DIALOG_MESSAGE_REPORT_SENT = "Laporan anda telah dikirim. Harap tunggu konfirmasi dari petugas kami.";

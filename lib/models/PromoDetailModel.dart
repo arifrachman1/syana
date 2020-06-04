@@ -6,9 +6,11 @@ class PromoDetailModel{
   List<PromoDetailInModel> _promoDetailIns;
   List<PromoDetailOutModel> _promoDetailOuts;
 
-
   PromoDetailModel.init(this._idPromoDetail, this._idPromo,
       this._promoDetailIns, this._promoDetailOuts);
+
+
+  PromoDetailModel.createPromo(this._promoDetailIns, this._promoDetailOuts);
 
   String get idPromoDetail => _idPromoDetail;
 
@@ -32,6 +34,15 @@ class PromoDetailModel{
 
   set promoDetailOuts(List<PromoDetailOutModel> value) {
     _promoDetailOuts = value;
+  }
+
+  Map<String, dynamic> toJson(){
+    return{
+      "id_promo_detail" : _idPromoDetail,
+      "id_promo" : _idPromo,
+      "promo_detail_in" : _promoDetailIns,
+      "promo_detail_out" : _promoDetailOuts
+    };
   }
 
   @override

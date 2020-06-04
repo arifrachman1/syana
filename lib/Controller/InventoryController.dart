@@ -182,7 +182,7 @@ class InventoryController {
     loadingStateCallback();
   }
 
-  getTeams(context, loadingStateCallback, setDataCallback) async {
+  getTeams(context, loadingStateCallback, setDataCallback, doesIncludeGlobal) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -207,7 +207,7 @@ class InventoryController {
         }
 
         List<DropdownMenuItem> teamDropdownItems =
-            _generateDropdownItems(teams);
+            _generateDropdownItems(teams, doesIncludeGlobal);
 
         if (teamDropdownItems.isNotEmpty) {
           setDataCallback(teamDropdownItems);
@@ -217,12 +217,14 @@ class InventoryController {
     loadingStateCallback();
   }
 
-  _generateDropdownItems(List<TeamModel> objects) {
+  _generateDropdownItems(List<TeamModel> objects, doesIncludeGlobal) {
     List<DropdownMenuItem> temp = new List();
-    temp.add(new DropdownMenuItem(
-      child: Text("Global"),
-      value: 0,
-    ));
+    if(doesIncludeGlobal){
+      temp.add(new DropdownMenuItem(
+        child: Text("Global"),
+        value: 0,
+      ));
+    }
     if (objects.isNotEmpty) {
       objects.forEach((element) {
         temp.add(new DropdownMenuItem(

@@ -246,7 +246,7 @@ class BarangKeluarState extends State<SyanaStokBarangKeluar> {
   _initTeams() async {
     await _inventoryController.getSaleHistory(
         context, setLoadingState, setData, "1", 0, "", "", null);
-    await _inventoryController.getTeams(context, setLoadingState, setData);
+    await _inventoryController.getTeams(context, setLoadingState, setData, true);
 
     _timeFilter = GlobalFunctions.generateDropdownMenuItem(
         childs: ["Hari ini", "Minggu ini", "Bulan ini", "Tentukan Sendiri"]);

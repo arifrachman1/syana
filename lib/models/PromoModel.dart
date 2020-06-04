@@ -1,11 +1,22 @@
+import 'package:syana/models/PromoDetailInModel.dart';
 import 'package:syana/models/PromoDetailModel.dart';
 
 class PromoModel{
-  String _idPromo, _title, _startDate, _endDate, _status, _length, _tipe, _teamId;
+  String _idPromo, _title, _startDate, _endDate, _status, _length, _type, _teamId;
   List<PromoDetailModel> _promoDetails;
 
+  bool _isPromoGet;
+
+  PromoModel(){
+    _isPromoGet = false;
+  }
+
   PromoModel.init(this._idPromo, this._title, this._startDate, this._endDate,
-      this._status, this._length, this._tipe, this._teamId, this._promoDetails);
+      this._status, this._length, this._type, this._teamId, this._promoDetails);
+
+
+  PromoModel.createPromo(this._title, this._startDate, this._endDate, this._status,
+      this._length, this._type, this._teamId, this._promoDetails);
 
   String get idPromo => _idPromo;
 
@@ -31,10 +42,10 @@ class PromoModel{
     _teamId = value;
   }
 
-  get tipe => _tipe;
+  get tipe => _type;
 
   set tipe(value) {
-    _tipe = value;
+    _type = value;
   }
 
   get length => _length;
@@ -61,9 +72,52 @@ class PromoModel{
     _startDate = value;
   }
 
+
+  get type => _type;
+
+  set type(value) {
+    _type = value;
+  }
+
+
+  bool get isPromoGet => _isPromoGet;
+
+  set isPromoGet(bool value) {
+    _isPromoGet = value;
+  }
+
+  check(productId, productSaleNumber, {total}){
+
+  }
+
+  checkFulfillment(promoDetailIns){
+    if(promoDetailIns is List<PromoDetailInModel>){
+      promoDetailIns.forEach((element) {
+        if(!element.fulfilled){
+          return false;
+        }
+      });
+    }
+    return true;
+  }
+
+  Map<String, dynamic> toJson(){
+    return{
+      "id_promo" : _idPromo,
+      "judul_promo" : _title,
+      "jangka_waktu_promo" : _length,
+      "tanggal_mulai_promo" : _startDate,
+      "tanggal_selesai_promo" : _endDate,
+      "status_promo" : _status,
+      "promo_details" : _promoDetails,
+      "tipe_promo" : _type,
+      "id_team" : _teamId
+    };
+  }
+
   @override
   String toString() {
-    return 'PromoModel{_idPromo: $_idPromo, _title: $_title, _startDate: $_startDate, _endDate: $_endDate, _status: $_status, _length: $_length, _tipe: $_tipe, _teamId: $_teamId, _promoDetails: $_promoDetails}';
+    return 'PromoModel{_idPromo: $_idPromo, _title: $_title, _startDate: $_startDate, _endDate: $_endDate, _status: $_status, _length: $_length, _tipe: $_type, _teamId: $_teamId, _promoDetails: $_promoDetails}';
   }
   
 }

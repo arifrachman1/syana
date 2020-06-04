@@ -5,6 +5,9 @@ class PromoDetailOutModel{
   PromoDetailOutModel.init(this._idPromoDetailOut, this._idPromoDetail,
       this._idProductFree, this._amountFree);
 
+
+  PromoDetailOutModel.createPromo(this._idProductFree, this._amountFree);
+
   String get idPromoDetailOut => _idPromoDetailOut;
 
   set idPromoDetailOut(String value) {
@@ -27,6 +30,15 @@ class PromoDetailOutModel{
 
   set idPromoDetail(value) {
     _idPromoDetail = value;
+  }
+
+  Map<String, dynamic> toJson () {
+    return{
+      "id_promo_detail_out" : _idPromoDetailOut,
+      "id_promo_detail" : _idPromoDetail,
+      "id_product_free" : _idProductFree,
+      "amount_free" : _amountFree
+    };
   }
 
   @override

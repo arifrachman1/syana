@@ -269,7 +269,7 @@ class SyanaProductRankTopLokasiState extends State<SyanaProductRankTopLokasi> {
     await _saleController.getTopLocation(context, setLoadingState, setData,
         _currentTimes, "", "", _currentTeams, _currentType);
     await _inventoryController.getTeams(
-        context, setLoadingState, setDropdownData);
+        context, setLoadingState, setDropdownData, true);
     print("list length : " + rankTopLocation.length.toString());
     setLoadingState();
   }
