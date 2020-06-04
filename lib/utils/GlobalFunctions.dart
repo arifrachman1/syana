@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/screens/home/SyanaHomeOwner.dart';
@@ -9,6 +10,7 @@ import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
 import 'package:syana/screens/inventory/SyanaStock.dart';
 import 'package:syana/screens/inventory/SyanaStokMain.dart';
 import 'package:syana/screens/product_rank/SyanaProductRank.dart';
+import 'package:syana/screens/profile/SyanaAkun.dart';
 import 'package:syana/screens/sale/SyanaEcommerce.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 
@@ -132,6 +134,69 @@ class GlobalFunctions {
     return temp;
   }
 
+  static const int FORMAT_DD_MM_YYYY = 1;
+  static const int FORMAT_DD_MM_YYYY_HH_MM = 2;
+  static const int FORMAT_YYYY_MM_DD = 3;
+  static const int FORMAT_YYYY_MM_DD_HH_MM = 4;
+  static const int FORMAT_MMMMM_YYYY = 5;
+
+  static DateTime getDateTimeFromString({@required targetDateTime, @required intendedFormat}){
+    DateTime dateTime;
+    switch(intendedFormat){
+      case FORMAT_DD_MM_YYYY:
+        var newFormat = DateFormat("dd-MM-y");
+        dateTime = newFormat.parse(targetDateTime);
+        break;
+      case FORMAT_DD_MM_YYYY_HH_MM:
+        var newFormat = DateFormat("dd-MM-y HH:mm");
+        dateTime = newFormat.parse(targetDateTime);
+        break;
+      case FORMAT_YYYY_MM_DD:
+        var newFormat = DateFormat("y-MM-dd");
+        dateTime = newFormat.parse(targetDateTime);
+        break;
+      case FORMAT_YYYY_MM_DD_HH_MM:
+        var newFormat = DateFormat("y-MM-dd HH:mm");
+        dateTime = newFormat.parse(targetDateTime);
+        break;
+      case FORMAT_MMMMM_YYYY:
+        var newFormat = DateFormat("MMMM y");
+        dateTime = newFormat.parse(targetDateTime);
+        break;
+    }
+
+    return dateTime;
+  }
+
+  static String getStringFromDate({@required targetDateTime, @required intendedFormat}){
+    String dateTime;
+
+    switch(intendedFormat){
+      case FORMAT_DD_MM_YYYY:
+        var newFormat = DateFormat("dd-MM-y");
+        dateTime = newFormat.format(targetDateTime);
+        break;
+      case FORMAT_DD_MM_YYYY_HH_MM:
+        var newFormat = DateFormat("dd-MM-y HH:mm");
+        dateTime = newFormat.format(targetDateTime);
+        break;
+      case FORMAT_YYYY_MM_DD:
+        var newFormat = DateFormat("y-MM-dd");
+        dateTime = newFormat.format(targetDateTime);
+        break;
+      case FORMAT_YYYY_MM_DD_HH_MM:
+        var newFormat = DateFormat("y-MM-dd HH:mm");
+        dateTime = newFormat.format(targetDateTime);
+        break;
+      case FORMAT_MMMMM_YYYY:
+        var newFormat = DateFormat("MMMM y");
+        dateTime = newFormat.format(targetDateTime);
+        break;
+    }
+
+    return dateTime;
+  }
+
   static navigate(context, whereTo) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int idRole = prefs.get(GlobalVars.idRoleKey);
@@ -158,7 +223,9 @@ class GlobalFunctions {
         return ProductRank();
       }), (route) => false);
     }else{
-      
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+        return SyanaAkun();
+      }), (route) => false);
     }
   }
 }
