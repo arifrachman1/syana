@@ -10,7 +10,7 @@ import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
 import 'package:syana/screens/inventory/SyanaStock.dart';
 import 'package:syana/screens/inventory/SyanaStokMain.dart';
 import 'package:syana/screens/product_rank/SyanaProductRank.dart';
-import 'package:syana/screens/profile/SyanaAkun.dart';
+import 'package:syana/screens/profile/SyanaProfileBase.dart';
 import 'package:syana/screens/sale/SyanaEcommerce.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 
@@ -224,7 +224,7 @@ class GlobalFunctions {
       }), (route) => false);
     }else{
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
-        return SyanaAkun();
+        return SyanaProfileBase();
       }), (route) => false);
     }
   }

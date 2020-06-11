@@ -36,7 +36,7 @@ class SyanaAddPromoMainState extends State<SyanaAddPromoMain> {
 
   TextEditingController _titleController = new TextEditingController();
   String _startDate = "", _endDate = "";
-  bool _isLoading = false, _isLimited = true;
+  bool _isLoading = false, _isLimited = true, _isSubmitted = false;
 
   @override
   void dispose() {
@@ -335,24 +335,32 @@ class SyanaAddPromoMainState extends State<SyanaAddPromoMain> {
                                   shape: AppTheme.roundButton(),
                                   color: AppTheme.btn_success,
                                   onPressed: () {
-                                    if (_titleController.text != "") {
-                                      _promoController
-                                          .setPromo(context, setLoadingState, {
-                                        "title": _titleController.text,
-                                        "type": widget.which,
-                                        "length": _isLimited ? "1" : "2",
-                                        "startDate": _startDate,
-                                        "endDate": _endDate,
-                                        "teamId": widget.teamId,
-                                        "details": widget.details
-                                      });
-                                    } else {
-                                      CustomDialog.getDialog(
-                                          title: Strings.DIALOG_TITLE_WARNING,
-                                          message: Strings
-                                              .DIALOG_MESSAGE_INSUFFICENT_PROMO_SETTING,
-                                          context: context,
-                                          popCount: 1);
+                                    if(!_isSubmitted){
+                                      if (_titleController.text != "") {
+                                        _promoController
+                                            .setPromo(context, setLoadingState, {
+                                          "title": _titleController.text,
+                                          "type": widget.which,
+                                          "length": _isLimited ? "2" : "1",
+                                          "startDate": _startDate,
+                                          "endDate": _endDate,
+                                          "teamId": widget.teamId,
+                                          "details": widget.details
+                                        });
+                                        /*we prevent multiple button click*/
+                                        setState(() {
+                                          _isSubmitted = true;
+                                        });
+                                      } else {
+                                        CustomDialog.getDialog(
+                                            title: Strings.DIALOG_TITLE_WARNING,
+                                            message: Strings
+                                                .DIALOG_MESSAGE_INSUFFICENT_PROMO_SETTING,
+                                            context: context,
+                                            popCount: 1);
+                                      }
+                                    }else{
+                                      print("is already submitted!");
                                     }
                                   },
                                 ),

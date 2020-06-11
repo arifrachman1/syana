@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PromoController.dart';
 import 'package:syana/models/PromoModel.dart';
 import 'package:syana/screens/promo/SyanaAddPromo.dart';
+import 'package:syana/screens/promo/SyanaPromoDetail.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
-import '../../main.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 
 class SyanaPromo extends StatefulWidget {
   @override
@@ -12,17 +16,7 @@ class SyanaPromo extends StatefulWidget {
 }
 
 class SyanaPromoState extends State<SyanaPromo> {
-  List<List> promo = [
-    ['teslft1', 'Lifetime', '-'],
-    ['teslft2', 'Lifetime', '-'],
-    ['teslft3', 'Lifetime', '-'],
-    ['teslft4', 'Lifetime', '-'],
-    ['teslft5', 'Lifetime', '-'],
-    ['teslft6', 'Lifetime', '-'],
-    ['teslft7', 'Lifetime', '-'],
-    ['teslft8', 'Lifetime', '-'],
-    ['teslft9', 'Lifetime', '-'],
-  ];
+  final String _devTitle = "promo";
 
   List<PromoModel> _promos = new List();
   List<PromoModel> _filteredPromos = new List();
@@ -70,11 +64,6 @@ class SyanaPromoState extends State<SyanaPromo> {
     }
   }
 
-  getPromo(index, index2) {
-    var selectedPromo = promo[index];
-    return selectedPromo[index2];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,8 +72,8 @@ class SyanaPromoState extends State<SyanaPromo> {
           foregroundColor: Colors.black,
           tooltip: 'Add',
           child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            var result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
@@ -92,6 +81,12 @@ class SyanaPromoState extends State<SyanaPromo> {
                 },
               ),
             );
+
+            print("result : " + result.toString());
+
+            if (result == 200) {
+              _initData();
+            }
           },
         ),
         appBar: AppBar(
@@ -115,7 +110,9 @@ class SyanaPromoState extends State<SyanaPromo> {
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
             : RefreshIndicator(
-                onRefresh: () {},
+                onRefresh: () {
+                  _initData();
+                },
                 child: Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -194,11 +191,45 @@ class SyanaPromoState extends State<SyanaPromo> {
                                     child: Container(
                                       alignment: Alignment.center,
                                       child: PopupMenuButton(
-                                        onSelected: (value) {
+                                        onSelected: (value) async {
                                           switch (value) {
                                             case 1:
+                                              var result =
+                                                  await _promoController
+                                                      .setPromoStatus(
+                                                          context,
+                                                          _filteredPromos[index]
+                                                              .idPromo,
+                                                          _filteredPromos[index]
+                                                              .status);
+                                              if (result) {
+                                                _initData();
+                                              } else {
+                                                CustomDialog.getDialog(
+                                                    title: Strings
+                                                        .DIALOG_TITLE_ERROR,
+                                                    message: Strings
+                                                        .DIALOG_MESSAGE_SET_PROMO_STATUS_FAILED,
+                                                    context: context,
+                                                    popCount: 1);
+                                              }
                                               break;
                                             case 2:
+                                              log(_filteredPromos[index].title,
+                                                  name: _devTitle);
+                                              log(
+                                                  _filteredPromos[index]
+                                                      .promoDetails
+                                                      .length
+                                                      .toString(),
+                                                  name: _devTitle);
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (_) {
+                                                return SyanaPromoDetail(
+                                                    _filteredPromos[index]
+                                                        .idPromo);
+                                              }));
                                               break;
                                           }
                                         },

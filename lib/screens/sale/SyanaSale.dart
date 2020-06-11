@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PromoController.dart';
@@ -10,8 +12,6 @@ import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
-import 'package:syana/widgets/SaleWidgets.dart';
-import '../../main.dart';
 
 class Sale extends StatefulWidget {
   @override
@@ -30,6 +30,8 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
   Map<String, String> categories = new Map();
   List<Widget> tabs = new List();
   List<Widget> pages = new List();
+
+  final String _devTitle = "sale";
 
   @override
   void dispose() {
@@ -117,7 +119,7 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
 
         setState(() {
           pages.add(SaleInnerWidget(key == "0" ? products : categorizedProducts,
-              _saleController, promos, _promoController));
+              _saleController, promos, _promoController, products));
         });
       });
     }
@@ -256,12 +258,13 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
 /*I separated the 'inner' widget so that they could filter each assigned products*/
 class SaleInnerWidget extends StatefulWidget {
   List<ProductModel> categorizedProducts;
+  List<ProductModel> allProducts;
   List<PromoModel> promos;
   SaleController saleController;
   PromoController promoController;
 
   SaleInnerWidget(this.categorizedProducts, this.saleController, this.promos,
-      this.promoController);
+      this.promoController, this.allProducts);
 
   _SaleInnerState createState() => _SaleInnerState();
 }
@@ -280,6 +283,8 @@ class _SaleInnerState extends State<SaleInnerWidget> {
   double _totalPrice = 0;
 
   bool _isLoading = false;
+
+  final String _devTitle = "sale_inner";
 
   @override
   void dispose() {
@@ -328,51 +333,78 @@ class _SaleInnerState extends State<SaleInnerWidget> {
     }
   }
 
-  add(index, isSale) {
-    /*update view*/
-    int number = isSale
-        ? int.parse(filteredProducts[index].saleNumber)
-        : int.parse(filteredProducts[index].freeNumber);
+  add(id, isSale) {
+    /*search id*/
+    log("id : " + id.toString(), name: _devTitle);
+    var indexOfFilteredProducts, indexOfAllProducts;
+    filteredProducts.forEach((element) {
+      if (element.id == id) {
+        indexOfFilteredProducts = filteredProducts.indexOf(element);
+      }
+    });
 
-    number++;
+    categorizedProducts.forEach((element) {
+      if (element.id == id) {
+        indexOfAllProducts = categorizedProducts.indexOf(element);
+      }
+    });
+
+    log(
+        "filtered index : " +
+            indexOfFilteredProducts.toString() +
+            ", all index : " +
+            indexOfAllProducts.toString(),
+        name: _devTitle);
+
+    /*update view*/
+    int numberForFilter = isSale
+        ? int.parse(filteredProducts[indexOfFilteredProducts].saleNumber)
+        : int.parse(filteredProducts[indexOfFilteredProducts].freeNumber);
+
+    numberForFilter++;
 
     /*to update the widget's(view) number*/
     setState(() {
       isSale
-          ? filteredProducts[index].saleNumber = number
-          : filteredProducts[index].freeNumber = number;
+          ? filteredProducts[indexOfFilteredProducts].saleNumber =
+              numberForFilter
+          : filteredProducts[indexOfFilteredProducts].freeNumber =
+              numberForFilter;
     });
     /*update view*/
 
     /*pass the selected product(s) to the controller*/
-    if (number == 1) {
-      widget.saleController.addSelectedProduct(filteredProducts[index]);
+    if (numberForFilter == 1) {
+      widget.saleController
+          .addSelectedProduct(categorizedProducts[indexOfAllProducts]);
     } else {
       isSale
-          ? widget.saleController.setSaleNumber(filteredProducts[index],
-              int.parse(filteredProducts[index].saleNumber))
-          : widget.saleController.setFreeNumber(filteredProducts[index],
-              int.parse(filteredProducts[index].freeNumber));
+          ? widget.saleController.setSaleNumber(
+              categorizedProducts[indexOfAllProducts],
+              int.parse(categorizedProducts[indexOfAllProducts].saleNumber))
+          : widget.saleController.setFreeNumber(
+              categorizedProducts[indexOfAllProducts],
+              int.parse(categorizedProducts[indexOfAllProducts].freeNumber));
     }
 
     /*promo checking*/
     if (isSale) {
-      _totalPrice += double.parse(filteredProducts[index].price);
+      _totalPrice +=
+          double.parse(categorizedProducts[indexOfAllProducts].price);
       Map _promoStatus = widget.promoController.checkAvailablePromo(
-          filteredProducts[index].id,
-          int.parse(filteredProducts[index].saleNumber),
+          categorizedProducts[indexOfAllProducts].id,
+          int.parse(categorizedProducts[indexOfAllProducts].saleNumber),
           _promos,
           _totalPrice);
-      print("function finished");
+      log("function finished...", name: _devTitle);
       if (_promoStatus.isEmpty) {
-        print("no return value...");
+        log("no return value...", name: _devTitle);
       } else {
-        _promoStatus.forEach((key, value) {
-          print(key + ":" + value.toString());
-        });
-
         if (_promoStatus['status'] == true) {
-          print("status : true");
+          log("status : true", name: _devTitle);
+          _promoStatus.forEach((key, value) {
+            log("$key : $value", name: _devTitle);
+          });
           addFreeItemFromPromo(
               _promoStatus['freeProduct'], _promoStatus['freeAmount']);
         }
@@ -381,20 +413,59 @@ class _SaleInnerState extends State<SaleInnerWidget> {
   }
 
   addFreeItemFromPromo(productId, productSize) {
-    filteredProducts.forEach((element) {
+    categorizedProducts.forEach((element) {
       if (element.id == productId) {
         for (int i = 0; i < int.parse(productSize); i++) {
-          add(filteredProducts.indexOf(element), false);
+          var indexOfAllProducts = categorizedProducts.indexOf(element);
+          int numberForAll =
+              int.parse(categorizedProducts[indexOfAllProducts].freeNumber);
+
+          numberForAll++;
+
+          setState(() {
+            categorizedProducts[indexOfAllProducts].freeNumber = numberForAll;
+          });
+
+          if (numberForAll == 1) {
+            widget.saleController
+                .addSelectedProduct(categorizedProducts[indexOfAllProducts]);
+          } else {
+            widget.saleController.setFreeNumber(
+                categorizedProducts[indexOfAllProducts],
+                int.parse(categorizedProducts[indexOfAllProducts].freeNumber));
+          }
         }
       }
     });
   }
 
   removeFreeItemFromPromo(productId, productSize) {
-    filteredProducts.forEach((element) {
+    log("start...", name: _devTitle);
+    categorizedProducts.forEach((element) {
       if (element.id == productId) {
         for (int i = 0; i < int.parse(productSize); i++) {
-          remove(filteredProducts.indexOf(element), false);
+          var indexOfAllProducts = categorizedProducts.indexOf(element);
+          int numberForAll =
+              int.parse(categorizedProducts[indexOfAllProducts].freeNumber);
+
+          numberForAll--;
+
+          setState(() {
+            categorizedProducts[indexOfAllProducts].freeNumber = numberForAll;
+          });
+
+          if (numberForAll >= 0) {
+            widget.saleController.setFreeNumber(
+                categorizedProducts[indexOfAllProducts],
+                int.parse(categorizedProducts[indexOfAllProducts].freeNumber));
+            /*after we decrese the number, then we check whether there is a zero number or not*/
+            widget.saleController.checkZeroNumber();
+          } else {
+            setState(() {
+              categorizedProducts[indexOfAllProducts].freeNumber = 0;
+              /*categorizedProducts[index].saleNumber = 0;*/
+            });
+          }
         }
       }
     });
@@ -629,7 +700,8 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                                         color: AppTheme.white,
                                         size: 24,
                                       ),
-                                      onPressed: () => add(index, true),
+                                      onPressed: () =>
+                                          add(filteredProducts[index].id, true),
                                     ),
                                     Text(filteredProducts[index].saleNumber,
                                         style: TextStyle(
@@ -663,7 +735,8 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                                           color: AppTheme.white,
                                           size: 24,
                                         ),
-                                        onPressed: () => add(index, false),
+                                        onPressed: () => add(
+                                            filteredProducts[index].id, false),
                                       ),
                                       Text(filteredProducts[index].freeNumber,
                                           style: TextStyle(

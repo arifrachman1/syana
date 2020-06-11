@@ -70,7 +70,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
         decoration: AppTheme.appBackground(),
         child: Scaffold(
             floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.add),
+                child: Icon(Icons.add, color: Colors.black,),
                 backgroundColor: AppTheme.yellow,
                 onPressed: () {
                   Navigator.push(

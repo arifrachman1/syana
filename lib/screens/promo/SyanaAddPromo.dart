@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:syana/Controller/InventoryController.dart';
 import 'package:syana/Controller/PromoController.dart';
 import 'package:syana/models/ProductModel.dart';
+import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
+
 import 'SyanaAddPromoMain.dart';
-import 'package:syana/utils/AppTheme.dart';
-import '../../main.dart';
 
 class SyanaAddPromo extends StatefulWidget {
   @override
@@ -347,9 +347,12 @@ class AddPromoState extends State<SyanaAddPromo> {
                 decoration: AppTheme.appBackground(),
                 child: SingleChildScrollView(
                   child: Container(
-                    height: ScreenSizeHelper.getDisplayHeight(
-                        context: context,
-                        which: ScreenSizeHelper.HEIGHT_WITH_STATUS_BAR),
+                    height: _currentOption ==
+                            OPTIONS_DIFFERENT_REQUIRED_WITH_DIFFERENT_FREE
+                        ? null
+                        : ScreenSizeHelper.getDisplayHeight(
+                            context: context,
+                            which: ScreenSizeHelper.HEIGHT_WITH_STATUS_BAR),
                     margin: EdgeInsets.only(top: 50.0),
                     padding: EdgeInsets.only(
                         top: 15.0, left: 20, right: 20, bottom: 20),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:syana/models/ProductModel.dart';
@@ -6,12 +8,12 @@ import 'package:syana/models/PromoDetailModel.dart';
 import 'package:syana/models/PromoDetailOutModel.dart';
 import 'package:syana/models/PromoModel.dart';
 import 'package:syana/models/UserModel.dart';
-import 'package:syana/screens/promo/SyanaAddPromo.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
 
 class PromoController {
   UserModel _userModel;
+  final String _devTitle = "promo_controller";
 
   PromoController() {
     _getPersistence();
@@ -356,53 +358,58 @@ class PromoController {
       print(data);
       if (data['status'] == 1) {
         print("success!");
-        Navigator.pop(context);
-        Navigator.pop(context);
+        Navigator.of(context).pop(200);
+        Navigator.of(context).pop(200);
       }
     }
   }
 
   Map checkAvailablePromo(
       selectedProduct, selectedProductSaleNumber, promos, totalPrice) {
-    print("begin checking...");
+    log("begin checking...", name: _devTitle);
     Map<String, dynamic> returnValues = new Map();
     if (promos is List<PromoModel> && promos.isNotEmpty) {
       promos.forEach((promoElement) {
         if (promoElement.status.toString().compareTo("1") == 0) {
-          print("promo status on...");
+          log("promo status on...", name: _devTitle);
           bool _doesMeetRequirements = false;
           promoElement.promoDetails.forEach((promoDetailElement) {
             promoDetailElement.promoDetailIns.forEach((detailInElement) {
               /*to check whether the provided id matching the required product id*/
-              if (selectedProduct.toString().compareTo(detailInElement.idProductRequired) == 0) {
-                print("product match...");
+              if (selectedProduct
+                      .toString()
+                      .compareTo(detailInElement.idProductRequired) ==
+                  0) {
+                log("product match...", name: _devTitle);
                 /*check promos*/
-                if (detailInElement.requiredType.toString().compareTo("1") == 0 ||
-                    detailInElement.requiredType.toString().compareTo("2") == 0) {
+                if (detailInElement.requiredType.toString().compareTo("1") ==
+                        0 ||
+                    detailInElement.requiredType.toString().compareTo("2") ==
+                        0) {
                   /*to check whether the provided sale number fulfilling the required minimum*/
                   if (selectedProductSaleNumber %
                           int.parse(detailInElement.amountRequired) ==
                       0) {
-                    print("product amount matched the required amount...");
+                    log("product amount matched the required amount...", name: _devTitle);
                     /*matched*/
-                    print("returning data...");
+                    log("returning data...", name: _devTitle);
                     promoDetailElement.promoDetailOuts
                         .forEach((detailOutElement) {
-
                       returnValues['status'] = true;
-                      returnValues['freeProduct'] = detailOutElement.idProductFree;
+                      returnValues['freeProduct'] =
+                          detailOutElement.idProductFree;
                       returnValues['freeAmount'] = detailOutElement.amountFree;
                     });
-                  }else if (selectedProductSaleNumber %
-                      int.parse(detailInElement.amountRequired) !=
-                      0){
-                    print("product amount did not match the required amount...");
-                    print("returning data...");
+                  } else if (selectedProductSaleNumber %
+                          int.parse(detailInElement.amountRequired) !=
+                      0) {
+                    log("product amount did not match the required amount...", name: _devTitle);
+                    log("returning data...", name: _devTitle);
                     promoDetailElement.promoDetailOuts
                         .forEach((detailOutElement) {
-
                       returnValues['status'] = false;
-                      returnValues['freeProduct'] = detailOutElement.idProductFree;
+                      returnValues['freeProduct'] =
+                          detailOutElement.idProductFree;
                       returnValues['freeAmount'] = detailOutElement.amountFree;
                     });
                   }
@@ -422,7 +429,8 @@ class PromoController {
                     promoDetailElement.promoDetailOuts
                         .forEach((detailOutElement) {
                       returnValues['status'] = true;
-                      returnValues['freeProduct'] = detailOutElement.idProductFree;
+                      returnValues['freeProduct'] =
+                          detailOutElement.idProductFree;
                       returnValues['freeAmount'] = detailOutElement.amountFree;
                     });
                   }
@@ -432,7 +440,8 @@ class PromoController {
                     promoDetailElement.promoDetailOuts
                         .forEach((detailOutElement) {
                       returnValues['status'] = true;
-                      returnValues['freeProduct'] = detailOutElement.idProductFree;
+                      returnValues['freeProduct'] =
+                          detailOutElement.idProductFree;
                       returnValues['freeAmount'] = detailOutElement.amountFree;
                       returnValues['isPromoGet'] = true;
                     });
@@ -444,9 +453,93 @@ class PromoController {
           });
         }
       });
-    }else{
-      print("promos is not a list and is empty...");
+    } else {
+      log("promos is not a list and is empty...", name: _devTitle);
     }
     return returnValues;
+  }
+
+  getPromoDetail(
+      context, loadingStateCallback, setDataCallback, promoId) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(['id_promo'], [promoId]);
+
+    loadingStateCallback();
+    final data = await GlobalFunctions.dioGetCall(
+        context: context,
+        params: params,
+        path: GlobalVars.apiUrl + "get-promo-detail");
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List<PromoDetailInModel> _promoDetailIns = new List();
+        List<PromoDetailOutModel> _promoDetailOuts = new List();
+
+        List _inFromApi = data['promo_detail']['promo_detail_in'];
+        List _outFromApi = data['promo_detail']['promo_detail_out'];
+
+        _inFromApi.forEach((element) {
+          _promoDetailIns.add(new PromoDetailInModel.init(
+              element['id_promo_detail_in'].toString(),
+              element['id_promo_detail'].toString(),
+              element['id_product_required'].toString(),
+              element['amount_required'].toString(),
+              element['required_type'].toString()));
+        });
+
+        _outFromApi.forEach((element) {
+          _promoDetailOuts.add(new PromoDetailOutModel.init(
+              element['id_promo_detail_out'].toString(),
+              element['id_promo_detail'].toString(),
+              element['id_product_free'].toString(),
+              element['amount_free'].toString()));
+        });
+
+        Map returnValues = new Map();
+
+        returnValues['promoId'] = data['promo_detail']['id_promo'];
+        returnValues['promoTitle'] = data['promo_detail']['judul_promo'];
+        returnValues['type'] = data['promo_detail']['tipe'];
+        returnValues['startDate'] =
+            data['promo_detail']['tanggal_mulai_promo'] ?? "-";
+        returnValues['endDate'] =
+            data['promo_detail']['tanggal_selesai_promo'] ?? "-";
+        returnValues['detailIn'] = _promoDetailIns;
+        returnValues['detailOut'] = _promoDetailOuts;
+
+        setDataCallback(returnValues);
+      }
+    }
+    loadingStateCallback();
+  }
+
+  setPromoStatus(context, promoId, status) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ['id_promo', 'status'], [promoId, status]);
+
+    log(params.toString(), name: _devTitle);
+
+    FormData _formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        path: GlobalVars.apiUrl + "change-promo-status",
+        params: _formData);
+
+    if (data != null) {
+      log(data.toString(), name: _devTitle);
+      if (data['status'] == 1) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 }
