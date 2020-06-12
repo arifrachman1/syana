@@ -333,7 +333,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                       : Container(
                     child: Text(_currentSelectedDate +
                         " : " +
-                        _valueData.toString()),
+                        _valueData.toString()+" Paket"),
                   ),
                   listDataTrace.length < 0
                       ? Container()
@@ -406,6 +406,7 @@ class GrafikProdukState extends State<GrafikProduk> {
               child: charts.TimeSeriesChart(
                 _timeSeriesLineData,
                 animate: false,
+                behaviors: [new charts.PanAndZoomBehavior()],
                 dateTimeFactory: const charts.LocalDateTimeFactory(),
                 selectionModels: [
                   new charts.SelectionModelConfig(

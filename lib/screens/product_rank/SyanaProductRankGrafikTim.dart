@@ -20,7 +20,6 @@ class GrafikTim extends StatefulWidget {
 }
 
 class GrafikTimState extends State<GrafikTim> {
-
   DateFormat formatDate = DateFormat("yyyy-MM-dd");
   DateTime timeStart = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime timeEnd = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
@@ -41,17 +40,14 @@ class GrafikTimState extends State<GrafikTim> {
   Future<bool> _generateData(List value) async {
     try {
       List<TimeSeriesSales> chartDataTime = new List();
-//      List<DateTime> range = calculateDaysInterval(timeStart, timeEnd);
-//      print("Range : ");
       print(listDateChart);
       for (int i = 0; i < value.length; i++) {
         setState(() {
           DateTime date = DateTime.parse(chartTeams[i].chartDate);
-          if(_currentFilterType=="3"){
-            chartDataTime.add(
-                new TimeSeriesSales(date, chartTeams[i].value));
+          if (_currentFilterType == "3") {
+            chartDataTime.add(new TimeSeriesSales(date, chartTeams[i].value));
             totalData += chartTeams[i].value;
-          }else{
+          } else {
             chartDataTime.add(
                 new TimeSeriesSales(date, int.parse(chartTeams[i].chartValue)));
             totalData += int.parse(chartTeams[i].chartValue);
@@ -128,8 +124,7 @@ class GrafikTimState extends State<GrafikTim> {
 
   initData() async {
     setLoadingState();
-    await _saleController.getTeams(
-        context, setLoadingState, setData);
+    await _saleController.getTeams(context, setLoadingState, setData);
     setLoadingState();
   }
 
@@ -158,7 +153,7 @@ class GrafikTimState extends State<GrafikTim> {
       setState(() {
         dateMaxMin = data;
       });
-    } else if (data is List<TeamModel> && data.isNotEmpty){
+    } else if (data is List<TeamModel> && data.isNotEmpty) {
       setState(() {
         teams = data;
       });
@@ -206,7 +201,7 @@ class GrafikTimState extends State<GrafikTim> {
                                 softWrap: true,
                               ),
                               Text(
-                                  _currentTimeStart,
+                                _currentTimeStart,
                                 style: TextStyle(
                                   color: AppTheme.orange_light,
                                   fontSize: 14,
@@ -266,7 +261,7 @@ class GrafikTimState extends State<GrafikTim> {
                           value: _selectedTeams,
                           hint: "Pilih Tim",
                           searchHint: "Cari Tim",
-                          onChanged: (TeamModel value) async{
+                          onChanged: (TeamModel value) async {
                             if (value != null) {
                               print(value.id);
                               setState(() {
@@ -285,8 +280,10 @@ class GrafikTimState extends State<GrafikTim> {
                                   _currentFilterType,
                                   _currentTimeStart,
                                   _currentTimeEnd,
-                                  _currentTeams,"");
-                              print("list length : " + chartTeams.length.toString());
+                                  _currentTeams,
+                                  "");
+                              print("list length : " +
+                                  chartTeams.length.toString());
                               setLoadingState();
                             }
                           },
@@ -313,7 +310,7 @@ class GrafikTimState extends State<GrafikTim> {
                                 ),
                               ),
                               Text(
-                                'Produk '+filterTypeName,
+                                'Produk ' + filterTypeName,
                                 style: TextStyle(
                                   color: AppTheme.text_light,
                                   fontSize: 20,
@@ -326,23 +323,24 @@ class GrafikTimState extends State<GrafikTim> {
                         _currentSelectedDate == ""
                             ? Container()
                             : Container(
-                          child: Text(_currentSelectedDate +
-                              " : " +
-                              _valueData.toString()),
-                        ),
+                                child: Text(_currentSelectedDate +
+                                    " : " +
+                                    _valueData.toString() +
+                                    " Pcs"),
+                              ),
 //                        Container(
 //                          height: MediaQuery.of(context).size.height * 0.3,
 //                        ),
                         listDataTrace.length < 0
                             ? Container()
                             : Container(
-                            height: 100,
-                            child: ListView.builder(
+                                height: 100,
+                                child: ListView.builder(
 //                              shrinkWrap: true,
-                                itemCount: listDataTrace.length,
-                                itemBuilder: (context, position) {
-                                  return buildListDetailChart(position);
-                                }))
+                                    itemCount: listDataTrace.length,
+                                    itemBuilder: (context, position) {
+                                      return buildListDetailChart(position);
+                                    }))
                       ],
                     ),
                   ),
@@ -405,6 +403,7 @@ class GrafikTimState extends State<GrafikTim> {
                   child: charts.TimeSeriesChart(
                   _timeSeriesLineData,
                   animate: false,
+                  behaviors: [new charts.PanAndZoomBehavior()],
                   dateTimeFactory: const charts.LocalDateTimeFactory(),
                   selectionModels: [
                     new charts.SelectionModelConfig(
@@ -439,7 +438,10 @@ class GrafikTimState extends State<GrafikTim> {
                         style: TextStyle(color: AppTheme.teal_light))),
                 FlatButton(
                   color: Colors.white,
-                  child: Text("TERAPKAN",style: TextStyle(color: AppTheme.teal_light),),
+                  child: Text(
+                    "TERAPKAN",
+                    style: TextStyle(color: AppTheme.teal_light),
+                  ),
                   onPressed: () async {
                     setState(() {
                       if (_tempTimeStart != null && _tempTimeEnd != null) {
@@ -463,7 +465,8 @@ class GrafikTimState extends State<GrafikTim> {
                         _currentFilterType,
                         _currentTimeStart,
                         _currentTimeEnd,
-                        _currentTeams,"");
+                        _currentTeams,
+                        "");
                     print("list length : " + chartTeams.length.toString());
                     setLoadingState();
                   },
@@ -754,11 +757,11 @@ class GrafikTimState extends State<GrafikTim> {
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       decoration:
-                                      AppTheme.dateDecorationShadow(),
+                                          AppTheme.dateDecorationShadow(),
                                       height: 35,
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           Icon(
                                             Icons.date_range,
@@ -775,7 +778,7 @@ class GrafikTimState extends State<GrafikTim> {
                                     ),
                                     onTap: () async {
                                       final DateTime pickedStart =
-                                      await showDatePicker(
+                                          await showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(2000),
@@ -796,55 +799,55 @@ class GrafikTimState extends State<GrafikTim> {
                             ),
                             Expanded(
                                 child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "To",
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        // margin: EdgeInsets.only(top: 10),
-                                        // padding: EdgeInsets.only(left: 10),
-                                        decoration: AppTheme.dateDecorationShadow(),
-                                        height: 35,
-                                        child: Row(
-                                          mainAxisAlignment:
+                              children: <Widget>[
+                                Container(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "To",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    // margin: EdgeInsets.only(top: 10),
+                                    // padding: EdgeInsets.only(left: 10),
+                                    decoration: AppTheme.dateDecorationShadow(),
+                                    height: 35,
+                                    child: Row(
+                                      mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.date_range,
-                                              color: AppTheme.white,
-                                            ),
-                                            Text(
-                                              timeEndTemp,
-                                              style: TextStyle(
-                                                  color: AppTheme.white,
-                                                  fontSize: 10),
-                                            ),
-                                          ],
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.date_range,
+                                          color: AppTheme.white,
                                         ),
-                                      ),
-                                      onTap: () async {
-                                        final DateTime pickedEnd =
-                                        await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(2101),
-                                        );
-                                        print(pickedEnd);
-                                        setState(() {
-                                          timeEndTemp =
-                                              formatDate.format(pickedEnd);
-                                        });
-                                      },
+                                        Text(
+                                          timeEndTemp,
+                                          style: TextStyle(
+                                              color: AppTheme.white,
+                                              fontSize: 10),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                )),
+                                  ),
+                                  onTap: () async {
+                                    final DateTime pickedEnd =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2101),
+                                    );
+                                    print(pickedEnd);
+                                    setState(() {
+                                      timeEndTemp =
+                                          formatDate.format(pickedEnd);
+                                    });
+                                  },
+                                ),
+                              ],
+                            )),
                           ],
                         ),
                         Container(

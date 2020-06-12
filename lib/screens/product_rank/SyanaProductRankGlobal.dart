@@ -259,7 +259,8 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                             : Container(
                                 child: Text(_currentSelectedDate +
                                     " : " +
-                                    _valueData.toString()),
+                                    _valueData.toString() +
+                                    " Pcs"),
                               ),
 //                        Container(
 //                          height: MediaQuery.of(context).size.height * 0.3,
@@ -321,6 +322,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                   child: charts.TimeSeriesChart(
                   _timeSeriesLineData,
                   animate: false,
+                  behaviors: [new charts.PanAndZoomBehavior()],
                   dateTimeFactory: const charts.LocalDateTimeFactory(),
                   selectionModels: [
                     new charts.SelectionModelConfig(
