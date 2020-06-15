@@ -13,7 +13,6 @@ class SyanaProductRankTerbaik extends StatefulWidget {
 }
 
 class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
-
   // *
   // *
   // *
@@ -42,7 +41,7 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateFrom)
       setState(
-            () {
+        () {
           selectedDateFrom = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -74,7 +73,7 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateTo)
       setState(
-            () {
+        () {
           selectedDateTo = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -203,7 +202,15 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
   // *
   // Komponen Dropdown button
   // ===========================================
-  List<String> waktu = ['Hari ini', 'Minggu ini', 'Bulan ini', 'Kemarin', 'Minggu lalu', 'Bulan lalu', 'Grand Total', 'Tentukan sendiri'];
+  List<String> waktu = [
+    'Hari ini',
+    'Minggu ini',
+    'Bulan ini',
+    'Minggu lalu',
+    'Bulan lalu',
+    'Grand Total',
+    'Tentukan sendiri'
+  ];
   List<String> cakupan = ['Global', 'Lokal'];
 
   String selectedWaktu;
@@ -278,7 +285,7 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
   void onChangedWaktu(value) async {
     setState(() {
       this.selectedTime = value;
-      _currentTimes = waktu.indexOf(value).toString();
+      _currentTimes = getFilterTime(selectedTime);
       _dateFrom = "";
       _dateTo = "";
     });
@@ -299,196 +306,216 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
     }
   }
 
+  String getFilterTime(String filterTime) {
+    String filterTemp = "";
+    if (filterTime == "Hari ini") {
+      filterTemp = "0";
+    } else if (filterTime == "Minggu ini") {
+      filterTemp = "1";
+    } else if (filterTime == "Bulan ini") {
+      filterTemp = "2";
+    } else if (filterTime == "Minggu lalu") {
+      filterTemp = "4";
+    } else if (filterTime == "Bulan lalu") {
+      filterTemp = "5";
+    } else if (filterTime == "Grand Total") {
+      filterTemp = "6";
+    } else if (filterTime == "Tentukan sendiri") {
+      filterTemp = "7";
+    }
+    return filterTemp;
+  }
+
   // ============================================
 
   @override
   Widget build(BuildContext context) {
     return _isLoading
         ? Center(
-      child: CircularProgressIndicator(),
-    )
+            child: CircularProgressIndicator(),
+          )
         : Column(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(bottom: 10),
-          padding: EdgeInsets.only(left: 10, right: 10),
-          child: Column(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: selectedTime,
-                          items: waktu.map(
-                                (String val) {
-                              return DropdownMenuItem(
-                                value: val,
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(left: 10),
+                            decoration: AppTheme.inputDecorationShadow(),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                value: selectedTime,
+                                items: waktu.map(
+                                  (String val) {
+                                    return DropdownMenuItem(
+                                      value: val,
+                                      child: Text(
+                                        val,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
+                                onChanged: (String value) {
+                                  onChangedWaktu(value);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.03,
+                        ),
+                        Expanded(
+                          child: Container(
+                              // width: 150,
+                              padding: EdgeInsets.only(left: 10),
+                              decoration: AppTheme.inputDecorationShadow(),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  items: teams,
+                                  value: _currentTeams,
+                                  onChanged: (value) async {
+                                    setState(() {
+                                      _currentTeams = value;
+                                    });
+                                    setLoadingState();
+                                    rankBestProducts.clear();
+                                    await _saleController.getRankProducts(
+                                        context,
+                                        setLoadingState,
+                                        setData,
+                                        "3",
+                                        _currentTimes,
+                                        _dateFrom,
+                                        _dateTo,
+                                        _currentTeams);
+                                    setLoadingState();
+                                  },
+                                ),
+                              )),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.01,
+                    ),
+                    showsDatePicker(
+                      waktu.indexOf(selectedTime),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(top: 10, right: 10, left: 10),
+                  child: ListView.builder(
+                    padding: EdgeInsets.all(0),
+                    shrinkWrap: true,
+                    itemCount: rankBestProducts.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color:
+                              index < 3 ? AppTheme.teal_light : AppTheme.teal,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        height: Dimens.listHeightSmall(context),
+                        margin: EdgeInsets.only(bottom: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Flexible(
+                              flex: 10,
+                              child: Container(
+                                alignment: Alignment.center,
                                 child: Text(
-                                  val,
+                                  (index + 1).toString(),
                                   style: TextStyle(
+                                    color: index < 3
+                                        ? AppTheme.text_darker
+                                        : AppTheme.text_light,
                                     fontSize: 15,
                                   ),
                                 ),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (String value) {
-                            onChangedWaktu(value);
-                          },
+                              ),
+                            ),
+                            Flexible(
+                              flex: 17,
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                child: Icon(
+                                  Icons.image,
+                                  size: 60,
+                                  color: index < 3
+                                      ? AppTheme.teal
+                                      : AppTheme.teal_light,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 53,
+                              fit: FlexFit.tight,
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      rankBestProducts[index].name,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: index < 3
+                                            ? AppTheme.text_darker
+                                            : AppTheme.text_light,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
+                                      rankBestProducts[index].sku,
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: index < 3
+                                            ? AppTheme.text_darker
+                                            : AppTheme.text_light,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 20,
+                              child: Container(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  rankBestProducts[index].rankValue,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    color: index < 3
+                                        ? AppTheme.text_darker
+                                        : AppTheme.text_light,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
-                  Expanded(
-                    child: Container(
-                      // width: 150,
-                        padding: EdgeInsets.only(left: 10),
-                        decoration: AppTheme.inputDecorationShadow(),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            items: teams,
-                            value: _currentTeams,
-                            onChanged: (value) async {
-                              setState(() {
-                                _currentTeams = value;
-                              });
-                              setLoadingState();
-                              rankBestProducts.clear();
-                              await _saleController.getRankProducts(
-                                  context,
-                                  setLoadingState,
-                                  setData,
-                                  "3",
-                                  _currentTimes,
-                                  _dateFrom,
-                                  _dateTo,
-                                  _currentTeams);
-                              setLoadingState();
-                            },
-                          ),
-                        )),
-                  ),
-                ],
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.01,
-              ),
-              showsDatePicker(
-                waktu.indexOf(selectedTime),
+                ),
               ),
             ],
-          ),
-        ),
-        Expanded(
-          child: Container(
-            margin: EdgeInsets.only(top: 10, right: 10, left: 10),
-            child: ListView.builder(
-              padding: EdgeInsets.all(0),
-              shrinkWrap: true,
-              itemCount: rankBestProducts.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color:
-                    index < 3 ? AppTheme.teal_light : AppTheme.teal,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  height: Dimens.listHeightSmall(context),
-                  margin: EdgeInsets.only(bottom: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Flexible(
-                        flex: 10,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            (index + 1).toString(),
-                            style: TextStyle(
-                              color: index < 3
-                                  ? AppTheme.text_darker
-                                  : AppTheme.text_light,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 17,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Icon(
-                            Icons.image,
-                            size: 60,
-                            color: index < 3
-                                ? AppTheme.teal
-                                : AppTheme.teal_light,
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 53,
-                        fit: FlexFit.tight,
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                rankBestProducts[index].name,
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: index < 3
-                                      ? AppTheme.text_darker
-                                      : AppTheme.text_light,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              Text(
-                                rankBestProducts[index].sku,
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: index < 3
-                                      ? AppTheme.text_darker
-                                      : AppTheme.text_light,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 20,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text(
-                            rankBestProducts[index].rankValue,
-                            softWrap: true,
-                            style: TextStyle(
-                              color: index < 3
-                                  ? AppTheme.text_darker
-                                  : AppTheme.text_light,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ],
-    );
+          );
   }
 }

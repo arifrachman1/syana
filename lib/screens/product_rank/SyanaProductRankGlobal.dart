@@ -409,7 +409,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
               content: StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
                   return Container(
-                    height: MediaQuery.of(context).size.height * 0.65,
+//                    height: MediaQuery.of(context).size.height * 0.65,
                     child: Column(
                       children: <Widget>[
                         Container(
@@ -422,37 +422,6 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                         ),
                         Row(
                           children: <Widget>[
-                            ButtonTheme(
-                              child: RaisedButton(
-                                color: Colors.blueGrey[900],
-                                onPressed: () {
-                                  setState(() {
-                                    _tempTimeStart = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
-                                    _tempTimeEnd = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day + 1);
-                                    timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
-                                    timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
-                                  });
-                                },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Text(
-                                  "1D",
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              minWidth: 50,
-                            ),
                             ButtonTheme(
                               child: RaisedButton(
                                 color: Colors.blueGrey[900],
@@ -546,11 +515,6 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                               ),
                               minWidth: 50,
                             ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                        Row(
-                          children: <Widget>[
                             ButtonTheme(
                               child: RaisedButton(
                                 color: Colors.blueGrey[900],
@@ -580,6 +544,11 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                               ),
                               minWidth: 50,
                             ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                        Row(
+                          children: <Widget>[
                             ButtonTheme(
                               child: RaisedButton(
                                 color: Colors.blueGrey[900],
@@ -648,6 +617,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                                 onPressed: () async {
                                   await _saleController.checkMaxFilter(
                                       context, setData);
+                                  print(dateMaxMin.dateMin);
                                   setState(() {
                                     _tempTimeStart =
                                         DateTime.parse(dateMaxMin.dateMin);
@@ -671,6 +641,9 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                               ),
                               minWidth: 50,
                             ),
+                            Container(
+                              width: 50,
+                            )
                           ],
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
@@ -681,6 +654,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                               child: Column(
                                 children: <Widget>[
                                   Container(
+                                    margin: EdgeInsets.only(bottom: 5),
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       "From",
@@ -735,6 +709,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                                 child: Column(
                               children: <Widget>[
                                 Container(
+                                  margin: EdgeInsets.only(bottom: 5),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                     "To",

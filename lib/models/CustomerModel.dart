@@ -11,16 +11,27 @@ class CustomerModel {
       _dateTimeCreated,
       _dateTimeModified,
       _idEmployee,
-      _idEmployeeTeam;
+      _idEmployeeTeam,
+      _nameEcommerce;
 
-  CustomerModel.full(this._id, this._fullName, this._nickName,
-      this._phoneNumber, this._address, this._city, this._province,
-      this._zipCode, this._ecommerceId, this._dateTimeCreated,
-      this._dateTimeModified, this._idEmployee, this._idEmployeeTeam);
+  CustomerModel.full(
+      this._id,
+      this._fullName,
+      this._nickName,
+      this._phoneNumber,
+      this._address,
+      this._city,
+      this._province,
+      this._zipCode,
+      this._ecommerceId,
+      this._dateTimeCreated,
+      this._dateTimeModified,
+      this._idEmployee,
+      this._idEmployeeTeam,
+      this._nameEcommerce);
 
-  CustomerModel.customerSuggestions(this._id, this._fullName,
-      this._phoneNumber, this._zipCode);
-
+  CustomerModel.customerSuggestions(
+      this._id, this._fullName, this._phoneNumber, this._zipCode);
 
   CustomerModel.zipCode(this._city, this._province, this._zipCode);
 
@@ -34,6 +45,12 @@ class CustomerModel {
 
   set idEmployee(value) {
     _idEmployee = value;
+  }
+
+  get nameEcommerce => _nameEcommerce;
+
+  set nameEcommerce(value) {
+    _nameEcommerce = value;
   }
 
   get dateTimeModified => _dateTimeModified;
@@ -106,6 +123,4 @@ class CustomerModel {
   String toString() {
     return 'CustomerModel{_id: $_id, _fullName: $_fullName, _nickName: $_nickName, _phoneNumber: $_phoneNumber, _address: $_address, _city: $_city, _province: $_province, _zipCode: $_zipCode, _ecommerceId: $_ecommerceId, _dateTimeCreated: $_dateTimeCreated, _dateTimeModified: $_dateTimeModified, _idEmployee: $_idEmployee, _idEmployeeTeam: $_idEmployeeTeam}';
   }
-
-
 }

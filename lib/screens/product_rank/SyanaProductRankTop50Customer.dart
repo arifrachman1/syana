@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:recase/recase.dart';
+import 'package:syana/Controller/CustomerController.dart';
 import 'package:syana/Controller/InventoryController.dart';
+import 'package:syana/Controller/RankDataController.dart';
 import 'package:syana/Controller/SaleController.dart';
+import 'package:syana/models/CustomerModel.dart';
 import 'package:syana/models/ProductModel.dart';
+import 'package:syana/models/RankDataModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -62,8 +66,8 @@ class SyanaProductRankTop50CustomerState
     if (_dateFrom != "" && _dateTo != "") {
       rankTop50Customer.clear();
       setLoadingState();
-      await _saleController.getTop50Customer(context, setLoadingState, setData,
-          _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      await _rankDataController.getTop50Customer(context, setLoadingState,
+          setData, _currentTimes, _dateFrom, _dateTo, _currentTeams);
       setLoadingState();
     }
   }
@@ -94,8 +98,8 @@ class SyanaProductRankTop50CustomerState
     if (_dateFrom != "" && _dateTo != "") {
       rankTop50Customer.clear();
       setLoadingState();
-      await _saleController.getTop50Customer(context, setLoadingState, setData,
-          _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      await _rankDataController.getTop50Customer(context, setLoadingState,
+          setData, _currentTimes, _dateFrom, _dateTo, _currentTeams);
       setLoadingState();
     }
   }
@@ -209,7 +213,6 @@ class SyanaProductRankTop50CustomerState
     'Hari ini',
     'Minggu ini',
     'Bulan ini',
-    'Kemarin',
     'Minggu lalu',
     'Bulan lalu',
     'Grand Total',
@@ -232,13 +235,16 @@ class SyanaProductRankTop50CustomerState
 
   int _currentTeams = 0;
 
-  SaleController _saleController;
   InventoryController _inventoryController;
+  CustomerController _customerController;
+  RankDataController _rankDataController;
 
   bool _isLoading = false;
 
-  List<ProductModel> rankTop50Customer = new List();
+  List<RankDataModel> rankTop50Customer = new List();
   List<DropdownMenuItem> teams = new List();
+
+  CustomerModel dataCustomer;
 
   @override
   void dispose() {
@@ -250,9 +256,9 @@ class SyanaProductRankTop50CustomerState
   void initState() {
     // TODO: implement initState
     super.initState();
-    _saleController = new SaleController();
     _inventoryController = new InventoryController();
-
+    _customerController = new CustomerController();
+    _rankDataController = new RankDataController();
     selectedTime = waktu[0];
     _currentTimes = 0.toString();
 
@@ -261,8 +267,8 @@ class SyanaProductRankTop50CustomerState
 
   initDataRank() async {
     setLoadingState();
-    await _saleController.getTopCourier(context, setLoadingState, setData,
-        _currentTimes, "", "", _currentTeams);
+    await _rankDataController.getTop50Customer(context, setLoadingState,
+        setData, _currentTimes, "", "", _currentTeams);
     await _inventoryController.getTeams(
         context, setLoadingState, setDropdownData, true);
     print("list length : " + rankTop50Customer.length.toString());
@@ -289,25 +295,51 @@ class SyanaProductRankTop50CustomerState
   void onChangedWaktu(value) async {
     setState(() {
       this.selectedTime = value;
-      _currentTimes = waktu.indexOf(value).toString();
+      _currentTimes = getFilterTime(selectedTime);
       _dateFrom = "";
       _dateTo = "";
     });
     if (_currentTimes != "7") {
       rankTop50Customer.clear();
       setLoadingState();
-      await _saleController.getTop50Customer(context, setLoadingState, setData,
-          _currentTimes, _dateFrom, _dateTo, _currentTeams);
+      await _rankDataController.getTop50Customer(context, setLoadingState,
+          setData, _currentTimes, _dateFrom, _dateTo, _currentTeams);
       setLoadingState();
     }
+    print(selectedTime);
+    print(_currentTimes);
   }
 
   setData(data) {
-    if (data is List<ProductModel> && data.isNotEmpty) {
+    if (data is List<RankDataModel> && data.isNotEmpty) {
       setState(() {
         rankTop50Customer = data;
       });
+    } else if (data is CustomerModel && data != null) {
+      setState(() {
+        dataCustomer = data;
+      });
     }
+  }
+
+  String getFilterTime(String filterTime) {
+    String filterTemp = "";
+    if (filterTime == "Hari ini") {
+      filterTemp = "0";
+    } else if (filterTime == "Minggu ini") {
+      filterTemp = "1";
+    } else if (filterTime == "Bulan ini") {
+      filterTemp = "2";
+    } else if (filterTime == "Minggu lalu") {
+      filterTemp = "4";
+    } else if (filterTime == "Bulan lalu") {
+      filterTemp = "5";
+    } else if (filterTime == "Grand Total") {
+      filterTemp = "6";
+    } else if (filterTime == "Tentukan sendiri") {
+      filterTemp = "7";
+    }
+    return filterTemp;
   }
 
   // ============================================
@@ -373,7 +405,7 @@ class SyanaProductRankTop50CustomerState
                                     });
                                     setLoadingState();
                                     rankTop50Customer.clear();
-                                    await _saleController.getTop50Customer(
+                                    await _rankDataController.getTop50Customer(
                                         context,
                                         setLoadingState,
                                         setData,
@@ -405,73 +437,110 @@ class SyanaProductRankTop50CustomerState
                     shrinkWrap: true,
                     itemCount: rankTop50Customer.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color:
-                              index < 3 ? AppTheme.teal_light : AppTheme.teal,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        height: Dimens.listHeightSmall(context),
-                        margin: EdgeInsets.only(bottom: 15),
-                        child: Row(
-                          children: <Widget>[
-                            Flexible(
-                              flex: 10,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  (index + 1).toString(),
-                                  style: TextStyle(
-                                    color: index < 3
-                                        ? AppTheme.text_darker
-                                        : AppTheme.text_light,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              flex: 53,
-                              fit: FlexFit.tight,
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      rankTop50Customer[index]
-                                          .name
-                                          .toString()
-                                          .titleCase,
-                                      softWrap: true,
-                                      style: TextStyle(
-                                        color: index < 3
-                                            ? AppTheme.text_darker
-                                            : AppTheme.text_light,
-                                        fontSize: 15,
-                                      ),
+                      return InkWell(
+                        onTap: () async {
+                          print(rankTop50Customer[index].id);
+                          await _customerController.getDataCustomer(
+                              context,
+                              setLoadingState,
+                              setData,
+                              rankTop50Customer[index].id);
+                          print(dataCustomer.fullName);
+                          menuFilter();
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color:
+                                index < 3 ? AppTheme.teal_light : AppTheme.teal,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          height: Dimens.listHeightSmall(context),
+                          margin: EdgeInsets.only(bottom: 15),
+                          child: Row(
+                            children: <Widget>[
+                              Flexible(
+                                flex: 10,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    (index + 1).toString(),
+                                    style: TextStyle(
+                                      color: index < 3
+                                          ? AppTheme.text_darker
+                                          : AppTheme.text_light,
+                                      fontSize: 15,
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              flex: 20,
-                              child: Container(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  rankTop50Customer[index].rankValue,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    color: index < 3
-                                        ? AppTheme.text_darker
-                                        : AppTheme.text_light,
-                                    fontSize: 14,
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                              Flexible(
+                                flex: 53,
+                                fit: FlexFit.tight,
+                                child: Container(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        rankTop50Customer[index]
+                                            .value
+                                            .toString()
+                                            .titleCase,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          color: index < 3
+                                              ? AppTheme.text_darker
+                                              : AppTheme.text_light,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      rankTop50Customer[index].city == null
+                                          ? Text(
+                                              "-",
+                                              softWrap: true,
+                                              style: TextStyle(
+                                                color: index < 3
+                                                    ? AppTheme.text_darker
+                                                    : AppTheme.text_light,
+                                                fontSize: 15,
+                                              ),
+                                            )
+                                          : Text(
+                                              rankTop50Customer[index]
+                                                  .city
+                                                  .toString()
+                                                  .titleCase,
+                                              softWrap: true,
+                                              style: TextStyle(
+                                                color: index < 3
+                                                    ? AppTheme.text_darker
+                                                    : AppTheme.text_light,
+                                                fontSize: 15,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                flex: 20,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    rankTop50Customer[index].rankValue,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      color: index < 3
+                                          ? AppTheme.text_darker
+                                          : AppTheme.text_light,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -480,5 +549,135 @@ class SyanaProductRankTop50CustomerState
               ),
             ],
           );
+  }
+
+  menuFilter() {
+    showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          String name = dataCustomer.fullName;
+          return AlertDialog(
+              actions: <Widget>[
+                FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("TUTUP",
+                        style: TextStyle(color: AppTheme.teal_light))),
+              ],
+              content: StatefulBuilder(
+                  builder: (BuildContext context, StateSetter setState) {
+                return Container(
+                  child: Column(
+                    children: <Widget>[
+                      Text("Data Pelanggan"),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("Nama"),
+                            Text(
+                                dataCustomer.fullName.toString().titleCase ??
+                                    "-",
+                                style: TextStyle(color: Colors.black54)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("Username"),
+                            Text(
+                                dataCustomer.nickName.toString().snakeCase ??
+                                    "-",
+                                style: TextStyle(color: Colors.black54)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text("No. Telp"),
+                            Text(dataCustomer.phoneNumber ?? "-",
+                                style: TextStyle(color: Colors.black54)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Alamat"),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                            ),
+                            Text(dataCustomer.address ?? "-",
+                                style: TextStyle(color: Colors.black54)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("Kota"),
+                            Text(dataCustomer.city ?? "-",
+                                style: TextStyle(color: Colors.black54)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text("Provinsi"),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 5),
+                            ),
+                            Text(dataCustomer.province ?? "-",
+                                style: TextStyle(color: Colors.black54)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("Kode Pos"),
+                            Text(dataCustomer.zipCode ?? "-",
+                                style: TextStyle(color: Colors.black54)),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text("E-Commerce"),
+                            Text(
+                              dataCustomer.nameEcommerce ?? "-",
+                              style: TextStyle(color: Colors.black54),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }));
+        });
   }
 }

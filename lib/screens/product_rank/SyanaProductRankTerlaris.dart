@@ -206,7 +206,6 @@ class RankState extends State<SyanaProductRankTerlaris> {
     'Hari ini',
     'Minggu ini',
     'Bulan ini',
-    'Kemarin',
     'Minggu lalu',
     'Bulan lalu',
     'Grand Total',
@@ -277,7 +276,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
   void onChangedWaktu(value) async {
     setState(() {
       this.selectedTime = value;
-      _currentTimes = waktu.indexOf(value).toString();
+      _currentTimes = getFilterTime(selectedTime);
       _dateFrom = "";
       _dateTo = "";
     });
@@ -296,6 +295,26 @@ class RankState extends State<SyanaProductRankTerlaris> {
         rankProducts = data;
       });
     }
+  }
+
+  String getFilterTime(String filterTime) {
+    String filterTemp = "";
+    if (filterTime == "Hari ini") {
+      filterTemp = "0";
+    } else if (filterTime == "Minggu ini") {
+      filterTemp = "1";
+    } else if (filterTime == "Bulan ini") {
+      filterTemp = "2";
+    } else if (filterTime == "Minggu lalu") {
+      filterTemp = "4";
+    } else if (filterTime == "Bulan lalu") {
+      filterTemp = "5";
+    } else if (filterTime == "Grand Total") {
+      filterTemp = "6";
+    } else if (filterTime == "Tentukan sendiri") {
+      filterTemp = "7";
+    }
+    return filterTemp;
   }
 
   // ============================================

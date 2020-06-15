@@ -9,6 +9,8 @@ import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 
+import 'dart:developer' as dev;
+
 class CustomerController {
   UserModel _userModel;
 
@@ -99,7 +101,6 @@ class CustomerController {
       _userModel.id
     ]);
 
-
     FormData formData = FormData.fromMap(params);
 
     final data = await GlobalFunctions.dioPostCall(
@@ -120,10 +121,49 @@ class CustomerController {
             context: context,
             popCount: 1);*/
 
-        Navigator.of(context).push(MaterialPageRoute(builder: (_){
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
           return Sale();
         }));
       }
     }
+  }
+
+  /*get data customer*/
+  getDataCustomer(context, loadingStateCallback, setDataCallback, customerId) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params =
+        GlobalFunctions.generateMapParam(["customer_id"], [customerId]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-customer-detail",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        CustomerModel detailCustomer = new CustomerModel.full(
+            data['customer']['id'],
+            data['customer']['full_name'],
+            data['customer']['nickname'],
+            data['customer']['phone_number'],
+            data['customer']['address'],
+            data['customer']['city'],
+            data['customer']['province'],
+            data['customer']['zip_code'],
+            data['customer']['id_ecommerce'],
+            data['customer']['date_time_created'],
+            data['customer']['date_time_modified'],
+            data['customer']['id_employee'],
+            data['customer']['id_employee_team'],
+            data['customer']['name_ecommerce']);
+
+
+        dev.log(detailCustomer.toString(),name: "CustomerController");
+        setDataCallback(detailCustomer);
+      }
+    } else {}
   }
 }

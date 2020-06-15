@@ -33,6 +33,10 @@ class GrafikTimState extends State<GrafikTim> {
   int _valueData = 0;
 
   int totalData = 0;
+  int totalDataCompared = 0;
+
+  bool changeFirstTeam=true;
+  bool changeSecondTeam=false;
 
   //Build Chart
   List<charts.Series<TimeSeriesSales, DateTime>> _timeSeriesLineData;
@@ -40,17 +44,26 @@ class GrafikTimState extends State<GrafikTim> {
   Future<bool> _generateData(List value) async {
     try {
       List<TimeSeriesSales> chartDataTime = new List();
+      List<TimeSeriesSales> chartDataTimeCompare = new List();
       print(listDateChart);
       for (int i = 0; i < value.length; i++) {
         setState(() {
           DateTime date = DateTime.parse(chartTeams[i].chartDate);
+          DateTime dateCompare = DateTime.parse(chartComparedTeams[i].chartDate);
           if (_currentFilterType == "3") {
             chartDataTime.add(new TimeSeriesSales(date, chartTeams[i].value));
             totalData += chartTeams[i].value;
+            chartDataTimeCompare.add(new TimeSeriesSales(dateCompare, chartComparedTeams[i].value));
+            totalDataCompared += chartComparedTeams[i].value;
           } else {
             chartDataTime.add(
-                new TimeSeriesSales(date, int.parse(chartTeams[i].chartValue)));
+                new TimeSeriesSales(
+                    date, int.parse(chartTeams[i].chartValue)));
             totalData += int.parse(chartTeams[i].chartValue);
+            chartDataTimeCompare.add(
+                new TimeSeriesSales(
+                    dateCompare, int.parse(chartComparedTeams[i].chartValue)));
+            totalDataCompared += int.parse(chartComparedTeams[i].chartValue);
           }
         });
       }
@@ -62,12 +75,20 @@ class GrafikTimState extends State<GrafikTim> {
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
         data: chartDataTime,
       ));
+      await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: chartDataTimeCompare,
+      ));
       return true;
     } catch (e) {
 //      CustomDialog.getDialog("Error", e.toString(), context);
     }
     return false;
   }
+
 
   _onSelectionChanged(charts.SelectionModel model) async {
     final selectedDatum = model.selectedDatum;
@@ -95,15 +116,18 @@ class GrafikTimState extends State<GrafikTim> {
   SaleController _saleController;
   bool _isLoading = false;
   List<ChartDataModel> chartTeams = new List();
+  List<ChartDataModel> chartComparedTeams = new List();
   List<TraceModel> listDataTrace = new List();
   List<DateTime> listDateChart = new List();
   List<TeamModel> teams = new List();
   ChartDataModel dateMaxMin;
 
   TeamModel _selectedTeams;
+  TeamModel _selectedComparedTeams;
 
   String _currentFilterType = "1";
   String _currentTeams;
+  String _currentComparedTeams;
 
   @override
   void dispose() {
@@ -138,6 +162,7 @@ class GrafikTimState extends State<GrafikTim> {
     if (data is List<ChartDataModel> && data.isNotEmpty) {
       setState(() {
         chartTeams = data;
+        chartComparedTeams = data;
         chartTeams.forEach((element) {
           String tempConvDate =
               formatDate.format(DateTime.parse(element.chartDate));
@@ -267,6 +292,7 @@ class GrafikTimState extends State<GrafikTim> {
                               setState(() {
                                 _selectedTeams = value;
                                 _currentTeams = value.id.toString();
+                                totalData = 0;
                                 print(_selectedTeams);
                               });
                               chartTeams.clear();
@@ -289,6 +315,46 @@ class GrafikTimState extends State<GrafikTim> {
                           },
                           isExpanded: true,
                         ),
+                        SearchableDropdown.single(
+                          items: teams.map((TeamModel team) {
+                            return DropdownMenuItem<TeamModel>(
+                              value: team,
+                              child: Text(
+                                team.name,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            );
+                          }).toList(),
+                          value: _selectedComparedTeams,
+                          hint: "Pilih Tim",
+                          searchHint: "Cari Tim",
+                          onChanged: (TeamModel value) async {
+                            if (value != null) {
+                              print(value.id);
+                              setState(() {
+                                _selectedComparedTeams = value;
+                                _currentComparedTeams = value.id.toString();
+                                totalDataCompared = 0;
+                                print(_selectedComparedTeams);
+                              });
+                              chartComparedTeams.clear();
+                              listDataTrace.clear();
+                              setLoadingState();
+                              await _saleController.getChartData(
+                                  context,
+                                  setLoadingState,
+                                  setData,
+                                  "2",
+                                  _currentFilterType,
+                                  _currentTimeStart,
+                                  _currentTimeEnd,
+                                  _currentComparedTeams,
+                                  "");
+                              setLoadingState();
+                            }
+                          },
+                          isExpanded: true,
+                        ),
                         Container(
                           height: MediaQuery.of(context).size.height * 0.02,
                         ),
@@ -296,6 +362,7 @@ class GrafikTimState extends State<GrafikTim> {
                           height: Dimens.grafikHeight(context),
                           child: buildChart(),
                         ),
+                        _selectedComparedTeams == null ?
                         Container(
                           margin: EdgeInsets.only(top: 10),
                           alignment: Alignment.center,
@@ -316,6 +383,55 @@ class GrafikTimState extends State<GrafikTim> {
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
+                              ),
+                            ],
+                          ),
+                        )
+                        :Container(
+                          margin: EdgeInsets.only(top: 10),
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    totalData.toString(),
+                                    style: TextStyle(
+                                      color: Colors.yellow,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Produk ' + filterTypeName,
+                                    style: TextStyle(
+                                      color: AppTheme.text_light,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Text(
+                                    totalDataCompared.toString(),
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Produk ' + filterTypeName,
+                                    style: TextStyle(
+                                      color: AppTheme.text_light,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -475,7 +591,7 @@ class GrafikTimState extends State<GrafikTim> {
               content: StatefulBuilder(
                 builder: (BuildContext context, StateSetter setState) {
                   return Container(
-                    height: MediaQuery.of(context).size.height * 0.65,
+//                    height: MediaQuery.of(context).size.height * 0.65,
                     child: Column(
                       children: <Widget>[
                         Container(
@@ -488,37 +604,6 @@ class GrafikTimState extends State<GrafikTim> {
                         ),
                         Row(
                           children: <Widget>[
-                            ButtonTheme(
-                              child: RaisedButton(
-                                color: Colors.blueGrey[900],
-                                onPressed: () {
-                                  setState(() {
-                                    _tempTimeStart = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
-                                    _tempTimeEnd = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day + 1);
-                                    timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
-                                    timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
-                                  });
-                                },
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Text(
-                                  "1D",
-                                  style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              minWidth: 50,
-                            ),
                             ButtonTheme(
                               child: RaisedButton(
                                 color: Colors.blueGrey[900],
@@ -612,11 +697,6 @@ class GrafikTimState extends State<GrafikTim> {
                               ),
                               minWidth: 50,
                             ),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        ),
-                        Row(
-                          children: <Widget>[
                             ButtonTheme(
                               child: RaisedButton(
                                 color: Colors.blueGrey[900],
@@ -646,6 +726,11 @@ class GrafikTimState extends State<GrafikTim> {
                               ),
                               minWidth: 50,
                             ),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                        Row(
+                          children: <Widget>[
                             ButtonTheme(
                               child: RaisedButton(
                                 color: Colors.blueGrey[900],
@@ -714,6 +799,7 @@ class GrafikTimState extends State<GrafikTim> {
                                 onPressed: () async {
                                   await _saleController.checkMaxFilter(
                                       context, setData);
+                                  print(dateMaxMin.dateMin);
                                   setState(() {
                                     _tempTimeStart =
                                         DateTime.parse(dateMaxMin.dateMin);
@@ -737,6 +823,9 @@ class GrafikTimState extends State<GrafikTim> {
                               ),
                               minWidth: 50,
                             ),
+                            Container(
+                              width: 50,
+                            )
                           ],
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         ),
@@ -747,6 +836,7 @@ class GrafikTimState extends State<GrafikTim> {
                               child: Column(
                                 children: <Widget>[
                                   Container(
+                                    margin: EdgeInsets.only(bottom: 5),
                                     alignment: Alignment.centerLeft,
                                     child: Text(
                                       "From",
@@ -757,11 +847,11 @@ class GrafikTimState extends State<GrafikTim> {
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       decoration:
-                                          AppTheme.dateDecorationShadow(),
+                                      AppTheme.dateDecorationShadow(),
                                       height: 35,
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           Icon(
                                             Icons.date_range,
@@ -778,7 +868,7 @@ class GrafikTimState extends State<GrafikTim> {
                                     ),
                                     onTap: () async {
                                       final DateTime pickedStart =
-                                          await showDatePicker(
+                                      await showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(2000),
@@ -799,55 +889,56 @@ class GrafikTimState extends State<GrafikTim> {
                             ),
                             Expanded(
                                 child: Column(
-                              children: <Widget>[
-                                Container(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "To",
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    // margin: EdgeInsets.only(top: 10),
-                                    // padding: EdgeInsets.only(left: 10),
-                                    decoration: AppTheme.dateDecorationShadow(),
-                                    height: 35,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: <Widget>[
-                                        Icon(
-                                          Icons.date_range,
-                                          color: AppTheme.white,
-                                        ),
-                                        Text(
-                                          timeEndTemp,
-                                          style: TextStyle(
-                                              color: AppTheme.white,
-                                              fontSize: 10),
-                                        ),
-                                      ],
+                                  children: <Widget>[
+                                    Container(
+                                      margin: EdgeInsets.only(bottom: 5),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "To",
+                                        style: TextStyle(fontSize: 14),
+                                      ),
                                     ),
-                                  ),
-                                  onTap: () async {
-                                    final DateTime pickedEnd =
+                                    GestureDetector(
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        // margin: EdgeInsets.only(top: 10),
+                                        // padding: EdgeInsets.only(left: 10),
+                                        decoration: AppTheme.dateDecorationShadow(),
+                                        height: 35,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.date_range,
+                                              color: AppTheme.white,
+                                            ),
+                                            Text(
+                                              timeEndTemp,
+                                              style: TextStyle(
+                                                  color: AppTheme.white,
+                                                  fontSize: 10),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      onTap: () async {
+                                        final DateTime pickedEnd =
                                         await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(2000),
-                                      lastDate: DateTime(2101),
-                                    );
-                                    print(pickedEnd);
-                                    setState(() {
-                                      timeEndTemp =
-                                          formatDate.format(pickedEnd);
-                                    });
-                                  },
-                                ),
-                              ],
-                            )),
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(2000),
+                                          lastDate: DateTime(2101),
+                                        );
+                                        print(pickedEnd);
+                                        setState(() {
+                                          timeEndTemp =
+                                              formatDate.format(pickedEnd);
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                )),
                           ],
                         ),
                         Container(
