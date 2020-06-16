@@ -1,10 +1,8 @@
-class ChartDataModel{
-  String _chartValue,_chartDate,_dateMax, _dateMin;
+class ChartDataModel {
+  String _chartValue, _chartDate, _dateMax, _dateMin;
   int _value;
 
-
   ChartDataModel.chartData(this._chartValue, this._chartDate);
-
 
   int get value => _value;
 
@@ -38,5 +36,10 @@ class ChartDataModel{
 
   set dateMin(value) {
     _dateMin = value;
+  }
+
+  @override
+  String toString() {
+    return 'ChartDataModel{_chartValue: $_chartValue, _chartDate: $_chartDate, _dateMax: $_dateMax, _dateMin: $_dateMin, _value: $_value}';
   }
 }

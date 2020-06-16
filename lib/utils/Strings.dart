@@ -21,6 +21,8 @@ class Strings{
   static final String DIALOG_MESSAGE_INSUFFICENT_PROMO_SETTING = "Data promo yang dimasukkan tidak lengkap.";
   static final String DIALOG_MESSAGE_SET_PROMO_STATUS_FAILED = "Terjadi kesalahan saat mengubah status promo.";
 
+  /*product rank*/
+  static final String DIALOG_MESSAGE_INVALID_FILTER = "Harap pilih pembanding pertama.";
 
   static final String DIALOG_MESSAGE_INSUFFICENT_INPUT = "Data input tidak lengkap.";
   static final String DIALOG_MESSAGE_TRANSACTION_SUCCESS = "Terima kasih. Pesanan anda telah kami terima.";

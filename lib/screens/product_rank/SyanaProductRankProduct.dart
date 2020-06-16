@@ -9,7 +9,10 @@ import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/TraceModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 import '../../main.dart';
+import 'dart:developer' as dev;
 
 String selectedProduk;
 int selectedGrafik = 0;
@@ -20,6 +23,7 @@ class GrafikProduk extends StatefulWidget {
 }
 
 class GrafikProdukState extends State<GrafikProduk> {
+  String _devTitle = "Grafik";
 
   DateFormat formatDate = DateFormat("yyyy-MM-dd");
   DateTime timeStart = DateTime(DateTime.now().year, DateTime.now().month, 1);
@@ -33,6 +37,7 @@ class GrafikProdukState extends State<GrafikProduk> {
   int _valueData = 0;
 
   int totalData = 0;
+  int totalDataCompared = 0;
 
   //Build Chart
   List<charts.Series<TimeSeriesSales, DateTime>> _timeSeriesLineData;
@@ -46,20 +51,20 @@ class GrafikProdukState extends State<GrafikProduk> {
       for (int i = 0; i < value.length; i++) {
         setState(() {
           DateTime date = DateTime.parse(chartProducts[i].chartDate);
-          if(_currentFilterType=="3"){
-            chartDataTime.add(
-                new TimeSeriesSales(date, chartProducts[i].value));
+          if (_currentFilterType == "3") {
+            chartDataTime
+                .add(new TimeSeriesSales(date, chartProducts[i].value));
             totalData += chartProducts[i].value;
-          }else{
-            chartDataTime.add(
-                new TimeSeriesSales(date, int.parse(chartProducts[i].chartValue)));
+          } else {
+            chartDataTime.add(new TimeSeriesSales(
+                date, int.parse(chartProducts[i].chartValue)));
             totalData += int.parse(chartProducts[i].chartValue);
           }
         });
       }
-      await _timeSeriesLineData.clear();
+      // await _timeSeriesLineData.clear();
       await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Sales',
+        id: "Pembanding 1",
         colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
@@ -67,7 +72,49 @@ class GrafikProdukState extends State<GrafikProduk> {
       ));
       return true;
     } catch (e) {
-//      CustomDialog.getDialog("Error", e.toString(), context);
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    }
+    return false;
+  }
+
+  Future<bool> _generateDataCompare(List value) async {
+    try {
+      List<TimeSeriesSales> chartDataTimeCompare = new List();
+      print(listDateChart);
+      for (int i = 0; i < value.length; i++) {
+        setState(() {
+          DateTime dateCompare =
+              DateTime.parse(chartComparedProducts[i].chartDate);
+          if (_currentFilterType == "3") {
+            chartDataTimeCompare.add(new TimeSeriesSales(
+                dateCompare, chartComparedProducts[i].value));
+            totalDataCompared += chartComparedProducts[i].value;
+          } else {
+            chartDataTimeCompare.add(new TimeSeriesSales(
+                dateCompare, int.parse(chartComparedProducts[i].chartValue)));
+            totalDataCompared += int.parse(chartComparedProducts[i].chartValue);
+          }
+        });
+      }
+      // await _timeSeriesLineData.clear();
+      await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
+        id: "Pembanding 2",
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: chartDataTimeCompare,
+      ));
+      return true;
+    } catch (e) {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
     }
     return false;
   }
@@ -89,8 +136,10 @@ class GrafikProdukState extends State<GrafikProduk> {
       _currentSelectedDate = convertedDate;
       _valueData = values;
     });
-    await _saleController.getAllTrace(context, setData, _currentSelectedDate);
-    print(listDataTrace.length);
+    if (_currentComparedProducts == null) {
+      await _saleController.getAllTrace(context, setData, _currentSelectedDate);
+      print(listDataTrace.length);
+    }
   }
 
   // API Implementation
@@ -98,14 +147,18 @@ class GrafikProdukState extends State<GrafikProduk> {
   SaleController _saleController;
   bool _isLoading = false;
   List<ChartDataModel> chartProducts = new List();
+  List<ChartDataModel> chartComparedProducts = new List();
   List<TraceModel> listDataTrace = new List();
   List<DateTime> listDateChart = new List();
   List<ProductModel> products = new List();
   ChartDataModel dateMaxMin;
 
   ProductModel _selectedProducts;
+  ProductModel _selectedComparedProducts;
+
   String _currentFilterType = "1";
   String _currentProducts;
+  String _currentComparedProducts;
 
   @override
   void dispose() {
@@ -126,8 +179,7 @@ class GrafikProdukState extends State<GrafikProduk> {
 
   initData() async {
     setLoadingState();
-    await _saleController.getProducts(
-        context, setLoadingState, setData);
+    await _saleController.getProducts(context, setLoadingState, setData);
     setLoadingState();
   }
 
@@ -143,7 +195,7 @@ class GrafikProdukState extends State<GrafikProduk> {
         chartProducts = data;
         chartProducts.forEach((element) {
           String tempConvDate =
-          formatDate.format(DateTime.parse(element.chartDate));
+              formatDate.format(DateTime.parse(element.chartDate));
           listDateChart.add(DateTime.parse(tempConvDate));
         });
         _generateData(chartProducts);
@@ -159,6 +211,16 @@ class GrafikProdukState extends State<GrafikProduk> {
     } else if (data is ChartDataModel && data != null) {
       setState(() {
         dateMaxMin = data;
+      });
+    }
+  }
+
+  setDataCompared(data2) {
+    if (data2 is List<ChartDataModel> && data2.isNotEmpty) {
+      setState(() {
+        chartComparedProducts = data2;
+        dev.log(chartComparedProducts.toString(), name: _devTitle);
+        _generateDataCompare(chartComparedProducts);
       });
     }
   }
@@ -185,185 +247,291 @@ class GrafikProdukState extends State<GrafikProduk> {
   Widget build(BuildContext context) {
     return _isLoading
         ? Center(
-      child: CircularProgressIndicator(),
-    )
+            child: CircularProgressIndicator(),
+          )
         : Container(
-      padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-      child: Stack(
-        children: <Widget>[
-          SingleChildScrollView(
-            child: Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: AppTheme.listBackground(),
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(
-                      top: 10,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          'Data dari ',
-                          style: TextStyle(
-                            color: AppTheme.text_light,
-                            fontSize: 14,
-                          ),
-                          softWrap: true,
-                        ),
-                        Text(
-                          _currentTimeStart,
-                          style: TextStyle(
-                            color: AppTheme.orange_light,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          softWrap: true,
-                        ),
-                        Text(
-                          ' hingga ',
-                          style: TextStyle(
-                            color: AppTheme.text_light,
-                            fontSize: 14,
-                          ),
-                          softWrap: true,
-                        ),
-                        Text(
-                          _currentTimeEnd,
-                          style: TextStyle(
-                            color: AppTheme.yellow,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          softWrap: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.01,
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10),
-                    padding: EdgeInsets.only(left: 13, right: 15),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Pilih Produk',
-                      style: TextStyle(
-                        color: AppTheme.text_light,
-                        fontSize: 14,
-                      ),
-                      softWrap: true,
-                    ),
-                  ),
-                  SearchableDropdown.single(
-                    items: products.map((ProductModel product) {
-                      return DropdownMenuItem<ProductModel>(
-                        value: product,
-                        child: Text(
-                          product.name,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      );
-                    }).toList(),
-                    value: _selectedProducts,
-                    hint: "Pilih Produk",
-                    searchHint: "Cari Produk",
-                    onChanged: (ProductModel value) async{
-                      if (value != null) {
-                        print(value.id);
-                        setState(() {
-                          _selectedProducts = value;
-                          _currentProducts = value.id.toString();
-                          print(_selectedProducts);
-                        });
-                        chartProducts.clear();
-                        listDataTrace.clear();
-                        setLoadingState();
-                        await _saleController.getChartData(
-                            context,
-                            setLoadingState,
-                            setData,
-                            "3",
-                            _currentFilterType,
-                            _currentTimeStart,
-                            _currentTimeEnd,
-                            "",_currentProducts);
-                        print("list length : " + chartProducts.length.toString());
-                        setLoadingState();
-                      }
-                    },
-                    isExpanded: true,
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.02,
-                  ),
-                  Container(
-                    height: Dimens.grafikHeight(context),
-                    child: buildChart(),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 10),
-                    alignment: Alignment.center,
+            padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            child: Stack(
+              children: <Widget>[
+                SingleChildScrollView(
+                  child: Container(
                     child: Column(
                       children: <Widget>[
-                        Text(
-                          totalData.toString(),
-                          style: TextStyle(
-                            color: AppTheme.text_light,
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          decoration: AppTheme.listBackground(),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Data dari ',
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 14,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                _currentTimeStart,
+                                style: TextStyle(
+                                  color: AppTheme.orange_light,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                ' hingga ',
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 14,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                _currentTimeEnd,
+                                style: TextStyle(
+                                  color: AppTheme.yellow,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                softWrap: true,
+                              ),
+                            ],
                           ),
                         ),
-                        Text(
-                          'Produk '+filterTypeName,
-                          style: TextStyle(
-                            color: AppTheme.text_light,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.01,
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          padding: EdgeInsets.only(left: 13, right: 15),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Pilih Produk',
+                            style: TextStyle(
+                              color: AppTheme.text_light,
+                              fontSize: 14,
+                            ),
+                            softWrap: true,
                           ),
                         ),
+                        SearchableDropdown.single(
+                          items: products.map((ProductModel product) {
+                            return DropdownMenuItem<ProductModel>(
+                              value: product,
+                              child: Text(
+                                product.name,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            );
+                          }).toList(),
+                          value: _selectedProducts,
+                          hint: "Pilih Produk",
+                          searchHint: "Cari Produk",
+                          onChanged: (ProductModel value) async {
+                            if (value != null) {
+                              print(value.id);
+                              setState(() {
+                                _selectedProducts = value;
+                                _currentProducts = value.id.toString();
+                                print(_selectedProducts);
+                              });
+                              chartProducts.clear();
+                              listDataTrace.clear();
+                              setLoadingState();
+                              await _saleController.getChartData(
+                                  context,
+                                  setLoadingState,
+                                  setData,
+                                  "3",
+                                  _currentFilterType,
+                                  _currentTimeStart,
+                                  _currentTimeEnd,
+                                  "",
+                                  _currentProducts);
+                              print("list length : " +
+                                  chartProducts.length.toString());
+                              setLoadingState();
+                            }
+                          },
+                          isExpanded: true,
+                        ),
+                        SearchableDropdown.single(
+                          items: products.map((ProductModel product) {
+                            return DropdownMenuItem<ProductModel>(
+                              value: product,
+                              child: Text(
+                                product.name,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            );
+                          }).toList(),
+                          value: _selectedComparedProducts,
+                          hint: "Pilih Produk Pembanding 2",
+                          searchHint: "Cari Produk",
+                          onChanged: (ProductModel value) async {
+                            if (value != null && _currentProducts != null) {
+                              print(value.id);
+                              setState(() {
+                                _selectedComparedProducts = value;
+                                _currentComparedProducts = value.id.toString();
+                                print(_selectedComparedProducts);
+                              });
+                              chartComparedProducts.clear();
+                              listDataTrace.clear();
+                              setLoadingState();
+                              await _saleController.getChartData(
+                                  context,
+                                  setLoadingState,
+                                  setDataCompared,
+                                  "3",
+                                  _currentFilterType,
+                                  _currentTimeStart,
+                                  _currentTimeEnd,
+                                  "",
+                                  _currentComparedProducts);
+                              print("list length : " +
+                                  chartProducts.length.toString());
+                              setLoadingState();
+                            } else {
+                              CustomDialog.getDialog(
+                                  title: Strings.DIALOG_TITLE_WARNING,
+                                  message:
+                                      Strings.DIALOG_MESSAGE_INVALID_FILTER,
+                                  context: context,
+                                  popCount: 1);
+                              setState(() {
+                                _currentComparedProducts = null;
+                              });
+                            }
+                          },
+                          isExpanded: true,
+                        ),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.02,
+                        ),
+                        Container(
+                          height: Dimens.grafikHeight(context),
+                          child: buildChart(),
+                        ),
+                        _selectedComparedProducts == null
+                            ? Container(
+                                margin: EdgeInsets.only(top: 10),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      totalData.toString(),
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Produk ' + filterTypeName,
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                margin: EdgeInsets.only(top: 10),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          totalData.toString(),
+                                          style: TextStyle(
+                                            color: Colors.yellow,
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Produk ' + filterTypeName,
+                                          style: TextStyle(
+                                            color: AppTheme.text_light,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          totalDataCompared.toString(),
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Produk ' + filterTypeName,
+                                          style: TextStyle(
+                                            color: AppTheme.text_light,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                        _currentSelectedDate == ""
+                            ? Container()
+                            : Container(
+                                child: Text(_currentSelectedDate +
+                                    " : " +
+                                    _valueData.toString() +
+                                    " Paket"),
+                              ),
+                        listDataTrace.length < 0 &&
+                                _currentComparedProducts != null
+                            ? Container()
+                            : Container(
+                                height: 100,
+                                child: ListView.builder(
+                                    itemCount: listDataTrace.length,
+                                    itemBuilder: (context, position) {
+                                      return buildListDetailChart(position);
+                                    }))
                       ],
                     ),
                   ),
-                  _currentSelectedDate == ""
-                      ? Container()
-                      : Container(
-                    child: Text(_currentSelectedDate +
-                        " : " +
-                        _valueData.toString()+" Paket"),
+                ),
+                Container(
+                  margin: EdgeInsets.only(bottom: 20, right: 10),
+                  alignment: Alignment.bottomRight,
+                  child: FloatingActionButton(
+                    backgroundColor: AppTheme.yellow,
+                    foregroundColor: Colors.black,
+                    tooltip: 'Add',
+                    child: Icon(Icons.filter_list),
+                    onPressed: () {
+                      menuFilter();
+                    },
                   ),
-                  listDataTrace.length < 0
-                      ? Container()
-                      : Container(
-                      height: 100,
-                      child: ListView.builder(
-                          itemCount: listDataTrace.length,
-                          itemBuilder: (context, position) {
-                            return buildListDetailChart(position);
-                          }))
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 20, right: 10),
-            alignment: Alignment.bottomRight,
-            child: FloatingActionButton(
-              backgroundColor: AppTheme.yellow,
-              foregroundColor: Colors.black,
-              tooltip: 'Add',
-              child: Icon(Icons.filter_list),
-              onPressed: () {
-                menuFilter();
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 
   Widget buildListDetailChart(int index) {
@@ -400,20 +568,20 @@ class GrafikProdukState extends State<GrafikProduk> {
           ),
           chartProducts.length < 1
               ? Center(
-            child: Text("Belum ada data"),
-          )
+                  child: Text("Belum ada data"),
+                )
               : Expanded(
-              child: charts.TimeSeriesChart(
-                _timeSeriesLineData,
-                animate: false,
-                behaviors: [new charts.PanAndZoomBehavior()],
-                dateTimeFactory: const charts.LocalDateTimeFactory(),
-                selectionModels: [
-                  new charts.SelectionModelConfig(
-                    changedListener: _onSelectionChanged,
-                  )
-                ],
-              )),
+                  child: charts.TimeSeriesChart(
+                  _timeSeriesLineData,
+                  animate: false,
+                  behaviors: [new charts.PanAndZoomBehavior(), charts.SeriesLegend()],
+                  dateTimeFactory: const charts.LocalDateTimeFactory(),
+                  selectionModels: [
+                    new charts.SelectionModelConfig(
+                      changedListener: _onSelectionChanged,
+                    )
+                  ],
+                )),
           const SizedBox(
             height: 10,
           ),
@@ -441,7 +609,10 @@ class GrafikProdukState extends State<GrafikProduk> {
                         style: TextStyle(color: AppTheme.teal_light))),
                 FlatButton(
                   color: Colors.white,
-                  child: Text("TERAPKAN",style: TextStyle(color: AppTheme.teal_light),),
+                  child: Text(
+                    "TERAPKAN",
+                    style: TextStyle(color: AppTheme.teal_light),
+                  ),
                   onPressed: () async {
                     setState(() {
                       if (_tempTimeStart != null && _tempTimeEnd != null) {
@@ -455,6 +626,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                     });
                     Navigator.of(context).pop();
                     chartProducts.clear();
+                    chartComparedProducts.clear();
                     listDataTrace.clear();
                     setLoadingState();
                     await _saleController.getChartData(
@@ -465,7 +637,18 @@ class GrafikProdukState extends State<GrafikProduk> {
                         _currentFilterType,
                         _currentTimeStart,
                         _currentTimeEnd,
-                        "",_currentProducts);
+                        "",
+                        _currentProducts);
+                    await _saleController.getChartData(
+                        context,
+                        setLoadingState,
+                        setDataCompared,
+                        "3",
+                        _currentFilterType,
+                        _currentTimeStart,
+                        _currentTimeEnd,
+                        "",
+                        _currentComparedProducts);
                     print("list length : " + chartProducts.length.toString());
                     setLoadingState();
                   },
@@ -730,11 +913,11 @@ class GrafikProdukState extends State<GrafikProduk> {
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       decoration:
-                                      AppTheme.dateDecorationShadow(),
+                                          AppTheme.dateDecorationShadow(),
                                       height: 35,
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           Icon(
                                             Icons.date_range,
@@ -751,7 +934,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                                     ),
                                     onTap: () async {
                                       final DateTime pickedStart =
-                                      await showDatePicker(
+                                          await showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(2000),
@@ -772,56 +955,56 @@ class GrafikProdukState extends State<GrafikProduk> {
                             ),
                             Expanded(
                                 child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(bottom: 5),
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "To",
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        // margin: EdgeInsets.only(top: 10),
-                                        // padding: EdgeInsets.only(left: 10),
-                                        decoration: AppTheme.dateDecorationShadow(),
-                                        height: 35,
-                                        child: Row(
-                                          mainAxisAlignment:
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "To",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    // margin: EdgeInsets.only(top: 10),
+                                    // padding: EdgeInsets.only(left: 10),
+                                    decoration: AppTheme.dateDecorationShadow(),
+                                    height: 35,
+                                    child: Row(
+                                      mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.date_range,
-                                              color: AppTheme.white,
-                                            ),
-                                            Text(
-                                              timeEndTemp,
-                                              style: TextStyle(
-                                                  color: AppTheme.white,
-                                                  fontSize: 10),
-                                            ),
-                                          ],
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.date_range,
+                                          color: AppTheme.white,
                                         ),
-                                      ),
-                                      onTap: () async {
-                                        final DateTime pickedEnd =
-                                        await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(2101),
-                                        );
-                                        print(pickedEnd);
-                                        setState(() {
-                                          timeEndTemp =
-                                              formatDate.format(pickedEnd);
-                                        });
-                                      },
+                                        Text(
+                                          timeEndTemp,
+                                          style: TextStyle(
+                                              color: AppTheme.white,
+                                              fontSize: 10),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                )),
+                                  ),
+                                  onTap: () async {
+                                    final DateTime pickedEnd =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2101),
+                                    );
+                                    print(pickedEnd);
+                                    setState(() {
+                                      timeEndTemp =
+                                          formatDate.format(pickedEnd);
+                                    });
+                                  },
+                                ),
+                              ],
+                            )),
                           ],
                         ),
                         Container(

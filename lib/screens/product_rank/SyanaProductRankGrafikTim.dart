@@ -10,7 +10,10 @@ import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:syana/utils/ScreenSizeHelper.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 import '../../main.dart';
+import 'dart:developer' as dev;
 
 String selectedTim;
 int selectedGrafik = 0;
@@ -21,6 +24,7 @@ class GrafikTim extends StatefulWidget {
 }
 
 class GrafikTimState extends State<GrafikTim> {
+  String _devTitle = "Grafik";
   DateFormat formatDate = DateFormat("yyyy-MM-dd");
   DateTime timeStart = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime timeEnd = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
@@ -35,17 +39,12 @@ class GrafikTimState extends State<GrafikTim> {
 
   int totalData = 0;
   int totalDataCompared = 0;
-  int tempTotal=0;
-
-  bool changeFirstTeam = true;
-  bool changeSecondTeam = false;
 
   //Build Chart
   List<charts.Series<TimeSeriesSales, DateTime>> _timeSeriesLineData;
 
   Future<bool> _generateData() async {
-    print("List A : " + chartTeams.length.toString());
-    print("List B : " + chartComparedTeams.length.toString());
+    print("List : " + chartTeams.length.toString());
     try {
       List<TimeSeriesSales> chartDataTime = new List();
       List<TimeSeriesSales> chartDataTimeCompare = new List();
@@ -61,6 +60,30 @@ class GrafikTimState extends State<GrafikTim> {
           totalData += int.parse(chartTeams[i].chartValue);
         }
       }
+//      await _timeSeriesLineData.clear();
+      await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
+        id: 'Pembanding 1',
+        colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: chartDataTime,
+      ));
+      return true;
+    } catch (e) {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    }
+    return false;
+  }
+
+  Future<bool> _generateDataCompare() async {
+    print("List Compare : " + chartComparedTeams.length.toString());
+    try {
+      List<TimeSeriesSales> chartDataTimeCompare = new List();
+      print(listDateChart);
       for (int i = 0; i < chartComparedTeams.length; i++) {
         DateTime dateCompare = DateTime.parse(chartComparedTeams[i].chartDate);
         if (_currentFilterType == "3") {
@@ -72,17 +95,11 @@ class GrafikTimState extends State<GrafikTim> {
               dateCompare, int.parse(chartComparedTeams[i].chartValue)));
           totalDataCompared += int.parse(chartComparedTeams[i].chartValue);
         }
+        dev.log(totalDataCompared.toString(), name: _devTitle);
       }
-      await _timeSeriesLineData.clear();
+//      await _timeSeriesLineData.clear();
       await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: chartDataTime,
-      ));
-      await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Sales',
+        id: 'Pembanding 2',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
@@ -90,6 +107,11 @@ class GrafikTimState extends State<GrafikTim> {
       ));
       return true;
     } catch (e) {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
 //      CustomDialog.getDialog("Error", e.toString(), context);
     }
     return false;
@@ -112,8 +134,10 @@ class GrafikTimState extends State<GrafikTim> {
       _currentSelectedDate = convertedDate;
       _valueData = values;
     });
-    await _saleController.getAllTrace(context, setData, _currentSelectedDate);
-    print(listDataTrace.length);
+    if (_currentComparedTeams == null) {
+      await _saleController.getAllTrace(context, setData, _currentSelectedDate);
+      print(listDataTrace.length);
+    }
   }
 
   // API Implementation
@@ -158,16 +182,18 @@ class GrafikTimState extends State<GrafikTim> {
   }
 
   void setLoadingState() {
-    setState(() {
-      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+      });
+    }
   }
 
   setData(data) {
-
     if (data is List<ChartDataModel> && data.isNotEmpty) {
       setState(() {
         chartTeams = data;
+        dev.log(chartTeams.toString(), name: _devTitle);
         _generateData();
       });
     } else if (data is List<TraceModel> && data.isNotEmpty) {
@@ -189,7 +215,8 @@ class GrafikTimState extends State<GrafikTim> {
     if (data2 is List<ChartDataModel> && data2.isNotEmpty) {
       setState(() {
         chartComparedTeams = data2;
-        _generateData();
+        dev.log(chartComparedTeams.toString(), name: _devTitle);
+        _generateDataCompare();
       });
     }
   }
@@ -302,53 +329,24 @@ class GrafikTimState extends State<GrafikTim> {
                                 _selectedTeams = value;
                                 _currentTeams = value.id.toString();
                                 totalData = 0;
-                                totalDataCompared = 0;
                                 print(_selectedTeams);
                               });
-                              if (_selectedComparedTeams != null) {
-                                chartComparedTeams.clear();
-                                chartTeams.clear();
-                                listDataTrace.clear();
-                                setLoadingState();
-                                await _saleController.getChartData(
-                                    context,
-                                    setLoadingState,
-                                    setDataCompared,
-                                    "2",
-                                    _currentFilterType,
-                                    _currentTimeStart,
-                                    _currentTimeEnd,
-                                    _currentComparedTeams,
-                                    "");
-                                await _saleController.getChartData(
-                                    context,
-                                    setLoadingState,
-                                    setData,
-                                    "2",
-                                    _currentFilterType,
-                                    _currentTimeStart,
-                                    _currentTimeEnd,
-                                    _currentTeams,
-                                    "");
-                                setLoadingState();
-                              } else {
-                                chartTeams.clear();
-                                listDataTrace.clear();
-                                setLoadingState();
-                                await _saleController.getChartData(
-                                    context,
-                                    setLoadingState,
-                                    setData,
-                                    "2",
-                                    _currentFilterType,
-                                    _currentTimeStart,
-                                    _currentTimeEnd,
-                                    _currentTeams,
-                                    "");
-                                print("list length : " +
-                                    chartTeams.length.toString());
-                                setLoadingState();
-                              }
+                              chartTeams.clear();
+                              listDataTrace.clear();
+                              setLoadingState();
+                              await _saleController.getChartData(
+                                  context,
+                                  setLoadingState,
+                                  setData,
+                                  "2",
+                                  _currentFilterType,
+                                  _currentTimeStart,
+                                  _currentTimeEnd,
+                                  _currentTeams,
+                                  "");
+                              print("list length : " +
+                                  chartTeams.length.toString());
+                              setLoadingState();
                             }
                           },
                           isExpanded: true,
@@ -364,20 +362,19 @@ class GrafikTimState extends State<GrafikTim> {
                             );
                           }).toList(),
                           value: _selectedComparedTeams,
-                          hint: "Pilih Tim",
+                          hint: "Pilih Tim Pembanding 2",
                           searchHint: "Cari Tim",
                           onChanged: (TeamModel value) async {
-                            if (value != null) {
+                            if (value != null && _currentTeams != null) {
                               print(value.id);
                               setState(() {
                                 _selectedComparedTeams = value;
                                 _currentComparedTeams = value.id.toString();
                                 totalDataCompared = 0;
-                                totalData = 0;
                                 print(_selectedComparedTeams);
                               });
                               chartComparedTeams.clear();
-                              chartTeams.clear();
+                              // chartTeams.clear();
                               listDataTrace.clear();
                               setLoadingState();
                               await _saleController.getChartData(
@@ -390,17 +387,17 @@ class GrafikTimState extends State<GrafikTim> {
                                   _currentTimeEnd,
                                   _currentComparedTeams,
                                   "");
-                              await _saleController.getChartData(
-                                  context,
-                                  setLoadingState,
-                                  setData,
-                                  "2",
-                                  _currentFilterType,
-                                  _currentTimeStart,
-                                  _currentTimeEnd,
-                                  _currentTeams,
-                                  "");
                               setLoadingState();
+                            } else {
+                              CustomDialog.getDialog(
+                                  title: Strings.DIALOG_TITLE_WARNING,
+                                  message:
+                                      Strings.DIALOG_MESSAGE_INVALID_FILTER,
+                                  context: context,
+                                  popCount: 1);
+                              setState(() {
+                                _currentComparedTeams = null;
+                              });
                             }
                           },
                           isExpanded: true,
@@ -498,7 +495,8 @@ class GrafikTimState extends State<GrafikTim> {
 //                        Container(
 //                          height: MediaQuery.of(context).size.height * 0.3,
 //                        ),
-                        listDataTrace.length < 0
+                        listDataTrace.length < 0 &&
+                                _currentComparedTeams != null
                             ? Container()
                             : Container(
                                 height: 100,
@@ -570,7 +568,7 @@ class GrafikTimState extends State<GrafikTim> {
                   child: charts.TimeSeriesChart(
                   _timeSeriesLineData,
                   animate: false,
-                  behaviors: [new charts.PanAndZoomBehavior()],
+                  behaviors: [new charts.PanAndZoomBehavior(), charts.SeriesLegend()],
                   dateTimeFactory: const charts.LocalDateTimeFactory(),
                   selectionModels: [
                     new charts.SelectionModelConfig(
@@ -622,6 +620,7 @@ class GrafikTimState extends State<GrafikTim> {
                     });
                     Navigator.of(context).pop();
                     chartTeams.clear();
+                    chartComparedTeams.clear();
                     listDataTrace.clear();
                     setLoadingState();
                     await _saleController.getChartData(
@@ -633,6 +632,16 @@ class GrafikTimState extends State<GrafikTim> {
                         _currentTimeStart,
                         _currentTimeEnd,
                         _currentTeams,
+                        "");
+                    await _saleController.getChartData(
+                        context,
+                        setLoadingState,
+                        setDataCompared,
+                        "2",
+                        _currentFilterType,
+                        _currentTimeStart,
+                        _currentTimeEnd,
+                        _currentComparedTeams,
                         "");
                     print("list length : " + chartTeams.length.toString());
                     setLoadingState();
