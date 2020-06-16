@@ -333,6 +333,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
     }
   }
 
+  /*add item*/
   add(id, isSale) {
     /*search id*/
     log("id : " + id.toString(), name: _devTitle);
@@ -412,65 +413,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
     }
   }
 
-  addFreeItemFromPromo(productId, productSize) {
-    categorizedProducts.forEach((element) {
-      if (element.id == productId) {
-        for (int i = 0; i < int.parse(productSize); i++) {
-          var indexOfAllProducts = categorizedProducts.indexOf(element);
-          int numberForAll =
-              int.parse(categorizedProducts[indexOfAllProducts].freeNumber);
-
-          numberForAll++;
-
-          setState(() {
-            categorizedProducts[indexOfAllProducts].freeNumber = numberForAll;
-          });
-
-          if (numberForAll == 1) {
-            widget.saleController
-                .addSelectedProduct(categorizedProducts[indexOfAllProducts]);
-          } else {
-            widget.saleController.setFreeNumber(
-                categorizedProducts[indexOfAllProducts],
-                int.parse(categorizedProducts[indexOfAllProducts].freeNumber));
-          }
-        }
-      }
-    });
-  }
-
-  removeFreeItemFromPromo(productId, productSize) {
-    log("start...", name: _devTitle);
-    categorizedProducts.forEach((element) {
-      if (element.id == productId) {
-        for (int i = 0; i < int.parse(productSize); i++) {
-          var indexOfAllProducts = categorizedProducts.indexOf(element);
-          int numberForAll =
-              int.parse(categorizedProducts[indexOfAllProducts].freeNumber);
-
-          numberForAll--;
-
-          setState(() {
-            categorizedProducts[indexOfAllProducts].freeNumber = numberForAll;
-          });
-
-          if (numberForAll >= 0) {
-            widget.saleController.setFreeNumber(
-                categorizedProducts[indexOfAllProducts],
-                int.parse(categorizedProducts[indexOfAllProducts].freeNumber));
-            /*after we decrese the number, then we check whether there is a zero number or not*/
-            widget.saleController.checkZeroNumber();
-          } else {
-            setState(() {
-              categorizedProducts[indexOfAllProducts].freeNumber = 0;
-              /*categorizedProducts[index].saleNumber = 0;*/
-            });
-          }
-        }
-      }
-    });
-  }
-
+  /*remove item*/
   remove(index, isSale) {
     /*update view*/
     int number = isSale
@@ -528,6 +471,72 @@ class _SaleInnerState extends State<SaleInnerWidget> {
     }
   }
 
+  /*add free item with promo
+  * we reproduced the steps in 'add' function
+  * we need to separate add item with add item alongside promo
+  * because we handle the promo with different list*/
+  addFreeItemFromPromo(productId, productSize) {
+    /*find the product from the products list*/
+    categorizedProducts.forEach((element) {
+      /*find the product using id*/
+      if (element.id == productId) {
+        /*when the product is found, we need to determine how much it will increase
+        * its number as decided on promo*/
+        for (int i = 0; i < int.parse(productSize); i++) {
+          /*after we found the product, we need its index to increase its free number*/
+          var index = categorizedProducts.indexOf(element);
+          int amount = int.parse(categorizedProducts[index].freeNumber);
+
+          amount++;
+
+          setState(() {
+            categorizedProducts[index].freeNumber = amount;
+          });
+
+          if (amount == 1) {
+            widget.saleController
+                .addSelectedProduct(categorizedProducts[index]);
+          } else {
+            widget.saleController.setFreeNumber(categorizedProducts[index],
+                int.parse(categorizedProducts[index].freeNumber));
+          }
+        }
+      }
+    });
+  }
+
+  /*remove item with promo
+  * we reproduced the steps in 'add' function
+  * we need to separate add item with add item alongside promo
+  * because we handle the promo with different list
+  * we implemented the same step as addItemFromPromo*/
+  removeFreeItemFromPromo(productId, productSize) {
+    categorizedProducts.forEach((element) {
+      if (element.id == productId) {
+        for (int i = 0; i < int.parse(productSize); i++) {
+          var index = categorizedProducts.indexOf(element);
+          int amount = int.parse(categorizedProducts[index].freeNumber);
+
+          amount--;
+
+          setState(() {
+            categorizedProducts[index].freeNumber = amount;
+          });
+
+          if (amount >= 0) {
+            widget.saleController.setFreeNumber(categorizedProducts[index],
+                int.parse(categorizedProducts[index].freeNumber));
+            widget.saleController.checkZeroNumber();
+          } else {
+            setState(() {
+              categorizedProducts[index].freeNumber = 0;
+            });
+          }
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -541,6 +550,9 @@ class _SaleInnerState extends State<SaleInnerWidget> {
 
       filteredProducts.forEach((value) {
         if (value.name.toLowerCase().contains(searchFilter.toLowerCase())) {
+          temp.add(value);
+          filteredProductsBefore = temp;
+        }else if(value.sku.toString().toLowerCase().contains(searchFilter.toLowerCase())){
           temp.add(value);
           filteredProductsBefore = temp;
         }

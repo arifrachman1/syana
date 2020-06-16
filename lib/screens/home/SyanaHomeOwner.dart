@@ -1,17 +1,21 @@
 import 'dart:math';
-import 'package:flutter/services.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:syana/Controller/HomeOwnerController.dart';
+import 'package:syana/Controller/ShortcutController.dart';
 import 'package:syana/models/HomeDataDetailModel.dart';
 import 'package:syana/models/HomeDataModel.dart';
+import 'package:syana/screens/inventory/SyanaStock.dart';
 import 'package:syana/screens/promo/SyanaPromo.dart';
-import 'package:syana/screens/sale/SyanaEcommerce.dart';
+import 'package:syana/screens/trace/SyanaTrace.dart';
+import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
+import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
-import '../../main.dart';
-import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/widgets/CustomButton.dart';
 
 class SyanaHomeOwner extends StatefulWidget {
   @override
@@ -20,8 +24,12 @@ class SyanaHomeOwner extends StatefulWidget {
 
 class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   HomeOwnerController _homeOwnerController;
+  ShortcutController _shortcutController;
+  List _shortcuts = new List();
+
   HomeDataModel _homeDataModel;
   bool isLoading = false;
+
 
   @override
   void dispose() {
@@ -33,11 +41,17 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   void initState() {
     super.initState();
     _homeOwnerController = new HomeOwnerController();
-    _homeOwnerController.getHomeData(context, setLoadingState, setData);
+    _shortcutController = new ShortcutController();
+    _initData();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+  }
+
+  _initData() async {
+    _shortcuts = await _shortcutController.getShortcuts();
+    await _homeOwnerController.getHomeData(context, setLoadingState, setData);
   }
 
   void setLoadingState() {
@@ -50,12 +64,9 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
     setState(() {
       _homeDataModel = data;
     });
+    GlobalFunctions.log(
+        message: _homeDataModel.detail.toString(), name: "home_owner");
   }
-
-  //komponen listview
-  final int count = 3;
-
-  var textScale;
 
   void logout() {
     _homeOwnerController.logout(context);
@@ -68,6 +79,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
         width: MediaQuery.of(context).size.width,
         decoration: AppTheme.appBackground(),
         child: Scaffold(
+            floatingActionButton: CustomButton.getCustomShortcutFAB(context, _shortcuts),
             backgroundColor: Colors.transparent,
             bottomNavigationBar: CustomBottomNav.getBottomNav(context, 2),
             body: isLoading
@@ -275,9 +287,11 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                       children: <Widget>[
                                         Text(
                                           _homeDataModel != null
-                                              ? _homeDataModel.grandTotalPoint
-                                                  .round()
-                                                  .toString()
+                                              ? NumberFormatter
+                                                  .getFormattedNumber(
+                                                      _homeDataModel
+                                                          .grandTotalPoint
+                                                          .roundToDouble())
                                               : '1',
                                           style: TextStyle(
                                             color: AppTheme.text_light,
@@ -299,8 +313,12 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                       children: <Widget>[
                                         Text(
                                           _homeDataModel != null
-                                              ? _homeDataModel.grandTotalPackage
-                                                  .toString()
+                                              ? NumberFormatter
+                                                  .getFormattedNumber(
+                                                      double.parse(
+                                                          _homeDataModel
+                                                              .grandTotalPackage
+                                                              .toString()))
                                               : '1',
                                           style: TextStyle(
                                               color: AppTheme.text_light,
@@ -318,7 +336,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 ],
                               ),
                             ),
-                            Container(
+                            /*removed - added into shortcut function*/
+                            /*Container(
                               margin: EdgeInsets.only(
                                 top: 20,
                               ),
@@ -327,18 +346,21 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 child: Text('KONFIGURASI PROMO'),
                                 color: AppTheme.yellow,
                                 onPressed: () {
-                                  Navigator.push(
+                                  *//*Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) {
                                         return SyanaPromo();
                                       },
                                     ),
-                                  );
+                                  );*//*
+                                  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
+                                    return InventoryMain();
+                                  }), (route) => false);
                                 },
                                 shape: AppTheme.roundButton(),
                               ),
-                            ),
+                            ),*/
                             SizedBox(
                               height: ScreenSizeHelper.getDisplayHeight(
                                       context: context,
@@ -346,7 +368,9 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           .HEIGHT_WITH_STATUS_BAR) *
                                   0.5,
                               child: ListView.builder(
-                                  itemCount: _homeDataModel != null ? _homeDataModel.detail.length : 0,
+                                  itemCount: _homeDataModel != null
+                                      ? _homeDataModel.detail.length
+                                      : 0,
                                   itemBuilder: (context, index) {
                                     return list(_homeDataModel.detail[index]);
                                   }),
@@ -368,43 +392,10 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.37,
       margin: EdgeInsets.only(top: 30),
-      padding: EdgeInsets.only(left: 15, right: 15),
+      padding: EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 30),
       decoration: AppTheme.listBackground(),
       child: Column(
         children: <Widget>[
-          Flexible(
-            flex: 10,
-            child: Container(
-              margin: EdgeInsets.only(top: 5, bottom: 3),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'New Customers',
-                    style: TextStyle(
-                      color: AppTheme.text_light,
-                    ),
-                  ),
-                  IconButton(
-                    padding: EdgeInsets.only(top: 0),
-                    icon: Icon(
-                      Icons.file_download,
-                      color: AppTheme.text_light,
-                    ),
-                    onPressed: null,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: Divider(
-              thickness: 2,
-              color: AppTheme.white,
-            ),
-          ),
           Flexible(
             flex: 50,
             child: Container(
@@ -686,6 +677,40 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                         ],
                       ),
                     ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 5, right: 5),
+            child: Divider(
+              thickness: 2,
+              color: AppTheme.white,
+            ),
+          ),
+          Flexible(
+            flex: 10,
+            child: Container(
+              margin: EdgeInsets.only(top: 5, bottom: 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  /*12-06-2020 revision*/
+                  /*Text(
+                    'New Customers',
+                    style: TextStyle(
+                      color: AppTheme.text_light,
+                    ),
+                  ),*/
+                  IconButton(
+                    padding: EdgeInsets.only(top: 0),
+                    icon: Icon(
+                      Icons.file_download,
+                      color: AppTheme.text_light,
+                    ),
+                    onPressed: null,
                   ),
                 ],
               ),

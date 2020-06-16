@@ -3,20 +3,38 @@ import 'package:syana/screens/inventory/SyanaStockExt.dart';
 import 'package:syana/screens/inventory/SyanaStockIn.dart';
 import 'package:syana/screens/inventory/SyanaStokMain.dart';
 import 'package:syana/utils/AppTheme.dart';
-import '../../main.dart';
+import 'package:syana/widgets/CustomShortcut.dart';
 
-class Stok extends StatefulWidget {
+class InventoryMain extends StatefulWidget {
+  int shortcutNavigator;
+
+  InventoryMain({this.shortcutNavigator});
+
   @override
-  StokState createState() => StokState();
+  InventoryMainState createState() => InventoryMainState();
 }
 
-class StokState extends State<Stok> with SingleTickerProviderStateMixin {
+class InventoryMainState extends State<InventoryMain>
+    with SingleTickerProviderStateMixin {
   TabController tabController;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(vsync: this, length: 3, initialIndex: 1);
+    tabController = TabController(
+        vsync: this,
+        length: 3,
+        initialIndex: widget.shortcutNavigator != null
+            ? (widget.shortcutNavigator == CustomShortcut.SHORTCUT_INVENTORY_IN
+                ? 0
+                : widget.shortcutNavigator ==
+                        CustomShortcut.SHORTCUT_INVENTORY_STOCK
+                    ? 1
+                    : widget.shortcutNavigator ==
+                            CustomShortcut.SHORTCUT_INVENTORY_EX
+                        ? 2
+                        : 1)
+            : 1);
   }
 
   @override
@@ -78,7 +96,7 @@ class StokState extends State<Stok> with SingleTickerProviderStateMixin {
                   controller: tabController,
                   children: <Widget>[
                     SyanaStockIn(),
-                    StokMain(),
+                    StockMain(),
                     SyanaStokBarangKeluar(),
                   ],
                 ),
