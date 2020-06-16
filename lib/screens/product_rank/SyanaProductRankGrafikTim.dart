@@ -9,6 +9,7 @@ import 'package:syana/utils/AppTheme.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:syana/utils/ScreenSizeHelper.dart';
 import '../../main.dart';
 
 String selectedTim;
@@ -35,37 +36,41 @@ class GrafikTimState extends State<GrafikTim> {
   int totalData = 0;
   int totalDataCompared = 0;
 
-  bool changeFirstTeam=true;
-  bool changeSecondTeam=false;
+  bool changeFirstTeam = true;
+  bool changeSecondTeam = false;
 
   //Build Chart
   List<charts.Series<TimeSeriesSales, DateTime>> _timeSeriesLineData;
 
-  Future<bool> _generateData(List value) async {
+  Future<bool> _generateData() async {
+    print("List A : " + chartTeams.length.toString());
+    print("List B : " + chartComparedTeams.length.toString());
     try {
       List<TimeSeriesSales> chartDataTime = new List();
       List<TimeSeriesSales> chartDataTimeCompare = new List();
       print(listDateChart);
-      for (int i = 0; i < value.length; i++) {
-        setState(() {
-          DateTime date = DateTime.parse(chartTeams[i].chartDate);
-          DateTime dateCompare = DateTime.parse(chartComparedTeams[i].chartDate);
-          if (_currentFilterType == "3") {
-            chartDataTime.add(new TimeSeriesSales(date, chartTeams[i].value));
-            totalData += chartTeams[i].value;
-            chartDataTimeCompare.add(new TimeSeriesSales(dateCompare, chartComparedTeams[i].value));
-            totalDataCompared += chartComparedTeams[i].value;
-          } else {
-            chartDataTime.add(
-                new TimeSeriesSales(
-                    date, int.parse(chartTeams[i].chartValue)));
-            totalData += int.parse(chartTeams[i].chartValue);
-            chartDataTimeCompare.add(
-                new TimeSeriesSales(
-                    dateCompare, int.parse(chartComparedTeams[i].chartValue)));
-            totalDataCompared += int.parse(chartComparedTeams[i].chartValue);
-          }
-        });
+      for (int i = 0; i < chartTeams.length; i++) {
+        DateTime date = DateTime.parse(chartTeams[i].chartDate);
+        if (_currentFilterType == "3") {
+          chartDataTime.add(new TimeSeriesSales(date, chartTeams[i].value));
+          totalData += chartTeams[i].value;
+        } else {
+          chartDataTime.add(
+              new TimeSeriesSales(date, int.parse(chartTeams[i].chartValue)));
+          totalData += int.parse(chartTeams[i].chartValue);
+        }
+      }
+      for (int i = 0; i < chartComparedTeams.length; i++) {
+        DateTime dateCompare = DateTime.parse(chartComparedTeams[i].chartDate);
+        if (_currentFilterType == "3") {
+          chartDataTimeCompare.add(
+              new TimeSeriesSales(dateCompare, chartComparedTeams[i].value));
+          totalDataCompared += chartComparedTeams[i].value;
+        } else {
+          chartDataTimeCompare.add(new TimeSeriesSales(
+              dateCompare, int.parse(chartComparedTeams[i].chartValue)));
+          totalDataCompared += int.parse(chartComparedTeams[i].chartValue);
+        }
       }
       await _timeSeriesLineData.clear();
       await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
@@ -88,7 +93,6 @@ class GrafikTimState extends State<GrafikTim> {
     }
     return false;
   }
-
 
   _onSelectionChanged(charts.SelectionModel model) async {
     final selectedDatum = model.selectedDatum;
@@ -159,16 +163,11 @@ class GrafikTimState extends State<GrafikTim> {
   }
 
   setData(data) {
+
     if (data is List<ChartDataModel> && data.isNotEmpty) {
       setState(() {
         chartTeams = data;
-        chartComparedTeams = data;
-        chartTeams.forEach((element) {
-          String tempConvDate =
-              formatDate.format(DateTime.parse(element.chartDate));
-          listDateChart.add(DateTime.parse(tempConvDate));
-        });
-        _generateData(chartTeams);
+        _generateData();
       });
     } else if (data is List<TraceModel> && data.isNotEmpty) {
       setState(() {
@@ -181,6 +180,15 @@ class GrafikTimState extends State<GrafikTim> {
     } else if (data is List<TeamModel> && data.isNotEmpty) {
       setState(() {
         teams = data;
+      });
+    }
+  }
+
+  setDataCompared(data2) {
+    if (data2 is List<ChartDataModel> && data2.isNotEmpty) {
+      setState(() {
+        chartComparedTeams = data2;
+        _generateData();
       });
     }
   }
@@ -293,24 +301,53 @@ class GrafikTimState extends State<GrafikTim> {
                                 _selectedTeams = value;
                                 _currentTeams = value.id.toString();
                                 totalData = 0;
+                                totalDataCompared = 0;
                                 print(_selectedTeams);
                               });
-                              chartTeams.clear();
-                              listDataTrace.clear();
-                              setLoadingState();
-                              await _saleController.getChartData(
-                                  context,
-                                  setLoadingState,
-                                  setData,
-                                  "2",
-                                  _currentFilterType,
-                                  _currentTimeStart,
-                                  _currentTimeEnd,
-                                  _currentTeams,
-                                  "");
-                              print("list length : " +
-                                  chartTeams.length.toString());
-                              setLoadingState();
+                              if (_selectedComparedTeams != null) {
+                                chartComparedTeams.clear();
+                                chartTeams.clear();
+                                listDataTrace.clear();
+                                setLoadingState();
+                                await _saleController.getChartData(
+                                    context,
+                                    setLoadingState,
+                                    setDataCompared,
+                                    "2",
+                                    _currentFilterType,
+                                    _currentTimeStart,
+                                    _currentTimeEnd,
+                                    _currentComparedTeams,
+                                    "");
+                                await _saleController.getChartData(
+                                    context,
+                                    setLoadingState,
+                                    setData,
+                                    "2",
+                                    _currentFilterType,
+                                    _currentTimeStart,
+                                    _currentTimeEnd,
+                                    _currentTeams,
+                                    "");
+                                setLoadingState();
+                              } else {
+                                chartTeams.clear();
+                                listDataTrace.clear();
+                                setLoadingState();
+                                await _saleController.getChartData(
+                                    context,
+                                    setLoadingState,
+                                    setData,
+                                    "2",
+                                    _currentFilterType,
+                                    _currentTimeStart,
+                                    _currentTimeEnd,
+                                    _currentTeams,
+                                    "");
+                                print("list length : " +
+                                    chartTeams.length.toString());
+                                setLoadingState();
+                              }
                             }
                           },
                           isExpanded: true,
@@ -335,11 +372,23 @@ class GrafikTimState extends State<GrafikTim> {
                                 _selectedComparedTeams = value;
                                 _currentComparedTeams = value.id.toString();
                                 totalDataCompared = 0;
+                                totalData = 0;
                                 print(_selectedComparedTeams);
                               });
                               chartComparedTeams.clear();
+                              chartTeams.clear();
                               listDataTrace.clear();
                               setLoadingState();
+                              await _saleController.getChartData(
+                                  context,
+                                  setLoadingState,
+                                  setDataCompared,
+                                  "2",
+                                  _currentFilterType,
+                                  _currentTimeStart,
+                                  _currentTimeEnd,
+                                  _currentComparedTeams,
+                                  "");
                               await _saleController.getChartData(
                                   context,
                                   setLoadingState,
@@ -348,7 +397,7 @@ class GrafikTimState extends State<GrafikTim> {
                                   _currentFilterType,
                                   _currentTimeStart,
                                   _currentTimeEnd,
-                                  _currentComparedTeams,
+                                  _currentTeams,
                                   "");
                               setLoadingState();
                             }
@@ -362,80 +411,81 @@ class GrafikTimState extends State<GrafikTim> {
                           height: Dimens.grafikHeight(context),
                           child: buildChart(),
                         ),
-                        _selectedComparedTeams == null ?
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                totalData.toString(),
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
+                        _selectedComparedTeams == null
+                            ? Container(
+                                margin: EdgeInsets.only(top: 10),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: <Widget>[
+                                    Text(
+                                      totalData.toString(),
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Produk ' + filterTypeName,
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                margin: EdgeInsets.only(top: 10),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          totalData.toString(),
+                                          style: TextStyle(
+                                            color: Colors.yellow,
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Produk ' + filterTypeName,
+                                          style: TextStyle(
+                                            color: AppTheme.text_light,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          totalDataCompared.toString(),
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontSize: 30,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Produk ' + filterTypeName,
+                                          style: TextStyle(
+                                            color: AppTheme.text_light,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                'Produk ' + filterTypeName,
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                        :Container(
-                          margin: EdgeInsets.only(top: 10),
-                          alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                    totalData.toString(),
-                                    style: TextStyle(
-                                      color: Colors.yellow,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Produk ' + filterTypeName,
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text(
-                                    totalDataCompared.toString(),
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Produk ' + filterTypeName,
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
                         _currentSelectedDate == ""
                             ? Container()
                             : Container(
@@ -847,11 +897,11 @@ class GrafikTimState extends State<GrafikTim> {
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       decoration:
-                                      AppTheme.dateDecorationShadow(),
+                                          AppTheme.dateDecorationShadow(),
                                       height: 35,
                                       child: Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           Icon(
                                             Icons.date_range,
@@ -868,7 +918,7 @@ class GrafikTimState extends State<GrafikTim> {
                                     ),
                                     onTap: () async {
                                       final DateTime pickedStart =
-                                      await showDatePicker(
+                                          await showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(2000),
@@ -889,56 +939,56 @@ class GrafikTimState extends State<GrafikTim> {
                             ),
                             Expanded(
                                 child: Column(
-                                  children: <Widget>[
-                                    Container(
-                                      margin: EdgeInsets.only(bottom: 5),
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "To",
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        // margin: EdgeInsets.only(top: 10),
-                                        // padding: EdgeInsets.only(left: 10),
-                                        decoration: AppTheme.dateDecorationShadow(),
-                                        height: 35,
-                                        child: Row(
-                                          mainAxisAlignment:
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(bottom: 5),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    "To",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  child: Container(
+                                    alignment: Alignment.centerLeft,
+                                    // margin: EdgeInsets.only(top: 10),
+                                    // padding: EdgeInsets.only(left: 10),
+                                    decoration: AppTheme.dateDecorationShadow(),
+                                    height: 35,
+                                    child: Row(
+                                      mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
-                                          children: <Widget>[
-                                            Icon(
-                                              Icons.date_range,
-                                              color: AppTheme.white,
-                                            ),
-                                            Text(
-                                              timeEndTemp,
-                                              style: TextStyle(
-                                                  color: AppTheme.white,
-                                                  fontSize: 10),
-                                            ),
-                                          ],
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.date_range,
+                                          color: AppTheme.white,
                                         ),
-                                      ),
-                                      onTap: () async {
-                                        final DateTime pickedEnd =
-                                        await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(2101),
-                                        );
-                                        print(pickedEnd);
-                                        setState(() {
-                                          timeEndTemp =
-                                              formatDate.format(pickedEnd);
-                                        });
-                                      },
+                                        Text(
+                                          timeEndTemp,
+                                          style: TextStyle(
+                                              color: AppTheme.white,
+                                              fontSize: 10),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                )),
+                                  ),
+                                  onTap: () async {
+                                    final DateTime pickedEnd =
+                                        await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2101),
+                                    );
+                                    print(pickedEnd);
+                                    setState(() {
+                                      timeEndTemp =
+                                          formatDate.format(pickedEnd);
+                                    });
+                                  },
+                                ),
+                              ],
+                            )),
                           ],
                         ),
                         Container(

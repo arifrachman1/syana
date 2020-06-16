@@ -279,7 +279,7 @@ class SyanaHomeTraceState extends State<SyanaHomeTrace> {
                       margin: EdgeInsets.symmetric(horizontal: 16.0),
                       child: _calendarCarouselNoHeader,
                     ), //
-                    eventList.length > 0
+                    eventList != null
                         ? ListView.builder(
                             physics: ScrollPhysics(),
                             shrinkWrap: true,
