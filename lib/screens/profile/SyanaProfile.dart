@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/ProfileController.dart';
+import 'package:syana/screens/profile/SyanaShortcutSettings.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
-import '../../main.dart';
 
 class SyanaProfile extends StatefulWidget {
   @override
@@ -60,14 +60,38 @@ class SyanaProfileState extends State<SyanaProfile> {
               padding: EdgeInsets.all(20),
               child: Column(
                 children: <Widget>[
-                  Container(
-                    alignment: Alignment.bottomRight,
-                    height: MediaQuery.of(context).size.height * 0.06,
-                    child: Icon(
-                      Icons.lock_outline,
-                      size: 35,
-                      color: AppTheme.white,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.bottomRight,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.lock_outline,
+                              size: 35,
+                              color: AppTheme.white,
+                            ),
+                          )),
+                      Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.bottomRight,
+                          height: MediaQuery.of(context).size.height * 0.06,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (_) {
+                                return ShortcutSettings();
+                              }));
+                            },
+                            icon: Icon(
+                              Icons.launch,
+                              size: 35,
+                              color: AppTheme.white,
+                            ),
+                          )),
+                    ],
                   ),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.65,

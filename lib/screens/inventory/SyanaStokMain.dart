@@ -8,12 +8,13 @@ import 'package:syana/widgets/CustomBottomNav.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
 import '../../main.dart';
 
-class StokMain extends StatefulWidget {
+class StockMain extends StatefulWidget {
+
   @override
-  StokMainState createState() => StokMainState();
+  StockMainState createState() => StockMainState();
 }
 
-class StokMainState extends State<StokMain> {
+class StockMainState extends State<StockMain> {
   List<List> stok = [
     ['(Better) Botanical Slimming Message Oil', '9 SP', 181],
     ['(Hotter) Botanical Slimming Massage Oil Carolina', '7 SP', 89],

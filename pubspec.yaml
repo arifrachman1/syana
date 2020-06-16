@@ -36,6 +36,8 @@ dependencies:
   flutter_youtube: ^2.0.0
   recase: ^3.0.0
   youtube_player_flutter: ^7.0.0+3
+  flutter_speed_dial: ^1.2.5
+  fab_circular_menu: ^1.0.0
 
 dev_dependencies:
   flutter_test:

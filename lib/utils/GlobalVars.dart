@@ -22,6 +22,10 @@ class GlobalVars{
   static final String accessTokenKey = "ACCESSTOKEN";
   static final String ecommerceKey = "ECOMMERCE";
 
+  static final String firstShortcutKey = "FIRSTSHORTCUT";
+  static final String secondShortcutKey = "SECONDSHORTCUT";
+  static final String thirdShortcutKey = "THIRDSHORTCUT";
+
   /*sale*/
   static String airwayBillNumber = "";
   static clearAirwayBillNumber(){
@@ -30,4 +34,6 @@ class GlobalVars{
   static String customerId = "";
   static String customerFullName = "";
   static int selectedEcommerce = 0;
+
+  /*shortcut*/
 }

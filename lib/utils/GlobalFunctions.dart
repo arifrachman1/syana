@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as dev;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:syana/models/UserModel.dart';
 import 'package:syana/screens/home/SyanaHomeOwner.dart';
 import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
 import 'package:syana/screens/inventory/SyanaStock.dart';
-import 'package:syana/screens/inventory/SyanaStokMain.dart';
 import 'package:syana/screens/product_rank/SyanaProductRank.dart';
 import 'package:syana/screens/profile/SyanaProfileBase.dart';
 import 'package:syana/screens/sale/SyanaEcommerce.dart';
@@ -49,7 +49,7 @@ class GlobalFunctions {
           message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
           context: context,
           popCount: 1);
-    } catch (e){
+    } catch (e) {
       print(e);
       CustomDialog.getDialog(
           title: Strings.DIALOG_TITLE_ERROR,
@@ -95,38 +95,43 @@ class GlobalFunctions {
     return jsonParam;
   }
 
-  static dynamic generateMapParam(List<String> key, List<dynamic> params){
+  static dynamic generateMapParam(List<String> key, List<dynamic> params) {
     Map<String, dynamic> param = new Map();
-    if(params.length == key.length){
-      for(int i = 0; i < key.length; i ++){
+    if (params.length == key.length) {
+      for (int i = 0; i < key.length; i++) {
         param[key[i]] = params[i];
       }
-    }else{
+    } else {
       return "0";
     }
 
     return param;
   }
 
-  static dynamic generateJsonFromList(List<dynamic> list){
+  static dynamic generateJsonFromList(List<dynamic> list) {
     String jsonFromList = "";
     jsonFromList = jsonEncode(list.map((e) => e.toJson()).toList());
     return jsonFromList;
   }
 
-  static dynamic generateDropdownMenuItem({@required List childs, List values}){
+  static dynamic generateDropdownMenuItem(
+      {@required List childs, List values}) {
     List<DropdownMenuItem> temp = new List();
-    if(childs.isNotEmpty){
-      if(values != null && childs.length == values.length){
+    if (childs.isNotEmpty) {
+      if (values != null && childs.length == values.length) {
         int i = 0;
         childs.forEach((element) {
-          temp.add(new DropdownMenuItem(child: Text(element), value: values[i]));
+          temp.add(
+              new DropdownMenuItem(child: Text(element), value: values[i]));
           i++;
         });
-      }else{
+      } else {
         int i = 0;
         childs.forEach((element) {
-          temp.add(new DropdownMenuItem(child: Text(element), value: i,));
+          temp.add(new DropdownMenuItem(
+            child: Text(element),
+            value: i,
+          ));
           i++;
         });
       }
@@ -140,9 +145,10 @@ class GlobalFunctions {
   static const int FORMAT_YYYY_MM_DD_HH_MM = 4;
   static const int FORMAT_MMMMM_YYYY = 5;
 
-  static DateTime getDateTimeFromString({@required targetDateTime, @required intendedFormat}){
+  static DateTime getDateTimeFromString(
+      {@required targetDateTime, @required intendedFormat}) {
     DateTime dateTime;
-    switch(intendedFormat){
+    switch (intendedFormat) {
       case FORMAT_DD_MM_YYYY:
         var newFormat = DateFormat("dd-MM-y");
         dateTime = newFormat.parse(targetDateTime);
@@ -168,10 +174,11 @@ class GlobalFunctions {
     return dateTime;
   }
 
-  static String getStringFromDate({@required targetDateTime, @required intendedFormat}){
+  static String getStringFromDate(
+      {@required targetDateTime, @required intendedFormat}) {
     String dateTime;
 
-    switch(intendedFormat){
+    switch (intendedFormat) {
       case FORMAT_DD_MM_YYYY:
         var newFormat = DateFormat("dd-MM-y");
         dateTime = newFormat.format(targetDateTime);
@@ -195,35 +202,41 @@ class GlobalFunctions {
     }
 
     return dateTime;
+  }
+
+  static log({@required message, @required name}) {
+    dev.log(message, name: name);
   }
 
   static navigate(context, whereTo) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int idRole = prefs.get(GlobalVars.idRoleKey);
-    if(whereTo == 0){
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
-        return Stok();
+    if (whereTo == 0) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
+        return InventoryMain();
       }), (route) => false);
-    }else if(whereTo == 1){
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+    } else if (whereTo == 1) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
         return SyanaEcommerce();
       }), (route) => false);
-    }else if(whereTo == 2){
-      if(idRole == 4){
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
-          return SyanaHomeOwner();
-        }), (route) => false);
-      }else if(idRole == 2 || idRole == 1){
-        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+    } else if (whereTo == 2) {
+      if (idRole == 4) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) {
           return SyanaHomeStarSeller();
         }), (route) => false);
+      } else if (idRole == 2 || idRole == 1) {
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) {
+          return SyanaHomeOwner();
+        }), (route) => false);
       }
-    }else if(whereTo == 3){
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+    } else if (whereTo == 3) {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
         return ProductRank();
       }), (route) => false);
-    }else{
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_){
+    } else {
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
         return SyanaProfileBase();
       }), (route) => false);
     }

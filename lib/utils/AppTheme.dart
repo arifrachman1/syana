@@ -13,7 +13,7 @@ class AppTheme{
   static var text_dark = Colors.black45;
   static var text_darker = Colors.black;
 
-  static var yellow = Colors.yellow[400];
+  static var yellow = Colors.yellow[300];
   static var white = Colors.white;
   static var red = Colors.red;
   static var orange = Colors.orange;

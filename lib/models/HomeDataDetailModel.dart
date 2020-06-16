@@ -1,11 +1,18 @@
-class HomeDataDetailModel {
+class HomeDataDetailModel implements Comparable {
   String _idTeam, _packageToday, _packageYesterday, _packageThisMonth;
   String _pointThisMonth, _pointLastMonth, _pointToday, _pointYesterday;
   String _teamName;
 
-  HomeDataDetailModel(this._idTeam, this._packageToday, this._packageYesterday,
-      this._packageThisMonth, this._pointThisMonth, this._pointLastMonth,
-      this._pointToday, this._pointYesterday, this._teamName);
+  HomeDataDetailModel(
+      this._idTeam,
+      this._packageToday,
+      this._packageYesterday,
+      this._packageThisMonth,
+      this._pointThisMonth,
+      this._pointLastMonth,
+      this._pointToday,
+      this._pointYesterday,
+      this._teamName);
 
   String get teamName => _teamName;
 
@@ -61,5 +68,22 @@ class HomeDataDetailModel {
     _idTeam = value;
   }
 
+  @override
+  String toString() {
+    return 'HomeDataDetailModel{_idTeam: $_idTeam, _packageToday: $_packageToday, _packageYesterday: $_packageYesterday, _packageThisMonth: $_packageThisMonth, _pointThisMonth: $_pointThisMonth, _pointLastMonth: $_pointLastMonth, _pointToday: $_pointToday, _pointYesterday: $_pointYesterday, _teamName: $_teamName}';
+  }
 
+  /*12-06-2020 revision
+  * to implement comparable, then add a compareTo function
+  * to compare each values*/
+  @override
+  int compareTo(other) {
+    // TODO: implement compareTo
+    if (other is HomeDataDetailModel) {
+      int a = int.parse(this.packageThisMonth.toString()),
+          b = int.parse(other.packageThisMonth.toString());
+
+      return b - a;
+    }
+  }
 }

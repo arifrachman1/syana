@@ -16,8 +16,7 @@ class HomeDataModel {
 
   HomeDataModel();
 
-  HomeDataModel.starSeller(
-      this._day,
+  HomeDataModel.starSeller(this._day,
       this._totalPackageSentToday,
       this._myTeamPackageSentToday,
       this._allTeamPointThisMonth,
@@ -29,8 +28,7 @@ class HomeDataModel {
       this._myTeamQuote,
       this._detail);
 
-  HomeDataModel.Owner(
-      this._day,
+  HomeDataModel.Owner(this._day,
       this._totalPackageSentToday,
       this._totalPackageSentThisMonth,
       this._allTeamPointThisMonth,
@@ -89,7 +87,8 @@ class HomeDataModel {
     _allTeamPointThisMonth = value;
   }
 
-  get myTeamPackageSentToday => _myTeamPackageSentToday != null ? int.parse(_myTeamPackageSentToday) : 0;
+  get myTeamPackageSentToday =>
+      _myTeamPackageSentToday != null ? _myTeamPackageSentToday : "0";
 
   set myTeamPackageSentToday(value) {
     _myTeamPackageSentToday = value;

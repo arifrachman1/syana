@@ -11,6 +11,7 @@ import 'package:syana/widgets/CustomDialog.dart';
 
 class HomeOwnerController {
   UserModel _userModel;
+  final String _devTitle = "homeOwnerController";
 
   clearPersistence() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,6 +63,8 @@ class HomeOwnerController {
               element['name_team'] ?? ""));
         });
 
+        details.sort();
+
         HomeDataModel homeDataModel = new HomeDataModel.Owner(
             data['day'].toString(),
             data['total_packet_sent_today'].toString(),
@@ -76,7 +79,7 @@ class HomeOwnerController {
 
         setDataCallback(homeDataModel);
       }
-    }else{
+    } else {
       CustomDialog.getDialog(
           title: Strings.DIALOG_TITLE_ERROR,
           message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
@@ -85,4 +88,14 @@ class HomeOwnerController {
     }
     loadingStateCallback();
   }
+
+/*sortBySentPackage(HomeDataModel data) {
+    data.detail.sort();
+
+    data.detail.forEach((element) {
+      dev.log(element.toString(), name: _devTitle);
+    });
+
+    return data;
+  }*/
 }
