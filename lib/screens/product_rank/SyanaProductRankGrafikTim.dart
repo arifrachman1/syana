@@ -35,6 +35,7 @@ class GrafikTimState extends State<GrafikTim> {
 
   int totalData = 0;
   int totalDataCompared = 0;
+  int tempTotal=0;
 
   bool changeFirstTeam = true;
   bool changeSecondTeam = false;
