@@ -128,6 +128,10 @@ class SyanaTripsYoutubePlayerState extends State<SyanaTripsYoutubePlayer> {
       ),
       builder: (context, player) => Scaffold(
         key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text("Syana Trip Video"),
+          automaticallyImplyLeading: true,
+        ),
         body: Container(
           decoration: AppTheme.appBackground(),
           child: ListView(
