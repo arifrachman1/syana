@@ -3,7 +3,8 @@ class PromoDetailInModel {
       _idPromoDetail,
       _idProductRequired,
       _amountRequired,
-      _requiredType;
+      _requiredType,
+      _productname;
 
   bool _fulfilled;
 
@@ -18,6 +19,9 @@ class PromoDetailInModel {
 
   PromoDetailInModel.createMinimumPricePromo(this._amountRequired,
       this._requiredType);
+
+
+  PromoDetailInModel.promoDetail(this._amountRequired, this._productname);
 
   String get idPromoDetailIn => _idPromoDetailIn;
 
@@ -54,6 +58,13 @@ class PromoDetailInModel {
 
   set fulfilled(bool value) {
     _fulfilled = value;
+  }
+
+
+  get productname => _productname;
+
+  set productname(value) {
+    _productname = value;
   }
 
   Map<String, dynamic> toJson(){

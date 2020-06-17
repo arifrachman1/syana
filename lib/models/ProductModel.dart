@@ -55,6 +55,11 @@ class ProductModel {
 
   ProductModel.productSuggestions(this._id, this._name, this._sku);
 
+
+  ProductModel.init(this._id, this._status, this._name, this._image,
+      this._point, this._stock, this._criticalStock, this._weight,
+      this._idCategory, this._idCreator, this._sku, this._price, this._type);
+
   get rankValue => _rankValue;
 
   set rankValue(value) {

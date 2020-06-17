@@ -390,7 +390,8 @@ class PromoController {
                   if (selectedProductSaleNumber %
                           int.parse(detailInElement.amountRequired) ==
                       0) {
-                    log("product amount matched the required amount...", name: _devTitle);
+                    log("product amount matched the required amount...",
+                        name: _devTitle);
                     /*matched*/
                     log("returning data...", name: _devTitle);
                     promoDetailElement.promoDetailOuts
@@ -403,7 +404,8 @@ class PromoController {
                   } else if (selectedProductSaleNumber %
                           int.parse(detailInElement.amountRequired) !=
                       0) {
-                    log("product amount did not match the required amount...", name: _devTitle);
+                    log("product amount did not match the required amount...",
+                        name: _devTitle);
                     log("returning data...", name: _devTitle);
                     promoDetailElement.promoDetailOuts
                         .forEach((detailOutElement) {
@@ -541,5 +543,41 @@ class PromoController {
         return false;
       }
     }
+  }
+
+  getProductById(id_product, context, loadingStateCallback) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+    loadingStateCallback();
+
+    var params = GlobalFunctions.generateMapParam(['id_product'], [id_product]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-product-by-id",
+        params: params,
+        context: context);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        ProductModel productModel = new ProductModel.init(
+            data['product']['id'].toString(),
+            data['product']['status'].toString(),
+            data['product']['name'].toString(),
+            data['product']['image'].toString(),
+            data['product']['point'].toString(),
+            data['product']['stock'].toString(),
+            data['product']['critical_stock'].toString(),
+            data['product']['weight'].toString(),
+            data['product']['id_category'].toString(),
+            data['product']['id_creator'].toString(),
+            data['product']['sku'].toString(),
+            data['product']['harga'].toString(),
+            data['product']['type'].toString());
+
+        return productModel;
+      }
+    }
+    loadingStateCallback();
   }
 }

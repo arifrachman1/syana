@@ -1,5 +1,5 @@
 class PromoDetailOutModel{
-  String _idPromoDetailOut, _idPromoDetail, _idProductFree, _amountFree;
+  String _idPromoDetailOut, _idPromoDetail, _idProductFree, _amountFree, _productName;
 
 
   PromoDetailOutModel.init(this._idPromoDetailOut, this._idPromoDetail,
@@ -7,6 +7,9 @@ class PromoDetailOutModel{
 
 
   PromoDetailOutModel.createPromo(this._idProductFree, this._amountFree);
+
+
+  PromoDetailOutModel.promoDetail(this._amountFree, this._productName);
 
   String get idPromoDetailOut => _idPromoDetailOut;
 
@@ -30,6 +33,13 @@ class PromoDetailOutModel{
 
   set idPromoDetail(value) {
     _idPromoDetail = value;
+  }
+
+
+  get productName => _productName;
+
+  set productName(value) {
+    _productName = value;
   }
 
   Map<String, dynamic> toJson () {

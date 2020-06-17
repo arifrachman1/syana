@@ -341,7 +341,7 @@ class SyanaAddPromoMainState extends State<SyanaAddPromoMain> {
                                             .setPromo(context, setLoadingState, {
                                           "title": _titleController.text,
                                           "type": widget.which,
-                                          "length": _isLimited ? "2" : "1",
+                                          "length": _isLimited ? "1" : "2",
                                           "startDate": _startDate,
                                           "endDate": _endDate,
                                           "teamId": widget.teamId,
