@@ -2,9 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PromoController.dart';
+import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/PromoDetailInModel.dart';
 import 'package:syana/models/PromoDetailOutModel.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/GlobalFunctions.dart';
 
 class SyanaPromoDetail extends StatefulWidget {
   String promoId;
@@ -45,38 +47,53 @@ class _DetailState extends State<SyanaPromoDetail> {
         context, setLoadingState, setData, widget.promoId);
   }
 
-  _assignPromo() {
+  _assignPromo() async {
+    setLoadingState();
     List<PromoDetailInModel> _promoDetailIns = _promoDetails['detailIn'];
     List<PromoDetailOutModel> _promoDetailOuts = _promoDetails['detailOut'];
 
-    _promoDetailIns.forEach((inElement) {
-      _promoRequirements.add(new PromoDetailInModel.init(
+    await _promoDetailIns.forEach((inElement) async {
+      /*_promoRequirements.add(new PromoDetailInModel.init(
           inElement.idPromoDetailIn,
           inElement.idPromoDetail,
           inElement.idProductRequired,
           inElement.amountRequired,
-          inElement.requiredType));
+          inElement.requiredType));*/
+      ProductModel product = await _promoController.getProductById(
+          inElement.idProductRequired, context, setLoadingState);
+      setState(() {
+        _promoRequirements.add(
+            new PromoDetailInModel.promoDetail(inElement.amountRequired, product.name));
+      });
+      GlobalFunctions.log(message: "inside loop " + _promoRequirements.length.toString(), name: _devTitle);
     });
 
-    _promoDetailOuts.forEach((outElement) {
-      _promoFreeItems.add(new PromoDetailOutModel.init(
+    await _promoDetailOuts.forEach((outElement) async {
+      /*_promoFreeItems.add(new PromoDetailOutModel.init(
           outElement.idPromoDetailOut,
           outElement.idPromoDetail,
           outElement.idProductFree,
-          outElement.amountFree));
+          outElement.amountFree));*/
+      ProductModel product = await _promoController.getProductById(
+          outElement.idProductFree, context, setLoadingState);
+      setState(() {
+        _promoFreeItems.add(
+            new PromoDetailOutModel.promoDetail(outElement.amountFree, product.name));
+      });
     });
 
     log(_promoRequirements.length.toString(), name: _devTitle);
     log(_promoFreeItems.length.toString(), name: _devTitle);
+    setLoadingState();
   }
 
-  setData(data) {
+  setData(data) async {
     if (data is Map) {
       setState(() {
         _promoDetails = data;
       });
 
-      _assignPromo();
+      await _assignPromo();
     }
   }
 
@@ -140,8 +157,7 @@ class _DetailState extends State<SyanaPromoDetail> {
                             child: Text(
                               "Jangka Waktu Berlaku Promo : " +
                                   (_promoDetails != null
-                                      ? (_promoDetails['startDate']
-                                                  != null
+                                      ? (_promoDetails['startDate'] != null
                                           ? (_promoDetails['startDate'] +
                                               " - " +
                                               _promoDetails['endDate'])
@@ -194,7 +210,7 @@ class _DetailState extends State<SyanaPromoDetail> {
                                                 vertical: 8, horizontal: 32),
                                             child: Text(
                                               (_promoRequirements[index]
-                                                          .idProductRequired
+                                                          .productname
                                                           .toString() ??
                                                       "Item 1") +
                                                   " sebanyak " +
@@ -220,7 +236,7 @@ class _DetailState extends State<SyanaPromoDetail> {
                                                 vertical: 8, horizontal: 32),
                                             child: Text(
                                               (_promoFreeItems[index]
-                                                          .idProductFree
+                                                          .productName
                                                           .toString() ??
                                                       "Item Free 1") +
                                                   " sebanyak " +
