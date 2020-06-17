@@ -680,6 +680,38 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                       ),
                     ),
                   ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        left: 5,
+                        right: 5,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              'Paket Bulan Lalu',
+                              style: TextStyle(
+                                color: AppTheme.text_light,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              detailModel.packageLastMonth.toString() ?? '0',
+                              style: TextStyle(
+                                color: AppTheme.text_light,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syana/Controller/HomeStarSellerController.dart';
+import 'package:syana/Controller/ShortcutController.dart';
 import 'package:syana/models/HomeDataModel.dart';
 import 'package:syana/screens/trace/SyanaTrace.dart';
 import 'package:syana/screens/trace/SyanaTraceInput.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
+import 'package:syana/widgets/CustomButton.dart';
 import 'dart:math';
 import '../promo/SyanaPromo.dart';
 import '../../main.dart';
@@ -20,6 +22,8 @@ class SyanaHomeStarSeller extends StatefulWidget {
 class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
   HomeStarSellerController _homeStarSellerController;
   HomeDataModel _homeDataModel;
+  ShortcutController _shortcutController;
+  List _shortcuts = new List();
 
   //komponen listview
   final int count = 1;
@@ -36,11 +40,17 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
   void initState() {
     _homeStarSellerController = new HomeStarSellerController();
     _homeStarSellerController.getHomeData(context, setLoadingState, setData);
+    _shortcutController = new ShortcutController();
+    _initData();
     setState(() {
       for (var i = 0; i < this.count; i++) {
         penjualan.add(false);
       }
     });
+  }
+
+  _initData() async{
+    _shortcuts = await _shortcutController.getShortcuts();
   }
 
   void setLoadingState() {
@@ -76,19 +86,8 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
             .width,
         decoration: AppTheme.appBackground(),
         child: Scaffold(
-            floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.add, color: Colors.black,),
-                backgroundColor: AppTheme.yellow,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) {
-                        return SyanaHomeTrace();
-                      },
-                    ),
-                  );
-                }),
+            floatingActionButton: CustomButton.getCustomShortcutFAB(
+                context, _shortcuts),
             backgroundColor: Colors.transparent,
             bottomNavigationBar: CustomBottomNav.getBottomNav(context, 2),
             body: isLoading
@@ -751,6 +750,41 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                             child: Text(
                               _homeDataModel != null
                                   ? _homeDataModel.detail[0].packageThisMonth
+                                  .toString()
+                                  : '0',
+                              style: TextStyle(
+                                color: AppTheme.text_light,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                        left: 5,
+                        right: 5,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            child: Text(
+                              'Paket Bulan Lalu',
+                              style: TextStyle(
+                                color: AppTheme.text_light,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              _homeDataModel != null
+                                  ? _homeDataModel.detail[0].packageLastMonth
                                   .toString()
                                   : '0',
                               style: TextStyle(
