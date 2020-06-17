@@ -58,7 +58,8 @@ class HomeStarSellerController {
               element['point_last_month'].toString(),
               element['point_today'].toString(),
               element['point_yesterday'].toString(),
-              element['name_team'] ?? ""));
+              element['name_team'] ?? "",
+              element['package_last_month'].toString()));
         });
 
         HomeDataModel homeDataModel = new HomeDataModel.starSeller(

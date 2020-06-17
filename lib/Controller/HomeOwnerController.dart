@@ -24,7 +24,7 @@ class HomeOwnerController {
     prefs.remove(GlobalVars.accessTokenKey);
   }
 
-  getPersistence() async {
+  _getPersistence() async {
     _userModel = await GlobalFunctions.getPersistence();
   }
 
@@ -35,8 +35,16 @@ class HomeOwnerController {
     }), (route) => false);
   }
 
+  getUserModel() async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    return _userModel;
+  }
+
   getHomeData(context, loadingStateCallback, setDataCallback) async {
-    await getPersistence();
+    await _getPersistence();
     var params =
         GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
     loadingStateCallback();
@@ -60,7 +68,8 @@ class HomeOwnerController {
               element['point_last_month'].toString(),
               element['point_today'].toString(),
               element['point_yesterday'].toString(),
-              element['name_team'] ?? ""));
+              element['name_team'] ?? "",
+              element['package_last_month'].toString()));
         });
 
         details.sort();

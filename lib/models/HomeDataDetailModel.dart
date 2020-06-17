@@ -1,5 +1,5 @@
 class HomeDataDetailModel implements Comparable {
-  String _idTeam, _packageToday, _packageYesterday, _packageThisMonth;
+  String _idTeam, _packageToday, _packageYesterday, _packageThisMonth, _packageLastMonth;
   String _pointThisMonth, _pointLastMonth, _pointToday, _pointYesterday;
   String _teamName;
 
@@ -12,7 +12,7 @@ class HomeDataDetailModel implements Comparable {
       this._pointLastMonth,
       this._pointToday,
       this._pointYesterday,
-      this._teamName);
+      this._teamName, this._packageLastMonth);
 
   String get teamName => _teamName;
 
@@ -66,6 +66,13 @@ class HomeDataDetailModel implements Comparable {
 
   set idTeam(value) {
     _idTeam = value;
+  }
+
+
+  get packageLastMonth => _packageLastMonth;
+
+  set packageLastMonth(value) {
+    _packageLastMonth = value;
   }
 
   @override

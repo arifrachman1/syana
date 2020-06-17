@@ -1,4 +1,4 @@
-class UserModel{
+class UserModel {
   int _id;
   String _name;
   String _fullName;
@@ -7,8 +7,8 @@ class UserModel{
   int _idTeam;
   String _accessToken;
 
-  UserModel(this._id, this._name, this._fullName, this._dateTimeJoined, this._idRole,
-      this._idTeam, this._accessToken);
+  UserModel(this._id, this._name, this._fullName, this._dateTimeJoined,
+      this._idRole, this._idTeam, this._accessToken);
 
   String get accessToken => _accessToken;
 
@@ -52,5 +52,8 @@ class UserModel{
     _id = value;
   }
 
-
+  @override
+  String toString() {
+    return 'UserModel{_id: $_id, _name: $_name, _fullName: $_fullName, _dateTimeJoined: $_dateTimeJoined, _idRole: $_idRole, _idTeam: $_idTeam, _accessToken: $_accessToken}';
+  }
 }

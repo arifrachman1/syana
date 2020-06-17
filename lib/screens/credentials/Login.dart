@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/LoginController.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/GlobalVars.dart';
+import 'package:syana/utils/MessagingService.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomButton.dart';
@@ -28,6 +30,7 @@ class LoginState extends State<Login> {
     // TODO: implement initState
     super.initState();
     _loginController = new LoginController();
+    MessagingService.getNotification(GlobalVars.firebaseMessaging, context);
   }
 
   void setLoadingState() {
@@ -67,29 +70,29 @@ class LoginState extends State<Login> {
               child: isLoading
                   ? Center(child: CircularProgressIndicator())
                   : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Align(
-                    alignment: Alignment.center,
-                    child: CustomTextInput.getCustomTextField(
-                        widthFactor: 0.7,
-                        context: context,
-                        controller: usernameController,
-                        hint: "Username"),
-                  ),
-                  CustomTextInput.getCustomTextField(
-                      widthFactor: 0.7,
-                      context: context,
-                      controller: passwordController,
-                      hint: "Password",
-                      isPasswordField: true),
-                  CustomButton.getCustomButton(
-                      context: context,
-                      callbackFunction: login,
-                      buttonText: "Login")
-                ],
-              ),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.center,
+                          child: CustomTextInput.getCustomTextField(
+                              widthFactor: 0.7,
+                              context: context,
+                              controller: usernameController,
+                              hint: "Username"),
+                        ),
+                        CustomTextInput.getCustomTextField(
+                            widthFactor: 0.7,
+                            context: context,
+                            controller: passwordController,
+                            hint: "Password",
+                            isPasswordField: true),
+                        CustomButton.getCustomButton(
+                            context: context,
+                            callbackFunction: login,
+                            buttonText: "Login")
+                      ],
+                    ),
             ),
           );
         }),

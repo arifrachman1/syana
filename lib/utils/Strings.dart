@@ -3,12 +3,14 @@ class Strings{
   static final String DIALOG_TITLE_WARNING = "Perhatian";
   static final String DIALOG_TITLE_SUCCESS = "Berhasil";
   static final String DIALOG_TITLE_THANK_YOU = "Terima Kasih";
+  static final String DIALOG_TITLE_NOTIFICATION = "Notifikasi";
 
   /*generals*/
   static final String DIALOG_MESSAGE_API_CALL_FAILED = "Terjadi kesalahan saat melakukan koneksi.";
 
   /*login*/
   static final String DIALOG_MESSAGE_INSUFFICENT_CREDENTIALS = "Email atau password kosong.";
+  static final String DIALOG_MESSAGE_GET_BROADCAST_TOKEN_FAILED = "Gagal mendapatkan broadcast token.";
 
   /*sale*/
   static final String DIALOG_MESSAGE_CUSTOMER_SAVED = "Data pelanggan berhasil disimpan.";
@@ -23,6 +25,10 @@ class Strings{
 
   /*product rank*/
   static final String DIALOG_MESSAGE_INVALID_FILTER = "Harap pilih pembanding pertama.";
+
+  /*messaging*/
+  static final String DIALOG_MESSAGE_BROADCAST_MESSAGE_SENT = "Pesan berhasil dibroadcast.";
+
 
   static final String DIALOG_MESSAGE_INSUFFICENT_INPUT = "Data input tidak lengkap.";
   static final String DIALOG_MESSAGE_TRANSACTION_SUCCESS = "Terima kasih. Pesanan anda telah kami terima.";

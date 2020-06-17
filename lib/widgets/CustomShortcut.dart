@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syana/screens/home/SyanaBroadcastMessage.dart';
 import 'package:syana/screens/inventory/SyanaStock.dart';
 import 'package:syana/screens/product_rank/SyanaProductRank.dart';
 import 'package:syana/screens/promo/SyanaPromo.dart';
@@ -23,6 +24,7 @@ class CustomShortcut {
       SHORTCUT_PROFILE_MY_POINTS = 16,
       SHORTCUT_PROMO = 17,
       SHORTCUT_TRACES = 18,
+      SHORTCUT_BROADCAST = 19,
       SHORTCUT_EMPTY = 99;
 
   static getShortcut(menu, context) {
@@ -287,6 +289,24 @@ class CustomShortcut {
               MaterialPageRoute(
                 builder: (BuildContext context) {
                   return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_CUSTOMERS,);
+                },
+              ),
+            );
+            /*Navigator.of(context).push(MaterialPageRoute(builder: (context){
+              return StockMain();
+            }));*/
+          },
+        );
+        break;
+      case SHORTCUT_BROADCAST:
+        return IconButton(
+          icon: Icon(Icons.message),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return BroadcastMessage();
                 },
               ),
             );

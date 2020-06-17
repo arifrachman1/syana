@@ -1,3 +1,5 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 class GlobalVars{
   /*urls*/
   static final String baseUrl = "http://192.168.43.242:8080/";
@@ -8,6 +10,10 @@ class GlobalVars{
   static final String thumbnailUrl = baseUrl + "syana/thumbnail/";
 
   static String YOUTUBE_API_KEY = "AIzaSyCyjg0Dq4NsQF6uLLNySsP2KR1JuGA7l9I";
+
+  /*fcm*/
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  static bool fcm_message_received = false;
 
   /*dev-mode*/
   static bool isDevMode = true;
