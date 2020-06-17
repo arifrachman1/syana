@@ -382,6 +382,7 @@ class SyanaProductRankTopKurirState extends State<SyanaProductRankTopKurir> {
                               decoration: AppTheme.inputDecorationShadow(),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
+                                  hint: Text("Pilih Team"),
                                   items: teams,
                                   value: _currentTeams,
                                   onChanged: (value) async {

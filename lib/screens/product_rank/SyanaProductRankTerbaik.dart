@@ -381,6 +381,7 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
                               decoration: AppTheme.inputDecorationShadow(),
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton(
+                                  hint: Text("Pilih Team"),
                                   items: teams,
                                   value: _currentTeams,
                                   onChanged: (value) async {
