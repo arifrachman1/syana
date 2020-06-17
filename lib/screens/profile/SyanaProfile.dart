@@ -35,9 +35,11 @@ class SyanaProfileState extends State<SyanaProfile> {
   }
 
   void setLoadingState() {
-    setState(() {
-      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+      });
+    }
   }
 
   void setData(data) {

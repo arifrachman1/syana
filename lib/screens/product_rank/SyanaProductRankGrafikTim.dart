@@ -353,6 +353,7 @@ class GrafikTimState extends State<GrafikTim> {
                           isExpanded: true,
                         ),
                         SearchableDropdown.single(
+
                           items: teams.map((TeamModel team) {
                             return DropdownMenuItem<TeamModel>(
                               value: team,

@@ -129,9 +129,11 @@ class GrafikGlobalState extends State<GrafikGlobal> {
   }
 
   void setLoadingState() {
-    setState(() {
-      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+      });
+    }
   }
 
   setData(data) {
@@ -257,13 +259,15 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                         _currentSelectedDate == ""
                             ? Container()
                             : Container(
-                                child: Text(_currentSelectedDate +
-                                    " : " +
-                                    _valueData.toString() +
-                                    " Pcs",style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold
-                                ),),
+                                child: Text(
+                                  _currentSelectedDate +
+                                      " : " +
+                                      _valueData.toString() +
+                                      " Pcs",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
 //                        Container(
 //                          height: MediaQuery.of(context).size.height * 0.3,
@@ -758,7 +762,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                                       timeEndTemp =
                                           formatDate.format(_tempTimeEnd);
                                     });
-                                    print("Time End "+timeEndTemp);
+                                    print("Time End " + timeEndTemp);
                                   },
                                 ),
                               ],
