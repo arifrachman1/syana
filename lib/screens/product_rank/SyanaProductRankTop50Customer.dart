@@ -8,6 +8,7 @@ import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/CustomerModel.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/RankDataModel.dart';
+import 'package:syana/screens/product_rank/SyanaProductRankDetailCustomer.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import '../../main.dart';
@@ -439,14 +440,16 @@ class SyanaProductRankTop50CustomerState
                     itemBuilder: (BuildContext context, int index) {
                       return InkWell(
                         onTap: () async {
-                          print(rankTop50Customer[index].id);
-                          await _customerController.getDataCustomer(
-                              context,
-                              setLoadingState,
-                              setData,
-                              rankTop50Customer[index].id);
-                          print(dataCustomer.fullName);
-                          menuFilter();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) {
+                                return SyanaProductRankDetailCustomer(
+                                  idCustomer: rankTop50Customer[index].id,
+                                );
+                              },
+                            ),
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -551,7 +554,7 @@ class SyanaProductRankTop50CustomerState
           );
   }
 
-  menuFilter() {
+  detailCustomerPop() {
     showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -567,7 +570,7 @@ class SyanaProductRankTop50CustomerState
               ],
               content: StatefulBuilder(
                   builder: (BuildContext context, StateSetter setState) {
-                return Container(
+                return SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
                       Text("Data Pelanggan"),
@@ -662,7 +665,7 @@ class SyanaProductRankTop50CustomerState
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        margin: EdgeInsets.only(top: 10,bottom: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -674,6 +677,23 @@ class SyanaProductRankTop50CustomerState
                           ],
                         ),
                       ),
+                      Container(
+                        margin: EdgeInsets.only(top:10),
+                        child: Text("Riwayat Pembelian"),
+                      ),
+                      Container(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          itemCount: 4,
+                          itemBuilder: (context, position) {
+                            return ListTile(
+                              leading: Text((position+1).toString()),
+                              title: Text("TEST"),
+                            );
+                          },
+                        ),
+                      )
                     ],
                   ),
                 );

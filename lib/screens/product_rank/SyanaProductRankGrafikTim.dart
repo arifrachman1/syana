@@ -26,6 +26,7 @@ class GrafikTim extends StatefulWidget {
 class GrafikTimState extends State<GrafikTim> {
   String _devTitle = "Grafik";
   DateFormat formatDate = DateFormat("yyyy-MM-dd");
+  DateFormat formatDateDayOnly = DateFormat("dd");
   DateTime timeStart = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime timeEnd = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
 
@@ -128,7 +129,7 @@ class GrafikTimState extends State<GrafikTim> {
       values = selectedDatum.first.datum.sales;
       selectedDate = selectedDatum.first.datum.time;
     }
-    convertedDate = formatDate.format(selectedDate);
+    convertedDate = formatDateDayOnly.format(selectedDate);
     // Request a build.
     setState(() {
       _currentSelectedDate = convertedDate;
@@ -490,7 +491,10 @@ class GrafikTimState extends State<GrafikTim> {
                                 child: Text(_currentSelectedDate +
                                     " : " +
                                     _valueData.toString() +
-                                    " Pcs"),
+                                    " Pcs", style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                                ),),
                               ),
 //                        Container(
 //                          height: MediaQuery.of(context).size.height * 0.3,
@@ -936,8 +940,9 @@ class GrafikTimState extends State<GrafikTim> {
                                       );
                                       print(pickedStart);
                                       setState(() {
+                                        _tempTimeStart = pickedStart;
                                         timeStartTemp =
-                                            formatDate.format(pickedStart);
+                                            formatDate.format(_tempTimeStart);
                                       });
                                     },
                                   ),
@@ -992,8 +997,9 @@ class GrafikTimState extends State<GrafikTim> {
                                     );
                                     print(pickedEnd);
                                     setState(() {
+                                      _tempTimeEnd = pickedEnd;
                                       timeEndTemp =
-                                          formatDate.format(pickedEnd);
+                                          formatDate.format(_tempTimeEnd);
                                     });
                                   },
                                 ),

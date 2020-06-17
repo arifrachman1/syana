@@ -19,6 +19,9 @@ class TransactionHistoryModel {
   TransactionHistoryModel.getHistory(
       this._transactionNumber, this._datetimeCreated, this._nameEcommerce);
 
+  TransactionHistoryModel.getHistoryCustomer(
+      this._transactionNumber, this._datetimeCreated);
+
   List<ProductModel> get productList => _productList;
 
   set productList(List<ProductModel> value) {

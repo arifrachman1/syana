@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/models/CustomerModel.dart';
+import 'package:syana/models/TransactionHistoryModel.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/screens/sale/SyanaSale.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
@@ -129,7 +130,8 @@ class CustomerController {
   }
 
   /*get data customer*/
-  getDataCustomer(context, loadingStateCallback, setDataCallback, customerId) async {
+  getDataCustomer(
+      context, loadingStateCallback, setDataCallback, customerId) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -160,9 +162,40 @@ class CustomerController {
             data['customer']['id_employee_team'],
             data['customer']['name_ecommerce']);
 
-
-        dev.log(detailCustomer.toString(),name: "CustomerController");
+        dev.log(detailCustomer.toString(), name: "CustomerController");
         setDataCallback(detailCustomer);
+      }
+    } else {}
+  }
+
+  /*get history*/
+  getHistoryCustomer(
+      context, loadingStateCallback, setDataCallback, idCustomer) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params =
+        GlobalFunctions.generateMapParam(["id_customer"], [idCustomer]);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-history-sales",
+        context: context,
+        params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        List historiesFromApi = data['history'];
+        List<TransactionHistoryModel> historiesProduct = new List();
+
+        historiesFromApi.forEach((element) {
+          historiesProduct.add(new TransactionHistoryModel.getHistoryCustomer(
+              element['transaction_number'], element['datetime_created']));
+        });
+
+        if (historiesProduct.isNotEmpty) {
+          setDataCallback(historiesProduct);
+        }
       }
     } else {}
   }

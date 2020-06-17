@@ -19,6 +19,7 @@ class GrafikGlobal extends StatefulWidget {
 
 class GrafikGlobalState extends State<GrafikGlobal> {
   DateFormat formatDate = DateFormat("yyyy-MM-dd");
+  DateFormat formatDateDayOnly = DateFormat("dd");
   DateTime timeStart = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime timeEnd = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
 
@@ -41,8 +42,6 @@ class GrafikGlobalState extends State<GrafikGlobal> {
       List<Sales> chartData = new List();
       List<TimeSeriesSales> chartDataTime = new List();
       List<DateTime> range = calculateDaysInterval(timeStart, timeEnd);
-      print("Range : ");
-      print(listDateChart);
       for (int i = 0; i < value.length; i++) {
         setState(() {
           DateTime date = DateTime.parse(chartGlobal[i].chartDate);
@@ -72,6 +71,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
   }
 
   _onSelectionChanged(charts.SelectionModel model) async {
+    listDataTrace.clear();
     final selectedDatum = model.selectedDatum;
 
     DateTime selectedDate;
@@ -82,7 +82,7 @@ class GrafikGlobalState extends State<GrafikGlobal> {
       values = selectedDatum.first.datum.sales;
       selectedDate = selectedDatum.first.datum.time;
     }
-    convertedDate = formatDate.format(selectedDate);
+    convertedDate = formatDateDayOnly.format(selectedDate);
     // Request a build.
     setState(() {
       _currentSelectedDate = convertedDate;
@@ -260,7 +260,10 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                                 child: Text(_currentSelectedDate +
                                     " : " +
                                     _valueData.toString() +
-                                    " Pcs"),
+                                    " Pcs",style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                                ),),
                               ),
 //                        Container(
 //                          height: MediaQuery.of(context).size.height * 0.3,
@@ -694,8 +697,9 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                                       );
                                       print(pickedStart);
                                       setState(() {
+                                        _tempTimeStart = pickedStart;
                                         timeStartTemp =
-                                            formatDate.format(pickedStart);
+                                            formatDate.format(_tempTimeStart);
                                       });
                                     },
                                   ),
@@ -750,9 +754,11 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                                     );
                                     print(pickedEnd);
                                     setState(() {
+                                      _tempTimeEnd = pickedEnd;
                                       timeEndTemp =
-                                          formatDate.format(pickedEnd);
+                                          formatDate.format(_tempTimeEnd);
                                     });
+                                    print("Time End "+timeEndTemp);
                                   },
                                 ),
                               ],

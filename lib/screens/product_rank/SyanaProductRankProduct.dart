@@ -26,6 +26,7 @@ class GrafikProdukState extends State<GrafikProduk> {
   String _devTitle = "Grafik";
 
   DateFormat formatDate = DateFormat("yyyy-MM-dd");
+  DateFormat formatDateDayOnly = DateFormat("dd");
   DateTime timeStart = DateTime(DateTime.now().year, DateTime.now().month, 1);
   DateTime timeEnd = DateTime(DateTime.now().year, DateTime.now().month + 1, 0);
 
@@ -130,7 +131,7 @@ class GrafikProdukState extends State<GrafikProduk> {
       values = selectedDatum.first.datum.sales;
       selectedDate = selectedDatum.first.datum.time;
     }
-    convertedDate = formatDate.format(selectedDate);
+    convertedDate = formatDateDayOnly.format(selectedDate);
     // Request a build.
     setState(() {
       _currentSelectedDate = convertedDate;
@@ -500,7 +501,10 @@ class GrafikProdukState extends State<GrafikProduk> {
                                 child: Text(_currentSelectedDate +
                                     " : " +
                                     _valueData.toString() +
-                                    " Paket"),
+                                    " Paket",style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold
+                                ),),
                               ),
                         listDataTrace.length < 0 &&
                                 _currentComparedProducts != null
@@ -942,8 +946,9 @@ class GrafikProdukState extends State<GrafikProduk> {
                                       );
                                       print(pickedStart);
                                       setState(() {
+                                        _tempTimeStart = pickedStart;
                                         timeStartTemp =
-                                            formatDate.format(pickedStart);
+                                            formatDate.format(_tempTimeStart);
                                       });
                                     },
                                   ),
@@ -998,8 +1003,9 @@ class GrafikProdukState extends State<GrafikProduk> {
                                     );
                                     print(pickedEnd);
                                     setState(() {
+                                      _tempTimeEnd = pickedEnd;
                                       timeEndTemp =
-                                          formatDate.format(pickedEnd);
+                                          formatDate.format(_tempTimeEnd);
                                     });
                                   },
                                 ),
