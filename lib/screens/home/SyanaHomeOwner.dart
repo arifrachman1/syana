@@ -6,12 +6,11 @@ import 'package:syana/Controller/HomeOwnerController.dart';
 import 'package:syana/Controller/ShortcutController.dart';
 import 'package:syana/models/HomeDataDetailModel.dart';
 import 'package:syana/models/HomeDataModel.dart';
-import 'package:syana/screens/inventory/SyanaStock.dart';
-import 'package:syana/screens/promo/SyanaPromo.dart';
-import 'package:syana/screens/trace/SyanaTrace.dart';
+import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
+import 'package:syana/utils/MessagingService.dart';
 import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
@@ -27,9 +26,9 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   ShortcutController _shortcutController;
   List _shortcuts = new List();
 
+  UserModel _userModel;
   HomeDataModel _homeDataModel;
-  bool isLoading = false;
-
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -40,6 +39,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   @override
   void initState() {
     super.initState();
+    MessagingService.getNotification(GlobalVars.firebaseMessaging, context);
     _homeOwnerController = new HomeOwnerController();
     _shortcutController = new ShortcutController();
     _initData();
@@ -50,13 +50,14 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   }
 
   _initData() async {
+    _userModel = await _homeOwnerController.getUserModel();
     _shortcuts = await _shortcutController.getShortcuts();
     await _homeOwnerController.getHomeData(context, setLoadingState, setData);
   }
 
   void setLoadingState() {
     setState(() {
-      isLoading = isLoading ? isLoading = false : isLoading = true;
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
     });
   }
 
@@ -79,10 +80,11 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
         width: MediaQuery.of(context).size.width,
         decoration: AppTheme.appBackground(),
         child: Scaffold(
-            floatingActionButton: CustomButton.getCustomShortcutFAB(context, _shortcuts),
+            floatingActionButton: CustomButton.getCustomShortcutFAB(
+                context, _shortcuts),
             backgroundColor: Colors.transparent,
             bottomNavigationBar: CustomBottomNav.getBottomNav(context, 2),
-            body: isLoading
+            body: _isLoading
                 ? Center(child: CircularProgressIndicator())
                 : RefreshIndicator(
                     onRefresh: () {
@@ -346,14 +348,14 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 child: Text('KONFIGURASI PROMO'),
                                 color: AppTheme.yellow,
                                 onPressed: () {
-                                  *//*Navigator.push(
+                                  */ /*Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (BuildContext context) {
                                         return SyanaPromo();
                                       },
                                     ),
-                                  );*//*
+                                  );*/ /*
                                   Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
                                     return InventoryMain();
                                   }), (route) => false);

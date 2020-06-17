@@ -38,6 +38,7 @@ dependencies:
   youtube_player_flutter: ^7.0.0+3
   flutter_speed_dial: ^1.2.5
   fab_circular_menu: ^1.0.0
+  firebase_messaging: ^6.0.16
 
 dev_dependencies:
   flutter_test:

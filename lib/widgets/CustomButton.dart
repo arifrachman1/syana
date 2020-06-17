@@ -1,8 +1,10 @@
 import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/ShortcutController.dart';
+import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/widgets/CustomShortcut.dart';
 
 class CustomButton {
@@ -43,6 +45,7 @@ class CustomButton {
       children: <Widget>[
         CustomShortcut.getShortcut(CustomShortcut.SHORTCUT_TRACES, context),
         CustomShortcut.getShortcut(CustomShortcut.SHORTCUT_PROMO, context),
+        CustomShortcut.getShortcut(CustomShortcut.SHORTCUT_BROADCAST, context),
         CustomShortcut.getShortcut(shortcuts != null || shortcuts.isNotEmpty ? shortcuts[0] : CustomShortcut.SHORTCUT_EMPTY, context),
         CustomShortcut.getShortcut(shortcuts != null || shortcuts.isNotEmpty ? shortcuts[1] : CustomShortcut.SHORTCUT_EMPTY, context),
         CustomShortcut.getShortcut(shortcuts != null || shortcuts.isNotEmpty ? shortcuts[2] : CustomShortcut.SHORTCUT_EMPTY, context),

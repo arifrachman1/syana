@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +9,13 @@ import 'package:syana/screens/home/SyanaHomeOwner.dart';
 import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 
 class LoginController {
   BuildContext context;
   UserModel _userModel;
+  String _devTitle = "login_controller";
   
   void savePersistence() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -23,11 +28,28 @@ class LoginController {
     prefs.setString(GlobalVars.accessTokenKey, _userModel.accessToken);
   }
 
-  void login(context, loadingStateCallback, username, password) async {
-    FormData formData =
-        FormData.fromMap({"username": username, "password": password});
+  saveDeviceToken() async {
+    String device_token = await GlobalVars.firebaseMessaging.getToken();
+    if (device_token != null) {
+      print(device_token);
+      log(device_token, name: _devTitle);
+      return device_token;
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_GET_BROADCAST_TOKEN_FAILED,
+          context: context,
+          popCount: 1);
+    }
+  }
 
+  void login(context, loadingStateCallback, username, password) async {
     loadingStateCallback();
+
+    String deviceToken = await saveDeviceToken();
+    FormData formData =
+        FormData.fromMap({"username": username, "password": password, "broadcast_token": deviceToken});
+
     final data = await GlobalFunctions.dioPostCall(
         path: GlobalVars.apiUrl + "login", params: formData, context: context);
 
