@@ -366,7 +366,7 @@ class PromoController {
 
   Map checkAvailablePromo(
       selectedProduct, selectedProductSaleNumber, promos, totalPrice) {
-    log("begin checking...", name: _devTitle);
+    GlobalFunctions.log(message: "begin checking...", name: _devTitle);
     Map<String, dynamic> returnValues = new Map();
     if (promos is List<PromoModel> && promos.isNotEmpty) {
       promos.forEach((promoElement) {

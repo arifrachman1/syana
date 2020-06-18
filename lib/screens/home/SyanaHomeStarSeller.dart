@@ -403,7 +403,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                           ],
                         ),
                       ),
-                      Container(
+                      /*Container(
                         margin: EdgeInsets.only(
                           top: 20,
                         ),
@@ -423,7 +423,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                           },
                           shape: AppTheme.roundButton(),
                         ),
-                      ),
+                      ),*/
                       list(),
                     ],
                   ),

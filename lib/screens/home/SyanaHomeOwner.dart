@@ -13,8 +13,11 @@ import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/MessagingService.dart';
 import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
+import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
 import 'package:syana/widgets/CustomButton.dart';
+import 'package:syana/widgets/CustomDialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SyanaHomeOwner extends StatefulWidget {
   @override
@@ -80,8 +83,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
         width: MediaQuery.of(context).size.width,
         decoration: AppTheme.appBackground(),
         child: Scaffold(
-            floatingActionButton: CustomButton.getCustomShortcutFAB(
-                context, _shortcuts),
+            floatingActionButton:
+                CustomButton.getCustomShortcutFAB(context, _shortcuts),
             backgroundColor: Colors.transparent,
             bottomNavigationBar: CustomBottomNav.getBottomNav(context, 2),
             body: _isLoading
@@ -744,7 +747,43 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                       Icons.file_download,
                       color: AppTheme.text_light,
                     ),
-                    onPressed: null,
+                    onPressed: () async {
+                      int year = DateTime.now().year;
+                      int month = DateTime.now().month;
+                      int day = DateTime.now().day;
+
+                      var date;
+
+                      if (month.toString().length < 2) {
+                        date = year.toString() +
+                            "-0" +
+                            month.toString() +
+                            "-" +
+                            day.toString();
+                      } else {
+                        date = year.toString() +
+                            "-" +
+                            month.toString() +
+                            "-" +
+                            day.toString();
+                      }
+
+                      var url = GlobalVars.siteUrl +
+                          "list-customer?date=" +
+                          date +
+                          "&id_employee_team=" +
+                          detailModel.idTeam.toString();
+
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        CustomDialog.getDialog(
+                            title: Strings.DIALOG_TITLE_WARNING,
+                            message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+                            context: context,
+                            popCount: 1);
+                      }
+                    },
                   ),
                 ],
               ),

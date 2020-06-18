@@ -1,7 +1,6 @@
-import 'package:fl_chart/fl_chart.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/ChartDataModel.dart';
@@ -9,10 +8,9 @@ import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/TraceModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
-import '../../main.dart';
-import 'dart:developer' as dev;
 
 String selectedProduk;
 int selectedGrafik = 0;
@@ -228,7 +226,8 @@ class GrafikProdukState extends State<GrafikProduk> {
     if (data2 is List<ChartDataModel> && data2.isNotEmpty) {
       setState(() {
         chartComparedProducts = data2;
-        dev.log(chartComparedProducts.toString(), name: _devTitle);
+        GlobalFunctions.log(
+            message: chartComparedProducts.toString(), name: _devTitle);
         _generateDataCompare(chartComparedProducts);
       });
     }

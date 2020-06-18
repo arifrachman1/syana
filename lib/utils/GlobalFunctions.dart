@@ -44,7 +44,7 @@ class GlobalFunctions {
       data = _localResp.data;
     } on DioError catch (e) {
       print(e.response.toString());
-      log(message: e.toString(), name: "dio_get_call");
+      GlobalFunctions.log(message: e.toString(), name: "dio_get_call");
       CustomDialog.getDialog(
           title: Strings.DIALOG_TITLE_ERROR,
           message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,

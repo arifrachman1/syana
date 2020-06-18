@@ -10,6 +10,7 @@ import 'package:syana/screens/sale/SyanaConfirmation.dart';
 import 'package:syana/screens/sale/SyanaPenjualanTimhariini.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 
@@ -336,7 +337,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
   /*add item*/
   add(id, isSale) {
     /*search id*/
-    log("id : " + id.toString(), name: _devTitle);
+    GlobalFunctions.log(message: "id : " + id.toString(), name: _devTitle);
     var indexOfFilteredProducts, indexOfAllProducts;
     filteredProducts.forEach((element) {
       if (element.id == id) {
@@ -350,8 +351,8 @@ class _SaleInnerState extends State<SaleInnerWidget> {
       }
     });
 
-    log(
-        "filtered index : " +
+    GlobalFunctions.log(
+        message: "filtered index : " +
             indexOfFilteredProducts.toString() +
             ", all index : " +
             indexOfAllProducts.toString(),
@@ -397,15 +398,14 @@ class _SaleInnerState extends State<SaleInnerWidget> {
           int.parse(categorizedProducts[indexOfAllProducts].saleNumber),
           _promos,
           _totalPrice);
-      log("function finished...", name: _devTitle);
+
       if (_promoStatus.isEmpty) {
-        log("no return value...", name: _devTitle);
+        GlobalFunctions.log(message: "no return value...", name: _devTitle);
       } else {
         if (_promoStatus['status'] == true) {
-          log("status : true", name: _devTitle);
-          _promoStatus.forEach((key, value) {
+          /*_promoStatus.forEach((key, value) {
             log("$key : $value", name: _devTitle);
-          });
+          });*/
           addFreeItemFromPromo(
               _promoStatus['freeProduct'], _promoStatus['freeAmount']);
         }
@@ -552,7 +552,10 @@ class _SaleInnerState extends State<SaleInnerWidget> {
         if (value.name.toLowerCase().contains(searchFilter.toLowerCase())) {
           temp.add(value);
           filteredProductsBefore = temp;
-        }else if(value.sku.toString().toLowerCase().contains(searchFilter.toLowerCase())){
+        } else if (value.sku
+            .toString()
+            .toLowerCase()
+            .contains(searchFilter.toLowerCase())) {
           temp.add(value);
           filteredProductsBefore = temp;
         }

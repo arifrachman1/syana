@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/screens/home/SyanaHomeOwner.dart';
+import 'package:syana/screens/home/SyanaHomePacking.dart';
 import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
@@ -16,7 +15,7 @@ class LoginController {
   BuildContext context;
   UserModel _userModel;
   String _devTitle = "login_controller";
-  
+
   void savePersistence() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt(GlobalVars.idKey, _userModel.id);
@@ -32,7 +31,7 @@ class LoginController {
     String device_token = await GlobalVars.firebaseMessaging.getToken();
     if (device_token != null) {
       print(device_token);
-      log(device_token, name: _devTitle);
+      GlobalFunctions.log(message: device_token, name: _devTitle);
       return device_token;
     } else {
       CustomDialog.getDialog(
@@ -47,8 +46,11 @@ class LoginController {
     loadingStateCallback();
 
     String deviceToken = await saveDeviceToken();
-    FormData formData =
-        FormData.fromMap({"username": username, "password": password, "broadcast_token": deviceToken});
+    FormData formData = FormData.fromMap({
+      "username": username,
+      "password": password,
+      "broadcast_token": deviceToken
+    });
 
     final data = await GlobalFunctions.dioPostCall(
         path: GlobalVars.apiUrl + "login", params: formData, context: context);
@@ -67,13 +69,17 @@ class LoginController {
         await savePersistence();
 
         //redirect
-        if(_userModel.idRole == 4){
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_){
+        if (_userModel.idRole == 4) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
             return SyanaHomeStarSeller();
           }));
-        }else if(_userModel.idRole == 2 || _userModel.idRole == 1){
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_){
+        } else if (_userModel.idRole == 2 || _userModel.idRole == 1) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
             return SyanaHomeOwner();
+          }));
+        } else if (_userModel.idRole == 8) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+            return SyanaHomePacking();
           }));
         }
       }

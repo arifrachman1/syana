@@ -7,6 +7,7 @@ import 'package:syana/screens/promo/SyanaAddPromo.dart';
 import 'package:syana/screens/promo/SyanaPromoDetail.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 
@@ -215,13 +216,13 @@ class SyanaPromoState extends State<SyanaPromo> {
                                               }
                                               break;
                                             case 2:
-                                              log(_filteredPromos[index].title,
+                                              GlobalFunctions.log(message: _filteredPromos[index].title,
                                                   name: _devTitle);
-                                              log(
-                                                  _filteredPromos[index]
-                                                      .promoDetails
-                                                      .length
-                                                      .toString(),
+                                              GlobalFunctions.log(message:
+                                              _filteredPromos[index]
+                                                  .promoDetails
+                                                  .length
+                                                  .toString(),
                                                   name: _devTitle);
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(

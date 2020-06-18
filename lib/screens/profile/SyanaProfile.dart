@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/ProfileController.dart';
+import 'package:syana/screens/profile/SyanaChangePassword.dart';
 import 'package:syana/screens/profile/SyanaShortcutSettings.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
@@ -75,6 +76,12 @@ class SyanaProfileState extends State<SyanaProfile> {
                               size: 35,
                               color: AppTheme.white,
                             ),
+                            onPressed: () {
+                              Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (_) {
+                                return SyanaChangePassword();
+                              }));
+                            },
                           )),
                       Container(
                           margin: EdgeInsets.symmetric(horizontal: 10),

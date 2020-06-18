@@ -29,6 +29,8 @@ class Strings{
   /*messaging*/
   static final String DIALOG_MESSAGE_BROADCAST_MESSAGE_SENT = "Pesan berhasil dibroadcast.";
 
+  /*profile*/
+  static final String DIALOG_MESSAGE_PASSWORD_CHANGED = "Password berhasil diganti.";
 
   static final String DIALOG_MESSAGE_INSUFFICENT_INPUT = "Data input tidak lengkap.";
   static final String DIALOG_MESSAGE_TRANSACTION_SUCCESS = "Terima kasih. Pesanan anda telah kami terima.";

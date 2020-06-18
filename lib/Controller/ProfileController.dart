@@ -1,7 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:syana/models/TripsModel.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 
 class ProfileController {
   UserModel _userModel;
@@ -168,5 +171,36 @@ class ProfileController {
       }
     }
     loadingStateCallback();
+  }
+
+  changePassword(context, loadingStateCallBack, oldPassword, newPassword) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    loadingStateCallBack();
+
+    var params = GlobalFunctions.generateMapParam(
+        ["id_employee", "password_old", "password_new"],
+        [_userModel.id.toString(), oldPassword, newPassword]);
+
+    FormData formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        path: GlobalVars.apiUrl + "change-password",
+        params: formData);
+
+    if (data != null) {
+      if (data['status'] == 1) {
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_SUCCESS,
+            message: Strings.DIALOG_MESSAGE_PASSWORD_CHANGED,
+            context: context,
+            popCount: 2);
+      }
+    }
+
+    loadingStateCallBack();
   }
 }
