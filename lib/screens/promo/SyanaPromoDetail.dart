@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PromoController.dart';
-import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/PromoDetailInModel.dart';
 import 'package:syana/models/PromoDetailOutModel.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -47,44 +44,21 @@ class _DetailState extends State<SyanaPromoDetail> {
         context, setLoadingState, setData, widget.promoId);
   }
 
-  _assignPromo() async {
-    setLoadingState();
-    List<PromoDetailInModel> _promoDetailIns = _promoDetails['detailIn'];
-    List<PromoDetailOutModel> _promoDetailOuts = _promoDetails['detailOut'];
-
-    await _promoDetailIns.forEach((inElement) async {
-      /*_promoRequirements.add(new PromoDetailInModel.init(
-          inElement.idPromoDetailIn,
-          inElement.idPromoDetail,
-          inElement.idProductRequired,
-          inElement.amountRequired,
-          inElement.requiredType));*/
-      ProductModel product = await _promoController.getProductById(
-          inElement.idProductRequired, context, setLoadingState);
-      setState(() {
-        _promoRequirements.add(
-            new PromoDetailInModel.promoDetail(inElement.amountRequired, product.name));
-      });
-      GlobalFunctions.log(message: "inside loop " + _promoRequirements.length.toString(), name: _devTitle);
+  _assignPromo() {
+    setState(() {
+      _promoRequirements = _promoDetails['detailIn'];
+      _promoFreeItems = _promoDetails['detailOut'];
     });
 
-    await _promoDetailOuts.forEach((outElement) async {
-      /*_promoFreeItems.add(new PromoDetailOutModel.init(
-          outElement.idPromoDetailOut,
-          outElement.idPromoDetail,
-          outElement.idProductFree,
-          outElement.amountFree));*/
-      ProductModel product = await _promoController.getProductById(
-          outElement.idProductFree, context, setLoadingState);
-      setState(() {
-        _promoFreeItems.add(
-            new PromoDetailOutModel.promoDetail(outElement.amountFree, product.name));
-      });
-    });
+    GlobalFunctions.log(message: "assign initialized...", name: "check_detail");
 
-    log(_promoRequirements.length.toString(), name: _devTitle);
-    log(_promoFreeItems.length.toString(), name: _devTitle);
-    setLoadingState();
+    GlobalFunctions.log(
+        message: "in : " + _promoRequirements.toString(),
+        name: "check_detail");
+
+    GlobalFunctions.log(
+        message: "out : " + _promoFreeItems.toString(),
+        name: "check_detail");
   }
 
   setData(data) async {
@@ -112,11 +86,11 @@ class _DetailState extends State<SyanaPromoDetail> {
         backgroundColor: Colors.lightGreen[200],
         title: Text('Detail Promo'),
       ),
-      body: _isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Container(
-              decoration: AppTheme.appBackground(),
-              child: LayoutBuilder(
+      body: Container(
+        decoration: AppTheme.appBackground(),
+        child: _isLoading
+            ? Center(child: CircularProgressIndicator())
+            : LayoutBuilder(
                 builder: (context, BoxConstraints constraints) {
                   return SingleChildScrollView(
                     child: ConstrainedBox(
@@ -259,7 +233,7 @@ class _DetailState extends State<SyanaPromoDetail> {
                   );
                 },
               ),
-            ),
+      ),
     );
   }
 }

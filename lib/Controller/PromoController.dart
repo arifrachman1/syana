@@ -84,7 +84,8 @@ class PromoController {
                 element['jangka_waktu_promo'].toString(),
                 element['tipe_promo'].toString(),
                 element['id_team'].toString(),
-                promoDetails, false));
+                promoDetails,
+                false));
           });
         }
 
@@ -120,47 +121,49 @@ class PromoController {
         if (promosFromApi.isNotEmpty) {
           promosFromApi.forEach((element) {
             List promoDetailsFromApi = element['promo_details'];
-            promoDetailsFromApi.forEach((elementDetail) {
-              List promoDetailInFromApi = elementDetail['promo_detail_in'];
-              promoDetailInFromApi.forEach((elementIn) {
-                promoDetailIns.add(new PromoDetailInModel.init(
-                    elementIn['id_promo_detail_in'].toString(),
-                    elementIn['id_promo_detail'].toString(),
-                    elementIn['id_product_required'].toString(),
-                    elementIn['amount_required'].toString(),
-                    elementIn['required_type'].toString()));
+            if (element['status_promo'] == 1) {
+              promoDetailsFromApi.forEach((elementDetail) {
+                List promoDetailInFromApi = elementDetail['promo_detail_in'];
+                promoDetailInFromApi.forEach((elementIn) {
+                  promoDetailIns.add(new PromoDetailInModel.init(
+                      elementIn['id_promo_detail_in'].toString(),
+                      elementIn['id_promo_detail'].toString(),
+                      elementIn['id_product_required'].toString(),
+                      elementIn['amount_required'].toString(),
+                      elementIn['required_type'].toString()));
+                });
+
+                List promoDetailOutFromApi = elementDetail['promo_detail_out'];
+                promoDetailOutFromApi.forEach((elementOut) {
+                  promoDetailOuts.add(new PromoDetailOutModel.init(
+                      elementOut['id_promo_detail_out'].toString(),
+                      elementOut['id_promo_detail'].toString(),
+                      elementOut['id_product_free'].toString(),
+                      elementOut['amount_free'].toString()));
+                });
+
+                promoDetails.add(new PromoDetailModel.init(
+                    elementDetail['id_promo_detail'].toString(),
+                    elementDetail['id_promo'].toString(),
+                    promoDetailIns,
+                    promoDetailOuts));
               });
 
-              List promoDetailOutFromApi = elementDetail['promo_detail_out'];
-              promoDetailOutFromApi.forEach((elementOut) {
-                promoDetailOuts.add(new PromoDetailOutModel.init(
-                    elementOut['id_promo_detail_out'].toString(),
-                    elementOut['id_promo_detail'].toString(),
-                    elementOut['id_product_free'].toString(),
-                    elementOut['amount_free'].toString()));
-              });
-
-              promoDetails.add(new PromoDetailModel.init(
-                  elementDetail['id_promo_detail'].toString(),
-                  elementDetail['id_promo'].toString(),
-                  promoDetailIns,
-                  promoDetailOuts));
-            });
-
-            promos.add(new PromoModel.init(
-                element['id_promo'].toString(),
-                element['judul_promo'].toString(),
-                element['tanggal_mulai_promo'].toString(),
-                element['tanggal_selesai_promo'].toString(),
-                element['status_promo'].toString(),
-                element['jangka_waktu_promo'].toString(),
-                element['tipe_promo'].toString(),
-                element['id_team'].toString(),
-                promoDetails, false));
+              promos.add(new PromoModel.init(
+                  element['id_promo'].toString(),
+                  element['judul_promo'].toString(),
+                  element['tanggal_mulai_promo'].toString(),
+                  element['tanggal_selesai_promo'].toString(),
+                  element['status_promo'].toString(),
+                  element['jangka_waktu_promo'].toString(),
+                  element['tipe_promo'].toString(),
+                  element['id_team'].toString(),
+                  promoDetails,
+                  false));
+            }
           });
+          setDataCallback(promos);
         }
-
-        setDataCallback(promos);
       }
     }
 
@@ -366,16 +369,16 @@ class PromoController {
 
   Map checkAvailablePromo(
       selectedProduct, selectedProductSaleNumber, promos, totalPrice) {
-    GlobalFunctions.log(message: "begin checking...", name: _devTitle);
+    GlobalFunctions.log(
+        message: "begin checking...\n" + promos.toString(), name: _devTitle);
     Map<String, dynamic> returnValues = new Map();
-    if (promos is List<PromoModel> && promos.isNotEmpty) {
+    if (promos is List<PromoModel>) {
       promos.forEach((promoElement) {
-        if (promoElement.status.toString().compareTo("1") == 0) {
+        if (promoElement.status == "1") {
           log("promo " + promoElement.title + " status on...", name: _devTitle);
           bool _doesMeetRequirements = false;
           promoElement.promoDetails.forEach((promoDetailElement) {
             promoDetailElement.promoDetailIns.forEach((detailInElement) {
-
               /*to check whether the provided id matching the required product id*/
               if (selectedProduct
                       .toString()
@@ -418,9 +421,6 @@ class PromoController {
                     });
                   }
                 } else if (detailInElement.requiredType == "3") {
-                  List<PromoDetailInModel> detailIn =
-                      promoDetailElement.promoDetailIns;
-
                   GlobalFunctions.log(
                       message: "cross promo, required amount : " +
                           detailInElement.amountRequired.toString(),
@@ -467,18 +467,22 @@ class PromoController {
                     });
                   }
                 }
-              }else{
-                if(detailInElement.requiredType == "4") {
+              } else {
+                if (detailInElement.requiredType == "4") {
                   GlobalFunctions.log(
-                      message: "min price promo : " + detailInElement.amountRequired,
+                      message:
+                          "min price promo : " + detailInElement.amountRequired,
                       name: "sale_inner");
                   GlobalFunctions.log(
                       message: "total price : " + totalPrice.toString(),
                       name: "sale_inner");
                   GlobalFunctions.log(
-                      message: "price promo status : " + promoElement.isPromoGet.toString(),
+                      message: "price promo status : " +
+                          promoElement.isPromoGet.toString(),
                       name: "sale_inner");
-                  if (totalPrice >= double.parse(detailInElement.amountRequired.toString()) &&
+                  if (totalPrice >=
+                          double.parse(
+                              detailInElement.amountRequired.toString()) &&
                       !promoElement.isPromoGet) {
                     GlobalFunctions.log(
                         message: "price requirement fulfilled!",
@@ -527,22 +531,35 @@ class PromoController {
         List _inFromApi = data['promo_detail']['promo_detail_in'];
         List _outFromApi = data['promo_detail']['promo_detail_out'];
 
-        _inFromApi.forEach((element) {
-          _promoDetailIns.add(new PromoDetailInModel.init(
-              element['id_promo_detail_in'].toString(),
-              element['id_promo_detail'].toString(),
-              element['id_product_required'].toString(),
-              element['amount_required'].toString(),
-              element['required_type'].toString()));
-        });
+        bool isCrossProductPromo = false;
+        for(dynamic element in _inFromApi){
+          if(element['required_type'] == 4){
+            _promoDetailIns.add(new PromoDetailInModel.promoDetail(
+                element['amount_required'].toString(),"Belanja"));
+          }else{
+            ProductModel product = await getProductById(
+                element['id_product_required'].toString(), context);
 
-        _outFromApi.forEach((element) {
-          _promoDetailOuts.add(new PromoDetailOutModel.init(
-              element['id_promo_detail_out'].toString(),
-              element['id_promo_detail'].toString(),
-              element['id_product_free'].toString(),
-              element['amount_free'].toString()));
-        });
+            _promoDetailIns.add(new PromoDetailInModel.promoDetail(
+                element['amount_required'].toString(),product.name));
+          }
+          if(element['required_type'] == 3){
+            isCrossProductPromo = true;
+          }
+        }
+
+        for(dynamic element in _outFromApi){
+          ProductModel product = await getProductById(
+              element['id_product_free'].toString(), context);
+
+          _promoDetailOuts.add(new PromoDetailOutModel.promoDetail(
+              element['amount_free'].toString(), product.name));
+        }
+
+        /*if(isCrossProductPromo){
+          _promoDetailOuts.add(new PromoDetailOutModel.promoDetail(
+              "", ""));
+        }*/
 
         Map returnValues = new Map();
 
@@ -550,9 +567,9 @@ class PromoController {
         returnValues['promoTitle'] = data['promo_detail']['judul_promo'];
         returnValues['type'] = data['promo_detail']['tipe'];
         returnValues['startDate'] =
-            data['promo_detail']['tanggal_mulai_promo'] ?? "-";
+            data['promo_detail']['tanggal_mulai_promo'];
         returnValues['endDate'] =
-            data['promo_detail']['tanggal_selesai_promo'] ?? "-";
+            data['promo_detail']['tanggal_selesai_promo'];
         returnValues['detailIn'] = _promoDetailIns;
         returnValues['detailOut'] = _promoDetailOuts;
 
@@ -589,11 +606,10 @@ class PromoController {
     }
   }
 
-  getProductById(id_product, context, loadingStateCallback) async {
+  getProductById(id_product, context) async {
     if (_userModel == null) {
       await _getPersistence();
     }
-    loadingStateCallback();
 
     var params = GlobalFunctions.generateMapParam(['id_product'], [id_product]);
 
@@ -622,6 +638,5 @@ class PromoController {
         return productModel;
       }
     }
-    loadingStateCallback();
   }
 }

@@ -53,7 +53,7 @@ class PromoDetailOutModel{
 
   @override
   String toString() {
-    return 'PromoDetailOutModel{_idPromoDetailOut: $_idPromoDetailOut, _idPromoDetail: $_idPromoDetail, _idProductFree: $_idProductFree, _amountFree: $_amountFree}';
+    return 'PromoDetailOutModel{_idPromoDetailOut: $_idPromoDetailOut, _idPromoDetail: $_idPromoDetail, _idProductFree: $_idProductFree, _amountFree: $_amountFree, _productName: $_productName}';
   }
 
 

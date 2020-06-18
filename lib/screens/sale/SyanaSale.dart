@@ -337,7 +337,6 @@ class _SaleInnerState extends State<SaleInnerWidget> {
   /*add item*/
   add(id, isSale) {
     /*search id*/
-    GlobalFunctions.log(message: "id : " + id.toString(), name: _devTitle);
     var indexOfFilteredProducts, indexOfAllProducts;
     filteredProducts.forEach((element) {
       if (element.id == id) {
@@ -350,13 +349,6 @@ class _SaleInnerState extends State<SaleInnerWidget> {
         indexOfAllProducts = categorizedProducts.indexOf(element);
       }
     });
-
-    GlobalFunctions.log(
-        message: "filtered index : " +
-            indexOfFilteredProducts.toString() +
-            ", all index : " +
-            indexOfAllProducts.toString(),
-        name: _devTitle);
 
     /*update view*/
     int numberForFilter = isSale

@@ -79,6 +79,8 @@ class PromoDetailInModel {
 
   @override
   String toString() {
-    return 'PromoDetailInModel{_idPromoDetailIn: $_idPromoDetailIn, _idPromoDetail: $_idPromoDetail, _idProductRequired: $_idProductRequired, _amountRequired: $_amountRequired, _requiredType: $_requiredType}';
+    return 'PromoDetailInModel{_idPromoDetailIn: $_idPromoDetailIn, _idPromoDetail: $_idPromoDetail, _idProductRequired: $_idProductRequired, _amountRequired: $_amountRequired, _requiredType: $_requiredType, _productname: $_productname, _fulfilled: $_fulfilled}';
   }
+
+
 }
