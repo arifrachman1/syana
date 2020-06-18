@@ -435,7 +435,7 @@ class SyanaProductRankTopReturnState extends State<SyanaProductRankTopReturn> {
                       height: MediaQuery.of(context).size.height * 0.01,
                     ),
                     showsDatePicker(
-                      waktu.indexOf(selectedTime),
+                      int.parse(_currentTimes),
                     ),
                   ],
                 ),
