@@ -264,7 +264,8 @@ class StockInState extends State<SyanaStockIn> {
   _initTeams() async {
     await _inventoryController.getAddition(
         context, setLoadingState, setData, "1", 0, "", "", null);
-    await _inventoryController.getTeams(context, setLoadingState, setTeamsData, true);
+    await _inventoryController.getTeams(
+        context, setLoadingState, setTeamsData, true);
 
     /*generate time filter dropdown and its value*/
     _timeFilter = GlobalFunctions.generateDropdownMenuItem(
@@ -274,25 +275,31 @@ class StockInState extends State<SyanaStockIn> {
   }
 
   void setLoadingState() {
-    setState(() {
-      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+      });
+    }
   }
 
   void setData(data) {
     if (data is List<ProductModel>) {
-      setState(() {
-        additions = data;
-      });
+      if (this.mounted) {
+        setState(() {
+          additions = data;
+        });
+      }
     }
   }
 
   void setTeamsData(data) {
     if (data is List<DropdownMenuItem> && data.isNotEmpty) {
-      setState(() {
-        _teams = data;
-        _currentTeam = data[0].value;
-      });
+      if (this.mounted) {
+        setState(() {
+          _teams = data;
+          _currentTeam = data[0].value;
+        });
+      }
     }
   }
 
@@ -325,17 +332,23 @@ class StockInState extends State<SyanaStockIn> {
               _isAsc = _isAsc ? false : true;
             });
 
-            _inventoryController.getAddition(context, setLoadingState, setData,
-                _isAsc ? "1" : "2", _currentTimeFilter, _currentTimeFilter == 3
+            _inventoryController.getAddition(
+                context,
+                setLoadingState,
+                setData,
+                _isAsc ? "1" : "2",
+                _currentTimeFilter,
+                _currentTimeFilter == 3
                     ? (yearFrom == "YY" && monthFrom == "MM" && dayFrom == "DD"
-                    ? ""
-                    : (yearFrom + "-" + monthFrom + "-" + dayFrom))
+                        ? ""
+                        : (yearFrom + "-" + monthFrom + "-" + dayFrom))
                     : "",
                 _currentTimeFilter == 3
                     ? (yearTo == "YY" && monthTo == "MM" && dayTo == "DD"
-                    ? ""
-                    : (yearTo + "-" + monthTo + "-" + dayTo))
-                    : "", _currentTeam);
+                        ? ""
+                        : (yearTo + "-" + monthTo + "-" + dayTo))
+                    : "",
+                _currentTeam);
           },
         ),
         body: _isLoading
@@ -349,14 +362,16 @@ class StockInState extends State<SyanaStockIn> {
                       _isAsc ? "1" : "2",
                       _currentTimeFilter,
                       _currentTimeFilter == 3
-                          ? (yearFrom == "YY" && monthFrom == "MM" && dayFrom == "DD"
-                          ? ""
-                          : (yearFrom + "-" + monthFrom + "-" + dayFrom))
+                          ? (yearFrom == "YY" &&
+                                  monthFrom == "MM" &&
+                                  dayFrom == "DD"
+                              ? ""
+                              : (yearFrom + "-" + monthFrom + "-" + dayFrom))
                           : "",
                       _currentTimeFilter == 3
                           ? (yearTo == "YY" && monthTo == "MM" && dayTo == "DD"
-                          ? ""
-                          : (yearTo + "-" + monthTo + "-" + dayTo))
+                              ? ""
+                              : (yearTo + "-" + monthTo + "-" + dayTo))
                           : "",
                       _currentTeam);
                 },
@@ -389,14 +404,26 @@ class StockInState extends State<SyanaStockIn> {
                                             _isAsc ? "1" : "2",
                                             _currentTimeFilter,
                                             _currentTimeFilter == 3
-                                                ? (yearFrom == "YY" && monthFrom == "MM" && dayFrom == "DD"
-                                                ? ""
-                                                : (yearFrom + "-" + monthFrom + "-" + dayFrom))
+                                                ? (yearFrom == "YY" &&
+                                                        monthFrom == "MM" &&
+                                                        dayFrom == "DD"
+                                                    ? ""
+                                                    : (yearFrom +
+                                                        "-" +
+                                                        monthFrom +
+                                                        "-" +
+                                                        dayFrom))
                                                 : "",
                                             _currentTimeFilter == 3
-                                                ? (yearTo == "YY" && monthTo == "MM" && dayTo == "DD"
-                                                ? ""
-                                                : (yearTo + "-" + monthTo + "-" + dayTo))
+                                                ? (yearTo == "YY" &&
+                                                        monthTo == "MM" &&
+                                                        dayTo == "DD"
+                                                    ? ""
+                                                    : (yearTo +
+                                                        "-" +
+                                                        monthTo +
+                                                        "-" +
+                                                        dayTo))
                                                 : "",
                                             _currentTeam);
                                       },

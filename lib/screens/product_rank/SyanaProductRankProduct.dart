@@ -192,27 +192,35 @@ class GrafikProdukState extends State<GrafikProduk> {
 
   setData(data) {
     if (data is List<ChartDataModel> && data.isNotEmpty) {
-      setState(() {
-        chartProducts = data;
-        chartProducts.forEach((element) {
-          String tempConvDate =
-              formatDate.format(DateTime.parse(element.chartDate));
-          listDateChart.add(DateTime.parse(tempConvDate));
+      if (this.mounted) {
+        setState(() {
+          chartProducts = data;
+          chartProducts.forEach((element) {
+            String tempConvDate =
+                formatDate.format(DateTime.parse(element.chartDate));
+            listDateChart.add(DateTime.parse(tempConvDate));
+          });
+          _generateData(chartProducts);
         });
-        _generateData(chartProducts);
-      });
+      }
     } else if (data is List<TraceModel> && data.isNotEmpty) {
-      setState(() {
-        listDataTrace = data;
-      });
+      if (this.mounted) {
+        setState(() {
+          listDataTrace = data;
+        });
+      }
     } else if (data is List<ProductModel> && data.isNotEmpty) {
-      setState(() {
-        products = data;
-      });
+      if (this.mounted) {
+        setState(() {
+          products = data;
+        });
+      }
     } else if (data is ChartDataModel && data != null) {
-      setState(() {
-        dateMaxMin = data;
-      });
+      if (this.mounted) {
+        setState(() {
+          dateMaxMin = data;
+        });
+      }
     }
   }
 
@@ -498,13 +506,15 @@ class GrafikProdukState extends State<GrafikProduk> {
                         _currentSelectedDate == ""
                             ? Container()
                             : Container(
-                                child: Text(_currentSelectedDate +
-                                    " : " +
-                                    _valueData.toString() +
-                                    " Paket",style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold
-                                ),),
+                                child: Text(
+                                  _currentSelectedDate +
+                                      " : " +
+                                      _valueData.toString() +
+                                      " Paket",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                         listDataTrace.length < 0 &&
                                 _currentComparedProducts != null
@@ -578,7 +588,10 @@ class GrafikProdukState extends State<GrafikProduk> {
                   child: charts.TimeSeriesChart(
                   _timeSeriesLineData,
                   animate: false,
-                  behaviors: [new charts.PanAndZoomBehavior(), charts.SeriesLegend()],
+                  behaviors: [
+                    new charts.PanAndZoomBehavior(),
+                    charts.SeriesLegend()
+                  ],
                   dateTimeFactory: const charts.LocalDateTimeFactory(),
                   selectionModels: [
                     new charts.SelectionModelConfig(

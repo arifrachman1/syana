@@ -9,7 +9,6 @@ import 'package:syana/widgets/CustomTextInput.dart';
 import '../../main.dart';
 
 class StockMain extends StatefulWidget {
-
   @override
   StockMainState createState() => StockMainState();
 }
@@ -50,13 +49,16 @@ class StockMainState extends State<StockMain> {
   }
 
   _initSearch() async {
-    await _inventoryController.getStock(context, setLoadingState, setData, '1', null);
+    await _inventoryController.getStock(
+        context, setLoadingState, setData, '1', null);
     await _inventoryController.getTeams(
         context, setLoadingState, setDropdownData, true);
 
-    setState(() {
-      filteredStocks = stocks;
-    });
+    if (this.mounted) {
+      setState(() {
+        filteredStocks = stocks;
+      });
+    }
 
     _searchController.addListener(() {
       if (_searchController.text.isEmpty) {
@@ -73,26 +75,32 @@ class StockMainState extends State<StockMain> {
   }
 
   void setLoadingState() {
-    setState(() {
-      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+      });
+    }
   }
 
   void setData(data) {
     if (data is List<ProductModel> && data.isNotEmpty) {
-      setState(() {
-        stocks = data;
-        filteredStocks = stocks;
-      });
+      if (this.mounted) {
+        setState(() {
+          stocks = data;
+          filteredStocks = stocks;
+        });
+      }
     }
   }
 
   void setDropdownData(data) {
     if (data is List<DropdownMenuItem> && data.isNotEmpty) {
-      setState(() {
-        teams = data;
-        _currentTeams = teams[0].value;
-      });
+      if (this.mounted) {
+        setState(() {
+          teams = data;
+          _currentTeams = teams[0].value;
+        });
+      }
     }
   }
 
@@ -131,24 +139,23 @@ class StockMainState extends State<StockMain> {
               _isAsc = _isAsc ? false : true;
             });
 
-            _inventoryController.getStock(
-                context, setLoadingState, setData, _isAsc ? "1" : "2", _currentTeams);
+            _inventoryController.getStock(context, setLoadingState, setData,
+                _isAsc ? "1" : "2", _currentTeams);
           },
         ),
         body: _isLoading
             ? Center(child: CircularProgressIndicator())
             : RefreshIndicator(
                 onRefresh: () {
-                  _inventoryController.getStock(
-                      context, setLoadingState, setData, _isAsc ? "1" : "2", _currentTeams);
+                  _inventoryController.getStock(context, setLoadingState,
+                      setData, _isAsc ? "1" : "2", _currentTeams);
                 },
                 child: Container(
                   decoration: AppTheme.appBackground(),
                   child: Column(
                     children: <Widget>[
                       Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 20),
+                        margin: EdgeInsets.symmetric(horizontal: 20),
                         child: CustomTextInput.getCustomTextField(
                             context: context,
                             controller: _searchController,
@@ -158,24 +165,29 @@ class StockMainState extends State<StockMain> {
                             isPasswordField: false),
                       ),
                       Container(
-                        decoration: AppTheme.inputDecoration(),
-                        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        width: ScreenSizeHelper.getDisplayWidth(context),
-                        height: Dimens.formHeight,
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            items : teams,
-                            value: _currentTeams,
-                            onChanged: (value){
-                              setState(() {
-                                _currentTeams = value;
-                              });
-                              _inventoryController.getStock(context, setLoadingState, setData, _isAsc ? "1" : "2", _currentTeams);
-                            },
-                          ),
-                        )
-                      ),
+                          decoration: AppTheme.inputDecoration(),
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          width: ScreenSizeHelper.getDisplayWidth(context),
+                          height: Dimens.formHeight,
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              items: teams,
+                              value: _currentTeams,
+                              onChanged: (value) {
+                                setState(() {
+                                  _currentTeams = value;
+                                });
+                                _inventoryController.getStock(
+                                    context,
+                                    setLoadingState,
+                                    setData,
+                                    _isAsc ? "1" : "2",
+                                    _currentTeams);
+                              },
+                            ),
+                          )),
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(

@@ -274,18 +274,22 @@ class SyanaProductRankTopLokasiState extends State<SyanaProductRankTopLokasi> {
   }
 
   void setLoadingState() {
-    setState(() {
-      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
-    });
+    if (this.mounted) {
+      setState(() {
+        _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+      });
+    }
   }
 
   //Dropdown Filter Teams
   void setDropdownData(data) {
     if (data is List<DropdownMenuItem> && data.isNotEmpty) {
-      setState(() {
-        teams = data;
-        _currentTeams = teams[0].value;
-      });
+      if (this.mounted) {
+        setState(() {
+          teams = data;
+          _currentTeams = teams[0].value;
+        });
+      }
     }
   }
 
@@ -321,9 +325,11 @@ class SyanaProductRankTopLokasiState extends State<SyanaProductRankTopLokasi> {
 
   setData(data) {
     if (data is List<ProductModel> && data.isNotEmpty) {
-      setState(() {
-        rankTopLocation = data;
-      });
+      if (this.mounted) {
+        setState(() {
+          rankTopLocation = data;
+        });
+      }
     }
   }
 
