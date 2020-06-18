@@ -68,8 +68,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
     setState(() {
       _homeDataModel = data;
     });
-    GlobalFunctions.log(
-        message: _homeDataModel.detail.toString(), name: "home_owner");
+    /*GlobalFunctions.log(
+        message: _homeDataModel.detail.toString(), name: "home_owner");*/
   }
 
   void logout() {

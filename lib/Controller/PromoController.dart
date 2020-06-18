@@ -84,7 +84,7 @@ class PromoController {
                 element['jangka_waktu_promo'].toString(),
                 element['tipe_promo'].toString(),
                 element['id_team'].toString(),
-                promoDetails));
+                promoDetails, false));
           });
         }
 
@@ -156,7 +156,7 @@ class PromoController {
                 element['jangka_waktu_promo'].toString(),
                 element['tipe_promo'].toString(),
                 element['id_team'].toString(),
-                promoDetails));
+                promoDetails, false));
           });
         }
 
@@ -371,16 +371,18 @@ class PromoController {
     if (promos is List<PromoModel> && promos.isNotEmpty) {
       promos.forEach((promoElement) {
         if (promoElement.status.toString().compareTo("1") == 0) {
-          log("promo status on...", name: _devTitle);
+          log("promo " + promoElement.title + " status on...", name: _devTitle);
           bool _doesMeetRequirements = false;
           promoElement.promoDetails.forEach((promoDetailElement) {
             promoDetailElement.promoDetailIns.forEach((detailInElement) {
+
               /*to check whether the provided id matching the required product id*/
               if (selectedProduct
                       .toString()
                       .compareTo(detailInElement.idProductRequired) ==
                   0) {
-                log("product match...", name: _devTitle);
+                log("product " + selectedProduct.toString() + " match...",
+                    name: _devTitle);
                 /*check promos*/
                 if (detailInElement.requiredType.toString().compareTo("1") ==
                         0 ||
@@ -416,29 +418,71 @@ class PromoController {
                     });
                   }
                 } else if (detailInElement.requiredType == "3") {
+                  List<PromoDetailInModel> detailIn =
+                      promoDetailElement.promoDetailIns;
+
+                  GlobalFunctions.log(
+                      message: "cross promo, required amount : " +
+                          detailInElement.amountRequired.toString(),
+                      name: "sale_inner");
+
                   /*to check whether the provided sale number fulfilling the required minimum*/
                   if (selectedProductSaleNumber %
-                          detailInElement.amountRequired ==
+                          int.parse(detailInElement.amountRequired) ==
                       0) {
                     /*matched*/
+                    GlobalFunctions.log(
+                        message:
+                            "product amount matched the required amount...",
+                        name: "sale_inner");
                     detailInElement.fulfilled = true;
                   }
+
+                  /*promoDetailElement.promoDetailIns.forEach((element) {
+                    GlobalFunctions.log(
+                        message: element.idProductRequired + " " + element.fulfilled.toString(),
+                        name: "check_fulfillment");
+                  });*/
 
                   _doesMeetRequirements = promoElement
                       .checkFulfillment(promoDetailElement.promoDetailIns);
 
                   if (_doesMeetRequirements) {
+                    GlobalFunctions.log(
+                        message: "all requirements fulfilled...",
+                        name: "sale_inner");
                     promoDetailElement.promoDetailOuts
                         .forEach((detailOutElement) {
-                      returnValues['status'] = true;
-                      returnValues['freeProduct'] =
-                          detailOutElement.idProductFree;
-                      returnValues['freeAmount'] = detailOutElement.amountFree;
+                      if (detailOutElement.idPromoDetail ==
+                          detailInElement.idPromoDetail) {
+                        GlobalFunctions.log(
+                            message: detailOutElement.toString(),
+                            name: "sale_inner");
+                        returnValues['status'] = true;
+                        returnValues['freeProduct'] =
+                            detailOutElement.idProductFree;
+                        returnValues['freeAmount'] =
+                            detailOutElement.amountFree;
+                      }
                     });
                   }
-                } else {
-                  if (totalPrice >= detailInElement.amountRequired &&
+                }
+              }else{
+                if(detailInElement.requiredType == "4") {
+                  GlobalFunctions.log(
+                      message: "min price promo : " + detailInElement.amountRequired,
+                      name: "sale_inner");
+                  GlobalFunctions.log(
+                      message: "total price : " + totalPrice.toString(),
+                      name: "sale_inner");
+                  GlobalFunctions.log(
+                      message: "price promo status : " + promoElement.isPromoGet.toString(),
+                      name: "sale_inner");
+                  if (totalPrice >= double.parse(detailInElement.amountRequired.toString()) &&
                       !promoElement.isPromoGet) {
+                    GlobalFunctions.log(
+                        message: "price requirement fulfilled!",
+                        name: "sale_inner");
                     promoDetailElement.promoDetailOuts
                         .forEach((detailOutElement) {
                       returnValues['status'] = true;

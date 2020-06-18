@@ -11,7 +11,6 @@ import 'package:syana/widgets/CustomDialog.dart';
 
 class HomeOwnerController {
   UserModel _userModel;
-  final String _devTitle = "homeOwnerController";
 
   clearPersistence() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
