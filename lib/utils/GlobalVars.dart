@@ -1,4 +1,4 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:firebase_messaging/firebase_messaging.dart';
 
 class GlobalVars{
   /*urls*/
@@ -13,8 +13,8 @@ class GlobalVars{
   static String YOUTUBE_API_KEY = "AIzaSyCyjg0Dq4NsQF6uLLNySsP2KR1JuGA7l9I";
 
   /*fcm*/
-  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  static bool fcm_message_received = false;
+  // static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  // static bool fcm_message_received = false;
 
   /*dev-mode*/
   static bool isDevMode = true;

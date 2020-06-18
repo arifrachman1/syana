@@ -42,7 +42,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   @override
   void initState() {
     super.initState();
-    MessagingService.getNotification(GlobalVars.firebaseMessaging, context);
+    // MessagingService.getNotification(GlobalVars.firebaseMessaging, context);
     _homeOwnerController = new HomeOwnerController();
     _shortcutController = new ShortcutController();
     _initData();

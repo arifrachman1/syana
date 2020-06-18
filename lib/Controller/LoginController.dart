@@ -28,29 +28,27 @@ class LoginController {
   }
 
   saveDeviceToken() async {
-    String device_token = await GlobalVars.firebaseMessaging.getToken();
-    if (device_token != null) {
-      print(device_token);
-      GlobalFunctions.log(message: device_token, name: _devTitle);
-      return device_token;
-    } else {
-      CustomDialog.getDialog(
-          title: Strings.DIALOG_TITLE_ERROR,
-          message: Strings.DIALOG_MESSAGE_GET_BROADCAST_TOKEN_FAILED,
-          context: context,
-          popCount: 1);
-    }
+
+    // String device_token = await GlobalVars.firebaseMessaging.getToken();
+    // if (device_token != null) {
+    //   print(device_token);
+    //   log(device_token, name: _devTitle);
+    //   return device_token;
+    // } else {
+    //   CustomDialog.getDialog(
+    //       title: Strings.DIALOG_TITLE_ERROR,
+    //       message: Strings.DIALOG_MESSAGE_GET_BROADCAST_TOKEN_FAILED,
+    //       context: context,
+    //       popCount: 1);
+    // }
   }
 
   void login(context, loadingStateCallback, username, password) async {
     loadingStateCallback();
 
-    String deviceToken = await saveDeviceToken();
-    FormData formData = FormData.fromMap({
-      "username": username,
-      "password": password,
-      "broadcast_token": deviceToken
-    });
+    // String deviceToken = await saveDeviceToken();
+    FormData formData =
+        FormData.fromMap({"username": username, "password": password, "broadcast_token": "-"});
 
     final data = await GlobalFunctions.dioPostCall(
         path: GlobalVars.apiUrl + "login", params: formData, context: context);

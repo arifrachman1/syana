@@ -30,7 +30,7 @@ class LoginState extends State<Login> {
     // TODO: implement initState
     super.initState();
     _loginController = new LoginController();
-    MessagingService.getNotification(GlobalVars.firebaseMessaging, context);
+    // MessagingService.getNotification(GlobalVars.firebaseMessaging, context);
   }
 
   void setLoadingState() {
