@@ -49,9 +49,9 @@ class CustomDialog {
               children: <Widget>[
                 SizedBox(
                     height: MediaQuery.of(context).size.height * 0.5,
-                    child: FlutterYoutube.playYoutubeVideoByUrl(
+                    child: FlutterYoutube.playYoutubeVideoById(
                       apiKey: GlobalVars.YOUTUBE_API_KEY,
-                      videoUrl: "https://www.youtube.com/watch?v=Z5m_ALZTjAo",
+                      videoId: videoId,
                       autoPlay: true, //default falase
                       fullScreen: true, //default false
                     )),

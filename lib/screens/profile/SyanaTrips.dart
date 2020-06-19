@@ -94,15 +94,15 @@ class SyanaTripsState extends State<SyanaTrips> {
       @required youtubeVideoId}) {
     return GestureDetector(
       onTap: () {
-        /*CustomDialog.getDialogWithVideo(
+        CustomDialog.getDialogWithVideo(
             title: title,
             message: quote,
             context: context,
             popCount: 1,
-            videoId: youtubeVideoId);*/
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return SyanaTripsVideo();
-        }));
+            videoId: youtubeVideoId);
+        // Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        //   return SyanaTripsVideo();
+        // }));
       },
       child: Expanded(
         child: Container(
@@ -128,16 +128,16 @@ class SyanaTripsState extends State<SyanaTrips> {
       @required youtubeVideoId}) {
     return GestureDetector(
       onTap: () {
-//        CustomDialog.getDialogWithVideo(
-//            title: title,
-//            message: quote,
-//            context: context,
-//            popCount: 1,
-//            videoId: youtubeVideoId);
+       CustomDialog.getDialogWithVideo(
+           title: title,
+           message: quote,
+           context: context,
+           popCount: 1,
+           videoId: youtubeVideoId);
 
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return SyanaTripsYoutubePlayer(idVideo: youtubeVideoId,);
-        }));
+        // Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        //   return SyanaTripsYoutubePlayer(idVideo: youtubeVideoId,);
+        // }));
 
         /*Navigator.of(context).push(MaterialPageRoute(builder: (_) {
           return SyanaTripsVideo();
