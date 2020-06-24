@@ -7,6 +7,7 @@ class Strings{
 
   /*generals*/
   static final String DIALOG_MESSAGE_API_CALL_FAILED = "Terjadi kesalahan saat melakukan koneksi.";
+  static final String DIALOG_MESSAGE_API_COPY_SUCCESS = "Sukses menyalin nomor transaksi.";
 
   /*login*/
   static final String DIALOG_MESSAGE_INSUFFICENT_CREDENTIALS = "Email atau password kosong.";

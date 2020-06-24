@@ -180,6 +180,50 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                   child: Container(
                     child: Column(
                       children: <Widget>[
+                        _currentSelectedDate == ""
+                            ? Container()
+                            : Container(
+                          child: Text(
+                            _currentSelectedDate +
+                                " : " +
+                                _valueData.toString() +
+                                " Pcs",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+//                        Container(
+//                          height: MediaQuery.of(context).size.height * 0.02,
+//                        ),
+                        Container(
+                          height: Dimens.grafikHeight(context),
+                          child: buildChart(),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                totalData.toString(),
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Produk ' + filterTypeName,
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         Container(
                           height: MediaQuery.of(context).size.height * 0.08,
                           decoration: AppTheme.listBackground(),
@@ -225,50 +269,6 @@ class GrafikGlobalState extends State<GrafikGlobal> {
                             ],
                           ),
                         ),
-//                        Container(
-//                          height: MediaQuery.of(context).size.height * 0.02,
-//                        ),
-                        Container(
-                          height: Dimens.grafikHeight(context),
-                          child: buildChart(),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          alignment: Alignment.center,
-                          child: Column(
-                            children: <Widget>[
-                              Text(
-                                totalData.toString(),
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                'Produk ' + filterTypeName,
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        _currentSelectedDate == ""
-                            ? Container()
-                            : Container(
-                                child: Text(
-                                  _currentSelectedDate +
-                                      " : " +
-                                      _valueData.toString() +
-                                      " Pcs",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
 //                        Container(
 //                          height: MediaQuery.of(context).size.height * 0.3,
 //                        ),

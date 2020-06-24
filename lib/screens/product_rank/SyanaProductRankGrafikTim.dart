@@ -36,6 +36,8 @@ class GrafikTimState extends State<GrafikTim> {
   String _currentSelectedDate = "";
   String filterTypeName = "Terjual";
 
+  String _current1st = "", _current2nd = "";
+
   int _valueData = 0;
 
   int totalData = 0;
@@ -63,7 +65,7 @@ class GrafikTimState extends State<GrafikTim> {
       }
 //      await _timeSeriesLineData.clear();
       await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Pembanding 1',
+        id: _current1st,
         colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
@@ -100,7 +102,7 @@ class GrafikTimState extends State<GrafikTim> {
       }
 //      await _timeSeriesLineData.clear();
       await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
-        id: 'Pembanding 2',
+        id: _current2nd,
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
@@ -244,52 +246,16 @@ class GrafikTimState extends State<GrafikTim> {
                   child: Container(
                     child: Column(
                       children: <Widget>[
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: AppTheme.listBackground(),
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(
-                            top: 10,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                'Data dari ',
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 14,
-                                ),
-                                softWrap: true,
-                              ),
-                              Text(
-                                _currentTimeStart,
-                                style: TextStyle(
-                                  color: AppTheme.orange_light,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                softWrap: true,
-                              ),
-                              Text(
-                                ' hingga ',
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 14,
-                                ),
-                                softWrap: true,
-                              ),
-                              Text(
-                                _currentTimeEnd,
-                                style: TextStyle(
-                                  color: AppTheme.yellow,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                softWrap: true,
-                              ),
-                            ],
-                          ),
+                        _currentSelectedDate == ""
+                            ? Container()
+                            : Container(
+                          child: Text(_currentSelectedDate +
+                              " : " +
+                              _valueData.toString() +
+                              " Pcs", style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold
+                          ),),
                         ),
                         Container(
                           height: MediaQuery.of(context).size.height * 0.01,
@@ -330,6 +296,7 @@ class GrafikTimState extends State<GrafikTim> {
                                 _selectedTeams = value;
                                 _currentTeams = value.id.toString();
                                 totalData = 0;
+                                _current1st = value.name;
                                 print(_selectedTeams);
                               });
                               chartTeams.clear();
@@ -364,7 +331,7 @@ class GrafikTimState extends State<GrafikTim> {
                             );
                           }).toList(),
                           value: _selectedComparedTeams,
-                          hint: "Pilih Tim Pembanding 2",
+                          hint: "Pilih Tim 2",
                           searchHint: "Cari Tim",
                           onChanged: (TeamModel value) async {
                             if (value != null && _currentTeams != null) {
@@ -372,6 +339,7 @@ class GrafikTimState extends State<GrafikTim> {
                               setState(() {
                                 _selectedComparedTeams = value;
                                 _currentComparedTeams = value.id.toString();
+                                _current2nd = value.name;
                                 totalDataCompared = 0;
                                 print(_selectedComparedTeams);
                               });
@@ -486,20 +454,58 @@ class GrafikTimState extends State<GrafikTim> {
                                   ],
                                 ),
                               ),
-                        _currentSelectedDate == ""
-                            ? Container()
-                            : Container(
-                                child: Text(_currentSelectedDate +
-                                    " : " +
-                                    _valueData.toString() +
-                                    " Pcs", style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold
-                                ),),
-                              ),
+
 //                        Container(
 //                          height: MediaQuery.of(context).size.height * 0.3,
 //                        ),
+
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          decoration: AppTheme.listBackground(),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Data dari ',
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 14,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                _currentTimeStart,
+                                style: TextStyle(
+                                  color: AppTheme.orange_light,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                ' hingga ',
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 14,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                _currentTimeEnd,
+                                style: TextStyle(
+                                  color: AppTheme.yellow,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                softWrap: true,
+                              ),
+                            ],
+                          ),
+                        ),
                         listDataTrace.length < 0 &&
                                 _currentComparedTeams != null
                             ? Container()

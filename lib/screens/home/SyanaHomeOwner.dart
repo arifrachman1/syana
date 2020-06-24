@@ -8,9 +8,7 @@ import 'package:syana/models/HomeDataDetailModel.dart';
 import 'package:syana/models/HomeDataModel.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/AppTheme.dart';
-import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
-import 'package:syana/utils/MessagingService.dart';
 import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/utils/Strings.dart';
@@ -205,29 +203,83 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: <Widget>[
-                                  Container(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          _homeDataModel != null
-                                              ? _homeDataModel
+                                  Column(
+                                    children: <Widget>[
+                                      Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              _homeDataModel != null
+                                                  ? _homeDataModel
                                                   .totalPackageSentThisMonth
                                                   .toString()
-                                              : '-',
-                                          style: TextStyle(
-                                            color: AppTheme.text_light,
-                                            fontSize: 40,
-                                          ),
+                                                  : '-',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 40,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Bulan ini',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          'Bulan ini',
-                                          style: TextStyle(
-                                            color: AppTheme.text_light,
-                                            fontSize: 17,
-                                          ),
+                                      ),
+
+                                      Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              _homeDataModel != null
+                                                  ? _homeDataModel
+                                                  .totalPackageSentThisMonth
+                                                  .toString()
+                                                  : '-',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 40,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Total Produk\nTerjual Hari Ini',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+
+                                      Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              _homeDataModel != null
+                                                  ? _homeDataModel
+                                                  .totalPackageSentThisMonth
+                                                  .toString()
+                                                  : '-',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 40,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Total Produk\nTerjual Bulan Ini',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   Container(
                                     height: 120,
@@ -237,30 +289,84 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                       width: 20,
                                     ),
                                   ),
-                                  Container(
-                                    child: Column(
-                                      children: <Widget>[
-                                        Text(
-                                          _homeDataModel != null
-                                              ? _homeDataModel
+                                  Column(
+                                    children: <Widget>[
+                                      Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              _homeDataModel != null
+                                                  ? _homeDataModel
                                                   .totalPackageSentToday
                                                   .toString()
-                                              : '-',
-                                          style: TextStyle(
-                                            color: AppTheme.text_light,
-                                            fontSize: 40,
-                                          ),
+                                                  : '-',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 40,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Hari ini',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          'Hari ini',
-                                          style: TextStyle(
-                                            color: AppTheme.text_light,
-                                            fontSize: 17,
-                                          ),
+                                      ),
+
+                                      Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              _homeDataModel != null
+                                                  ? _homeDataModel
+                                                  .totalPackageSentToday
+                                                  .toString()
+                                                  : '-',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 40,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Total Produk\nTerjual Kemarin',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+
+                                      Container(
+                                        child: Column(
+                                          children: <Widget>[
+                                            Text(
+                                              _homeDataModel != null
+                                                  ? _homeDataModel
+                                                  .totalPackageSentToday
+                                                  .toString()
+                                                  : '-',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 40,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Total Produk\nTerjual Bulan Lalu',
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 17,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ],
                               ),
                             ),
@@ -299,14 +405,15 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                                           .roundToDouble())
                                               : '1',
                                           style: TextStyle(
-                                            color: AppTheme.text_light,
-                                            fontSize: 17,
-                                          ),
+                                              fontSize: 17,
+                                              color: AppTheme.yellow,
+                                              fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           'Grand Total Poin',
                                           style: TextStyle(
-                                            color: AppTheme.text_light,
+                                            color: AppTheme.yellow,
+                                            fontWeight: FontWeight.bold,
                                             fontSize: 15,
                                           ),
                                         ),
@@ -326,13 +433,15 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                                               .toString()))
                                               : '1',
                                           style: TextStyle(
-                                              color: AppTheme.text_light,
+                                              color: AppTheme.yellow,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 17),
                                         ),
                                         Text(
                                           'Grand Total Paket',
                                           style: TextStyle(
-                                              color: AppTheme.text_light,
+                                              color: AppTheme.yellow,
+                                              fontWeight: FontWeight.bold,
                                               fontSize: 15),
                                         ),
                                       ],

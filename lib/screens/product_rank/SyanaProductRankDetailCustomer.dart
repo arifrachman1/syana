@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:recase/recase.dart';
 import 'package:syana/Controller/CustomerController.dart';
 import 'package:syana/models/CustomerModel.dart';
-import 'package:recase/recase.dart';
 import 'package:syana/models/TransactionHistoryModel.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 
 class SyanaProductRankDetailCustomer extends StatefulWidget {
   String idCustomer;
+
   SyanaProductRankDetailCustomer({this.idCustomer});
+
   @override
   SyanaProductRankDetailCustomerState createState() =>
       SyanaProductRankDetailCustomerState();
@@ -60,8 +65,10 @@ class SyanaProductRankDetailCustomerState
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+        backgroundColor: Colors.lightGreen[200],
         appBar: AppBar(
           automaticallyImplyLeading: true,
+          backgroundColor: Colors.lightGreen[200],
           title: Text("Detail Customer"),
         ),
         body: _isLoading
@@ -174,7 +181,7 @@ class SyanaProductRankDetailCustomerState
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 10),
-                        child: Text("Riwayat Pembelian"),
+                        child: Text("Riwayat Pembelian (" + historiesCustomer.length.toString() + ")"),
                       ),
                       Expanded(
                         child: ListView.builder(
@@ -188,6 +195,20 @@ class SyanaProductRankDetailCustomerState
                                   .transactionNumber),
                               subtitle: Text(
                                   historiesCustomer[position].datetimeCreated),
+                              trailing: IconButton(
+                                icon: Icon(Icons.content_copy),
+                                onPressed: () {
+                                  CustomDialog.getDialog(
+                                      title: Strings.DIALOG_TITLE_SUCCESS,
+                                      message: Strings
+                                          .DIALOG_MESSAGE_API_COPY_SUCCESS,
+                                      context: context,
+                                      popCount: 1);
+                                  Clipboard.setData(new ClipboardData(
+                                      text: historiesCustomer[position]
+                                          .transactionNumber));
+                                },
+                              ),
                             );
                           },
                         ),

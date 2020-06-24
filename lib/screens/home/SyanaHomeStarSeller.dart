@@ -212,29 +212,82 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                           mainAxisAlignment:
                           MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    _homeDataModel != null
-                                        ? _homeDataModel
-                                        .totalPackageSentToday
-                                        .toString()
-                                        : '-',
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 40,
-                                    ),
+                            Column(
+                              children: <Widget>[
+                                Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        _homeDataModel != null
+                                            ? _homeDataModel
+                                            .totalPackageSentToday
+                                            .toString()
+                                            : '-',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 40,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Total Paket\nTerkirim',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    'Total Paket\nTerkirim',
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 14,
-                                    ),
+                                ),
+
+                                Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        _homeDataModel != null
+                                            ? _homeDataModel
+                                            .productSoldToday
+                                            .toString()
+                                            : '-',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 40,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Total Produk\nTerjual Hari Ini',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        _homeDataModel != null
+                                            ? _homeDataModel
+                                            .productSoldThisMonth
+                                            .toString()
+                                            : '-',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 40,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Total Produk\nTerjual Bulan Ini',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                             Container(
                               height: 120,
@@ -244,30 +297,84 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                 width: 20,
                               ),
                             ),
-                            Container(
-                              child: Column(
-                                children: <Widget>[
-                                  Text(
-                                    _homeDataModel != null
-                                        ? _homeDataModel
-                                        .myTeamPackageSentToday
-                                        .toString()
-                                        : '-',
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 40,
-                                    ),
+                            Column(
+                              children: <Widget>[
+                                Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        _homeDataModel != null
+                                            ? _homeDataModel
+                                            .myTeamPackageSentToday
+                                            .toString()
+                                            : '-',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 40,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Paket Dari\nTim Saya',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    'Paket Dari\nTim Saya',
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 14,
-                                    ),
+                                ),
+
+                                Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        _homeDataModel != null
+                                            ? _homeDataModel
+                                            .productSoldYesterday
+                                            .toString()
+                                            : '-',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 40,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Produk Terjual\nKemarin',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            ),
+                                ),
+
+                                Container(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        _homeDataModel != null
+                                            ? _homeDataModel
+                                            .productSoldLastMonth
+                                            .toString()
+                                            : '-',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 40,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Produk Terjual\nBulan Lalu',
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
@@ -304,14 +411,16 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                             .roundToDouble())
                                         : '0',
                                     style: TextStyle(
-                                      color: AppTheme.text_light,
+                                      color: AppTheme.yellow,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 17,
                                     ),
                                   ),
                                   Text(
                                     'Grand Total Poin',
                                     style: TextStyle(
-                                      color: AppTheme.text_light,
+                                      color: AppTheme.yellow,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                     ),
                                   ),
@@ -328,13 +437,15 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                             _homeDataModel.grandTotalPackage.toString()))
                                     : '0',
                                     style: TextStyle(
-                                        color: AppTheme.text_light,
+                                        color: AppTheme.yellow,
+                                        fontWeight: FontWeight.bold,
                                         fontSize: 17),
                                   ),
                                   Text(
                                     'Grand Total Paket',
                                     style: TextStyle(
-                                        color: AppTheme.text_light,
+                                        color: AppTheme.yellow,
+                                        fontWeight: FontWeight.bold,
                                         fontSize: 15),
                                   ),
                                 ],
@@ -364,14 +475,16 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                             .roundToDouble())
                                         : '0',
                                     style: TextStyle(
-                                      color: AppTheme.text_light,
+                                      color: AppTheme.yellow,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 17,
                                     ),
                                   ),
                                   Text(
                                     'Grand Total Poin Tim',
                                     style: TextStyle(
-                                      color: AppTheme.text_light,
+                                      color: AppTheme.yellow,
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 15,
                                     ),
                                   ),
@@ -388,13 +501,15 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                             _homeDataModel.grandTotalPackage.toString()))
                                         : '0',
                                     style: TextStyle(
-                                        color: AppTheme.text_light,
+                                        color: AppTheme.yellow,
+                                        fontWeight: FontWeight.bold,
                                         fontSize: 17),
                                   ),
                                   Text(
                                     'Grand Total Paket Tim',
                                     style: TextStyle(
-                                        color: AppTheme.text_light,
+                                        color: AppTheme.yellow,
+                                        fontWeight: FontWeight.bold,
                                         fontSize: 15),
                                   ),
                                 ],

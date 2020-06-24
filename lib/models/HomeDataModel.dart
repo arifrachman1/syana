@@ -5,6 +5,10 @@ class HomeDataModel {
       _totalPackageSentToday,
       _totalPackageSentThisMonth,
       _myTeamPackageSentToday;
+  String _productSoldToday,
+      _productSoldYesterday,
+      _productSoldThisMonth,
+      _productSoldLastMonth;
   String _allTeamPointThisMonth,
       _allTeamPointLastMonth,
       _grandTotalPoint,
@@ -16,9 +20,14 @@ class HomeDataModel {
 
   HomeDataModel();
 
-  HomeDataModel.starSeller(this._day,
+  HomeDataModel.starSeller(
+      this._day,
       this._totalPackageSentToday,
       this._myTeamPackageSentToday,
+      this._productSoldToday,
+      this._productSoldYesterday,
+      this._productSoldThisMonth,
+      this._productSoldLastMonth,
       this._allTeamPointThisMonth,
       this._allTeamPointLastMonth,
       this._grandTotalPoint,
@@ -28,9 +37,14 @@ class HomeDataModel {
       this._myTeamQuote,
       this._detail);
 
-  HomeDataModel.Owner(this._day,
+  HomeDataModel.Owner(
+      this._day,
       this._totalPackageSentToday,
       this._totalPackageSentThisMonth,
+      this._productSoldToday,
+      this._productSoldYesterday,
+      this._productSoldThisMonth,
+      this._productSoldLastMonth,
       this._allTeamPointThisMonth,
       this._allTeamPointLastMonth,
       this._grandTotalPoint,
@@ -111,4 +125,30 @@ class HomeDataModel {
   set totalPackageSentThisMonth(value) {
     _totalPackageSentThisMonth = value;
   }
+
+  get productSoldLastMonth => _productSoldLastMonth;
+
+  set productSoldLastMonth(value) {
+    _productSoldLastMonth = value;
+  }
+
+  get productSoldThisMonth => _productSoldThisMonth;
+
+  set productSoldThisMonth(value) {
+    _productSoldThisMonth = value;
+  }
+
+  get productSoldYesterday => _productSoldYesterday;
+
+  set productSoldYesterday(value) {
+    _productSoldYesterday = value;
+  }
+
+  String get productSoldToday => _productSoldToday;
+
+  set productSoldToday(String value) {
+    _productSoldToday = value;
+  }
+
+
 }

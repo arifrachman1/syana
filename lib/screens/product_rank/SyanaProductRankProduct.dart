@@ -35,6 +35,8 @@ class GrafikProdukState extends State<GrafikProduk> {
   String filterTypeName = "Terjual";
   int _valueData = 0;
 
+  String _current1st = "", _current2nd = "";
+
   int totalData = 0;
   int totalDataCompared = 0;
 
@@ -63,7 +65,7 @@ class GrafikProdukState extends State<GrafikProduk> {
       }
       // await _timeSeriesLineData.clear();
       await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
-        id: "Pembanding 1",
+        id: _current1st,
         colorFn: (_, __) => charts.MaterialPalette.yellow.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
@@ -101,7 +103,7 @@ class GrafikProdukState extends State<GrafikProduk> {
       }
       // await _timeSeriesLineData.clear();
       await _timeSeriesLineData.add(charts.Series<TimeSeriesSales, DateTime>(
-        id: "Pembanding 2",
+        id: _current2nd,
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
@@ -265,51 +267,17 @@ class GrafikProdukState extends State<GrafikProduk> {
                   child: Container(
                     child: Column(
                       children: <Widget>[
-                        Container(
-                          height: MediaQuery.of(context).size.height * 0.08,
-                          decoration: AppTheme.listBackground(),
-                          alignment: Alignment.center,
-                          margin: EdgeInsets.only(
-                            top: 10,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                'Data dari ',
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 14,
-                                ),
-                                softWrap: true,
-                              ),
-                              Text(
-                                _currentTimeStart,
-                                style: TextStyle(
-                                  color: AppTheme.orange_light,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                softWrap: true,
-                              ),
-                              Text(
-                                ' hingga ',
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 14,
-                                ),
-                                softWrap: true,
-                              ),
-                              Text(
-                                _currentTimeEnd,
-                                style: TextStyle(
-                                  color: AppTheme.yellow,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                softWrap: true,
-                              ),
-                            ],
+                        _currentSelectedDate == ""
+                            ? Container()
+                            : Container(
+                          child: Text(
+                            _currentSelectedDate +
+                                " : " +
+                                _valueData.toString() +
+                                " Paket",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                         Container(
@@ -347,6 +315,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                               setState(() {
                                 _selectedProducts = value;
                                 _currentProducts = value.id.toString();
+                                _current1st = value.name;
                                 print(_selectedProducts);
                               });
                               chartProducts.clear();
@@ -380,7 +349,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                             );
                           }).toList(),
                           value: _selectedComparedProducts,
-                          hint: "Pilih Produk Pembanding 2",
+                          hint: "Pilih Produk 2",
                           searchHint: "Cari Produk",
                           onChanged: (ProductModel value) async {
                             if (value != null && _currentProducts != null) {
@@ -388,6 +357,7 @@ class GrafikProdukState extends State<GrafikProduk> {
                               setState(() {
                                 _selectedComparedProducts = value;
                                 _currentComparedProducts = value.id.toString();
+                                _current2nd = value.name;
                                 print(_selectedComparedProducts);
                               });
                               chartComparedProducts.clear();
@@ -502,19 +472,56 @@ class GrafikProdukState extends State<GrafikProduk> {
                                   ],
                                 ),
                               ),
-                        _currentSelectedDate == ""
-                            ? Container()
-                            : Container(
-                                child: Text(
-                                  _currentSelectedDate +
-                                      " : " +
-                                      _valueData.toString() +
-                                      " Paket",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+
+
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          decoration: AppTheme.listBackground(),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(
+                            top: 10,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Data dari ',
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 14,
                                 ),
+                                softWrap: true,
                               ),
+                              Text(
+                                _currentTimeStart,
+                                style: TextStyle(
+                                  color: AppTheme.orange_light,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                ' hingga ',
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 14,
+                                ),
+                                softWrap: true,
+                              ),
+                              Text(
+                                _currentTimeEnd,
+                                style: TextStyle(
+                                  color: AppTheme.yellow,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                softWrap: true,
+                              ),
+                            ],
+                          ),
+                        ),
+
                         listDataTrace.length < 0 &&
                                 _currentComparedProducts != null
                             ? Container()
