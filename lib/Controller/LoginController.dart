@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,27 +30,30 @@ class LoginController {
   }
 
   saveDeviceToken() async {
-
-    // String device_token = await GlobalVars.firebaseMessaging.getToken();
-    // if (device_token != null) {
-    //   print(device_token);
-    //   log(device_token, name: _devTitle);
-    //   return device_token;
-    // } else {
-    //   CustomDialog.getDialog(
-    //       title: Strings.DIALOG_TITLE_ERROR,
-    //       message: Strings.DIALOG_MESSAGE_GET_BROADCAST_TOKEN_FAILED,
-    //       context: context,
-    //       popCount: 1);
-    // }
+    String device_token = await GlobalVars.firebaseMessaging.getToken();
+    log(device_token, name: "firebase-token");
+    if (device_token != null) {
+      print(device_token);
+      log(device_token, name: _devTitle);
+      return device_token;
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_GET_BROADCAST_TOKEN_FAILED,
+          context: context,
+          popCount: 1);
+    }
   }
 
   void login(context, loadingStateCallback, username, password) async {
     loadingStateCallback();
 
-    // String deviceToken = await saveDeviceToken();
-    FormData formData =
-        FormData.fromMap({"username": username, "password": password, "broadcast_token": "-"});
+    String deviceToken = await saveDeviceToken();
+    FormData formData = FormData.fromMap({
+      "username": username,
+      "password": password,
+      "broadcast_token": deviceToken
+    });
 
     final data = await GlobalFunctions.dioPostCall(
         path: GlobalVars.apiUrl + "login", params: formData, context: context);
@@ -71,16 +76,30 @@ class LoginController {
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
             return SyanaHomeStarSeller();
           }));
-        } else if (_userModel.idRole == 2 || _userModel.idRole == 1) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-            return SyanaHomeOwner();
-          }));
         } else if (_userModel.idRole == 8) {
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
             return SyanaHomePacking();
           }));
+        } else {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+            return SyanaHomeOwner();
+          }));
         }
+      } else {
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_WARNING,
+            message: Strings.DIALOG_MESSAGE_INVALID_EMAIL_OR_PASSWORD,
+            context: context,
+            popCount: 1);
       }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_WARNING,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
     }
+
+    loadingStateCallback();
   }
 }

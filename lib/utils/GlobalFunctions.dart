@@ -213,13 +213,23 @@ class GlobalFunctions {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int idRole = prefs.get(GlobalVars.idRoleKey);
     if (whereTo == 0) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
-        return InventoryMain();
-      }), (route) => false);
+      if(idRole == 5 || idRole == 7){
+        CustomDialog.getDialog(title: Strings.DIALOG_TITLE_WARNING, message: Strings.DIALOG_MESSAGE_FORBIDDEN, context: context, popCount: 1);
+      }else{
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
+          return InventoryMain();
+        }), (route) => false);
+      }
+
     } else if (whereTo == 1) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
-        return SyanaEcommerce();
-      }), (route) => false);
+      if(idRole == 6 || idRole == 5 || idRole == 2 || idRole == 3 || idRole == 7){
+        CustomDialog.getDialog(title: Strings.DIALOG_TITLE_WARNING, message: Strings.DIALOG_MESSAGE_FORBIDDEN, context: context, popCount: 1);
+      }else{
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
+          return SyanaEcommerce();
+        }), (route) => false);
+      }
+
     } else if (whereTo == 2) {
       if (idRole == 4) {
         Navigator.of(context).pushAndRemoveUntil(
@@ -233,9 +243,14 @@ class GlobalFunctions {
         }), (route) => false);
       }
     } else if (whereTo == 3) {
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
-        return ProductRank();
-      }), (route) => false);
+      if(idRole == 5){
+        CustomDialog.getDialog(title: Strings.DIALOG_TITLE_WARNING, message: Strings.DIALOG_MESSAGE_FORBIDDEN, context: context, popCount: 1);
+      }else{
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
+          return ProductRank();
+        }), (route) => false);
+      }
+
     } else {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
         return SyanaProfileBase();

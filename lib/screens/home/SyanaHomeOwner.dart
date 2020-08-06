@@ -8,6 +8,7 @@ import 'package:syana/models/HomeDataDetailModel.dart';
 import 'package:syana/models/HomeDataModel.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
@@ -414,7 +415,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           style: TextStyle(
                                             color: AppTheme.yellow,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 15,
+                                            fontSize: Dimens.fontSmall,
                                           ),
                                         ),
                                       ],
@@ -442,7 +443,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           style: TextStyle(
                                               color: AppTheme.yellow,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 15),
+                                              fontSize: Dimens.fontSmall),
                                         ),
                                       ],
                                     ),
@@ -711,6 +712,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               'Paket Hari Ini',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -720,6 +722,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               detailModel.packageToday.toString() ?? '0',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -743,6 +746,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               'Paket Kemarin',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -752,6 +756,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               detailModel.packageYesterday.toString() ?? '0',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -775,6 +780,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               'Paket Bulan Ini',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -784,6 +790,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               detailModel.packageThisMonth.toString() ?? '0',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -807,6 +814,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               'Paket Bulan Lalu',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -816,6 +824,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               detailModel.packageLastMonth.toString() ?? '0',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),

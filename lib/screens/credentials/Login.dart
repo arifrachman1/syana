@@ -40,7 +40,6 @@ class LoginState extends State<Login> {
   }
 
   void login() {
-    print('login');
     if (usernameController.text != "" && passwordController.text != "") {
       _loginController.login(context, setLoadingState, usernameController.text,
           passwordController.text);

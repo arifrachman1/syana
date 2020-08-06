@@ -8,9 +8,11 @@ class Strings{
   /*generals*/
   static final String DIALOG_MESSAGE_API_CALL_FAILED = "Terjadi kesalahan saat melakukan koneksi.";
   static final String DIALOG_MESSAGE_API_COPY_SUCCESS = "Sukses menyalin nomor transaksi.";
+  static final String DIALOG_MESSAGE_FORBIDDEN = "Anda tidak diijinkan mengakses halaman ini.";
 
   /*login*/
   static final String DIALOG_MESSAGE_INSUFFICENT_CREDENTIALS = "Email atau password kosong.";
+  static final String DIALOG_MESSAGE_INVALID_EMAIL_OR_PASSWORD = "Email atau password salah, harap cek kembali email atau password.";
   static final String DIALOG_MESSAGE_GET_BROADCAST_TOKEN_FAILED = "Gagal mendapatkan broadcast token.";
 
   /*sale*/

@@ -224,7 +224,7 @@ class SyanaTripsState extends State<SyanaTrips> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      bottomNavigationBar: CustomBottomNav.getBottomNav(context, 3),
+      bottomNavigationBar: CustomBottomNav.getBottomNav(context, 4),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : Container(

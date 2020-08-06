@@ -5,6 +5,7 @@ import 'package:syana/Controller/ShortcutController.dart';
 import 'package:syana/models/HomeDataModel.dart';
 import 'package:syana/screens/trace/SyanaTrace.dart';
 import 'package:syana/screens/trace/SyanaTraceInput.dart';
+import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
@@ -421,7 +422,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                     style: TextStyle(
                                       color: AppTheme.yellow,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                      fontSize: Dimens.fontSmall,
                                     ),
                                   ),
                                 ],
@@ -446,7 +447,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                     style: TextStyle(
                                         color: AppTheme.yellow,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                        fontSize: Dimens.fontSmall),
                                   ),
                                 ],
                               ),
@@ -485,7 +486,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                     style: TextStyle(
                                       color: AppTheme.yellow,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 15,
+                                      fontSize: Dimens.fontSmall,
                                     ),
                                   ),
                                 ],
@@ -510,7 +511,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                     style: TextStyle(
                                         color: AppTheme.yellow,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                        fontSize: Dimens.fontSmall),
                                   ),
                                 ],
                               ),
@@ -787,6 +788,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                               'Paket Hari Ini',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -799,6 +801,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                   : '0',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -822,6 +825,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                               'Paket Kemarin',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -834,6 +838,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                   : '0',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -857,6 +862,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                               'Paket Bulan Ini',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -869,6 +875,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                   : '0',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -892,6 +899,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                               'Paket Bulan Lalu',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -904,6 +912,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                   : '0',
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                  fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),

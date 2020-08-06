@@ -24,7 +24,7 @@ class _BroadcastState extends State<BroadcastMessage> {
   }
 
   sendMessage() {
-    // MessagingService.sendMessage(_messageController.text, context);
+     MessagingService.sendMessage(_messageController.text, context);
   }
 
   @override

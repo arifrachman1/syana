@@ -4,6 +4,12 @@ class Dimens{
   //===========================geometri widget=================================================
   static double formHeight = 56;
 
+  static double fontXtraSmall = 6;
+  static double fontSmall = 10;
+  static double fontMedium = 12;
+  static double fontLarge = 18;
+  static double fontXtraLarge = 22;
+
   static buttonRatio(){
     return 7/2;
   }
