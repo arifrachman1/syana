@@ -152,8 +152,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                         ),
                                         Text(
                                           _homeDataModel != null
-                                              ? _homeDataModel
-                                                  .allTeamPointThisMonth
+                                              ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                              .allTeamPointThisMonth)
                                                   .toString()
                                               : '-',
                                           style: TextStyle(
@@ -177,8 +177,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                                 : Container(),
                                             Text(
                                               _homeDataModel != null
-                                                  ? _homeDataModel
-                                                      .allTeamPointLastMonth
+                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                  .allTeamPointLastMonth)
                                                       .toString()
                                                   : '-',
                                               style: TextStyle(
@@ -211,8 +211,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           children: <Widget>[
                                             Text(
                                               _homeDataModel != null
-                                                  ? _homeDataModel
-                                                  .totalPackageSentThisMonth
+                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                  .totalPackageSentThisMonth)
                                                   .toString()
                                                   : '-',
                                               style: TextStyle(
@@ -236,8 +236,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           children: <Widget>[
                                             Text(
                                               _homeDataModel != null
-                                                  ? _homeDataModel
-                                                  .totalPackageSentThisMonth
+                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                  .totalPackageSentThisMonth)
                                                   .toString()
                                                   : '-',
                                               style: TextStyle(
@@ -261,8 +261,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           children: <Widget>[
                                             Text(
                                               _homeDataModel != null
-                                                  ? _homeDataModel
-                                                  .totalPackageSentThisMonth
+                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                  .totalPackageSentThisMonth)
                                                   .toString()
                                                   : '-',
                                               style: TextStyle(
@@ -297,8 +297,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           children: <Widget>[
                                             Text(
                                               _homeDataModel != null
-                                                  ? _homeDataModel
-                                                  .totalPackageSentToday
+                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                  .totalPackageSentToday)
                                                   .toString()
                                                   : '-',
                                               style: TextStyle(
@@ -322,8 +322,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           children: <Widget>[
                                             Text(
                                               _homeDataModel != null
-                                                  ? _homeDataModel
-                                                  .totalPackageSentToday
+                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                  .totalPackageSentToday) 
                                                   .toString()
                                                   : '-',
                                               style: TextStyle(
@@ -347,8 +347,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           children: <Widget>[
                                             Text(
                                               _homeDataModel != null
-                                                  ? _homeDataModel
-                                                  .totalPackageSentToday
+                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                  .totalPackageSentToday)
                                                   .toString()
                                                   : '-',
                                               style: TextStyle(
