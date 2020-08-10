@@ -5,6 +5,7 @@ import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
+import 'package:syana/widgets/CustomImage.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
 import '../../main.dart';
 
@@ -210,11 +211,7 @@ class StockMainState extends State<StockMain> {
                                       flex: 17,
                                       child: Container(
                                         alignment: Alignment.center,
-                                        child: Icon(
-                                          Icons.image,
-                                          size: 60,
-                                          color: AppTheme.teal_light,
-                                        ),
+                                        child: CustomImage.getProductImage(filteredStocks[index].image)
                                       ),
                                     ),
                                     Flexible(

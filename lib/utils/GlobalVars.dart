@@ -12,6 +12,10 @@ class GlobalVars{
   static final String apiUrl = baseUrl + "api/";
   static final String siteUrl = baseUrl + "site/";
 
+//  static final String imageUrl = baseUrl + "syana/products/";
+  static final String imageUrl = baseUrl + "products/";
+
+
   static final String thumbnailUrl = baseUrl + "syana/thumbnail/";
 
   static String YOUTUBE_API_KEY = "AIzaSyCyjg0Dq4NsQF6uLLNySsP2KR1JuGA7l9I";

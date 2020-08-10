@@ -8,6 +8,7 @@ import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
 import 'package:syana/widgets/CustomDialog.dart';
+import 'package:syana/widgets/CustomImage.dart';
 
 class SyanaStockIn extends StatefulWidget {
   @override
@@ -496,11 +497,7 @@ class StockInState extends State<SyanaStockIn> {
                                     flex: 17,
                                     child: Container(
                                       alignment: Alignment.center,
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 60,
-                                        color: AppTheme.teal_light,
-                                      ),
+                                      child: CustomImage.getProductImage(additions[index].image)
                                     ),
                                   ),
                                   Flexible(

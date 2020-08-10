@@ -5,6 +5,7 @@ import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
+import 'package:syana/widgets/CustomImage.dart';
 import '../../main.dart';
 
 class SyanaStokBarangKeluar extends StatefulWidget {
@@ -35,9 +36,9 @@ class BarangKeluarState extends State<SyanaStokBarangKeluar> {
         initialDate: selectedDateFrom,
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null)
+    if (picked != null){
       setState(
-        () {
+            () {
           selectedDateFrom = picked;
           var toSplit = picked.toString();
           getDay(val) {
@@ -51,6 +52,8 @@ class BarangKeluarState extends State<SyanaStokBarangKeluar> {
           yearFrom = toSplit.split('-')[0];
         },
       );
+    }
+
   }
 
   Future<Null> selectDateTo(BuildContext context) async {
@@ -364,6 +367,16 @@ class BarangKeluarState extends State<SyanaStokBarangKeluar> {
                                         setState(() {
                                           _currentTimeFilter = value;
                                         });
+
+                                        _inventoryController.getSaleHistory(
+                                            context,
+                                            setLoadingState,
+                                            setData,
+                                            "1",
+                                            _currentTimeFilter,
+                                            yearFrom + "-" + monthFrom + "-" + dayFrom,
+                                            yearTo + "-" + monthTo + "-" + dayTo,
+                                            _currentTeam);
                                       },
                                     ),
                                   ),
@@ -434,11 +447,7 @@ class BarangKeluarState extends State<SyanaStokBarangKeluar> {
                                     flex: 17,
                                     child: Container(
                                       alignment: Alignment.center,
-                                      child: Icon(
-                                        Icons.image,
-                                        size: 60,
-                                        color: AppTheme.teal_light,
-                                      ),
+                                      child: CustomImage.getProductImage(_saleHistory[index].image)
                                     ),
                                   ),
                                   Flexible(

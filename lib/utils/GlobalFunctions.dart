@@ -212,6 +212,7 @@ class GlobalFunctions {
   static navigate(context, whereTo) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     int idRole = prefs.get(GlobalVars.idRoleKey);
+    log(message: "Role : " + idRole.toString(), name: "navigator");
     if (whereTo == 0) {
       if(idRole == 5 || idRole == 7){
         CustomDialog.getDialog(title: Strings.DIALOG_TITLE_WARNING, message: Strings.DIALOG_MESSAGE_FORBIDDEN, context: context, popCount: 1);

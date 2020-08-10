@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/TeamModel.dart';
@@ -91,7 +93,7 @@ class InventoryController {
       sortOrder
     ]);
 
-    print(params);
+    log(params.toString(), name: "addition-params");
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioGetCall(
@@ -147,15 +149,19 @@ class InventoryController {
       sortOrder
     ]);
 
-    print(params);
+    log(GlobalVars.apiUrl + "get-sale-history", name: "sale-history");
+
+    log(params.toString(), name: "sale-history");
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioGetCall(
         context: context,
-        path: GlobalVars.apiUrl + "get-addition",
+        path: GlobalVars.apiUrl + "get-sale-history",
         params: params);
 
     if(data != null){
+      log(data.toString(), name: "sale-history");
+
       if(data['status'] == 1){
         List historyFromApi = data['product'];
         List<ProductModel> history = new List();
