@@ -160,9 +160,9 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                   ),
                                   Text(
                                     _homeDataModel != null
-                                        ? _homeDataModel
+                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
                                         .allTeamPointThisMonth
-                                        .round()
+                                        .round())
                                         .toString()
                                         : '17',
                                     style: TextStyle(
@@ -185,9 +185,9 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                           color: Colors.green)
                                           : Container(),
                                       Text(
-                                        _homeDataModel != null
-                                            ? _homeDataModel
-                                            .allTeamPointLastMonth
+                                        _homeDataModel.allTeamPointLastMonth != null
+                                            ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                            .allTeamPointLastMonth)
                                             .toString()
                                             : '7.773',
                                         style: TextStyle(
@@ -606,10 +606,10 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                     flex: 1,
                                     child: Text(
                                       _homeDataModel != null
-                                          ? double.parse(_homeDataModel
+                                          ? NumberFormatter.getFormattedNumber(double.parse(_homeDataModel
                                           .detail[0].pointToday
                                           .toString())
-                                          .round()
+                                          .round())
                                           .toString()
                                           : '0',
                                       softWrap: true,
@@ -693,14 +693,14 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                               alignment: Alignment.centerRight,
                               child: Text(
                                 _homeDataModel != null
-                                    ? _homeDataModel.detail[0].pointThisMonth
-                                    .round()
+                                    ? NumberFormatter.getFormattedNumber(_homeDataModel.detail[0].pointThisMonth
+                                    .round())
                                     .toString()
                                     : '0',
                                 softWrap: true,
                                 style: TextStyle(
                                   color: AppTheme.text_light,
-                                  fontSize: 40,
+                                  fontSize: 25,
                                 ),
                                 textAlign: TextAlign.right,
                               ),

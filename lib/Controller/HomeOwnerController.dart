@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/models/HomeDataDetailModel.dart';
@@ -88,6 +90,8 @@ class HomeOwnerController {
             data['grand_total_point_team'].toString(),
             data['grand_total_package_team'].toString(),
             details);
+
+        log(homeDataModel.toString(), name: "home-info");
 
         setDataCallback(homeDataModel);
       }
