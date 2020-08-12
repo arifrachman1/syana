@@ -27,15 +27,15 @@ class Dimens{
   }
 
   static listHeight(context){
-    return MediaQuery.of(context).size.height *0.15;
+    return MediaQuery.of(context).size.height *0.20;
   }
 
   static listHeightSmall(context){
-    return MediaQuery.of(context).size.height *0.11;
+    return MediaQuery.of(context).size.height *0.15;
   }
 
   static listHeightLarge(context){
-    return MediaQuery.of(context).size.height *0.14;
+    return MediaQuery.of(context).size.height *0.25;
   }
 
   static grafikHeight(context){

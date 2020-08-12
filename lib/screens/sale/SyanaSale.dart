@@ -13,6 +13,7 @@ import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
+import 'package:syana/widgets/CustomImage.dart';
 
 class Sale extends StatefulWidget {
   @override
@@ -672,11 +673,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                                 flex: 17,
                                 child: Container(
                                   alignment: Alignment.center,
-                                  child: Icon(
-                                    Icons.image,
-                                    size: 60,
-                                    color: AppTheme.teal_light,
-                                  ),
+                                  child: CustomImage.getProductImage(filteredProducts[index].image)
                                 ),
                               ),
                               Flexible(

@@ -5,6 +5,7 @@ import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/widgets/CustomImage.dart';
 import '../../main.dart';
 
 class SyanaProductRankTerlaris extends StatefulWidget {
@@ -447,13 +448,7 @@ class RankState extends State<SyanaProductRankTerlaris> {
                               flex: 17,
                               child: Container(
                                 alignment: Alignment.centerLeft,
-                                child: Icon(
-                                  Icons.image,
-                                  size: 60,
-                                  color: index < 3
-                                      ? AppTheme.teal
-                                      : AppTheme.teal_light,
-                                ),
+                                child: CustomImage.getProductImage(rankProducts[index].image)
                               ),
                             ),
                             Flexible(
