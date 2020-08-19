@@ -1,4 +1,4 @@
-package com.mamorasoft.syanahq
+package com.mamorasoft.app.syanahq
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

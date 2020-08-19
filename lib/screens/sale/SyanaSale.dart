@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PromoController.dart';
@@ -62,8 +60,7 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
     categories = await _saleController.getCategoriesFromProducts(products);
     print("categories length : " + categories.length.toString());
     setState(() {
-      _tabController = TabController(
-          vsync: this, length: categories.length, initialIndex: 0);
+      _tabController = TabController(vsync: this, length: categories.length, initialIndex: 0);
     });
     await generateTabs();
     await generatePages();
@@ -115,13 +112,11 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
         List categorizedProducts = new List();
 
         if (key != "0") {
-          categorizedProducts =
-              _saleController.getProductsByCategory(products, key);
+          categorizedProducts = _saleController.getProductsByCategory(products, key);
         }
 
         setState(() {
-          pages.add(SaleInnerWidget(key == "0" ? products : categorizedProducts,
-              _saleController, promos, _promoController, products));
+          pages.add(SaleInnerWidget(key == "0" ? products : categorizedProducts, _saleController, promos, _promoController, products));
         });
       });
     }
@@ -154,8 +149,7 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
                     flex: 10,
                     child: Container(
                       margin: EdgeInsets.only(top: 10.0),
-                      child: TabBarView(
-                          controller: _tabController, children: pages),
+                      child: TabBarView(controller: _tabController, children: pages),
                     ),
                   ),
                   Expanded(
@@ -218,26 +212,20 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
                                 shape: AppTheme.roundButton(),
                                 color: AppTheme.btn_success,
                                 onPressed: () {
-                                  if (_saleController
-                                      .getSelectedProduct()
-                                      .isNotEmpty) {
+                                  if (_saleController.getSelectedProduct().isNotEmpty) {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (BuildContext context) {
                                           return Confirmation(
-                                              _saleController
-                                                  .getSelectedProduct(),
-                                              _saleController.getTotal(true),
-                                              _saleController.getTotal(false));
+                                              _saleController.getSelectedProduct(), _saleController.getTotal(true), _saleController.getTotal(false));
                                         },
                                       ),
                                     );
                                   } else {
                                     CustomDialog.getDialog(
                                         title: Strings.DIALOG_TITLE_WARNING,
-                                        message: Strings
-                                            .DIALOG_MESSAGE_INSUFFICENT_ITEM,
+                                        message: Strings.DIALOG_MESSAGE_INSUFFICENT_ITEM,
                                         context: context,
                                         popCount: 1);
                                   }
@@ -265,8 +253,7 @@ class SaleInnerWidget extends StatefulWidget {
   SaleController saleController;
   PromoController promoController;
 
-  SaleInnerWidget(this.categorizedProducts, this.saleController, this.promos,
-      this.promoController, this.allProducts);
+  SaleInnerWidget(this.categorizedProducts, this.saleController, this.promos, this.promoController, this.allProducts);
 
   _SaleInnerState createState() => _SaleInnerState();
 }
@@ -299,8 +286,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
     // TODO: implement initState
     super.initState();
 
-    widget.promoController
-        .getPromoForSales(context, setLoadingState, setPromos);
+    widget.promoController.getPromoForSales(context, setLoadingState, setPromos);
 
     setState(() {
       categorizedProducts = widget.categorizedProducts;
@@ -352,45 +338,35 @@ class _SaleInnerState extends State<SaleInnerWidget> {
     });
 
     /*update view*/
-    int numberForFilter = isSale
-        ? int.parse(filteredProducts[indexOfFilteredProducts].saleNumber)
-        : int.parse(filteredProducts[indexOfFilteredProducts].freeNumber);
+    int numberForFilter =
+        isSale ? int.parse(filteredProducts[indexOfFilteredProducts].saleNumber) : int.parse(filteredProducts[indexOfFilteredProducts].freeNumber);
 
     numberForFilter++;
 
     /*to update the widget's(view) number*/
     setState(() {
       isSale
-          ? filteredProducts[indexOfFilteredProducts].saleNumber =
-              numberForFilter
-          : filteredProducts[indexOfFilteredProducts].freeNumber =
-              numberForFilter;
+          ? filteredProducts[indexOfFilteredProducts].saleNumber = numberForFilter
+          : filteredProducts[indexOfFilteredProducts].freeNumber = numberForFilter;
     });
     /*update view*/
 
     /*pass the selected product(s) to the controller*/
     if (numberForFilter == 1) {
-      widget.saleController
-          .addSelectedProduct(categorizedProducts[indexOfAllProducts]);
+      widget.saleController.addSelectedProduct(categorizedProducts[indexOfAllProducts]);
     } else {
       isSale
-          ? widget.saleController.setSaleNumber(
-              categorizedProducts[indexOfAllProducts],
-              int.parse(categorizedProducts[indexOfAllProducts].saleNumber))
-          : widget.saleController.setFreeNumber(
-              categorizedProducts[indexOfAllProducts],
-              int.parse(categorizedProducts[indexOfAllProducts].freeNumber));
+          ? widget.saleController
+              .setSaleNumber(categorizedProducts[indexOfAllProducts], int.parse(categorizedProducts[indexOfAllProducts].saleNumber))
+          : widget.saleController
+              .setFreeNumber(categorizedProducts[indexOfAllProducts], int.parse(categorizedProducts[indexOfAllProducts].freeNumber));
     }
 
     /*promo checking*/
     if (isSale) {
-      _totalPrice +=
-          double.parse(categorizedProducts[indexOfAllProducts].price);
+      _totalPrice += double.parse(categorizedProducts[indexOfAllProducts].price);
       Map _promoStatus = widget.promoController.checkAvailablePromo(
-          categorizedProducts[indexOfAllProducts].id,
-          int.parse(categorizedProducts[indexOfAllProducts].saleNumber),
-          _promos,
-          _totalPrice);
+          categorizedProducts[indexOfAllProducts].id, int.parse(categorizedProducts[indexOfAllProducts].saleNumber), _promos, _totalPrice);
 
       if (_promoStatus.isEmpty) {
         GlobalFunctions.log(message: "no return value...", name: _devTitle);
@@ -399,8 +375,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
           /*_promoStatus.forEach((key, value) {
             log("$key : $value", name: _devTitle);
           });*/
-          addFreeItemFromPromo(
-              _promoStatus['freeProduct'], _promoStatus['freeAmount']);
+          addFreeItemFromPromo(_promoStatus['freeProduct'], _promoStatus['freeAmount']);
         }
       }
     }
@@ -409,32 +384,24 @@ class _SaleInnerState extends State<SaleInnerWidget> {
   /*remove item*/
   remove(index, isSale) {
     /*update view*/
-    int number = isSale
-        ? int.parse(filteredProducts[index].saleNumber)
-        : int.parse(filteredProducts[index].freeNumber);
+    int number = isSale ? int.parse(filteredProducts[index].saleNumber) : int.parse(filteredProducts[index].freeNumber);
     number--;
     /*to update widget's(view) number*/
     setState(() {
-      isSale
-          ? filteredProducts[index].saleNumber = number
-          : filteredProducts[index].freeNumber = number;
+      isSale ? filteredProducts[index].saleNumber = number : filteredProducts[index].freeNumber = number;
     });
     /*update view*/
 
     /*pass the desired object to controller to substract its value or remove it when the value hits 0*/
     if (number >= 0) {
       isSale
-          ? widget.saleController.setSaleNumber(filteredProducts[index],
-              int.parse(filteredProducts[index].saleNumber))
-          : widget.saleController.setFreeNumber(filteredProducts[index],
-              int.parse(filteredProducts[index].freeNumber));
+          ? widget.saleController.setSaleNumber(filteredProducts[index], int.parse(filteredProducts[index].saleNumber))
+          : widget.saleController.setFreeNumber(filteredProducts[index], int.parse(filteredProducts[index].freeNumber));
       /*after we decrese the number, then we check whether there is a zero number or not*/
       widget.saleController.checkZeroNumber();
     } else {
       setState(() {
-        isSale
-            ? filteredProducts[index].saleNumber = 0
-            : filteredProducts[index].freeNumber = 0;
+        isSale ? filteredProducts[index].saleNumber = 0 : filteredProducts[index].freeNumber = 0;
         /*categorizedProducts[index].saleNumber = 0;*/
       });
     }
@@ -444,11 +411,8 @@ class _SaleInnerState extends State<SaleInnerWidget> {
       if (_totalPrice != 0) {
         _totalPrice -= double.parse(filteredProducts[index].price);
       }
-      Map _promoStatus = widget.promoController.checkAvailablePromo(
-          filteredProducts[index].id,
-          int.parse(filteredProducts[index].saleNumber),
-          _promos,
-          _totalPrice);
+      Map _promoStatus =
+          widget.promoController.checkAvailablePromo(filteredProducts[index].id, int.parse(filteredProducts[index].saleNumber), _promos, _totalPrice);
       print("function finished");
       if (_promoStatus.isEmpty) {
         print("no return value...");
@@ -457,8 +421,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
           print(key + ":" + value.toString());
         });
         if (_promoStatus['status'] == false) {
-          removeFreeItemFromPromo(
-              _promoStatus['freeProduct'], _promoStatus['freeAmount']);
+          removeFreeItemFromPromo(_promoStatus['freeProduct'], _promoStatus['freeAmount']);
         }
       }
     }
@@ -487,11 +450,9 @@ class _SaleInnerState extends State<SaleInnerWidget> {
           });
 
           if (amount == 1) {
-            widget.saleController
-                .addSelectedProduct(categorizedProducts[index]);
+            widget.saleController.addSelectedProduct(categorizedProducts[index]);
           } else {
-            widget.saleController.setFreeNumber(categorizedProducts[index],
-                int.parse(categorizedProducts[index].freeNumber));
+            widget.saleController.setFreeNumber(categorizedProducts[index], int.parse(categorizedProducts[index].freeNumber));
           }
         }
       }
@@ -517,8 +478,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
           });
 
           if (amount >= 0) {
-            widget.saleController.setFreeNumber(categorizedProducts[index],
-                int.parse(categorizedProducts[index].freeNumber));
+            widget.saleController.setFreeNumber(categorizedProducts[index], int.parse(categorizedProducts[index].freeNumber));
             widget.saleController.checkZeroNumber();
           } else {
             setState(() {
@@ -545,10 +505,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
         if (value.name.toLowerCase().contains(searchFilter.toLowerCase())) {
           temp.add(value);
           filteredProductsBefore = temp;
-        } else if (value.sku
-            .toString()
-            .toLowerCase()
-            .contains(searchFilter.toLowerCase())) {
+        } else if (value.sku.toString().toLowerCase().contains(searchFilter.toLowerCase())) {
           temp.add(value);
           filteredProductsBefore = temp;
         }
@@ -671,10 +628,7 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                             children: <Widget>[
                               Flexible(
                                 flex: 17,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  child: CustomImage.getProductImage(filteredProducts[index].image)
-                                ),
+                                child: Container(alignment: Alignment.center, child: CustomImage.getProductImage(filteredProducts[index].image)),
                               ),
                               Flexible(
                                 flex: 49,
@@ -698,14 +652,20 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.expand_less,
-                                        color: AppTheme.white,
-                                        size: 24,
+                                    GestureDetector(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.expand_less,
+                                          color: AppTheme.white,
+                                          size: 24,
+                                        ),
                                       ),
-                                      onPressed: () =>
-                                          add(filteredProducts[index].id, true),
+                                      onTap: () => add(filteredProducts[index].id, true),
+                                      onLongPress: () {
+                                        for (var i = 0; i < 10; i++) {
+                                          add(filteredProducts[index].id, true);
+                                        }
+                                      },
                                     ),
                                     Text(filteredProducts[index].saleNumber,
                                         style: TextStyle(
@@ -713,13 +673,20 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                                           fontSize: 14,
                                         ),
                                         softWrap: true),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.expand_more,
-                                        color: AppTheme.white,
-                                        size: 24,
+                                    GestureDetector(
+                                      child: IconButton(
+                                        icon: Icon(
+                                          Icons.expand_more,
+                                          color: AppTheme.white,
+                                          size: 24,
+                                        ),
                                       ),
-                                      onPressed: () => remove(index, true),
+                                      onTap: () => remove(index, true),
+                                      onLongPress: () {
+                                        for (var i = 0; i < 10; i++) {
+                                          remove(index, true);
+                                        }
+                                      },
                                     )
                                   ],
                                 ),
@@ -730,17 +697,22 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                                   alignment: Alignment.center,
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.expand_less,
-                                          color: AppTheme.white,
-                                          size: 24,
+                                      GestureDetector(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.expand_less,
+                                            color: AppTheme.white,
+                                            size: 24,
+                                          ),
                                         ),
-                                        onPressed: () => add(
-                                            filteredProducts[index].id, false),
+                                        onTap: () => add(filteredProducts[index].id, false),
+                                        onLongPress: () {
+                                          for (var i = 0; i < 10; i++) {
+                                            add(filteredProducts[index].id, false);
+                                          }
+                                        },
                                       ),
                                       Text(filteredProducts[index].freeNumber,
                                           style: TextStyle(
@@ -748,14 +720,21 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                                             fontSize: 14,
                                           ),
                                           softWrap: true),
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.expand_more,
-                                          color: AppTheme.white,
-                                          size: 24,
+                                      GestureDetector(
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.expand_more,
+                                            color: AppTheme.white,
+                                            size: 24,
+                                          ),
                                         ),
-                                        onPressed: () => remove(index, false),
-                                      ),
+                                        onTap: () => remove(index, false),
+                                        onLongPress: () {
+                                          for (var i = 0; i < 10; i++) {
+                                            remove(index, false);
+                                          }
+                                        },
+                                      )
                                     ],
                                   ),
                                 ),
