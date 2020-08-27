@@ -241,6 +241,15 @@ class StockMainState extends State<StockMain> {
                                               ),
                                               softWrap: true,
                                             ),
+                                            Text(
+                                              filteredStocks[index].sku,
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 13,
+                                                fontStyle: FontStyle.italic,
+                                              ),
+                                              softWrap: true,
+                                            ),
                                           ],
                                         ),
                                       ),

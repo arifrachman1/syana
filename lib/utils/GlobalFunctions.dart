@@ -70,7 +70,7 @@ class GlobalFunctions {
       _localResp = await dio.post(path, data: params, options: options);
       data = _localResp.data;
     } on DioError catch (e) {
-      print(e.response);
+      debugPrint(e.response.toString());
       CustomDialog.getDialog(
           title: Strings.DIALOG_TITLE_ERROR,
           message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
