@@ -237,7 +237,7 @@ class GlobalFunctions {
             MaterialPageRoute(builder: (_) {
           return SyanaHomeStarSeller();
         }), (route) => false);
-      } else if (idRole == 2 || idRole == 1) {
+      } else {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) {
           return SyanaHomeOwner();

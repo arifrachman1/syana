@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/screens/credentials/Login.dart';
 import 'package:syana/screens/home/SyanaHomeOwner.dart';
 import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
-import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 
@@ -37,7 +36,7 @@ class SplashScreenState extends State<SplashScreen> {
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
             return SyanaHomeStarSeller();
           }));
-        } else if (idRole == 2 || idRole == 1) {
+        } else {
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
             return SyanaHomeOwner();
           }));

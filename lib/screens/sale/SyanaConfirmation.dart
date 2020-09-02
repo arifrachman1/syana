@@ -28,7 +28,7 @@ class ConfirmationState extends State<Confirmation> {
   ];
 
   List<DropdownMenuItem> _courierDropdownItems = new List();
-  TextEditingController _airwayBilLController = new TextEditingController();
+  TextEditingController _airwayBilLController;
 
   SaleController _saleController;
   bool isLoading = false;
@@ -59,6 +59,12 @@ class ConfirmationState extends State<Confirmation> {
   void initState() {
     selectedJasa = jasa[0];
     _saleController = new SaleController();
+    if (GlobalVars.airwayBillNumber != "") {
+      _airwayBilLController = new TextEditingController(text: GlobalVars.airwayBillNumber);
+    } else {
+      _airwayBilLController = new TextEditingController();
+    }
+
     _saleController.getCourier(context, setLoadingState, setDropdownData);
   }
 
