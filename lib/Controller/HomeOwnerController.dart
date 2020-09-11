@@ -46,22 +46,17 @@ class HomeOwnerController {
 
   getHomeData(context, loadingStateCallback, setDataCallback) async {
     await _getPersistence();
-    var params =
-        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    var params = GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
     loadingStateCallback();
-    final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-home-info",
-        context: context,
-        params: params);
+    final data = await GlobalFunctions.dioGetCall(path: GlobalVars.apiUrl + "get-home-info", context: context, params: params);
 
     if (data != null) {
-      print(data);
       if (data['status'] == 1) {
         List _detailFromApi = data['each_team_point'];
         List<HomeDataDetailModel> details = new List();
         _detailFromApi.forEach((element) {
           details.add(new HomeDataDetailModel(
-              data['id_team'].toString(),
+                  element['id_team'].toString(),
               element['package_today'].toString(),
               element['package_yesterday'].toString(),
               element['package_this_month'].toString(),
@@ -71,6 +66,8 @@ class HomeOwnerController {
               element['point_yesterday'].toString(),
               element['name_team'] ?? "",
               element['package_last_month'].toString()));
+
+          log(details.last.toString(), name: "log-status-result");
         });
 
         details.sort();
@@ -96,11 +93,7 @@ class HomeOwnerController {
         setDataCallback(homeDataModel);
       }
     } else {
-      CustomDialog.getDialog(
-          title: Strings.DIALOG_TITLE_ERROR,
-          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
-          context: context,
-          popCount: 1);
+      CustomDialog.getDialog(title: Strings.DIALOG_TITLE_ERROR, message: Strings.DIALOG_MESSAGE_API_CALL_FAILED, context: context, popCount: 1);
     }
     loadingStateCallback();
   }

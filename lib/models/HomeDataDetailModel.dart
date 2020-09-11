@@ -77,7 +77,7 @@ class HomeDataDetailModel implements Comparable {
 
   @override
   String toString() {
-    return 'HomeDataDetailModel{_idTeam: $_idTeam, _packageToday: $_packageToday, _packageYesterday: $_packageYesterday, _packageThisMonth: $_packageThisMonth, _pointThisMonth: $_pointThisMonth, _pointLastMonth: $_pointLastMonth, _pointToday: $_pointToday, _pointYesterday: $_pointYesterday, _teamName: $_teamName}';
+    return 'HomeDataDetailModel\n{_idTeam: $_idTeam,\n _packageToday: $_packageToday,\n _packageYesterday: $_packageYesterday,\n _packageThisMonth: $_packageThisMonth,\n _pointThisMonth: $_pointThisMonth,\n _pointLastMonth: $_pointLastMonth,\n _pointToday: $_pointToday,\n _pointYesterday: $_pointYesterday,\n _teamName: $_teamName}';
   }
 
   /*12-06-2020 revision

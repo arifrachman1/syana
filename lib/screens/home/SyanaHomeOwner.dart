@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -78,381 +79,381 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: AppTheme.appBackground(),
-        child: Scaffold(
-            floatingActionButton:
-                CustomButton.getCustomShortcutFAB(context, _shortcuts),
-            backgroundColor: Colors.transparent,
-            bottomNavigationBar: CustomBottomNav.getBottomNav(context, 2),
-            body: _isLoading
-                ? Center(child: CircularProgressIndicator())
-                : RefreshIndicator(
-                    onRefresh: () {
-                      _homeOwnerController.getHomeData(
-                          context, setLoadingState, setData);
-                    },
-                    child: SingleChildScrollView(
-                      child: Container(
-                        margin: EdgeInsets.only(top: 50.0),
-                        padding: EdgeInsets.only(
-                            left: 30, right: 30, top: 25, bottom: 30),
-                        child: Column(
-                          children: <Widget>[
-                            GlobalVars.isDevMode
-                                ? Container(
-                                    child: IconButton(
-                                      onPressed: logout,
-                                      icon: Icon(Icons.exit_to_app),
-                                      color: Colors.white,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            decoration: AppTheme.appBackground(),
+            child: Scaffold(
+                    floatingActionButton:
+                    CustomButton.getCustomShortcutFAB(context, _shortcuts),
+                    backgroundColor: Colors.transparent,
+                    bottomNavigationBar: CustomBottomNav.getBottomNav(context, 2),
+                    body: _isLoading
+                            ? Center(child: CircularProgressIndicator())
+                            : RefreshIndicator(
+                      onRefresh: () {
+                        _homeOwnerController.getHomeData(
+                                context, setLoadingState, setData);
+                      },
+                      child: SingleChildScrollView(
+                        child: Container(
+                          margin: EdgeInsets.only(top: 50.0),
+                          padding: EdgeInsets.only(
+                                  left: 30, right: 30, top: 25, bottom: 30),
+                          child: Column(
+                            children: <Widget>[
+                              GlobalVars.isDevMode
+                                      ? Container(
+                                child: IconButton(
+                                  onPressed: logout,
+                                  icon: Icon(Icons.exit_to_app),
+                                  color: Colors.white,
+                                ),
+                              )
+                                      : Container(),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 1,
+                                padding: EdgeInsets.only(right: 20),
+                                alignment: Alignment.topRight,
+                                child: Stack(
+                                  overflow: Overflow.visible,
+                                  children: <Widget>[
+                                    Transform.rotate(
+                                      angle: pi / 15,
+                                      child: Icon(
+                                        Icons.star,
+                                        color: AppTheme.yellow,
+                                        size: 150,
+                                      ),
                                     ),
-                                  )
-                                : Container(),
-                            Container(
-                              width: MediaQuery.of(context).size.width / 1,
-                              padding: EdgeInsets.only(right: 20),
-                              alignment: Alignment.topRight,
-                              child: Stack(
-                                overflow: Overflow.visible,
-                                children: <Widget>[
-                                  Transform.rotate(
-                                    angle: pi / 15,
-                                    child: Icon(
-                                      Icons.star,
-                                      color: AppTheme.yellow,
-                                      size: 150,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 20,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: <Widget>[
-                                        Text(
-                                          "H" +
-                                              (_homeDataModel != null
-                                                  ? _homeDataModel.day
-                                                      .toString()
-                                                  : '-18'),
-                                          style: TextStyle(
-                                            fontSize: 27,
-                                            color: AppTheme.text_light,
-                                            shadows: [AppTheme.shadowText()],
+                                    Positioned(
+                                      right: 20,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.end,
+                                        children: <Widget>[
+                                          Text(
+                                            "H" +
+                                                    (_homeDataModel != null
+                                                            ? _homeDataModel.day
+                                                            .toString()
+                                                            : '-18'),
+                                            style: TextStyle(
+                                              fontSize: 27,
+                                              color: AppTheme.text_light,
+                                              shadows: [AppTheme.shadowText()],
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          'All-Team',
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: AppTheme.text_light,
-                                            shadows: [AppTheme.shadowText()],
+                                          Text(
+                                            'All-Team',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              color: AppTheme.text_light,
+                                              shadows: [AppTheme.shadowText()],
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          _homeDataModel != null
-                                              ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                              .allTeamPointThisMonth)
-                                                  .toString()
-                                              : '-',
-                                          style: TextStyle(
-                                            fontSize: 45,
-                                            color: AppTheme.text_light,
-                                            shadows: [AppTheme.shadowText()],
-                                          ),
-                                        ),
-                                        Row(
-                                          children: <Widget>[
+                                          Text(
                                             _homeDataModel != null
-                                                ? _homeDataModel
-                                                            .allTeamPointLastMonth >
-                                                        _homeDataModel
-                                                            .allTeamPointThisMonth
-                                                    ? Icon(
-                                                        Icons.arrow_drop_down,
-                                                        color: AppTheme.red)
-                                                    : Icon(Icons.arrow_drop_up,
-                                                        color: Colors.green)
-                                                : Container(),
-                                            Text(
+                                                    ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                    .allTeamPointThisMonth)
+                                                    .toString()
+                                                    : '-',
+                                            style: TextStyle(
+                                              fontSize: 45,
+                                              color: AppTheme.text_light,
+                                              shadows: [AppTheme.shadowText()],
+                                            ),
+                                          ),
+                                          Row(
+                                            children: <Widget>[
                                               _homeDataModel != null
-                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                  .allTeamPointLastMonth)
-                                                      .toString()
-                                                  : '-',
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                color: AppTheme.text_light,
-                                                shadows: [
-                                                  AppTheme.shadowText()
-                                                ],
+                                                      ? _homeDataModel
+                                                      .allTeamPointLastMonth >
+                                                      _homeDataModel
+                                                              .allTeamPointThisMonth
+                                                      ? Icon(
+                                                      Icons.arrow_drop_down,
+                                                      color: AppTheme.red)
+                                                      : Icon(Icons.arrow_drop_up,
+                                                      color: Colors.green)
+                                                      : Container(),
+                                              Text(
+                                                _homeDataModel != null
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                        .allTeamPointLastMonth)
+                                                        .toString()
+                                                        : '-',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: AppTheme.text_light,
+                                                  shadows: [
+                                                    AppTheme.shadowText()
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 40),
-                              alignment: Alignment.center,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Column(
-                                    children: <Widget>[
-                                      Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              _homeDataModel.totalPackageSentThisMonth != null
-                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                  .totalPackageSentThisMonth)
-                                                  .toString()
-                                                  : '-',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 40,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Bulan ini',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              _homeDataModel.productSoldToday != null
-                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                  .productSoldToday)
-                                                  .toString()
-                                                  : '-',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 40,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Total Produk\nTerjual Hari Ini',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              _homeDataModel.productSoldThisMonth != null
-                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                  .productSoldThisMonth)
-                                                  .toString()
-                                                  : '-',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 40,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Total Produk\nTerjual Bulan Ini',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Container(
-                                    height: 120,
-                                    child: VerticalDivider(
-                                      color: AppTheme.yellow,
-                                      thickness: 2,
-                                      width: 20,
-                                    ),
-                                  ),
-                                  Column(
-                                    children: <Widget>[
-                                      Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              _homeDataModel.totalPackageSentToday != null
-                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                  .totalPackageSentToday)
-                                                  .toString()
-                                                  : '-',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 40,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Hari ini',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              _homeDataModel.productSoldYesterday != null
-                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                  .productSoldYesterday)
-                                                  .toString()
-                                                  : '-',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 40,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Total Produk\nTerjual Kemarin',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      Container(
-                                        child: Column(
-                                          children: <Widget>[
-                                            Text(
-                                              _homeDataModel.productSoldLastMonth != null
-                                                  ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                  .productSoldLastMonth)
-                                                  .toString()
-                                                  : '-',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 40,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Total Produk\nTerjual Bulan Lalu',
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 17,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                top: 10,
-                                bottom: 10,
-                              ),
-                              child: Text(
-                                'Total paket terkirim',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: AppTheme.yellow,
+                                  ],
                                 ),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(
-                                top: 20,
-                                bottom: 10,
-                              ),
-                              alignment: Alignment.center,
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Container(
-                                    child: Column(
+                              Container(
+                                margin: EdgeInsets.only(top: 40),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Column(
                                       children: <Widget>[
-                                        Text(
-                                          _homeDataModel != null
-                                              ? NumberFormatter
-                                                  .getFormattedNumber(
-                                                      _homeDataModel
-                                                          .grandTotalPoint
-                                                          .roundToDouble())
-                                              : '1',
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              color: AppTheme.yellow,
-                                              fontWeight: FontWeight.bold),
+                                        Container(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                _homeDataModel.totalPackageSentThisMonth != null
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                        .totalPackageSentThisMonth)
+                                                        .toString()
+                                                        : '-',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 40,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Bulan ini',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        Text(
-                                          'Grand Total Poin',
-                                          style: TextStyle(
-                                            color: AppTheme.yellow,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: Dimens.fontSmall,
+
+                                        Container(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                _homeDataModel.productSoldToday != null
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                        .productSoldToday)
+                                                        .toString()
+                                                        : '-',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 40,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Total Produk\nTerjual Hari Ini',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        Container(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                _homeDataModel.productSoldThisMonth != null
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                        .productSoldThisMonth)
+                                                        .toString()
+                                                        : '-',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 40,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Total Produk\nTerjual Bulan Ini',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Container(
-                                    child: Column(
+                                    Container(
+                                      height: 120,
+                                      child: VerticalDivider(
+                                        color: AppTheme.yellow,
+                                        thickness: 2,
+                                        width: 20,
+                                      ),
+                                    ),
+                                    Column(
                                       children: <Widget>[
-                                        Text(
-                                          _homeDataModel != null
-                                              ? NumberFormatter
-                                                  .getFormattedNumber(
-                                                      double.parse(
-                                                          _homeDataModel
-                                                              .grandTotalPackage
-                                                              .toString()))
-                                              : '1',
-                                          style: TextStyle(
-                                              color: AppTheme.yellow,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 17),
+                                        Container(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                _homeDataModel.totalPackageSentToday != null
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                        .totalPackageSentToday)
+                                                        .toString()
+                                                        : '-',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 40,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Hari ini',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        Text(
-                                          'Grand Total Paket',
-                                          style: TextStyle(
-                                              color: AppTheme.yellow,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: Dimens.fontSmall),
+
+                                        Container(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                _homeDataModel.productSoldYesterday != null
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                        .productSoldYesterday)
+                                                        .toString()
+                                                        : '-',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 40,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Total Produk\nTerjual Kemarin',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        Container(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Text(
+                                                _homeDataModel.productSoldLastMonth != null
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
+                                                        .productSoldLastMonth)
+                                                        .toString()
+                                                        : '-',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 40,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Total Produk\nTerjual Bulan Lalu',
+                                                style: TextStyle(
+                                                  color: AppTheme.text_light,
+                                                  fontSize: 17,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ],
-                                    ),
-                                  ),
-                                ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                            /*removed - added into shortcut function*/
-                            /*Container(
+                              Container(
+                                margin: EdgeInsets.only(
+                                  top: 10,
+                                  bottom: 10,
+                                ),
+                                child: Text(
+                                  'Total paket terkirim',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: AppTheme.yellow,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                  top: 20,
+                                  bottom: 10,
+                                ),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Container(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            _homeDataModel != null
+                                                    ? NumberFormatter
+                                                    .getFormattedNumber(
+                                                    _homeDataModel
+                                                            .grandTotalPoint
+                                                            .roundToDouble())
+                                                    : '1',
+                                            style: TextStyle(
+                                                    fontSize: 17,
+                                                    color: AppTheme.yellow,
+                                                    fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            'Grand Total Poin',
+                                            style: TextStyle(
+                                              color: AppTheme.yellow,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Dimens.fontSmall,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Text(
+                                            _homeDataModel != null
+                                                    ? NumberFormatter
+                                                    .getFormattedNumber(
+                                                    double.parse(
+                                                            _homeDataModel
+                                                                    .grandTotalPackage
+                                                                    .toString()))
+                                                    : '1',
+                                            style: TextStyle(
+                                                    color: AppTheme.yellow,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 17),
+                                          ),
+                                          Text(
+                                            'Grand Total Paket',
+                                            style: TextStyle(
+                                                    color: AppTheme.yellow,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: Dimens.fontSmall),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              /*removed - added into shortcut function*/
+                              /*Container(
                               margin: EdgeInsets.only(
                                 top: 20,
                               ),
@@ -476,25 +477,25 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 shape: AppTheme.roundButton(),
                               ),
                             ),*/
-                            SizedBox(
-                              height: ScreenSizeHelper.getDisplayHeight(
-                                      context: context,
-                                      which: ScreenSizeHelper
-                                          .HEIGHT_WITH_STATUS_BAR) *
-                                  0.5,
-                              child: ListView.builder(
-                                  itemCount: _homeDataModel != null
-                                      ? _homeDataModel.detail.length
-                                      : 0,
-                                  itemBuilder: (context, index) {
-                                    return list(_homeDataModel.detail[index]);
-                                  }),
-                            )
-                          ],
+                              SizedBox(
+                                height: ScreenSizeHelper.getDisplayHeight(
+                                        context: context,
+                                        which: ScreenSizeHelper
+                                                .HEIGHT_WITH_STATUS_BAR) *
+                                        0.5,
+                                child: ListView.builder(
+                                        itemCount: _homeDataModel != null
+                                                ? _homeDataModel.detail.length
+                                                : 0,
+                                        itemBuilder: (context, index) {
+                                          return list(_homeDataModel.detail[index]);
+                                        }),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  )));
+                    )));
   }
 
   // *
@@ -549,7 +550,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                       detailModel.pointToday
                                               .round()
                                               .toString() ??
-                                          '0',
+                                              '0',
                                       softWrap: true,
                                       style: TextStyle(
                                         color: AppTheme.text_light,
@@ -570,19 +571,19 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 children: <Widget>[
                                   detailModel.pointToday <
                                           detailModel.pointYesterday
-                                      ? Icon(
-                                          Icons.arrow_drop_down,
-                                          color: AppTheme.red,
-                                        )
-                                      : Icon(
-                                          Icons.arrow_drop_up,
-                                          color: Colors.green,
-                                        ),
+                                          ? Icon(
+                                    Icons.arrow_drop_down,
+                                    color: AppTheme.red,
+                                  )
+                                          : Icon(
+                                    Icons.arrow_drop_up,
+                                    color: Colors.green,
+                                  ),
                                   Text(
                                     detailModel.pointYesterday
                                             .round()
                                             .toString() ??
-                                        '0',
+                                            '0',
                                     softWrap: true,
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
@@ -626,7 +627,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               alignment: Alignment.centerRight,
                               child: Text(
                                 NumberFormatter.getFormattedNumber(detailModel.pointThisMonth.round()).toString() ??
-                                    '0',
+                                        '0',
                                 softWrap: true,
                                 style: TextStyle(
                                   color: AppTheme.text_light,
@@ -644,19 +645,19 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 children: <Widget>[
                                   detailModel.pointThisMonth <
                                           detailModel.pointLastMonth
-                                      ? Icon(
-                                          Icons.arrow_drop_down,
-                                          color: AppTheme.red,
-                                        )
-                                      : Icon(
-                                          Icons.arrow_drop_up,
-                                          color: Colors.green,
-                                        ),
+                                          ? Icon(
+                                    Icons.arrow_drop_down,
+                                    color: AppTheme.red,
+                                  )
+                                          : Icon(
+                                    Icons.arrow_drop_up,
+                                    color: Colors.green,
+                                  ),
                                   Text(
                                     detailModel.pointLastMonth
                                             .round()
                                             .toString() ??
-                                        '0',
+                                            '0',
                                     softWrap: true,
                                     style: TextStyle(
                                       color: AppTheme.text_light,
@@ -711,8 +712,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Text(
                               'Paket Hari Ini',
                               style: TextStyle(
-                                color: AppTheme.text_light,
-                                  fontSize: Dimens.fontSmall
+                                      color: AppTheme.text_light,
+                                      fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -721,8 +722,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Text(
                               detailModel.packageToday.toString() ?? '0',
                               style: TextStyle(
-                                color: AppTheme.text_light,
-                                  fontSize: Dimens.fontSmall
+                                      color: AppTheme.text_light,
+                                      fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -745,8 +746,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Text(
                               'Paket Kemarin',
                               style: TextStyle(
-                                color: AppTheme.text_light,
-                                  fontSize: Dimens.fontSmall
+                                      color: AppTheme.text_light,
+                                      fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -755,8 +756,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Text(
                               detailModel.packageYesterday.toString() ?? '0',
                               style: TextStyle(
-                                color: AppTheme.text_light,
-                                  fontSize: Dimens.fontSmall
+                                      color: AppTheme.text_light,
+                                      fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -779,8 +780,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Text(
                               'Paket Bulan Ini',
                               style: TextStyle(
-                                color: AppTheme.text_light,
-                                  fontSize: Dimens.fontSmall
+                                      color: AppTheme.text_light,
+                                      fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -789,8 +790,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Text(
                               detailModel.packageThisMonth.toString() ?? '0',
                               style: TextStyle(
-                                color: AppTheme.text_light,
-                                  fontSize: Dimens.fontSmall
+                                      color: AppTheme.text_light,
+                                      fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -813,8 +814,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Text(
                               'Paket Bulan Lalu',
                               style: TextStyle(
-                                color: AppTheme.text_light,
-                                  fontSize: Dimens.fontSmall
+                                      color: AppTheme.text_light,
+                                      fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.left,
                             ),
@@ -823,8 +824,8 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Text(
                               detailModel.packageLastMonth.toString() ?? '0',
                               style: TextStyle(
-                                color: AppTheme.text_light,
-                                  fontSize: Dimens.fontSmall
+                                      color: AppTheme.text_light,
+                                      fontSize: Dimens.fontSmall
                               ),
                               textAlign: TextAlign.center,
                             ),
@@ -874,32 +875,34 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
 
                       if (month.toString().length < 2) {
                         date = year.toString() +
-                            "-0" +
-                            month.toString() +
-                            "-" +
-                            day.toString();
+                                "-0" +
+                                month.toString() +
+                                "-" +
+                                day.toString();
                       } else {
                         date = year.toString() +
-                            "-" +
-                            month.toString() +
-                            "-" +
-                            day.toString();
+                                "-" +
+                                month.toString() +
+                                "-" +
+                                day.toString();
                       }
 
                       var url = GlobalVars.siteUrl +
-                          "list-customer?date=" +
-                          date +
-                          "&id_employee_team=" +
-                          detailModel.idTeam.toString();
+                              "list-customer?date=" +
+                              date +
+                              "&id_employee_team=" +
+                              detailModel.idTeam.toString();
+
+                      dev.log(url, name: "log-url");
 
                       if (await canLaunch(url)) {
                         await launch(url);
                       } else {
                         CustomDialog.getDialog(
-                            title: Strings.DIALOG_TITLE_WARNING,
-                            message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
-                            context: context,
-                            popCount: 1);
+                                title: Strings.DIALOG_TITLE_WARNING,
+                                message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+                                context: context,
+                                popCount: 1);
                       }
                     },
                   ),
