@@ -513,6 +513,88 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
       child: Column(
         children: <Widget>[
           Flexible(
+            flex: 10,
+            child: Container(
+              margin: EdgeInsets.only(top: 5, bottom: 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  /*12-06-2020 revision*/
+                  /*Text(
+                    'New Customers',
+                    style: TextStyle(
+                      color: AppTheme.text_light,
+                    ),
+                  ),*/
+                  IconButton(
+                    padding: EdgeInsets.only(top: 0),
+                    icon: Icon(
+                      Icons.file_download,
+                      color: AppTheme.text_light,
+                    ),
+                    onPressed: () async {
+                      int year = DateTime
+                              .now()
+                              .year;
+                      int month = DateTime
+                              .now()
+                              .month;
+                      int day = DateTime
+                              .now()
+                              .day;
+
+                      var date;
+
+                      if (month
+                              .toString()
+                              .length < 2) {
+                        date = year.toString() +
+                                "-0" +
+                                month.toString() +
+                                "-" +
+                                day.toString();
+                      } else {
+                        date = year.toString() +
+                                "-" +
+                                month.toString() +
+                                "-" +
+                                day.toString();
+                      }
+
+                      var url = GlobalVars.siteUrl +
+                              "list-customer?date=" +
+                              date +
+                              "&id_employee_team=" +
+                              detailModel.idTeam.toString();
+
+                      dev.log(url, name: "log-url");
+
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        CustomDialog.getDialog(
+                                title: Strings.DIALOG_TITLE_WARNING,
+                                message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+                                context: context,
+                                popCount: 1);
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Container(
+            padding: EdgeInsets.only(left: 5, right: 5),
+            child: Divider(
+              thickness: 2,
+              color: AppTheme.white,
+            ),
+          ),
+
+          Flexible(
             flex: 50,
             child: Container(
               padding: EdgeInsets.only(left: 10, right: 10),
@@ -838,78 +920,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: Divider(
-              thickness: 2,
-              color: AppTheme.white,
-            ),
-          ),
-          Flexible(
-            flex: 10,
-            child: Container(
-              margin: EdgeInsets.only(top: 5, bottom: 3),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  /*12-06-2020 revision*/
-                  /*Text(
-                    'New Customers',
-                    style: TextStyle(
-                      color: AppTheme.text_light,
-                    ),
-                  ),*/
-                  IconButton(
-                    padding: EdgeInsets.only(top: 0),
-                    icon: Icon(
-                      Icons.file_download,
-                      color: AppTheme.text_light,
-                    ),
-                    onPressed: () async {
-                      int year = DateTime.now().year;
-                      int month = DateTime.now().month;
-                      int day = DateTime.now().day;
 
-                      var date;
-
-                      if (month.toString().length < 2) {
-                        date = year.toString() +
-                                "-0" +
-                                month.toString() +
-                                "-" +
-                                day.toString();
-                      } else {
-                        date = year.toString() +
-                                "-" +
-                                month.toString() +
-                                "-" +
-                                day.toString();
-                      }
-
-                      var url = GlobalVars.siteUrl +
-                              "list-customer?date=" +
-                              date +
-                              "&id_employee_team=" +
-                              detailModel.idTeam.toString();
-
-                      dev.log(url, name: "log-url");
-
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        CustomDialog.getDialog(
-                                title: Strings.DIALOG_TITLE_WARNING,
-                                message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
-                                context: context,
-                                popCount: 1);
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
     );

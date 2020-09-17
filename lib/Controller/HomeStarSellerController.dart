@@ -50,7 +50,7 @@ class HomeStarSellerController {
         List<HomeDataDetailModel> details = new List();
         _detailFromApi.forEach((element) {
           details.add(new HomeDataDetailModel(
-              data['id_team'].toString(),
+                  element['id_team'].toString(),
               element['package_today'].toString(),
               element['package_yesterday'].toString(),
               element['package_this_month'].toString(),
