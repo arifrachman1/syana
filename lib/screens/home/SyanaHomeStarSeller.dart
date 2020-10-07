@@ -153,7 +153,7 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
                                             ),
                                           ),
                                           Text(
-                                            'All-Team',
+                                            'All-Team-POINT',
                                             style: TextStyle(
                                               fontSize: 18,
                                               color: AppTheme.text_light,

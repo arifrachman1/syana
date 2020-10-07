@@ -144,7 +144,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                             ),
                                           ),
                                           Text(
-                                            'All-Team',
+	                                          'All-Team-POINT',
                                             style: TextStyle(
                                               fontSize: 18,
                                               color: AppTheme.text_light,
@@ -622,6 +622,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                       style: TextStyle(
                                         color: AppTheme.text_light,
                                         fontSize: 17,
+		                                      fontWeight: FontWeight.bold
                                       ),
                                       textAlign: TextAlign.right,
                                     ),
