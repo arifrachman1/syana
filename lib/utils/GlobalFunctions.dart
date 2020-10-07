@@ -37,6 +37,10 @@ class GlobalFunctions {
     Dio dio;
     Response _localResp;
     var data;
+
+    dev.log(params is FormData ? params.fields.toString() : params.toString());
+    dev.log(path.toString());
+
     try {
       dio = new Dio();
       _localResp =
@@ -65,6 +69,10 @@ class GlobalFunctions {
     Dio dio;
     Response _localResp;
     var data;
+
+    dev.log(params is FormData ? params.fields.toString() : params.toString());
+    dev.log(path.toString());
+
     try {
       dio = new Dio();
       _localResp = await dio.post(path, data: params, options: options);

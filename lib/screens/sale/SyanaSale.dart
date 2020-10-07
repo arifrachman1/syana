@@ -633,16 +633,32 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                               Flexible(
                                 flex: 49,
                                 fit: FlexFit.tight,
-                                child: Container(
-                                  child: Text(
-                                    filteredProducts[index].name,
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 15,
-                                    ),
-                                    softWrap: true,
-                                  ),
-                                ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            child: Text(
+                                              filteredProducts[index].name,
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 15,
+                                              ),
+                                              softWrap: true,
+                                            ),
+                                          ),
+                                          Container(
+                                            child: Text(
+                                              filteredProducts[index].sku,
+                                              style: TextStyle(
+                                                color: AppTheme.text_light,
+                                                fontSize: 15,
+                                              ),
+                                              softWrap: true,
+                                            ),
+                                          ),
+                                        ],
+                                      )
                               ),
                               Flexible(
                                 flex: 17,

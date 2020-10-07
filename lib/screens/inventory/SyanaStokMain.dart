@@ -7,7 +7,6 @@ import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
 import 'package:syana/widgets/CustomImage.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
-import '../../main.dart';
 
 class StockMain extends StatefulWidget {
   @override
@@ -120,7 +119,8 @@ class StockMainState extends State<StockMain> {
       }
 
       filteredStocks.forEach((value) {
-        if (value.name.toLowerCase().contains(searchFilter.toLowerCase())) {
+	      if (value.name.toLowerCase().contains(searchFilter.toLowerCase()) || value.sku.toString().toLowerCase().contains(searchFilter
+			      .toLowerCase())) {
           temp.add(value);
           filteredStocksBefore = temp;
         }
