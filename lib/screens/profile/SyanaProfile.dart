@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/ProfileController.dart';
+import 'package:syana/controller/HomeOwnerController.dart';
 import 'package:syana/screens/profile/SyanaChangePassword.dart';
 import 'package:syana/screens/profile/SyanaShortcutSettings.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -14,6 +15,7 @@ class SyanaProfile extends StatefulWidget {
 class SyanaProfileState extends State<SyanaProfile> {
   ProfileController _profileController;
   Map _personalInfo = new Map();
+  HomeOwnerController _homeOwnerController;
 
   bool _isLoading = false;
 
@@ -28,6 +30,7 @@ class SyanaProfileState extends State<SyanaProfile> {
     // TODO: implement initState
     super.initState();
     _profileController = new ProfileController();
+
     _initData();
   }
 
@@ -50,6 +53,10 @@ class SyanaProfileState extends State<SyanaProfile> {
         print(_personalInfo);
       });
     }
+  }
+
+  void logout() {
+	  _profileController.logout(context);
   }
 
   @override
@@ -100,6 +107,19 @@ class SyanaProfileState extends State<SyanaProfile> {
                               color: AppTheme.white,
                             ),
                           )),
+	                    Container(
+		                    margin: EdgeInsets.symmetric(horizontal: 10),
+		                    alignment: Alignment.bottomRight,
+		                    height: MediaQuery
+				                    .of(context)
+				                    .size
+				                    .height * 0.06,
+		                    child: IconButton(
+			                    onPressed: logout,
+			                    icon: Icon(Icons.exit_to_app, size: 35,),
+			                    color: Colors.white,
+		                    ),
+	                    )
                     ],
                   ),
                   Container(

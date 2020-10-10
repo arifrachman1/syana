@@ -1,6 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/models/TripsModel.dart';
 import 'package:syana/models/UserModel.dart';
+import 'package:syana/screens/credentials/Login.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/Strings.dart';
@@ -202,5 +205,23 @@ class ProfileController {
     }
 
     loadingStateCallBack();
+  }
+
+  logout(context) async {
+	  await clearPersistence();
+	  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
+		  return Login();
+	  }), (route) => false);
+  }
+
+  clearPersistence() async {
+	  final SharedPreferences prefs = await SharedPreferences.getInstance();
+	  prefs.remove(GlobalVars.idKey);
+	  prefs.remove(GlobalVars.nameKey);
+	  prefs.remove(GlobalVars.fullNameKey);
+	  prefs.remove(GlobalVars.dateTimeJoinedKey);
+	  prefs.remove(GlobalVars.idRoleKey);
+	  prefs.remove(GlobalVars.idTeamKey);
+	  prefs.remove(GlobalVars.accessTokenKey);
   }
 }

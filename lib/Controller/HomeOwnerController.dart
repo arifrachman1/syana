@@ -70,7 +70,7 @@ class HomeOwnerController {
           log(details.last.toString(), name: "log-status-result");
         });
 
-        details.sort();
+        details.sort((a, b) => int.parse(b.packageToday.toString()).compareTo(int.parse(a.packageToday.toString())));
 
         HomeDataModel homeDataModel = new HomeDataModel.Owner(
             data['day'].toString(),

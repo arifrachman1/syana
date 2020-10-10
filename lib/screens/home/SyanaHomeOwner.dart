@@ -79,29 +79,32 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   @override
   Widget build(BuildContext context) {
     return Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
+            height: MediaQuery
+                    .of(context)
+                    .size
+                    .height,
+            width: MediaQuery
+                    .of(context)
+                    .size
+                    .width,
             decoration: AppTheme.appBackground(),
             child: Scaffold(
-                    floatingActionButton:
-                    CustomButton.getCustomShortcutFAB(context, _shortcuts),
+                    floatingActionButton: CustomButton.getCustomShortcutFAB(context, _shortcuts),
                     backgroundColor: Colors.transparent,
                     bottomNavigationBar: CustomBottomNav.getBottomNav(context, 2),
                     body: _isLoading
                             ? Center(child: CircularProgressIndicator())
                             : RefreshIndicator(
                       onRefresh: () {
-                        _homeOwnerController.getHomeData(
-                                context, setLoadingState, setData);
+                        _homeOwnerController.getHomeData(context, setLoadingState, setData);
                       },
                       child: SingleChildScrollView(
                         child: Container(
                           margin: EdgeInsets.only(top: 50.0),
-                          padding: EdgeInsets.only(
-                                  left: 30, right: 30, top: 25, bottom: 30),
+                          padding: EdgeInsets.only(left: 30, right: 30, top: 25, bottom: 30),
                           child: Column(
                             children: <Widget>[
-                              GlobalVars.isDevMode
+                              /*GlobalVars.isDevMode
                                       ? Container(
                                 child: IconButton(
                                   onPressed: logout,
@@ -109,9 +112,12 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                   color: Colors.white,
                                 ),
                               )
-                                      : Container(),
+                                      : Container(),*/
                               Container(
-                                width: MediaQuery.of(context).size.width / 1,
+                                width: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .width / 1,
                                 padding: EdgeInsets.only(right: 20),
                                 alignment: Alignment.topRight,
                                 child: Stack(
@@ -128,15 +134,10 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                     Positioned(
                                       right: 20,
                                       child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.end,
+                                        crossAxisAlignment: CrossAxisAlignment.end,
                                         children: <Widget>[
                                           Text(
-                                            "H" +
-                                                    (_homeDataModel != null
-                                                            ? _homeDataModel.day
-                                                            .toString()
-                                                            : '-18'),
+                                            "H" + (_homeDataModel != null ? _homeDataModel.day.toString() : '-18'),
                                             style: TextStyle(
                                               fontSize: 27,
                                               color: AppTheme.text_light,
@@ -144,7 +145,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                             ),
                                           ),
                                           Text(
-	                                          'All-Team-POINT',
+                                            'All-Team-POINT',
                                             style: TextStyle(
                                               fontSize: 18,
                                               color: AppTheme.text_light,
@@ -153,9 +154,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           ),
                                           Text(
                                             _homeDataModel != null
-                                                    ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                    .allTeamPointThisMonth)
-                                                    .toString()
+                                                    ? NumberFormatter.removeZeroBehindDecimals(_homeDataModel.allTeamPointThisMonth).toString()
                                                     : '-',
                                             style: TextStyle(
                                               fontSize: 45,
@@ -166,28 +165,18 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                           Row(
                                             children: <Widget>[
                                               _homeDataModel != null
-                                                      ? _homeDataModel
-                                                      .allTeamPointLastMonth >
-                                                      _homeDataModel
-                                                              .allTeamPointThisMonth
-                                                      ? Icon(
-                                                      Icons.arrow_drop_down,
-                                                      color: AppTheme.red)
-                                                      : Icon(Icons.arrow_drop_up,
-                                                      color: Colors.green)
+                                                      ? _homeDataModel.allTeamPointLastMonth > _homeDataModel.allTeamPointThisMonth
+                                                      ? Icon(Icons.arrow_drop_down, color: AppTheme.red)
+                                                      : Icon(Icons.arrow_drop_up, color: Colors.green)
                                                       : Container(),
                                               Text(
                                                 _homeDataModel != null
-                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                        .allTeamPointLastMonth)
-                                                        .toString()
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel.allTeamPointLastMonth).toString()
                                                         : '-',
                                                 style: TextStyle(
                                                   fontSize: 15,
                                                   color: AppTheme.text_light,
-                                                  shadows: [
-                                                    AppTheme.shadowText()
-                                                  ],
+                                                  shadows: [AppTheme.shadowText()],
                                                 ),
                                               ),
                                             ],
@@ -202,8 +191,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 margin: EdgeInsets.only(top: 40),
                                 alignment: Alignment.center,
                                 child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Column(
                                       children: <Widget>[
@@ -212,9 +200,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                             children: <Widget>[
                                               Text(
                                                 _homeDataModel.totalPackageSentThisMonth != null
-                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                        .totalPackageSentThisMonth)
-                                                        .toString()
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel.totalPackageSentThisMonth).toString()
                                                         : '-',
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
@@ -231,23 +217,22 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                             ],
                                           ),
                                         ),
-
                                         Container(
                                           child: Column(
                                             children: <Widget>[
                                               Text(
                                                 _homeDataModel.productSoldToday != null
-                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                        .productSoldToday)
-                                                        .toString()
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel.productSoldToday).toString()
                                                         : '-',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
                                                   fontSize: 40,
                                                 ),
                                               ),
                                               Text(
-                                                'Total Produk\nTerjual Hari Ini',
+                                                'Total Produk\nTerjual\nHari Ini',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
                                                   fontSize: 17,
@@ -256,23 +241,22 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                             ],
                                           ),
                                         ),
-
                                         Container(
                                           child: Column(
                                             children: <Widget>[
                                               Text(
                                                 _homeDataModel.productSoldThisMonth != null
-                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                        .productSoldThisMonth)
-                                                        .toString()
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel.productSoldThisMonth).toString()
                                                         : '-',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
                                                   fontSize: 40,
                                                 ),
                                               ),
                                               Text(
-                                                'Total Produk\nTerjual Bulan Ini',
+                                                'Total Produk\nTerjual\nBulan Ini',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
                                                   fontSize: 17,
@@ -298,9 +282,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                             children: <Widget>[
                                               Text(
                                                 _homeDataModel.totalPackageSentToday != null
-                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                        .totalPackageSentToday)
-                                                        .toString()
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel.totalPackageSentToday).toString()
                                                         : '-',
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
@@ -317,23 +299,22 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                             ],
                                           ),
                                         ),
-
                                         Container(
                                           child: Column(
                                             children: <Widget>[
                                               Text(
                                                 _homeDataModel.productSoldYesterday != null
-                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                        .productSoldYesterday)
-                                                        .toString()
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel.productSoldYesterday).toString()
                                                         : '-',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
                                                   fontSize: 40,
                                                 ),
                                               ),
                                               Text(
-                                                'Total Produk\nTerjual Kemarin',
+                                                'Total Produk\nTerjual\nKemarin',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
                                                   fontSize: 17,
@@ -342,23 +323,22 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                             ],
                                           ),
                                         ),
-
                                         Container(
                                           child: Column(
                                             children: <Widget>[
                                               Text(
                                                 _homeDataModel.productSoldLastMonth != null
-                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel
-                                                        .productSoldLastMonth)
-                                                        .toString()
+                                                        ? NumberFormatter.getFormattedNumber(_homeDataModel.productSoldLastMonth).toString()
                                                         : '-',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
                                                   fontSize: 40,
                                                 ),
                                               ),
                                               Text(
-                                                'Total Produk\nTerjual Bulan Lalu',
+                                                'Total Produk\nTerjual\nBulan Lalu',
+                                                textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                   color: AppTheme.text_light,
                                                   fontSize: 17,
@@ -392,24 +372,16 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 ),
                                 alignment: Alignment.center,
                                 child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Container(
                                       child: Column(
                                         children: <Widget>[
                                           Text(
                                             _homeDataModel != null
-                                                    ? NumberFormatter
-                                                    .getFormattedNumber(
-                                                    _homeDataModel
-                                                            .grandTotalPoint
-                                                            .roundToDouble())
+                                                    ? NumberFormatter.getFormattedNumber(_homeDataModel.grandTotalPoint.roundToDouble())
                                                     : '1',
-                                            style: TextStyle(
-                                                    fontSize: 17,
-                                                    color: AppTheme.yellow,
-                                                    fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontSize: 17, color: AppTheme.yellow, fontWeight: FontWeight.bold),
                                           ),
                                           Text(
                                             'Grand Total Poin',
@@ -427,24 +399,13 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                         children: <Widget>[
                                           Text(
                                             _homeDataModel != null
-                                                    ? NumberFormatter
-                                                    .getFormattedNumber(
-                                                    double.parse(
-                                                            _homeDataModel
-                                                                    .grandTotalPackage
-                                                                    .toString()))
+                                                    ? NumberFormatter.getFormattedNumber(double.parse(_homeDataModel.grandTotalPackage.toString()))
                                                     : '1',
-                                            style: TextStyle(
-                                                    color: AppTheme.yellow,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 17),
+                                            style: TextStyle(color: AppTheme.yellow, fontWeight: FontWeight.bold, fontSize: 17),
                                           ),
                                           Text(
                                             'Grand Total Paket',
-                                            style: TextStyle(
-                                                    color: AppTheme.yellow,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: Dimens.fontSmall),
+                                            style: TextStyle(color: AppTheme.yellow, fontWeight: FontWeight.bold, fontSize: Dimens.fontSmall),
                                           ),
                                         ],
                                       ),
@@ -478,15 +439,9 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               ),
                             ),*/
                               SizedBox(
-                                height: ScreenSizeHelper.getDisplayHeight(
-                                        context: context,
-                                        which: ScreenSizeHelper
-                                                .HEIGHT_WITH_STATUS_BAR) *
-                                        0.5,
+                                height: ScreenSizeHelper.getDisplayHeight(context: context, which: ScreenSizeHelper.HEIGHT_WITH_STATUS_BAR) * 0.5,
                                 child: ListView.builder(
-                                        itemCount: _homeDataModel != null
-                                                ? _homeDataModel.detail.length
-                                                : 0,
+                                        itemCount: _homeDataModel != null ? _homeDataModel.detail.length : 0,
                                         itemBuilder: (context, index) {
                                           return list(_homeDataModel.detail[index]);
                                         }),
@@ -549,24 +504,12 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                       if (month
                               .toString()
                               .length < 2) {
-                        date = year.toString() +
-                                "-0" +
-                                month.toString() +
-                                "-" +
-                                day.toString();
+                        date = year.toString() + "-0" + month.toString() + "-" + day.toString();
                       } else {
-                        date = year.toString() +
-                                "-" +
-                                month.toString() +
-                                "-" +
-                                day.toString();
+                        date = year.toString() + "-" + month.toString() + "-" + day.toString();
                       }
 
-                      var url = GlobalVars.siteUrl +
-                              "list-customer?date=" +
-                              date +
-                              "&id_employee_team=" +
-                              detailModel.idTeam.toString();
+                      var url = GlobalVars.siteUrl + "list-customer?date=" + date + "&id_employee_team=" + detailModel.idTeam.toString();
 
                       dev.log(url, name: "log-url");
 
@@ -574,10 +517,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                         await launch(url);
                       } else {
                         CustomDialog.getDialog(
-                                title: Strings.DIALOG_TITLE_WARNING,
-                                message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
-                                context: context,
-                                popCount: 1);
+                                title: Strings.DIALOG_TITLE_WARNING, message: Strings.DIALOG_MESSAGE_API_CALL_FAILED, context: context, popCount: 1);
                       }
                     },
                   ),
@@ -585,7 +525,6 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
               ),
             ),
           ),
-
           Container(
             padding: EdgeInsets.only(left: 5, right: 5),
             child: Divider(
@@ -593,7 +532,6 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
               color: AppTheme.white,
             ),
           ),
-
           Flexible(
             flex: 50,
             child: Container(
@@ -619,21 +557,14 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                     child: Text(
                                       detailModel.teamName ?? 'Team Name',
                                       softWrap: true,
-                                      style: TextStyle(
-                                        color: AppTheme.text_light,
-                                        fontSize: 17,
-		                                      fontWeight: FontWeight.bold
-                                      ),
+                                      style: TextStyle(color: AppTheme.text_light, fontSize: 17, fontWeight: FontWeight.bold),
                                       textAlign: TextAlign.right,
                                     ),
                                   ),
                                   Flexible(
                                     flex: 1,
                                     child: Text(
-                                      detailModel.pointToday
-                                              .round()
-                                              .toString() ??
-                                              '0',
+                                      detailModel.pointToday.round().toString() ?? '0',
                                       softWrap: true,
                                       style: TextStyle(
                                         color: AppTheme.text_light,
@@ -652,8 +583,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  detailModel.pointToday <
-                                          detailModel.pointYesterday
+                                  detailModel.pointToday < detailModel.pointYesterday
                                           ? Icon(
                                     Icons.arrow_drop_down,
                                     color: AppTheme.red,
@@ -663,10 +593,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                     color: Colors.green,
                                   ),
                                   Text(
-                                    detailModel.pointYesterday
-                                            .round()
-                                            .toString() ??
-                                            '0',
+                                    detailModel.pointYesterday.round().toString() ?? '0',
                                     softWrap: true,
                                     textAlign: TextAlign.right,
                                     style: TextStyle(
@@ -709,8 +636,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                             child: Container(
                               alignment: Alignment.centerRight,
                               child: Text(
-                                NumberFormatter.getFormattedNumber(detailModel.pointThisMonth.round()).toString() ??
-                                        '0',
+                                NumberFormatter.getFormattedNumber(detailModel.pointThisMonth.round()).toString() ?? '0',
                                 softWrap: true,
                                 style: TextStyle(
                                   color: AppTheme.text_light,
@@ -726,8 +652,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  detailModel.pointThisMonth <
-                                          detailModel.pointLastMonth
+                                  detailModel.pointThisMonth < detailModel.pointLastMonth
                                           ? Icon(
                                     Icons.arrow_drop_down,
                                     color: AppTheme.red,
@@ -737,10 +662,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                     color: Colors.green,
                                   ),
                                   Text(
-                                    detailModel.pointLastMonth
-                                            .round()
-                                            .toString() ??
-                                            '0',
+                                    detailModel.pointLastMonth.round().toString() ?? '0',
                                     softWrap: true,
                                     style: TextStyle(
                                       color: AppTheme.text_light,
@@ -790,24 +712,19 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
                             child: Text(
-                              'Paket Hari Ini',
-                              style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: Dimens.fontSmall
-                              ),
-                              textAlign: TextAlign.left,
+                              'Paket\nHari Ini',
+                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           Container(
                             child: Text(
                               detailModel.packageToday.toString() ?? '0',
-                              style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: Dimens.fontSmall
-                              ),
+                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -824,24 +741,19 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
                             child: Text(
-                              'Paket Kemarin',
-                              style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: Dimens.fontSmall
-                              ),
-                              textAlign: TextAlign.left,
+                              'Paket\nKemarin',
+                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           Container(
                             child: Text(
                               detailModel.packageYesterday.toString() ?? '0',
-                              style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: Dimens.fontSmall
-                              ),
+                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -858,24 +770,19 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
                             child: Text(
-                              'Paket Bulan Ini',
-                              style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: Dimens.fontSmall
-                              ),
-                              textAlign: TextAlign.left,
+                              'Paket\nBulan Ini',
+                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           Container(
                             child: Text(
                               detailModel.packageThisMonth.toString() ?? '0',
-                              style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: Dimens.fontSmall
-                              ),
+                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -892,24 +799,19 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
                             child: Text(
-                              'Paket Bulan Lalu',
-                              style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: Dimens.fontSmall
-                              ),
-                              textAlign: TextAlign.left,
+                              'Paket\nBulan Lalu',
+                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           Container(
                             child: Text(
                               detailModel.packageLastMonth.toString() ?? '0',
-                              style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: Dimens.fontSmall
-                              ),
+                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -921,7 +823,6 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
               ),
             ),
           ),
-
         ],
       ),
     );
