@@ -4,13 +4,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 class GlobalVars{
   /*urls*/
-//  static final String baseUrl = "http://192.168.43.242:8080/";
+  static final String baseUrl = "http://192.168.1.67:8080/";
 //  static final String baseUrl = "http://syana.mamorasoft.com/";
-  static final String baseUrl = "http://hq.syana.co.id/";
-//  static final String apiUrl = baseUrl + "syana/api/";
-//  static final String siteUrl = baseUrl + "syana/site/";
-  static final String apiUrl = baseUrl + "api/";
-  static final String siteUrl = baseUrl + "site/";
+//  static final String baseUrl = "http://hq.syana.co.id/";
+  static final String apiUrl = baseUrl + "syana/api/";
+  static final String siteUrl = baseUrl + "syana/site/";
+
+//  static final String apiUrl = baseUrl + "api/";
+//  static final String siteUrl = baseUrl + "site/";
 
 //  static final String imageUrl = baseUrl + "syana/products/";
   static final String imageUrl = baseUrl + "products/";

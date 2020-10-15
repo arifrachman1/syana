@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +86,8 @@ class SaleController {
     int total = 0;
     _selectedProducts.forEach((element) {
       int value = isSale
-          ? int.parse(element.saleNumber)
-          : int.parse(element.freeNumber);
+              ? int.parse(element.saleNumber)
+              : int.parse(element.freeNumber);
       total += value;
     });
 
@@ -114,13 +116,13 @@ class SaleController {
     }
 
     var params =
-        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-ecommerce",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-ecommerce",
+            context: context,
+            params: params);
 
     if (data != null) {
       print(data);
@@ -130,7 +132,7 @@ class SaleController {
 
         ecommerceFromApi.forEach((element) {
           ecommerces.add(new EcommerceModel(element['id'].toString(),
-              element['name'].toString(), element['status'].toString()));
+                  element['name'].toString(), element['status'].toString()));
         });
 
         if (ecommerces.isNotEmpty) {
@@ -150,12 +152,12 @@ class SaleController {
     }
 
     var params =
-        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-list-product",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-list-product",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -164,15 +166,15 @@ class SaleController {
 
         productsFromApi.forEach((element) {
           products.add(new ProductModel.productList(
-              element['id'],
-              element['name'],
-              element['image'],
-              element['id_category'],
-              element['sku'],
-              element['harga'],
-              element['category_name'],
-              "0",
-              "0"));
+                  element['id'],
+                  element['name'],
+                  element['image'],
+                  element['id_category'],
+                  element['sku'],
+                  element['harga'],
+                  element['category_name'],
+                  "0",
+                  "0"));
         });
 
         if (products.isNotEmpty) {
@@ -189,12 +191,12 @@ class SaleController {
     }
 
     var params =
-        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-list-sales",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-list-sales",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -203,9 +205,9 @@ class SaleController {
 
         historiesFromApi.forEach((element) {
           historiesProduct.add(new TransactionHistoryModel.getHistory(
-              element['transaction_number'],
-              element['datetime_created'],
-              element['name_ecommerce']));
+                  element['transaction_number'],
+                  element['datetime_created'],
+                  element['name_ecommerce']));
         });
 
         if (historiesProduct.isNotEmpty) {
@@ -217,19 +219,19 @@ class SaleController {
 
   /*get rank*/
   getRankProducts(context, loadingStateCallback, setDataCallback, dataType,
-      filterTime, timeFrom, timeTo, idTeam) async {
+                  filterTime, timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ["data_type", "filter_time", "time_from", "time_to", "id_team"],
-        [dataType, filterTime, timeFrom, timeTo, idTeam]);
+            ["data_type", "filter_time", "time_from", "time_to", "id_team"],
+            [dataType, filterTime, timeFrom, timeTo, idTeam]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-product-rank",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-product-rank",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -238,11 +240,11 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.productRank(
-              element['id'],
-              element['name'],
-              element['image'],
-              element['sku'],
-              element['rank_value']));
+                  element['id'],
+                  element['name'],
+                  element['image'],
+                  element['sku'],
+                  element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -254,19 +256,19 @@ class SaleController {
 
   /*get top return*/
   getTopReturn(context, loadingStateCallback, setDataCallback, filterTime,
-      timeFrom, timeTo, idTeam) async {
+               timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ["filter_time", "time_from", "time_to", "id_team"],
-        [filterTime, timeFrom, timeTo, idTeam]);
+            ["filter_time", "time_from", "time_to", "id_team"],
+            [filterTime, timeFrom, timeTo, idTeam]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-top-return",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-top-return",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -275,7 +277,7 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.rankTopData(
-              element['value'], element['rank_value']));
+                  element['value'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -287,19 +289,19 @@ class SaleController {
 
   /*get top courier*/
   getTopCourier(context, loadingStateCallback, setDataCallback, filterTime,
-      timeFrom, timeTo, idTeam) async {
+                timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ["filter_time", "time_from", "time_to", "id_team"],
-        [filterTime, timeFrom, timeTo, idTeam]);
+            ["filter_time", "time_from", "time_to", "id_team"],
+            [filterTime, timeFrom, timeTo, idTeam]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-top-courier",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-top-courier",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -308,7 +310,7 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.rankTopData(
-              element['value'], element['rank_value']));
+                  element['value'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -320,19 +322,19 @@ class SaleController {
 
   /*get top 50 customer*/
   getTop50Customer(context, loadingStateCallback, setDataCallback, filterTime,
-      timeFrom, timeTo, idTeam) async {
+                   timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ["filter_time", "time_from", "time_to", "id_team"],
-        [filterTime, timeFrom, timeTo, idTeam]);
+            ["filter_time", "time_from", "time_to", "id_team"],
+            [filterTime, timeFrom, timeTo, idTeam]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-top-50-customer",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-top-50-customer",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -341,7 +343,7 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.rankTopData(
-              element['value'], element['rank_value']));
+                  element['value'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -353,19 +355,19 @@ class SaleController {
 
   /*get top location*/
   getTopLocation(context, loadingStateCallback, setDataCallback, filterTime,
-      timeFrom, timeTo, idTeam, type) async {
+                 timeFrom, timeTo, idTeam, type) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ["filter_time", "time_from", "time_to", "id_team", "type"],
-        [filterTime, timeFrom, timeTo, idTeam, type]);
+            ["filter_time", "time_from", "time_to", "id_team", "type"],
+            [filterTime, timeFrom, timeTo, idTeam, type]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-top-city",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-top-city",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -374,7 +376,7 @@ class SaleController {
 
         rankFromApi.forEach((element) {
           rankProducts.add(new ProductModel.rankTopData(
-              element['value'], element['rank_value']));
+                  element['value'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -399,9 +401,9 @@ class SaleController {
       var distinctNames = names.toSet().toList();
 
       print("distinct ids length : " +
-          distinctIds.length.toString() +
-          ", distinct names length : " +
-          distinctNames.length.toString());
+              distinctIds.length.toString() +
+              ", distinct names length : " +
+              distinctNames.length.toString());
 
       if (distinctIds.length == distinctNames.length) {
         int i = 0;
@@ -430,11 +432,11 @@ class SaleController {
   }
 
   setSale(context, loadingStateCallback, transNumber, courierId,
-      List details) async {
+          List details) async {
     FormData formData;
     print(details);
     String paramDetail =
-        GlobalFunctions.generateJsonParam(["detail"], [details]);
+    GlobalFunctions.generateJsonParam(["detail"], [details]);
     print(paramDetail);
     Map param = GlobalFunctions.generateMapParam([
       "id_employee",
@@ -454,33 +456,33 @@ class SaleController {
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioPostCall(
-        path: GlobalVars.apiUrl + "sale-product",
-        params: formData,
-        context: context);
+            path: GlobalVars.apiUrl + "sale-product",
+            params: formData,
+            context: context);
     if (data != null) {
       if (data['status'] == 1) {
         Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pop(context);
         CustomDialog.getDialog(
-            title: Strings.DIALOG_TITLE_SUCCESS,
-            message: Strings.DIALOG_MESSAGE_TRANSACTION_SUCCESS,
-            context: context,
-            popCount: 1);
+                title: Strings.DIALOG_TITLE_SUCCESS,
+                message: Strings.DIALOG_MESSAGE_TRANSACTION_SUCCESS,
+                context: context,
+                popCount: 1);
       } else {
         CustomDialog.getDialog(
-            title: Strings.DIALOG_TITLE_ERROR,
-            message: data['message'],
-            context: context,
-            popCount: 1);
+                title: Strings.DIALOG_TITLE_ERROR,
+                message: data['message'],
+                context: context,
+                popCount: 1);
         print(data['message']);
       }
     } else {
       CustomDialog.getDialog(
-          title: Strings.DIALOG_TITLE_ERROR,
-          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
-          context: context,
-          popCount: 1);
+              title: Strings.DIALOG_TITLE_ERROR,
+              message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+              context: context,
+              popCount: 1);
     }
     loadingStateCallback();
   }
@@ -502,7 +504,7 @@ class SaleController {
         List<CourierModel> temp = new List();
         courierFromApi.forEach((element) {
           temp.add(new CourierModel(
-              element['id'].toString(), element['name'].toString()));
+                  element['id'].toString(), element['name'].toString()));
         });
 
         if (temp.isNotEmpty) {
@@ -533,13 +535,13 @@ class SaleController {
     }
 
     var params =
-        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioGetCall(
-        context: context,
-        params: params,
-        path: GlobalVars.apiUrl + "get-list-product");
+            context: context,
+            params: params,
+            path: GlobalVars.apiUrl + "get-list-product");
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -549,12 +551,12 @@ class SaleController {
         if (productsFromApi.isNotEmpty) {
           productsFromApi.forEach((element) {
             products.add(new ProductModel.productsDropdown(
-                element['id'].toString(), element['name'].toString()));
+                    element['id'].toString(), element['name'].toString()));
           });
         }
 
         List<DropdownMenuItem> productDropdownItems =
-            _generateDropdownProducts(products);
+        _generateDropdownProducts(products);
 
         if (productDropdownItems.isNotEmpty) {
           setDataCallback(productDropdownItems);
@@ -582,22 +584,21 @@ class SaleController {
   }
 
   //Trace - Add Trace
-  sendTrace(
-      context, loadingStateCallback, productId, traceDate, trace, type) async {
+  sendTrace(context, loadingStateCallback, productId, traceDate, trace, type) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ["product_id", "trace_date", "trace", "type", "id_employee"],
-        [productId, traceDate, trace, type, _userModel.id]);
+            ["product_id", "trace_date", "trace", "type", "id_employee"],
+            [productId, traceDate, trace, type, _userModel.id]);
 
     FormData formData = FormData.fromMap(params);
 
     final data = await GlobalFunctions.dioPostCall(
-        context: context,
-        path: GlobalVars.apiUrl + "set-trace",
-        params: formData);
+            context: context,
+            path: GlobalVars.apiUrl + "set-trace",
+            params: formData);
 
     print(GlobalVars.apiUrl + "set-trace");
     print(params);
@@ -607,10 +608,10 @@ class SaleController {
         Navigator.pop(context);
         Navigator.pop(context);
         CustomDialog.getDialog(
-            title: Strings.DIALOG_TITLE_SUCCESS,
-            message: Strings.DIALOG_MESSAGE_CUSTOMER_SAVED,
-            context: context,
-            popCount: 1);
+                title: Strings.DIALOG_TITLE_SUCCESS,
+                message: Strings.DIALOG_MESSAGE_CUSTOMER_SAVED,
+                context: context,
+                popCount: 1);
       }
     }
   }
@@ -622,12 +623,12 @@ class SaleController {
     }
 
     var params =
-        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-trace-by-employee",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-trace-by-employee",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -636,15 +637,15 @@ class SaleController {
 
         traceFromApi.forEach((element) {
           traceLists.add(new TraceModel.traceData(
-              element['trace_id'],
-              element['product_id'],
-              element['employee_team_id'],
-              element['employee_id'],
-              element['trace_date'],
-              element['trace'],
-              element['product_name'],
-              element['team_name'],
-              element['employee_name']));
+                  element['trace_id'],
+                  element['product_id'],
+                  element['employee_team_id'],
+                  element['employee_id'],
+                  element['trace_date'],
+                  element['trace'],
+                  element['product_name'],
+                  element['team_name'],
+                  element['employee_name']));
         });
 
         if (traceLists.isNotEmpty) {
@@ -661,12 +662,12 @@ class SaleController {
     }
 
     var params =
-        GlobalFunctions.generateMapParam(["trace_date"], [selectedDate]);
+    GlobalFunctions.generateMapParam(["trace_date"], [selectedDate]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-all-trace",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-all-trace",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -675,15 +676,15 @@ class SaleController {
 
         traceFromApi.forEach((element) {
           traceLists.add(new TraceModel.traceData(
-              element['trace_id'],
-              element['product_id'],
-              element['employee_team_id'],
-              element['employee_id'],
-              element['trace_date'],
-              element['trace'],
-              element['product_name'],
-              element['team_name'],
-              element['employee_name']));
+                  element['trace_id'],
+                  element['product_id'],
+                  element['employee_team_id'],
+                  element['employee_id'],
+                  element['trace_date'],
+                  element['trace'],
+                  element['product_name'],
+                  element['team_name'],
+                  element['employee_name']));
         });
 
         if (traceLists.isNotEmpty) {
@@ -697,7 +698,7 @@ class SaleController {
 
   /*get chart*/
   getChartData(context, loadingStateCallback, setDataCallback, dataType,
-      filterType, timeStart, timeEnd, idTeam, idProduct) async {
+               filterType, timeStart, timeEnd, idTeam, idProduct) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -719,9 +720,9 @@ class SaleController {
     ]);
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-chart-data",
-        context: context,
-        params: params);
+            path: GlobalVars.apiUrl + "get-chart-data",
+            context: context,
+            params: params);
 
     if (data != null) {
       if (data['status'] == "1") {
@@ -731,12 +732,14 @@ class SaleController {
         chartFromApi.forEach((element) {
           if (filterType == "3") {
             chartGlobal.add(new ChartDataModel.chartTypeInt(
-                element['value'], element['date']));
+                    element['value'], element['date']));
           } else {
             chartGlobal.add(new ChartDataModel.chartData(
-                element['value'], element['date']));
+                    element['value'], element['date']));
           }
         });
+
+        log("chart data : ${chartGlobal.toString()}", name: "data");
 
         if (chartGlobal.isNotEmpty) {
           setDataCallback(chartGlobal);
@@ -752,11 +755,11 @@ class SaleController {
     }
 
     var params =
-        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioGetCall(
-        context: context, params: params, path: GlobalVars.apiUrl + "get-team");
+            context: context, params: params, path: GlobalVars.apiUrl + "get-team");
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -766,7 +769,7 @@ class SaleController {
         if (teamsFromApi.isNotEmpty) {
           teamsFromApi.forEach((element) {
             teams.add(new TeamModel.teamsDropdown(
-                element['id'].toString(), element['name'].toString()));
+                    element['id'].toString(), element['name'].toString()));
           });
         }
 
@@ -785,7 +788,7 @@ class SaleController {
     }
 
     final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-first-and-last-date", context: context);
+            path: GlobalVars.apiUrl + "get-first-and-last-date", context: context);
 
     if (data != null) {
       if (data['status'] == 1) {

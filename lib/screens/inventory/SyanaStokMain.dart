@@ -3,6 +3,7 @@ import 'package:syana/Controller/InventoryController.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/FontHelper.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
 import 'package:syana/widgets/CustomImage.dart';
@@ -226,28 +227,17 @@ class StockMainState extends State<StockMain> {
                                           children: <Widget>[
                                             Text(
                                               filteredStocks[index].name,
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 15,
-                                              ),
+	                                            style: FontHelper.textListTitle,
                                               softWrap: true,
                                             ),
                                             Text(
                                               filteredStocks[index].point,
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 13,
-                                                fontStyle: FontStyle.italic,
-                                              ),
+	                                            style: FontHelper.textListSubtitle,
                                               softWrap: true,
                                             ),
                                             Text(
                                               filteredStocks[index].sku,
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 13,
-                                                fontStyle: FontStyle.italic,
-                                              ),
+	                                            style: FontHelper.textListSubtitle,
                                               softWrap: true,
                                             ),
                                           ],
@@ -260,10 +250,7 @@ class StockMainState extends State<StockMain> {
                                         alignment: Alignment.center,
                                         child: Text(
                                           filteredStocks[index].stock,
-                                          style: TextStyle(
-                                            color: AppTheme.text_light,
-                                            fontSize: 15,
-                                          ),
+	                                        style: FontHelper.textListSubtitle,
                                         ),
                                       ),
                                     ),

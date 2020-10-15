@@ -4,14 +4,11 @@ import 'package:recase/recase.dart';
 import 'package:syana/Controller/CustomerController.dart';
 import 'package:syana/Controller/InventoryController.dart';
 import 'package:syana/Controller/RankDataController.dart';
-import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/CustomerModel.dart';
-import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/RankDataModel.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankDetailCustomer.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
-import '../../main.dart';
 
 class SyanaProductRankTop50Customer extends StatefulWidget {
   @override
@@ -497,6 +494,7 @@ class SyanaProductRankTop50CustomerState
                                               ? AppTheme.text_darker
                                               : AppTheme.text_light,
                                           fontSize: 15,
+		                                        fontWeight: FontWeight.bold
                                         ),
                                       ),
                                       rankTop50Customer[index].city == null

@@ -1,19 +1,18 @@
-import 'package:fl_chart/fl_chart.dart';
+import 'dart:developer' as dev;
+
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/ChartDataModel.dart';
 import 'package:syana/models/TeamModel.dart';
 import 'package:syana/models/TraceModel.dart';
 import 'package:syana/utils/AppTheme.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
 import 'package:syana/utils/Dimens.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:syana/utils/ScreenSizeHelper.dart';
+import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
-import '../../main.dart';
-import 'dart:developer' as dev;
 
 String selectedTim;
 int selectedGrafik = 0;
@@ -53,7 +52,7 @@ class GrafikTimState extends State<GrafikTim> {
       List<TimeSeriesSales> chartDataTimeCompare = new List();
       print(listDateChart);
       for (int i = 0; i < chartTeams.length; i++) {
-        DateTime date = DateTime.parse(chartTeams[i].chartDate);
+        DateTime date = DateTime.parse(chartTeams[i].chartDate.toString());
         if (_currentFilterType == "3") {
           chartDataTime.add(new TimeSeriesSales(date, chartTeams[i].value));
           totalData += chartTeams[i].value;
@@ -157,7 +156,7 @@ class GrafikTimState extends State<GrafikTim> {
   TeamModel _selectedTeams;
   TeamModel _selectedComparedTeams;
 
-  String _currentFilterType = "1";
+  String _currentFilterType = "4";
   String _currentTeams;
   String _currentComparedTeams;
 
@@ -289,6 +288,17 @@ class GrafikTimState extends State<GrafikTim> {
                           value: _selectedTeams,
                           hint: "Pilih Tim",
                           searchHint: "Cari Tim",
+                          onClear: () {
+                            setState(() {
+                              _selectedTeams = null;
+                              _currentTeams = "";
+                              totalData = 0;
+                              _current1st = "";
+                              print(_selectedTeams);
+                            });
+                            chartTeams.clear();
+                            listDataTrace.clear();
+                          },
                           onChanged: (TeamModel value) async {
                             if (value != null) {
                               print(value.id);
@@ -333,6 +343,16 @@ class GrafikTimState extends State<GrafikTim> {
                           value: _selectedComparedTeams,
                           hint: "Pilih Tim 2",
                           searchHint: "Cari Tim",
+                          onClear: () {
+                            setState(() {
+                              _selectedComparedTeams = null;
+                              _currentComparedTeams = "";
+                              _current2nd = "";
+                              totalDataCompared = 0;
+                            });
+                            chartComparedTeams.clear();
+                            listDataTrace.clear();
+                          },
                           onChanged: (TeamModel value) async {
                             if (value != null && _currentTeams != null) {
                               print(value.id);
@@ -478,7 +498,8 @@ class GrafikTimState extends State<GrafikTim> {
                                 softWrap: true,
                               ),
                               Text(
-                                _currentTimeStart,
+                                GlobalFunctions.formatStringDate(targetDateTime: _currentTimeStart, sourceFormat: GlobalFunctions
+                                        .FORMAT_YYYY_MM_DD, intendedFormat: GlobalFunctions.FORMAT_DD_MM_YYYY),
                                 style: TextStyle(
                                   color: AppTheme.orange_light,
                                   fontSize: 14,
@@ -486,6 +507,7 @@ class GrafikTimState extends State<GrafikTim> {
                                 ),
                                 softWrap: true,
                               ),
+                              _currentTimeEnd != "" ?
                               Text(
                                 ' hingga ',
                                 style: TextStyle(
@@ -493,9 +515,14 @@ class GrafikTimState extends State<GrafikTim> {
                                   fontSize: 14,
                                 ),
                                 softWrap: true,
-                              ),
+                              ) : Container(),
                               Text(
-                                _currentTimeEnd,
+                                _currentTimeEnd != ""
+                                        ? GlobalFunctions.formatStringDate(
+                                        targetDateTime: _currentTimeEnd,
+                                        sourceFormat: GlobalFunctions.FORMAT_YYYY_MM_DD,
+                                        intendedFormat: GlobalFunctions.FORMAT_DD_MM_YYYY)
+                                        : "",
                                 style: TextStyle(
                                   color: AppTheme.yellow,
                                   fontSize: 14,
@@ -578,6 +605,26 @@ class GrafikTimState extends State<GrafikTim> {
               : Expanded(
                   child: charts.TimeSeriesChart(
                   _timeSeriesLineData,
+                    domainAxis: charts.DateTimeAxisSpec(
+                            tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+                              year: charts.TimeFormatterSpec(
+                                      format: "yyyy-MM",
+                                      transitionFormat: "yyyy-MM"
+                              ),
+                              month: charts.TimeFormatterSpec(
+                                      format: 'MM-dd',
+                                      transitionFormat: "MM-dd"
+                              ),
+                              day: charts.TimeFormatterSpec(
+                                      format: 'MM-dd',
+                                      transitionFormat: 'MM-dd'
+                              ),
+                              hour: charts.TimeFormatterSpec(
+                                      format: 'HH:mm',
+                                      transitionFormat: "HH:mm"
+                              ),
+                            )
+                    ),
                   animate: false,
                   behaviors: [new charts.PanAndZoomBehavior(), charts.SeriesLegend()],
                   dateTimeFactory: const charts.LocalDateTimeFactory(),
@@ -599,13 +646,14 @@ class GrafikTimState extends State<GrafikTim> {
     showDialog<void>(
         context: context,
         builder: (BuildContext context) {
-          int filterType = 1;
+          int filterType = 4;
           DateTime _tempTimeStart;
           DateTime _tempTimeEnd;
           String timeStartTemp = "PILIH TANGGAL";
           String timeEndTemp = "PILIH TANGGAL";
           return AlertDialog(
-              actions: <Widget>[
+                  shape: AppTheme.popupRoundedBackground(),
+                  actions: <Widget>[
                 FlatButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -620,10 +668,10 @@ class GrafikTimState extends State<GrafikTim> {
                   ),
                   onPressed: () async {
                     setState(() {
-                      if (_tempTimeStart != null && _tempTimeEnd != null) {
+                      if (_tempTimeStart != null) {
                         _currentFilterType = filterType.toString();
                         _currentTimeStart = timeStartTemp;
-                        _currentTimeEnd = timeEndTemp;
+                        _currentTimeEnd = timeEndTemp != "PILIH TANGGAL" ? timeEndTemp : "";
                       } else {
                         _currentFilterType = filterType.toString();
                       }
@@ -664,6 +712,7 @@ class GrafikTimState extends State<GrafikTim> {
                   return Container(
 //                    height: MediaQuery.of(context).size.height * 0.65,
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(
                           alignment: Alignment.centerLeft,
@@ -681,27 +730,27 @@ class GrafikTimState extends State<GrafikTim> {
                                 onPressed: () {
                                   setState(() {
                                     _tempTimeStart = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day - 7);
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day - 7);
                                     _tempTimeEnd = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day);
                                     timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
+                                            formatDate.format(_tempTimeStart);
                                     timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
+                                            formatDate.format(_tempTimeEnd);
                                   });
                                 },
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
+                                        borderRadius: BorderRadius.circular(5)),
                                 child: Text(
                                   "1W",
                                   style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
+                                          fontSize: 8,
+                                          color: AppTheme.text_light,
+                                          fontWeight: FontWeight.bold),
                                 ),
                               ),
                               minWidth: 50,
@@ -712,27 +761,27 @@ class GrafikTimState extends State<GrafikTim> {
                                 onPressed: () {
                                   setState(() {
                                     _tempTimeStart = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month - 1,
-                                        DateTime.now().day);
+                                            DateTime.now().year,
+                                            DateTime.now().month - 1,
+                                            DateTime.now().day);
                                     _tempTimeEnd = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day);
                                     timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
+                                            formatDate.format(_tempTimeStart);
                                     timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
+                                            formatDate.format(_tempTimeEnd);
                                   });
                                 },
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
+                                        borderRadius: BorderRadius.circular(5)),
                                 child: Text(
                                   "1M",
                                   style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
+                                          fontSize: 8,
+                                          color: AppTheme.text_light,
+                                          fontWeight: FontWeight.bold),
                                 ),
                               ),
                               minWidth: 50,
@@ -743,27 +792,27 @@ class GrafikTimState extends State<GrafikTim> {
                                 onPressed: () {
                                   setState(() {
                                     _tempTimeStart = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month - 6,
-                                        DateTime.now().day);
+                                            DateTime.now().year,
+                                            DateTime.now().month - 6,
+                                            DateTime.now().day);
                                     _tempTimeEnd = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day);
                                     timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
+                                            formatDate.format(_tempTimeStart);
                                     timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
+                                            formatDate.format(_tempTimeEnd);
                                   });
                                 },
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
+                                        borderRadius: BorderRadius.circular(5)),
                                 child: Text(
                                   "6M",
                                   style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
+                                          fontSize: 8,
+                                          color: AppTheme.text_light,
+                                          fontWeight: FontWeight.bold),
                                 ),
                               ),
                               minWidth: 50,
@@ -774,25 +823,25 @@ class GrafikTimState extends State<GrafikTim> {
                                 onPressed: () {
                                   setState(() {
                                     _tempTimeStart =
-                                        DateTime(DateTime.now().year, 1, 1);
+                                            DateTime(DateTime.now().year, 1, 1);
                                     _tempTimeEnd = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day);
                                     timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
+                                            formatDate.format(_tempTimeStart);
                                     timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
+                                            formatDate.format(_tempTimeEnd);
                                   });
                                 },
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
+                                        borderRadius: BorderRadius.circular(5)),
                                 child: Text(
                                   "YTD",
                                   style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
+                                          fontSize: 8,
+                                          color: AppTheme.text_light,
+                                          fontWeight: FontWeight.bold),
                                 ),
                               ),
                               minWidth: 50,
@@ -808,27 +857,27 @@ class GrafikTimState extends State<GrafikTim> {
                                 onPressed: () {
                                   setState(() {
                                     _tempTimeStart = DateTime(
-                                        DateTime.now().year - 1,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
+                                            DateTime.now().year - 1,
+                                            DateTime.now().month,
+                                            DateTime.now().day);
                                     _tempTimeEnd = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day);
                                     timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
+                                            formatDate.format(_tempTimeStart);
                                     timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
+                                            formatDate.format(_tempTimeEnd);
                                   });
                                 },
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
+                                        borderRadius: BorderRadius.circular(5)),
                                 child: Text(
                                   "1Y",
                                   style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
+                                          fontSize: 8,
+                                          color: AppTheme.text_light,
+                                          fontWeight: FontWeight.bold),
                                 ),
                               ),
                               minWidth: 50,
@@ -839,28 +888,28 @@ class GrafikTimState extends State<GrafikTim> {
                                 onPressed: () {
                                   setState(() {
                                     _tempTimeStart = DateTime(
-                                        DateTime.now().year - 5,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
+                                            DateTime.now().year - 5,
+                                            DateTime.now().month,
+                                            DateTime.now().day);
                                     _tempTimeEnd = DateTime(
-                                        DateTime.now().year,
-                                        DateTime.now().month,
-                                        DateTime.now().day);
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day);
                                     timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
+                                            formatDate.format(_tempTimeStart);
                                     timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
+                                            formatDate.format(_tempTimeEnd);
                                   });
                                 },
                                 child: Text(
                                   "5Y",
                                   style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
+                                          fontSize: 8,
+                                          color: AppTheme.text_light,
+                                          fontWeight: FontWeight.bold),
                                 ),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
+                                        borderRadius: BorderRadius.circular(5)),
                               ),
                               minWidth: 50,
                             ),
@@ -869,28 +918,28 @@ class GrafikTimState extends State<GrafikTim> {
                                 color: Colors.blueGrey[900],
                                 onPressed: () async {
                                   await _saleController.checkMaxFilter(
-                                      context, setData);
+                                          context, setData);
                                   print(dateMaxMin.dateMin);
                                   setState(() {
                                     _tempTimeStart =
-                                        DateTime.parse(dateMaxMin.dateMin);
+                                            DateTime.parse(dateMaxMin.dateMin);
                                     _tempTimeEnd =
-                                        DateTime.parse(dateMaxMin.dateMax);
+                                            DateTime.parse(dateMaxMin.dateMax);
                                     timeStartTemp =
-                                        formatDate.format(_tempTimeStart);
+                                            formatDate.format(_tempTimeStart);
                                     timeEndTemp =
-                                        formatDate.format(_tempTimeEnd);
+                                            formatDate.format(_tempTimeEnd);
                                   });
                                 },
                                 child: Text(
                                   "MAX",
                                   style: TextStyle(
-                                      fontSize: 8,
-                                      color: AppTheme.text_light,
-                                      fontWeight: FontWeight.bold),
+                                          fontSize: 8,
+                                          color: AppTheme.text_light,
+                                          fontWeight: FontWeight.bold),
                                 ),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)),
+                                        borderRadius: BorderRadius.circular(5)),
                               ),
                               minWidth: 50,
                             ),
@@ -918,11 +967,11 @@ class GrafikTimState extends State<GrafikTim> {
                                     child: Container(
                                       alignment: Alignment.centerLeft,
                                       decoration:
-                                          AppTheme.dateDecorationShadow(),
+                                      AppTheme.dateDecorationShadow(),
                                       height: 35,
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
+                                        MainAxisAlignment.spaceEvenly,
                                         children: <Widget>[
                                           Icon(
                                             Icons.date_range,
@@ -931,15 +980,15 @@ class GrafikTimState extends State<GrafikTim> {
                                           Text(
                                             timeStartTemp,
                                             style: TextStyle(
-                                                color: AppTheme.white,
-                                                fontSize: 10),
+                                                    color: AppTheme.white,
+                                                    fontSize: 10),
                                           ),
                                         ],
                                       ),
                                     ),
                                     onTap: () async {
                                       final DateTime pickedStart =
-                                          await showDatePicker(
+                                      await showDatePicker(
                                         context: context,
                                         initialDate: DateTime.now(),
                                         firstDate: DateTime(2000),
@@ -949,7 +998,7 @@ class GrafikTimState extends State<GrafikTim> {
                                       setState(() {
                                         _tempTimeStart = pickedStart;
                                         timeStartTemp =
-                                            formatDate.format(_tempTimeStart);
+                                                formatDate.format(_tempTimeStart);
                                       });
                                     },
                                   ),
@@ -960,58 +1009,58 @@ class GrafikTimState extends State<GrafikTim> {
                               width: MediaQuery.of(context).size.width * 0.03,
                             ),
                             Expanded(
-                                child: Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "To",
-                                    style: TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  child: Container(
-                                    alignment: Alignment.centerLeft,
-                                    // margin: EdgeInsets.only(top: 10),
-                                    // padding: EdgeInsets.only(left: 10),
-                                    decoration: AppTheme.dateDecorationShadow(),
-                                    height: 35,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                    child: Column(
                                       children: <Widget>[
-                                        Icon(
-                                          Icons.date_range,
-                                          color: AppTheme.white,
+                                        Container(
+                                          margin: EdgeInsets.only(bottom: 5),
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            "To",
+                                            style: TextStyle(fontSize: 14),
+                                          ),
                                         ),
-                                        Text(
-                                          timeEndTemp,
-                                          style: TextStyle(
-                                              color: AppTheme.white,
-                                              fontSize: 10),
+                                        GestureDetector(
+                                          child: Container(
+                                            alignment: Alignment.centerLeft,
+                                            // margin: EdgeInsets.only(top: 10),
+                                            // padding: EdgeInsets.only(left: 10),
+                                            decoration: AppTheme.dateDecorationShadow(),
+                                            height: 35,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                              children: <Widget>[
+                                                Icon(
+                                                  Icons.date_range,
+                                                  color: AppTheme.white,
+                                                ),
+                                                Text(
+                                                  timeEndTemp,
+                                                  style: TextStyle(
+                                                          color: AppTheme.white,
+                                                          fontSize: 10),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          onTap: () async {
+                                            final DateTime pickedEnd =
+                                            await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2000),
+                                              lastDate: DateTime(2101),
+                                            );
+                                            print(pickedEnd);
+                                            setState(() {
+                                              _tempTimeEnd = pickedEnd;
+                                              timeEndTemp =
+                                                      formatDate.format(_tempTimeEnd);
+                                            });
+                                          },
                                         ),
                                       ],
-                                    ),
-                                  ),
-                                  onTap: () async {
-                                    final DateTime pickedEnd =
-                                        await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(2000),
-                                      lastDate: DateTime(2101),
-                                    );
-                                    print(pickedEnd);
-                                    setState(() {
-                                      _tempTimeEnd = pickedEnd;
-                                      timeEndTemp =
-                                          formatDate.format(_tempTimeEnd);
-                                    });
-                                  },
-                                ),
-                              ],
-                            )),
+                                    )),
                           ],
                         ),
                         Container(

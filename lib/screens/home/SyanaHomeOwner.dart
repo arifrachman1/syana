@@ -10,6 +10,7 @@ import 'package:syana/models/HomeDataModel.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/FontHelper.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
@@ -443,7 +444,7 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
                                 child: ListView.builder(
                                         itemCount: _homeDataModel != null ? _homeDataModel.detail.length : 0,
                                         itemBuilder: (context, index) {
-                                          return list(_homeDataModel.detail[index]);
+                                          return list(_homeDataModel.detail[index], index);
                                         }),
                               )
                             ],
@@ -458,373 +459,390 @@ class SyanaHomeOwnerState extends State<SyanaHomeOwner> {
   // *
   // Tampilan promo
 
-  list(HomeDataDetailModel detailModel) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.37,
-      margin: EdgeInsets.only(top: 30),
-      padding: EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 30),
-      decoration: AppTheme.listBackground(),
-      child: Column(
-        children: <Widget>[
-          Flexible(
-            flex: 10,
-            child: Container(
-              margin: EdgeInsets.only(top: 5, bottom: 3),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  /*12-06-2020 revision*/
-                  /*Text(
+  list(HomeDataDetailModel detailModel, index) {
+    return Stack(
+      children: [
+        Container(
+          width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
+          height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.37,
+          margin: EdgeInsets.only(top: 30),
+          padding: EdgeInsets.only(left: 15, right: 15, top: 30, bottom: 30),
+          decoration: AppTheme.listBackground(),
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                flex: 10,
+                child: Container(
+                  margin: EdgeInsets.only(top: 5, bottom: 3),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      /*12-06-2020 revision*/
+                      /*Text(
                     'New Customers',
                     style: TextStyle(
                       color: AppTheme.text_light,
                     ),
                   ),*/
-                  IconButton(
-                    padding: EdgeInsets.only(top: 0),
-                    icon: Icon(
-                      Icons.file_download,
-                      color: AppTheme.text_light,
-                    ),
-                    onPressed: () async {
-                      int year = DateTime
-                              .now()
-                              .year;
-                      int month = DateTime
-                              .now()
-                              .month;
-                      int day = DateTime
-                              .now()
-                              .day;
+                      IconButton(
+                        padding: EdgeInsets.only(top: 0),
+                        icon: Icon(
+                          Icons.file_download,
+                          color: AppTheme.text_light,
+                        ),
+                        onPressed: () async {
+                          int year = DateTime
+                                  .now()
+                                  .year;
+                          int month = DateTime
+                                  .now()
+                                  .month;
+                          int day = DateTime
+                                  .now()
+                                  .day;
 
-                      var date;
+                          var date;
 
-                      if (month
-                              .toString()
-                              .length < 2) {
-                        date = year.toString() + "-0" + month.toString() + "-" + day.toString();
-                      } else {
-                        date = year.toString() + "-" + month.toString() + "-" + day.toString();
-                      }
+                          if (month
+                                  .toString()
+                                  .length < 2) {
+                            date = year.toString() + "-0" + month.toString() + "-" + day.toString();
+                          } else {
+                            date = year.toString() + "-" + month.toString() + "-" + day.toString();
+                          }
 
-                      var url = GlobalVars.siteUrl + "list-customer?date=" + date + "&id_employee_team=" + detailModel.idTeam.toString();
+                          var url = GlobalVars.siteUrl + "list-customer?date=" + date + "&id_employee_team=" + detailModel.idTeam.toString();
 
-                      dev.log(url, name: "log-url");
+                          dev.log(url, name: "log-url");
 
-                      if (await canLaunch(url)) {
-                        await launch(url);
-                      } else {
-                        CustomDialog.getDialog(
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            CustomDialog.getDialog(
                                 title: Strings.DIALOG_TITLE_WARNING, message: Strings.DIALOG_MESSAGE_API_CALL_FAILED, context: context, popCount: 1);
-                      }
-                    },
+                          }
+                        },
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: Divider(
-              thickness: 2,
-              color: AppTheme.white,
-            ),
-          ),
-          Flexible(
-            flex: 50,
-            child: Container(
-              padding: EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Flexible(
-                    flex: 3,
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Flexible(
-                                    fit: FlexFit.tight,
-                                    flex: 3,
-                                    child: Text(
-                                      detailModel.teamName ?? 'Team Name',
-                                      softWrap: true,
-                                      style: TextStyle(color: AppTheme.text_light, fontSize: 17, fontWeight: FontWeight.bold),
-                                      textAlign: TextAlign.right,
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 1,
-                                    child: Text(
-                                      detailModel.pointToday.round().toString() ?? '0',
-                                      softWrap: true,
-                                      style: TextStyle(
-                                        color: AppTheme.text_light,
-                                        fontSize: 15,
+              Container(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: Divider(
+                  thickness: 2,
+                  color: AppTheme.white,
+                ),
+              ),
+              Flexible(
+                flex: 50,
+                child: Container(
+                  padding: EdgeInsets.only(left: 10, right: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Flexible(
+                        flex: 3,
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              Flexible(
+                                flex: 3,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: <Widget>[
+                                      Flexible(
+                                        fit: FlexFit.tight,
+                                        flex: 3,
+                                        child: Text(
+                                          detailModel.teamName ?? 'Team Name',
+                                          softWrap: true,
+                                          style: TextStyle(color: AppTheme.text_light, fontSize: 17, fontWeight: FontWeight.bold),
+                                          textAlign: TextAlign.right,
+                                        ),
                                       ),
-                                      textAlign: TextAlign.right,
-                                    ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: Text(
+                                          detailModel.pointToday.round().toString() ?? '0',
+                                          softWrap: true,
+                                          style: TextStyle(
+                                            color: AppTheme.text_light,
+                                            fontSize: 15,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  detailModel.pointToday < detailModel.pointYesterday
+                              Flexible(
+                                flex: 1,
+                                child: Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      detailModel.pointToday < detailModel.pointYesterday
                                           ? Icon(
-                                    Icons.arrow_drop_down,
-                                    color: AppTheme.red,
-                                  )
+                                        Icons.arrow_drop_down,
+                                        color: AppTheme.red,
+                                      )
                                           : Icon(
-                                    Icons.arrow_drop_up,
-                                    color: Colors.green,
+                                        Icons.arrow_drop_up,
+                                        color: Colors.green,
+                                      ),
+                                      Text(
+                                        detailModel.pointYesterday.round().toString() ?? '0',
+                                        softWrap: true,
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Text(
-                                    detailModel.pointYesterday.round().toString() ?? '0',
-                                    softWrap: true,
-                                    textAlign: TextAlign.right,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    'Hari ini',
                                     style: TextStyle(
                                       color: AppTheme.text_light,
-                                      fontSize: 15,
                                     ),
+                                    textAlign: TextAlign.left,
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                'Hari ini',
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
                                 ),
-                                textAlign: TextAlign.left,
                               ),
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 3,
-                    child: Container(),
-                  ),
-                  Flexible(
-                    flex: 3,
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Flexible(
-                            flex: 3,
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                NumberFormatter.getFormattedNumber(detailModel.pointThisMonth.round()).toString() ?? '0',
-                                softWrap: true,
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
-                                  fontSize: 25,
-                                ),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  detailModel.pointThisMonth < detailModel.pointLastMonth
-                                          ? Icon(
-                                    Icons.arrow_drop_down,
-                                    color: AppTheme.red,
-                                  )
-                                          : Icon(
-                                    Icons.arrow_drop_up,
-                                    color: Colors.green,
-                                  ),
-                                  Text(
-                                    detailModel.pointLastMonth.round().toString() ?? '0',
+                      Flexible(
+                        flex: 3,
+                        child: Container(),
+                      ),
+                      Flexible(
+                        flex: 3,
+                        child: Container(
+                          child: Column(
+                            children: <Widget>[
+                              Flexible(
+                                flex: 3,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    NumberFormatter.getFormattedNumber(detailModel.pointThisMonth.round()).toString() ?? '0',
                                     softWrap: true,
                                     style: TextStyle(
                                       color: AppTheme.text_light,
-                                      fontSize: 15,
+                                      fontSize: 25,
                                     ),
                                     textAlign: TextAlign.right,
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            flex: 1,
-                            child: Container(
-                              alignment: Alignment.centerRight,
-                              child: Text(
-                                'Bulan ini',
-                                style: TextStyle(
-                                  color: AppTheme.text_light,
                                 ),
-                                textAlign: TextAlign.left,
                               ),
-                            ),
+                              Flexible(
+                                flex: 1,
+                                child: Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      detailModel.pointThisMonth < detailModel.pointLastMonth
+                                          ? Icon(
+                                        Icons.arrow_drop_down,
+                                        color: AppTheme.red,
+                                      )
+                                          : Icon(
+                                        Icons.arrow_drop_up,
+                                        color: Colors.green,
+                                      ),
+                                      Text(
+                                        detailModel.pointLastMonth.round().toString() ?? '0',
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          color: AppTheme.text_light,
+                                          fontSize: 15,
+                                        ),
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    'Bulan ini',
+                                    style: TextStyle(
+                                      color: AppTheme.text_light,
+                                    ),
+                                    textAlign: TextAlign.left,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-          Flexible(
-            flex: 30,
-            child: Container(
-              margin: EdgeInsets.only(top: 10, bottom: 10),
-              padding: EdgeInsets.only(left: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        left: 5,
-                        right: 5,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              'Paket\nHari Ini',
-                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
-                              textAlign: TextAlign.center,
-                            ),
+              Flexible(
+                flex: 30,
+                child: Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 10),
+                  padding: EdgeInsets.only(left: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: 5,
+                            right: 5,
                           ),
-                          Container(
-                            child: Text(
-                              detailModel.packageToday.toString() ?? '0',
-                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
-                              textAlign: TextAlign.center,
-                            ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                child: Text(
+                                  'Paket\nHari Ini',
+                                  style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  detailModel.packageToday.toString() ?? '0',
+                                  style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: 5,
+                            right: 5,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                child: Text(
+                                  'Paket\nKemarin',
+                                  style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  detailModel.packageYesterday.toString() ?? '0',
+                                  style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: 5,
+                            right: 5,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                child: Text(
+                                  'Paket\nBulan Ini',
+                                  style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  detailModel.packageThisMonth.toString() ?? '0',
+                                  style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(
+                            left: 5,
+                            right: 5,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                child: Text(
+                                  'Paket\nBulan Lalu',
+                                  style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                  detailModel.packageLastMonth.toString() ?? '0',
+                                  style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        left: 5,
-                        right: 5,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              'Paket\nKemarin',
-                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              detailModel.packageYesterday.toString() ?? '0',
-                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        left: 5,
-                        right: 5,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              'Paket\nBulan Ini',
-                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              detailModel.packageThisMonth.toString() ?? '0',
-                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Container(
-                      margin: EdgeInsets.only(
-                        left: 5,
-                        right: 5,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            child: Text(
-                              'Paket\nBulan Lalu',
-                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          Container(
-                            child: Text(
-                              detailModel.packageLastMonth.toString() ?? '0',
-                              style: TextStyle(color: AppTheme.text_light, fontSize: Dimens.fontSmall),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            "#${(index + 1).toString()}",
+            style: FontHelper.textLogoTitleLight,
+          ),
+        ),
+      ],
     );
   }
 }

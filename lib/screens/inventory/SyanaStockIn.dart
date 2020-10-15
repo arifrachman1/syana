@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/InventoryController.dart';
 import 'package:syana/models/ProductModel.dart';
-import 'package:syana/models/TeamModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/FontHelper.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
@@ -513,10 +513,7 @@ class StockInState extends State<SyanaStockIn> {
                                           Text(
                                             additions[index].name,
                                             softWrap: true,
-                                            style: TextStyle(
-                                              color: AppTheme.text_light,
-                                              fontSize: 15,
-                                            ),
+	                                          style: FontHelper.textListTitle,
                                           ),
                                           Text(
                                             additions[index].point +
@@ -527,10 +524,7 @@ class StockInState extends State<SyanaStockIn> {
                                                         : "-"
                                                     : "-"),
                                             softWrap: true,
-                                            style: TextStyle(
-                                              color: AppTheme.text_light,
-                                              fontSize: 15,
-                                            ),
+	                                          style: FontHelper.textListSubtitle,
                                           ),
                                         ],
                                       ),
@@ -543,10 +537,7 @@ class StockInState extends State<SyanaStockIn> {
                                       child: Text(
                                         additions[index].stock,
                                         softWrap: true,
-                                        style: TextStyle(
-                                          color: AppTheme.text_light,
-                                          fontSize: 14,
-                                        ),
+	                                      style: FontHelper.textListSubtitle,
                                       ),
                                     ),
                                   ),

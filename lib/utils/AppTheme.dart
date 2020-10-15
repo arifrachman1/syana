@@ -45,6 +45,10 @@ class AppTheme{
     );
   }
 
+	static popupRoundedBackground() {
+		return RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)));
+	}
+
 //style input
   static inputDecoration() {
     return BoxDecoration(

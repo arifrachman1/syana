@@ -104,15 +104,6 @@ class _SyanaHomeStarSellerState extends State<SyanaHomeStarSeller> {
 							    padding: EdgeInsets.only(left: 30, right: 30, top: 25, bottom: 30),
 							    child: Column(
 								    children: <Widget>[
-									    GlobalVars.isDevMode
-											    ? Container(
-										    child: IconButton(
-											    onPressed: logout,
-											    icon: Icon(Icons.exit_to_app),
-											    color: Colors.white,
-										    ),
-									    )
-											    : Container(),
 									    Container(
 										    width: MediaQuery
 												    .of(context)

@@ -171,7 +171,7 @@ class GlobalFunctions {
         dateTime = newFormat.parse(targetDateTime);
         break;
       case FORMAT_YYYY_MM_DD_HH_MM:
-        var newFormat = DateFormat("y-MM-dd HH:mm");
+        var newFormat = DateFormat("yyyy-MM-dd HH:mm");
         dateTime = newFormat.parse(targetDateTime);
         break;
       case FORMAT_MMMMM_YYYY:
@@ -211,6 +211,40 @@ class GlobalFunctions {
     }
 
     return dateTime;
+  }
+
+  static String formatStringDate({@required targetDateTime, @required sourceFormat, @required intendedFormat}) {
+    DateTime dateTime;
+    String result;
+
+    switch (sourceFormat) {
+      case FORMAT_DD_MM_YYYY:
+        var newFormat = DateFormat("dd-MM-y");
+        dateTime = newFormat.parse(targetDateTime);
+        result = getStringFromDate(targetDateTime: dateTime, intendedFormat: intendedFormat);
+        break;
+      case FORMAT_DD_MM_YYYY_HH_MM:
+        var newFormat = DateFormat("dd-MM-y HH:mm");
+        dateTime = newFormat.parse(targetDateTime);
+        result = getStringFromDate(targetDateTime: dateTime, intendedFormat: intendedFormat);
+        break;
+      case FORMAT_YYYY_MM_DD:
+        var newFormat = DateFormat("y-MM-dd");
+        dateTime = newFormat.parse(targetDateTime);
+        result = getStringFromDate(targetDateTime: dateTime, intendedFormat: intendedFormat);
+        break;
+      case FORMAT_YYYY_MM_DD_HH_MM:
+        var newFormat = DateFormat("y-MM-dd HH:mm");
+        dateTime = newFormat.parse(targetDateTime);
+        result = getStringFromDate(targetDateTime: dateTime, intendedFormat: intendedFormat);
+        break;
+      case FORMAT_MMMMM_YYYY:
+        var newFormat = DateFormat("MMMM y");
+        dateTime = newFormat.parse(targetDateTime);
+        result = getStringFromDate(targetDateTime: dateTime, intendedFormat: intendedFormat);
+        break;
+    }
+    return result;
   }
 
   static log({@required message, @required name}) {

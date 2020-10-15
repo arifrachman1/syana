@@ -3,10 +3,10 @@ import 'package:syana/Controller/InventoryController.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/FontHelper.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
 import 'package:syana/widgets/CustomImage.dart';
-import '../../main.dart';
 
 class SyanaStokBarangKeluar extends StatefulWidget {
   @override
@@ -463,10 +463,7 @@ class BarangKeluarState extends State<SyanaStokBarangKeluar> {
                                           Text(
                                             _saleHistory[index].name,
                                             softWrap: true,
-                                            style: TextStyle(
-                                              color: AppTheme.text_light,
-                                              fontSize: 15,
-                                            ),
+	                                          style: FontHelper.textListTitle,
                                           ),
                                           Text(
                                             _saleHistory[index].point +
@@ -479,10 +476,7 @@ class BarangKeluarState extends State<SyanaStokBarangKeluar> {
                                                         : "-"
                                                     : "-"),
                                             softWrap: true,
-                                            style: TextStyle(
-                                              color: AppTheme.text_light,
-                                              fontSize: 15,
-                                            ),
+	                                          style: FontHelper.textListSubtitle,
                                           ),
                                         ],
                                       ),
@@ -495,10 +489,7 @@ class BarangKeluarState extends State<SyanaStokBarangKeluar> {
                                       child: Text(
                                         _saleHistory[index].stock,
                                         softWrap: true,
-                                        style: TextStyle(
-                                          color: AppTheme.text_light,
-                                          fontSize: 14,
-                                        ),
+	                                      style: FontHelper.textListSubtitle,
                                       ),
                                     ),
                                   ),

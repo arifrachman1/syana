@@ -6,23 +6,25 @@ class CustomImage {
   static Widget getProductImage(productImage, {width, height}) {
     if (productImage != null && productImage != "") {
       return Container(
-        child: Image.network(
-          GlobalVars.imageUrl + productImage,
-          width: width ?? 30,
-          height: height ?? 30,
-          fit: BoxFit.fitHeight,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                        loadingProgress.expectedTotalBytes
-                    : null,
-              ),
-            );
-          },
-        ),
+	      margin: EdgeInsets.symmetric(horizontal: 8),
+	      child: Image.network(
+		      GlobalVars.imageUrl + productImage,
+		      width: width ?? 64,
+		      height: height ?? 64,
+		      fit: BoxFit.fitHeight,
+		      loadingBuilder: (context, child, loadingProgress) {
+			      if (loadingProgress == null) return child;
+			      return Center(
+				      child: CircularProgressIndicator(
+					      value: loadingProgress.expectedTotalBytes != null
+							      ? loadingProgress.cumulativeBytesLoaded /
+							      loadingProgress.expectedTotalBytes
+							      : null,
+				      ),
+			      );
+		      },
+
+	      ),
       );
     } else {
       return Container(

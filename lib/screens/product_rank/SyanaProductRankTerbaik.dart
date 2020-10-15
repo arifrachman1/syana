@@ -6,7 +6,6 @@ import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:syana/widgets/CustomImage.dart';
-import '../../main.dart';
 
 class SyanaProductRankTerbaik extends StatefulWidget {
   @override
@@ -476,6 +475,7 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
                                             ? AppTheme.text_darker
                                             : AppTheme.text_light,
                                         fontSize: 15,
+		                                      fontWeight: FontWeight.bold
                                       ),
                                     ),
                                     Text(

@@ -5,7 +5,6 @@ import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
-import '../../main.dart';
 
 class SyanaProductRankTopKurir extends StatefulWidget {
   @override
@@ -468,6 +467,7 @@ class SyanaProductRankTopKurirState extends State<SyanaProductRankTopKurir> {
                                             ? AppTheme.text_darker
                                             : AppTheme.text_light,
                                         fontSize: 15,
+		                                      fontWeight: FontWeight.bold
                                       ),
                                     ),
                                   ],

@@ -8,6 +8,7 @@ import 'package:syana/screens/sale/SyanaConfirmation.dart';
 import 'package:syana/screens/sale/SyanaPenjualanTimhariini.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
+import 'package:syana/utils/FontHelper.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
@@ -640,20 +641,14 @@ class _SaleInnerState extends State<SaleInnerWidget> {
                                           Container(
                                             child: Text(
                                               filteredProducts[index].name,
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 15,
-                                              ),
+	                                            style: FontHelper.textListTitle,
                                               softWrap: true,
                                             ),
                                           ),
                                           Container(
                                             child: Text(
                                               filteredProducts[index].sku,
-                                              style: TextStyle(
-                                                color: AppTheme.text_light,
-                                                fontSize: 15,
-                                              ),
+	                                            style: FontHelper.textListSubtitle,
                                               softWrap: true,
                                             ),
                                           ),
