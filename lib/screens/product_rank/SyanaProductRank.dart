@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/screens/product_rank/SyanaIngrendientsRank.dart';
+import 'package:syana/screens/product_rank/SyanaPackagingRank.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankGlobal.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankGrafikTim.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankProduct.dart';
