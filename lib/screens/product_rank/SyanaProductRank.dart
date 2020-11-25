@@ -32,7 +32,7 @@ class ProductRankState extends State<ProductRank>
     super.initState();
     tabController = TabController(
         vsync: this,
-        length: 11,
+        length: 12,
         initialIndex: widget.shortcutNavigator != null
             ? (widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_FREE
                 ? 0
@@ -61,7 +61,9 @@ class ProductRankState extends State<ProductRank>
                                                 ? 8
                                                 : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_CUSTOMERS
                                                  ? 9
-                                                  : widget.shortcutNavigator == CustomShortcut.SHORTCUT_INGRENDIENTS_RANK ? 10 : 1)
+                                                  : widget.shortcutNavigator == CustomShortcut.SHORTCUT_INGRENDIENTS_RANK
+                                                    ? 10
+                                                    : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PACKAGING_RANK ? 11 : 1)
             : 1);
   }
 
@@ -166,13 +168,13 @@ class ProductRankState extends State<ProductRank>
                             style: TextStyle(fontSize: 13),
                           ),
                         ),
-                        /* Container(
+                        Container(
                           child: Text(
                             'Packaging Rank',
                             softWrap: false,
                             style: TextStyle(fontSize: 13),
                           ),
-                        ), */
+                        ), 
                       ],
                     ),
                   ),
@@ -196,6 +198,7 @@ class ProductRankState extends State<ProductRank>
                     SyanaProductRankTopLokasi(),
                     SyanaProductRankTop50Customer(),
                     SyanaIngrendientsRank(),
+                    SyanaPackagingRank(),
                   ],
                 ),
               ),
