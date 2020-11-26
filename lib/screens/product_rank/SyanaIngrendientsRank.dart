@@ -338,69 +338,29 @@ class _State extends State<SyanaIngrendientsRank> {
                 padding: EdgeInsets.only(left: 10, right: 10),
                 child: Column(
                   children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.only(left: 10),
-                            decoration: AppTheme.inputDecorationShadow(),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                value: _selectedTime,
-                                items: _waktu.map((String value) {
-                                  return DropdownMenuItem(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (String value) {
-                                  onChangedWaktu(value);
-                                },
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: 10),
+                      decoration: AppTheme.inputDecorationShadow(),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: _selectedTime,
+                          items: _waktu.map((String value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          }).toList(),
+                          onChanged: (String value) {
+                            onChangedWaktu(value);
+                          },
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.03,
-                        ),
-                        /* Expanded(
-                            child: Container(
-                                // width: 150,
-                                padding: EdgeInsets.only(left: 10),
-                                decoration: AppTheme.inputDecorationShadow(),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    hint: Text("Pilih Team"),
-                                    value: _currentTeams,
-                                    items: _teams,
-                                    onChanged: (value) async {
-                                      setState(() {
-                                        _currentTeams = value;
-                                      });
-                                      setLoadingState();
-                                      _rankIngrendients.clear();
-                                      await _rankDataController
-                                          .getIngrendientsRank(
-                                              context,
-                                              setLoadingState,
-                                              setData,
-                                              _currentTime,
-                                              _dateFrom,
-                                              _dateTo,
-                                              "1",
-                                              _currentTeams);
-                                      setLoadingState();
-                                    },
-                                  ),
-                                )),
-                          ), */
-                      ],
+                      ),
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.01,
