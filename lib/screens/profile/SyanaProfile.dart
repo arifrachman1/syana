@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:syana/Controller/HomeOwnerController.dart';
 import 'package:syana/Controller/ProfileController.dart';
-import 'package:syana/controller/HomeOwnerController.dart';
+import 'package:syana/Controller/HomeOwnerController.dart';
 import 'package:syana/screens/profile/SyanaChangePassword.dart';
 import 'package:syana/screens/profile/SyanaShortcutSettings.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -56,7 +57,7 @@ class SyanaProfileState extends State<SyanaProfile> {
   }
 
   void logout() {
-	  _profileController.logout(context);
+    _profileController.logout(context);
   }
 
   @override
@@ -107,19 +108,19 @@ class SyanaProfileState extends State<SyanaProfile> {
                               color: AppTheme.white,
                             ),
                           )),
-	                    Container(
-		                    margin: EdgeInsets.symmetric(horizontal: 10),
-		                    alignment: Alignment.bottomRight,
-		                    height: MediaQuery
-				                    .of(context)
-				                    .size
-				                    .height * 0.06,
-		                    child: IconButton(
-			                    onPressed: logout,
-			                    icon: Icon(Icons.exit_to_app, size: 35,),
-			                    color: Colors.white,
-		                    ),
-	                    )
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        alignment: Alignment.bottomRight,
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        child: IconButton(
+                          onPressed: logout,
+                          icon: Icon(
+                            Icons.exit_to_app,
+                            size: 35,
+                          ),
+                          color: Colors.white,
+                        ),
+                      )
                     ],
                   ),
                   Container(

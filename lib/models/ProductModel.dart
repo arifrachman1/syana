@@ -15,7 +15,9 @@ class ProductModel {
       _categoryName,
       _saleNumber,
       _freeNumber,
-      _rankValue;
+      _rankValue,
+      _createAt,
+      _totalItem;
 
   ProductModel() {
     _freeNumber = "0";
@@ -31,7 +33,9 @@ class ProductModel {
       this._price,
       this._categoryName,
       this._saleNumber,
-      this._freeNumber);
+      this._freeNumber,
+      this._createAt,
+      this._totalItem);
 
   ProductModel.productStock(
       this._id,
@@ -50,15 +54,26 @@ class ProductModel {
 
   ProductModel.rankTopData(this._name, this._rankValue);
 
-  ProductModel.productsDropdown(
-      this._id, this._name);
+  ProductModel.productsDropdown(this._id, this._name);
 
   ProductModel.productSuggestions(this._id, this._name, this._sku);
 
+  ProductModel.materialRank(this._name, this._createAt, this._totalItem);
 
-  ProductModel.init(this._id, this._status, this._name, this._image,
-      this._point, this._stock, this._criticalStock, this._weight,
-      this._idCategory, this._idCreator, this._sku, this._price, this._type);
+  ProductModel.init(
+      this._id,
+      this._status,
+      this._name,
+      this._image,
+      this._point,
+      this._stock,
+      this._criticalStock,
+      this._weight,
+      this._idCategory,
+      this._idCreator,
+      this._sku,
+      this._price,
+      this._type);
 
   get rankValue => _rankValue;
 
@@ -162,6 +177,18 @@ class ProductModel {
     _id = value;
   }
 
+  get createAt => _createAt;
+
+  set createAt(value) {
+    _createAt = value;
+  }
+
+  get totalItem => _totalItem;
+
+  set totalItem(value) {
+    _totalItem = value;
+  }
+
   Map<String, dynamic> toJson() {
     return {
       "id": this._id,
@@ -179,13 +206,15 @@ class ProductModel {
       "category_name": this._categoryName,
       "sale_number": this._saleNumber,
       "free_number": this._freeNumber,
-      "rank_value": this._rankValue
+      "rank_value": this._rankValue,
+      "create_at": this._createAt,
+      "total_item": this._totalItem,
     };
   }
 
   @override
   String toString() {
-    return 'ProductModel{_id: $_id, _name: $_name, _sku: $_sku, _saleNumber: $_saleNumber, _freeNumber: $_freeNumber}';
+    return 'ProductModel{_id: $_id, _name: $_name, _sku: $_sku, _saleNumber: $_saleNumber, _freeNumber: $_freeNumber, _createAt: $_createAt, _totalItem: $_totalItem}';
   }
 
 /*static List encondeToJson(List<ProductModel>list){

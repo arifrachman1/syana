@@ -174,6 +174,8 @@ class SaleController {
               element['harga'],
               element['category_name'],
               "0",
+              "0",
+              "0",
               "0"));
         });
 
