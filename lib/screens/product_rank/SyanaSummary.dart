@@ -9,6 +9,14 @@ class SyanaSummary extends StatefulWidget {
 
 class _SyanaSummaryState extends State<SyanaSummary> {
   bool _isLoading = false;
+  
+  bool _secureText = true;
+
+ showHide() {
+   setState(() {
+     _secureText = !_secureText;
+   });
+ }
 
   void setLoadingState() {
     setState(() {
@@ -49,6 +57,9 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                   //alignment: ,
                   child: Expanded(
                     child: Container(
+                      decoration: BoxDecoration(
+                        
+                      ),
                     // padding: EdgeInsets.only(left: 10),
                     //decoration: AppTheme.inputDecorationShadow(),
                     child: DropdownButtonHideUnderline(
@@ -111,19 +122,19 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                         return Container(
                           decoration: BoxDecoration(
                             
-                            color: AppTheme.white
-                                //index < 3 ? AppTheme.teal_light : AppTheme.teal,
-                            //borderRadius: BorderRadius.circular(12),
+                            color: 
+                                index < 3 ? AppTheme.teal_light : AppTheme.teal,
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          //height: Dimens.listHeightSmall(context),
+                          height: Dimens.listHeightSmall(context),
                           margin: EdgeInsets.only(bottom: 15),
                           child: Row(
                             children: <Widget>[
-                              /* Flexible(
-                                flex: 10,
+                               Flexible(
+                                flex: 5,
                                 child: Container(
                                   alignment: Alignment.center,
-                                  child: Text(
+                                  /* child: Text(
                                     (index + 1).toString(),
                                     style: TextStyle(
                                       color: index < 3
@@ -131,55 +142,56 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                                           : AppTheme.text_light,
                                       fontSize: 15,
                                     ),
-                                  ),
+                                  ),  */
                                 ),
-                              ), */ 
+                              ), 
                               Flexible(
                                 flex: 20,
-                                //fit: FlexFit.tight,
+                                fit: FlexFit.tight,
                                 child: Container(
                                   child: Text(
-                                        'Produk A'
+                                        'JP123456'
                                         /* rankBestProducts[index].name, */,
                                         softWrap: true,
                                         style: TextStyle(
                                             //color: AppTheme.
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold),
+                                            fontSize: 20,
+                                            //fontWeight: FontWeight.bold
+                                            ),
                                       ),
                                 ),
                               ),
                               Flexible(
-                                flex: 40,
-                                fit: FlexFit.tight,
+                                flex: 10,
+                                //fit: FlexFit.tight,
                                 child: Container(
                                   alignment: Alignment.center,
                                   child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '50'
-                                        /* rankBestProducts[index].rankValue */,
-                                       softWrap: true,
-                                        style: TextStyle(
-                                          color:AppTheme.white,
-                                          fontSize: 14,
-                                        ),
-                                      ),
+                                            '200.000'
+                                            /* rankBestProducts[index].name, */,
+                                            softWrap: true,
+                                            style: TextStyle(
+                                                //color: AppTheme.
+                                                fontSize: 13,
+                                                //fontWeight: FontWeight.bold
+                                                ),
+                                          ),
                                       Text(
-                                        '50'
-                                        /* rankBestProducts[index].rankValue */,
-                                        //softWrap: true,
-                                        style: TextStyle(
-                                          color: index < 3
-                                              ? AppTheme.text_darker
-                                              : AppTheme.text_light,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    
+                                            '200.000'
+                                            /* rankBestProducts[index].name, */,
+                                            softWrap: true,
+                                            style: TextStyle(
+                                                //color: AppTheme.
+                                                fontSize: 13,
+                                                //fontWeight: FontWeight.bold
+                                                ),
+                                          ),
                                     ],
-                                  )
-                                ),
+                                  ),
+                                  ),
                               ),
                             ],
                           ),
