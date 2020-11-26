@@ -25,7 +25,10 @@ class CustomShortcut {
       SHORTCUT_PROMO = 17,
       SHORTCUT_TRACES = 18,
       SHORTCUT_BROADCAST = 19,
-      SHORTCUT_EMPTY = 99;
+      SHORTCUT_EMPTY = 99,
+      SHORTCUT_INGRENDIENTS_RANK = 20,
+      SHORTCUT_PACKAGING_RANK = 21;
+
 
   static getShortcut(menu, context) {
     switch (menu) {
@@ -307,6 +310,25 @@ class CustomShortcut {
               MaterialPageRoute(
                 builder: (BuildContext context) {
                   return BroadcastMessage();
+                },
+              ),
+            );
+            /*Navigator.of(context).push(MaterialPageRoute(builder: (context){
+              return StockMain();
+            }));*/
+          },
+        );
+        break;
+        
+        case SHORTCUT_INGRENDIENTS_RANK:
+        return IconButton(
+          icon: Icon(Icons.insert_chart),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return ProductRank(shortcutNavigator: SHORTCUT_INGRENDIENTS_RANK,);
                 },
               ),
             );

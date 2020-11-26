@@ -197,6 +197,31 @@ class RankDataController {
     } else {}
   }
 
+  /* Get Ingrendients Rank */
+  getIngrendientsRank(context, loadingStateCallback, setDataCallback,
+      filterTime, timeFrom, timeTo, idTeam, type) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam([], []);
+
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "", context: context, params: params);
+
+    if (data != null) {
+      if (data['status'] == 1) {}
+    } else {}
+  }
+
+  /* Get Packaging Rank */
+  getPackagingRank(context, loadingStateCallBack, setDataCallback, filterTime,
+      timeFrom, timeTo, idTeam, type) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+  }
+
   /*strip categories from products*/
   getCategoriesFromProducts(List products) {
     Map<String, String> categories = new Map();
