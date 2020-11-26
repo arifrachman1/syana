@@ -199,27 +199,92 @@ class RankDataController {
 
   /* Get Ingrendients Rank */
   getIngrendientsRank(context, loadingStateCallback, setDataCallback,
-      filterTime, timeFrom, timeTo, idTeam, type) async {
+      filterTime, timeFrom, timeTo, materialType, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
-    var params = GlobalFunctions.generateMapParam([], []);
+    var options = Options(headers: {
+      "Authorization": "Bearer " + _userModel.accessToken.toString()
+    });
 
-    final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "", context: context, params: params);
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "material_type", "id_team"],
+        [filterTime, timeFrom, timeTo, materialType, idTeam]);
+
+    FormData formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        options: options,
+        path: GlobalVars.rankUrl + "get-rank-materials",
+        params: formData);
+
+    print(GlobalVars.rankUrl + "get-rank-materials");
+    print(params);
 
     if (data != null) {
-      if (data['status'] == 1) {}
+      if (data['status'] == 200) {
+        List _ingrendientsFromApi = data['data'];
+        List<ProductModel> _rankIngrendientsProducts = new List();
+
+        _ingrendientsFromApi.forEach((element) {
+          _rankIngrendientsProducts.add(new ProductModel.materialRank(
+            element['nama_bahan'],
+            element['create_at'],
+            element['total_item'],
+          ));
+        });
+        if (_rankIngrendientsProducts.isNotEmpty) {
+          setDataCallback(_rankIngrendientsProducts);
+        }
+      }
     } else {}
   }
 
   /* Get Packaging Rank */
-  getPackagingRank(context, loadingStateCallBack, setDataCallback, filterTime,
-      timeFrom, timeTo, idTeam, type) async {
+  getPackagingRank(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, materialType, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
+
+    var options = Options(headers: {
+      "Authorization": "Bearer " + _userModel.accessToken.toString()
+    });
+
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "material_type", "id_team"],
+        [filterTime, timeFrom, timeTo, materialType, idTeam]);
+
+    FormData formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        options: options,
+        path: GlobalVars.rankUrl + "get-rank-materials",
+        params: formData);
+
+    print(GlobalVars.rankUrl + "get-rank-materials");
+    print(params);
+
+    if (data != null) {
+      if (data['status'] == 200) {
+        List _packagingFromApi = data['data'];
+        List<ProductModel> _rankpackagingProducts = new List();
+
+        _packagingFromApi.forEach((element) {
+          _rankpackagingProducts.add(new ProductModel.materialRank(
+            element['nama_bahan'],
+            element['create_at'],
+            element['total_item'],
+          ));
+        });
+        if (_rankpackagingProducts.isNotEmpty) {
+          setDataCallback(_rankpackagingProducts);
+        }
+      }
+    } else {}
   }
 
   /*strip categories from products*/
