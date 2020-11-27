@@ -213,20 +213,20 @@ class _PackingDetailState extends State<PackingDetail> {
                 )
               ],
             ),
-            checkSaleNumber()
-                ? Container(
+            Container(
               margin: EdgeInsets.only(top: 20),
-                    child: RaisedButton(
-                      shape: StadiumBorder(),
-                      color: AppTheme.yellow,
-                      onPressed: () async {
+              child: RaisedButton(
+                shape: StadiumBorder(),
+                color: AppTheme.yellow,
+                onPressed: checkSaleNumber()
+                    ? () async {
                         _homePackingController.accPackingSale(
                             context, setLoadingState, widget.data.id);
-                      },
-                      child: Text("PACKING"),
-                    ),
-                  )
-                : Container()
+                      }
+                    : null,
+                child: Text("PACKING"),
+              ),
+            )
           ],
         ),
       ),
