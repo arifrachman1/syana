@@ -8,6 +8,8 @@ import 'package:syana/screens/credentials/Login.dart';
 import 'package:syana/screens/packing/PackingDetail.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 
 class HomePackingController {
   UserModel _userModel;
@@ -58,32 +60,88 @@ class HomePackingController {
 
         _detailFromApi.forEach((element) {
           saleDetailModels.add(new SaleDetailModel.init(
-              element['id'].toString(),
-              element['id_sale'].toString(),
-              element['id_product'].toString(),
-              element['product_name'].toString(),
-              element['sale_number'].toString(),
-              element['point'].toString(),
-              element['sku'].toString(),
-              element['price'].toString(),
-              element['weight'].toString(),
-              0));
+            element['id'].toString(),
+            element['id_sale'].toString(),
+            element['id_product'].toString(),
+            element['product_name'].toString(),
+            element['sale_number'].toString(),
+            element['point'].toString(),
+            element['sku'].toString(),
+            element['price'].toString(),
+            element['weight'].toString(),
+            0,
+          ));
         });
 
         saleModel = new SaleModel.init(
-            data['data']['sale']['id'].toString(),
-            data['data']['sale']['transaction_number'].toString(),
-            data['data']['sale']['total_point'].toString(),
-            data['data']['sale']['datetime_created'].toString(),
-            data['data']['sale']['username_customer'].toString(),
-            data['data']['sale']['name_ecommerce'].toString(),
-            saleDetailModels);
+          data['data']['sale']['id'].toString(),
+          data['data']['sale']['transaction_number'].toString(),
+          data['data']['sale']['total_point'].toString(),
+          data['data']['sale']['datetime_created'].toString(),
+          data['data']['sale']['username_customer'].toString(),
+          data['data']['sale']['name_ecommerce'].toString(),
+          saleDetailModels,
+          data['data']['sale']['status'].toString(),
+        );
 
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return PackingDetail(saleModel);
-        }));
+        if (saleModel.status != "1") {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+            return PackingDetail(saleModel);
+          }));
+        } else {
+          CustomDialog.getDialog(
+              title: "Peringatan",
+              message: "Data pembelian sudah dipacking.",
+              context: context,
+              popCount: 1);
+        }
       }
     }
+  }
+
+  accPackingSale(context, loadingStateCallback, idSale) async {
+    FormData formData;
+    Map param = GlobalFunctions.generateMapParam([
+      "id_employee",
+      "id_sale",
+    ], [
+      _userModel.id.toString(),
+      idSale,
+    ]);
+    formData = FormData.fromMap(param);
+    print(formData.fields);
+
+    loadingStateCallback();
+    final data = await GlobalFunctions.dioPostCall(
+        path: GlobalVars.baseUrl + "syana/sale/" + "packing-acc-sales",
+        params: formData,
+        options: Options(
+            headers: {"Authorization": "Bearer " + _userModel.accessToken}),
+        context: context);
+    if (data != null) {
+      if (data['status'] == 200) {
+        Navigator.pop(context);
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_SUCCESS,
+            message: Strings.DIALOG_MESSAGE_TRANSACTION_SUCCESS,
+            context: context,
+            popCount: 1);
+      } else {
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_ERROR,
+            message: data['message'],
+            context: context,
+            popCount: 1);
+        print(data['message']);
+      }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    }
+    loadingStateCallback();
   }
 
   clearPersistence() async {

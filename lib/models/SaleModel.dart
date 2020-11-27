@@ -1,11 +1,17 @@
 import 'package:syana/models/SaleDetailModel.dart';
 
 class SaleModel{
-  String _id, _transactionNumber, _totalPoint, _date, _customer, _ecommerce;
+  String _id, _transactionNumber, _totalPoint, _date, _customer, _ecommerce, _status;
   List<SaleDetailModel> _saleDetails;
 
   SaleModel.init(this._id, this._transactionNumber, this._totalPoint,
-      this._date, this._customer, this._ecommerce, this._saleDetails);
+      this._date, this._customer, this._ecommerce, this._saleDetails, this._status);
+
+  get status => _status;
+
+  set status(value) {
+    _status = value;
+  }
 
   String get id => _id;
 
