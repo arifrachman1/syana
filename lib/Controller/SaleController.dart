@@ -458,11 +458,13 @@ class SaleController {
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioPostCall(
-        path: GlobalVars.apiUrl + "sale-product",
+        path: GlobalVars.baseUrl + "syana/sale/" + "sale-product",
         params: formData,
+        options: Options(
+            headers: {"Authorization": "Bearer " + _userModel.accessToken}),
         context: context);
     if (data != null) {
-      if (data['status'] == 1) {
+      if (data['status'] == 200) {
         Navigator.pop(context);
         Navigator.pop(context);
         Navigator.pop(context);
