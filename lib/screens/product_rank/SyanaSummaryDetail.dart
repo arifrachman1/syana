@@ -19,6 +19,13 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
       _item.add("Item E 5x");
       _item.add("Item F 6x");
       _item.add("Item G 7x");
+      _item.add("Item H 8x");
+      _item.add("Item I 9x");
+      _item.add("Item J 10x");
+      _item.add("Item K 11x");
+      _item.add("Item L 12x");
+      _item.add("Item M 13x");
+      _item.add("Item N 14x");
     });
   }
 
@@ -45,33 +52,40 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : Column(
+            : Center(
+              child: Column(
                 children: [
                   Container(
                     alignment: Alignment.center,
                     //color: Colors.red,
                     width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.06,
+                    height: MediaQuery.of(context).size.height * 0.08,
                     child: Row(
                       children: [
-                        Text(
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          child: Text(
                           "Sales : ",
                           style: TextStyle(
                             fontSize: 21,
+                            ),
                           ),
                         ),
-                        Text(
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: Text(
                           "Ari",
                           style: TextStyle(
                             fontSize: 21,
                           ),
                         ),
+                        )
                       ],
                     ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.06,
+                    height: MediaQuery.of(context).size.height * 0.07,
                     child: Row(
                       children: [
                         Text(
@@ -90,22 +104,26 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
                     ),
                   ),
                   Flexible(
-                    child: ListView.builder(
-                            //shrinkwrap
-                            //shrinkWrap: true,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      //color: Colors.red,
+                      child: ListView.builder(
                             itemCount: _item.length,
-                            //scrollDirection: Axis.vertical,
                             itemBuilder: (context, index) {
                               return Container(
-                                  alignment: Alignment.center,
-                                  padding: EdgeInsets.all(5.0),
-                                  margin: EdgeInsets.all(5.0),
+                                  padding: EdgeInsets.all(7.0),
+                                  margin: EdgeInsets.all(7.0),
                                   child: Text(
                                     _item[index],
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    ),
                                   ));
-                            })),
+                            }))),
                   
                 ],
-              ));
+              )
+              )
+        );
   }
 }
