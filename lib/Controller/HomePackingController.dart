@@ -43,6 +43,9 @@ class HomePackingController {
             "syana/sale/" +
             "get-sales-by-airway-bill-number");
 
+    print(data);
+    print("WOIII");
+
     if (data != null) {
       if (data['status'] == 200) {
         GlobalFunctions.log(
@@ -63,7 +66,8 @@ class HomePackingController {
               element['point'].toString(),
               element['sku'].toString(),
               element['price'].toString(),
-              element['weight'].toString()));
+              element['weight'].toString(),
+              0));
         });
 
         saleModel = new SaleModel.init(

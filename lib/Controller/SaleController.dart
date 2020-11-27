@@ -445,13 +445,15 @@ class SaleController {
       "id_customer",
       "transaction_number",
       "detail",
-      "courier"
+      "courier",
+      "id_ecommerce"
     ], [
       _userModel.id.toString(),
       GlobalVars.customerId,
       transNumber,
       paramDetail,
-      courierId
+      courierId,
+      GlobalVars.selectedEcommerce
     ]);
     formData = FormData.fromMap(param);
     print(formData.fields);

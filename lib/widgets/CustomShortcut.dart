@@ -27,7 +27,8 @@ class CustomShortcut {
       SHORTCUT_BROADCAST = 19,
       SHORTCUT_EMPTY = 99,
       SHORTCUT_INGRENDIENTS_RANK = 20,
-      SHORTCUT_PACKAGING_RANK = 21;
+      SHORTCUT_PACKAGING_RANK = 21,
+      SHORTCUT_OVERVIEW = 22;
 
 
   static getShortcut(menu, context) {

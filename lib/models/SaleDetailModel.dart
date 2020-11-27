@@ -1,9 +1,33 @@
-class SaleDetailModel{
-  String _id, _idSale, _idProduct, _productName, _saleNumber, _point, _sku, _price, _weight;
+class SaleDetailModel {
+  String _id,
+      _idSale,
+      _idProduct,
+      _productName,
+      _saleNumber,
+      _point,
+      _sku,
+      _price,
+      _weight;
 
-  SaleDetailModel.init(this._id, this._idSale, this._idProduct,
-      this._productName, this._saleNumber, this._point, this._sku, this._price,
-      this._weight);
+  int _currentSaleNum;
+
+  SaleDetailModel.init(
+      this._id,
+      this._idSale,
+      this._idProduct,
+      this._productName,
+      this._saleNumber,
+      this._point,
+      this._sku,
+      this._price,
+      this._weight,
+      this._currentSaleNum);
+
+  get currentSaleNum => _currentSaleNum;
+
+  set currentSaleNum(value) {
+    _currentSaleNum = value;
+  }
 
   get weight => _weight;
 
@@ -61,8 +85,6 @@ class SaleDetailModel{
 
   @override
   String toString() {
-    return 'SaleDetailModel{_id: $_id, _idSale: $_idSale, _idProduct: $_idProduct, _productName: $_productName, _saleNumber: $_saleNumber, _point: $_point, _sku: $_sku, _price: $_price, _weight: $_weight}';
+    return 'SaleDetailModel{_id: $_id, _idSale: $_idSale, _idProduct: $_idProduct, _productName: $_productName, _saleNumber: $_saleNumber, _point: $_point, _sku: $_sku, _price: $_price, _weight: $_weight, _currentSaleNum: $_currentSaleNum}';
   }
-
-
 }

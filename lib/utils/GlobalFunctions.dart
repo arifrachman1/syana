@@ -300,4 +300,13 @@ class GlobalFunctions {
       }), (route) => false);
     }
   }
+  
+  static String convertRupiah(int currency) {
+    String format_currency =
+        NumberFormat.currency(locale: 'id', symbol: '').format(currency);
+    List<String> currencys = format_currency.split(",");
+    format_currency = currencys[0];
+
+    return format_currency;
+  }
 }
