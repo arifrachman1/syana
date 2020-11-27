@@ -9,20 +9,21 @@ class SyanaSummary extends StatefulWidget {
 
 class _SyanaSummaryState extends State<SyanaSummary> {
   bool _isLoading = false;
-  
+
   bool _secureText = true;
 
- showHide() {
-   setState(() {
-     _secureText = !_secureText;
-   });
- }
+  showHide() {
+    setState(() {
+      _secureText = !_secureText;
+    });
+  }
 
   void setLoadingState() {
     setState(() {
       _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
     });
   }
+
   String selectedToko;
   String selectedEcommerce;
 
@@ -53,19 +54,71 @@ class _SyanaSummaryState extends State<SyanaSummary> {
               children: <Widget>[
                 Container(
                   width: MediaQuery.of(context).size.width * 0.8,
+                  height: 20,
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'Filter Toko',
+                    style: TextStyle(
+                      color: AppTheme.text_darker,
+                      fontSize: 12,
+                      //fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
                   height: MediaQuery.of(context).size.height * 0.1,
                   //alignment: ,
                   child: Expanded(
                     child: Container(
-                      decoration: BoxDecoration(
-                        
+                      decoration: BoxDecoration(),
+                      // padding: EdgeInsets.only(left: 10),
+                      //decoration: AppTheme.inputDecorationShadow(),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          value: selectedToko,
+                          items: _toko.map((value) {
+                            return DropdownMenuItem(
+                              child: Text(value),
+                              value: value,
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedToko = value;
+                            });
+                          },
+                        ),
                       ),
-                    // padding: EdgeInsets.only(left: 10),
-                    //decoration: AppTheme.inputDecorationShadow(),
-                    child: DropdownButtonHideUnderline(
+                    ),
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 20,
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'Filter E-Commerce',
+                    style: TextStyle(
+                      color: AppTheme.text_darker,
+                      fontSize: 12,
+                      //fontWeight: FontWeight.bold
+                    ),
+                  ),
+                ),
+                Container(
+                  //alignment: ,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: Expanded(
+                    child: Container(
+                        // width: 150,
+                        //padding: EdgeInsets.only(left: 10),
+                        //decoration: AppTheme.inputDecorationShadow(),
+                        child: DropdownButtonHideUnderline(
                       child: DropdownButton(
-                        value: selectedToko,
-                        items: _toko.map((value) {
+                        value: selectedEcommerce,
+                        items: _ecommerce.map((value) {
                           return DropdownMenuItem(
                             child: Text(value),
                             value: value,
@@ -73,43 +126,16 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            selectedToko = value;
+                            selectedEcommerce = value;
                           });
                         },
                       ),
-                    ),
-                    ),
-                    ),
+                    )),
                   ),
-                Container(
-                  //alignment: ,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: Expanded(
-                            child: Container(
-                                // width: 150,
-                                //padding: EdgeInsets.only(left: 10),
-                                //decoration: AppTheme.inputDecorationShadow(),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton(
-                                    value: selectedEcommerce,
-                                    items: _ecommerce.map((value) {
-                                      return DropdownMenuItem(
-                                        child: Text(value),
-                                        value: value,
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedEcommerce = value;
-                                      });
-                                    },
-                                  ),
-                                )),
-                          ),),
+                ),
                 Container(
                   margin: EdgeInsets.only(bottom: 10),
                   padding: EdgeInsets.only(left: 10, right: 10),
-                  
                 ),
                 Expanded(
                   child: Container(
@@ -121,8 +147,7 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
                           decoration: BoxDecoration(
-                            
-                            color: 
+                            color:
                                 index < 3 ? AppTheme.teal_light : AppTheme.teal,
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -130,7 +155,7 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                           margin: EdgeInsets.only(bottom: 15),
                           child: Row(
                             children: <Widget>[
-                               Flexible(
+                              Flexible(
                                 flex: 5,
                                 child: Container(
                                   alignment: Alignment.center,
@@ -144,21 +169,21 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                                     ),
                                   ),  */
                                 ),
-                              ), 
+                              ),
                               Flexible(
                                 flex: 20,
                                 fit: FlexFit.tight,
                                 child: Container(
                                   child: Text(
-                                        'JP123456'
-                                        /* rankBestProducts[index].name, */,
-                                        softWrap: true,
-                                        style: TextStyle(
-                                            //color: AppTheme.
-                                            fontSize: 20,
-                                            //fontWeight: FontWeight.bold
-                                            ),
-                                      ),
+                                    'JP123456'
+                                    /* rankBestProducts[index].name, */,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      //color: AppTheme.
+                                      fontSize: 20,
+                                      //fontWeight: FontWeight.bold
+                                    ),
+                                  ),
                                 ),
                               ),
                               Flexible(
@@ -170,28 +195,28 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                            '200.000'
-                                            /* rankBestProducts[index].name, */,
-                                            softWrap: true,
-                                            style: TextStyle(
-                                                //color: AppTheme.
-                                                fontSize: 13,
-                                                //fontWeight: FontWeight.bold
-                                                ),
-                                          ),
+                                        '200.000'
+                                        /* rankBestProducts[index].name, */,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          //color: AppTheme.
+                                          fontSize: 13,
+                                          //fontWeight: FontWeight.bold
+                                        ),
+                                      ),
                                       Text(
-                                            '200.000'
-                                            /* rankBestProducts[index].name, */,
-                                            softWrap: true,
-                                            style: TextStyle(
-                                                //color: AppTheme.
-                                                fontSize: 13,
-                                                //fontWeight: FontWeight.bold
-                                                ),
-                                          ),
+                                        '200.000'
+                                        /* rankBestProducts[index].name, */,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          //color: AppTheme.
+                                          fontSize: 13,
+                                          //fontWeight: FontWeight.bold
+                                        ),
+                                      ),
                                     ],
                                   ),
-                                  ),
+                                ),
                               ),
                             ],
                           ),
