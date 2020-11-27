@@ -2,13 +2,15 @@
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-class GlobalVars{
+class GlobalVars {
   /*urls*/
-  static final String baseUrl = "http://192.168.1.67:8080/";
+  static final String baseUrl = "http://10.0.3.2:8080/";
 //  static final String baseUrl = "http://syana.mamorasoft.com/";
 //  static final String baseUrl = "http://hq.syana.co.id/";
   static final String apiUrl = baseUrl + "syana/api/";
+  static final String rankUrl = baseUrl + "syana/rank/";
   static final String siteUrl = baseUrl + "syana/site/";
+  static final String summaryUrl = baseUrl + "syana/summary/";
 
 //  static final String apiUrl = baseUrl + "api/";
 //  static final String siteUrl = baseUrl + "site/";
@@ -16,14 +18,13 @@ class GlobalVars{
 //  static final String imageUrl = baseUrl + "syana/products/";
   static final String imageUrl = baseUrl + "products/";
 
-
   static final String thumbnailUrl = baseUrl + "syana/thumbnail/";
 
   static String YOUTUBE_API_KEY = "AIzaSyCyjg0Dq4NsQF6uLLNySsP2KR1JuGA7l9I";
 
   /*fcm*/
-   static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-   static bool fcm_message_received = false;
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  static bool fcm_message_received = false;
 
   /*dev-mode*/
   static bool isDevMode = true;
@@ -44,9 +45,10 @@ class GlobalVars{
 
   /*sale*/
   static String airwayBillNumber = "";
-  static clearAirwayBillNumber(){
+  static clearAirwayBillNumber() {
     airwayBillNumber = "";
   }
+
   static String customerId = "";
   static String customerFullName = "";
   static int selectedEcommerce = 0;

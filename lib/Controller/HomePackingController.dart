@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/models/SaleDetailModel.dart';
@@ -24,24 +25,36 @@ class HomePackingController {
     if (_userModel == null) {
       await _getPersistence();
     }
+    FormData formData;
+    Map param = GlobalFunctions.generateMapParam([
+      "airway_bill_number",
+    ], [
+      airwayBillNumber,
+    ]);
+    formData = FormData.fromMap(param);
+    print(formData.fields);
 
-    var params = GlobalFunctions.generateMapParam(
-        ["airway_bill_number"], [airwayBillNumber]);
-
-    final data = await GlobalFunctions.dioGetCall(
+    final data = await GlobalFunctions.dioPostCall(
         context: context,
-        params: params,
-        path: GlobalVars.apiUrl + "get-sales-by-airway-bill-number");
+        params: formData,
+        options: Options(
+            headers: {"Authorization": "Bearer " + _userModel.accessToken}),
+        path: GlobalVars.baseUrl +
+            "syana/sale/" +
+            "get-sales-by-airway-bill-number");
+
+    print(data);
+    print("WOIII");
 
     if (data != null) {
-      if (data['status'] == 1) {
+      if (data['status'] == 200) {
         GlobalFunctions.log(
             message: data.toString(), name: "packaging_controller");
 
         List<SaleDetailModel> saleDetailModels = new List();
         SaleModel saleModel;
 
-        List _detailFromApi = data['sale_detail'];
+        List _detailFromApi = data['data']['sale_detail'];
 
         _detailFromApi.forEach((element) {
           saleDetailModels.add(new SaleDetailModel.init(
@@ -53,16 +66,17 @@ class HomePackingController {
               element['point'].toString(),
               element['sku'].toString(),
               element['price'].toString(),
-              element['weight'].toString()));
+              element['weight'].toString(),
+              0));
         });
 
         saleModel = new SaleModel.init(
-            data['sale']['id'].toString(),
-            data['sale']['transaction_number'].toString(),
-            data['sale']['total_point'].toString(),
-            data['sale']['datetime_created'].toString(),
-            data['sale']['username_customer'].toString(),
-            data['sale']['name_ecommerce'].toString(),
+            data['data']['sale']['id'].toString(),
+            data['data']['sale']['transaction_number'].toString(),
+            data['data']['sale']['total_point'].toString(),
+            data['data']['sale']['datetime_created'].toString(),
+            data['data']['sale']['username_customer'].toString(),
+            data['data']['sale']['name_ecommerce'].toString(),
             saleDetailModels);
 
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:syana/models/ChartDataModel.dart';
 import 'package:syana/models/CourierModel.dart';
 import 'package:syana/models/EcommerceModel.dart';
+import 'package:syana/models/OverviewModel.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/RankDataModel.dart';
 import 'package:syana/models/TeamModel.dart';
@@ -164,6 +165,57 @@ class RankDataController {
     } else {}
   }
 
+  /*get overview*/
+  getOverview(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, idTeam) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var options = Options(headers: {
+      "Authorization": "Bearer " + _userModel.accessToken.toString()
+    });
+
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "id_team"],
+        [filterTime, timeFrom, timeTo, idTeam]);
+    FormData formData = FormData.fromMap(params);
+    final data = await GlobalFunctions.dioPostCall(
+        path: GlobalVars.summaryUrl + "get-overview",
+        context: context,
+        params: formData,
+        options: options);
+
+    if (data != null) {
+      if (data['status'] == 200) {
+         var _overview = data['data'];
+
+        OverviewModel _rankOverview = new OverviewModel.getOverview(
+          _overview['profit_bruto'], 
+          _overview['cost_terjual'], 
+          _overview['cost_free'], 
+          _overview['profit_netto'], 
+          _overview['omzet']);     
+
+        if (_rankOverview != null) {
+          setDataCallback(_rankOverview);
+        }
+      }else{
+        CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: data['message'],
+          context: context,
+          popCount: 1);
+      }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    }
+  }
+
   /*get top location*/
   getTopLocation(context, loadingStateCallback, setDataCallback, filterTime,
       timeFrom, timeTo, idTeam, type) async {
@@ -199,27 +251,104 @@ class RankDataController {
 
   /* Get Ingrendients Rank */
   getIngrendientsRank(context, loadingStateCallback, setDataCallback,
-      filterTime, timeFrom, timeTo, idTeam, type) async {
+      filterTime, timeFrom, timeTo, materialType, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
-    var params = GlobalFunctions.generateMapParam([], []);
+    var options = Options(headers: {
+      "Authorization": "Bearer " + _userModel.accessToken.toString()
+    });
 
-    final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "", context: context, params: params);
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "material_type", "id_team"],
+        [filterTime, timeFrom, timeTo, materialType, idTeam]);
+
+    FormData formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        options: options,
+        path: GlobalVars.rankUrl + "get-rank-materials",
+        params: formData);
+
+    print(GlobalVars.rankUrl + "get-rank-materials");
+    print(params);
 
     if (data != null) {
-      if (data['status'] == 1) {}
-    } else {}
+      if (data['status'] == 200) {
+        List _ingrendientsFromApi = data['data'];
+        List<ProductModel> _rankIngrendientsProducts = new List();
+
+        _ingrendientsFromApi.forEach((element) {
+          _rankIngrendientsProducts.add(new ProductModel.materialRank(
+            element['nama_bahan'],
+            element['create_at'],
+            element['total_item'],
+          ));
+        });
+        if (_rankIngrendientsProducts.isNotEmpty) {
+          setDataCallback(_rankIngrendientsProducts);
+        }
+      }else{
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_WARNING,
+            message: data['message'],
+            context: context,
+            popCount: 1);
+      }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    }
   }
 
   /* Get Packaging Rank */
-  getPackagingRank(context, loadingStateCallBack, setDataCallback, filterTime,
-      timeFrom, timeTo, idTeam, type) async {
+  getPackagingRank(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, materialType, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
+
+    var options = Options(headers: {
+      "Authorization": "Bearer " + _userModel.accessToken.toString()
+    });
+
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "material_type", "id_team"],
+        [filterTime, timeFrom, timeTo, materialType, idTeam]);
+
+    FormData formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        options: options,
+        path: GlobalVars.rankUrl + "get-rank-materials",
+        params: formData);
+
+    print(GlobalVars.rankUrl + "get-rank-materials");
+    print(params);
+
+    if (data != null) {
+      if (data['status'] == 200) {
+        List _packagingFromApi = data['data'];
+        List<ProductModel> _rankpackagingProducts = new List();
+
+        _packagingFromApi.forEach((element) {
+          _rankpackagingProducts.add(new ProductModel.materialRank(
+            element['nama_bahan'],
+            element['create_at'],
+            element['total_item'],
+          ));
+        });
+        if (_rankpackagingProducts.isNotEmpty) {
+          setDataCallback(_rankpackagingProducts);
+        }
+      }
+    } else {}
   }
 
   /*strip categories from products*/
