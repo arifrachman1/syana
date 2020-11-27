@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:syana/models/ChartDataModel.dart';
 import 'package:syana/models/CourierModel.dart';
 import 'package:syana/models/EcommerceModel.dart';
+import 'package:syana/models/OverviewModel.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/RankDataModel.dart';
 import 'package:syana/models/TeamModel.dart';
@@ -164,6 +165,57 @@ class RankDataController {
     } else {}
   }
 
+  /*get overview*/
+  getOverview(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, idTeam) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var options = Options(headers: {
+      "Authorization": "Bearer " + _userModel.accessToken.toString()
+    });
+
+    var params = GlobalFunctions.generateMapParam(
+        ["filter_time", "time_from", "time_to", "id_team"],
+        [filterTime, timeFrom, timeTo, idTeam]);
+    FormData formData = FormData.fromMap(params);
+    final data = await GlobalFunctions.dioPostCall(
+        path: GlobalVars.summaryUrl + "get-overview",
+        context: context,
+        params: formData,
+        options: options);
+
+    if (data != null) {
+      if (data['status'] == 200) {
+         var _overview = data['data'];
+
+        OverviewModel _rankOverview = new OverviewModel.getOverview(
+          _overview['profit_bruto'], 
+          _overview['cost_terjual'], 
+          _overview['cost_free'], 
+          _overview['profit_netto'], 
+          _overview['omzet']);     
+
+        if (_rankOverview != null) {
+          setDataCallback(_rankOverview);
+        }
+      }else{
+        CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: data['message'],
+          context: context,
+          popCount: 1);
+      }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    }
+  }
+
   /*get top location*/
   getTopLocation(context, loadingStateCallback, setDataCallback, filterTime,
       timeFrom, timeTo, idTeam, type) async {
@@ -238,8 +290,20 @@ class RankDataController {
         if (_rankProducts.isNotEmpty) {
           setDataCallback(_rankProducts);
         }
+      }else{
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_WARNING,
+            message: data['message'],
+            context: context,
+            popCount: 1);
       }
-    } else {}
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    }
   }
 
   /* Get Packaging Rank */

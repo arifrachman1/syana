@@ -120,8 +120,9 @@ class PromoController {
 
         if (promosFromApi.isNotEmpty) {
           promosFromApi.forEach((element) {
-            List promoDetailsFromApi = element['promo_details'];
-            if (element['status_promo'] == 1) {
+            List promoDetailsFromApi = new List();
+            promoDetailsFromApi = element['promo_details'];
+            if (element['status_promo'] == 1 && promoDetailsFromApi != null) {
               promoDetailsFromApi.forEach((elementDetail) {
                 List promoDetailInFromApi = elementDetail['promo_detail_in'];
                 promoDetailInFromApi.forEach((elementIn) {
