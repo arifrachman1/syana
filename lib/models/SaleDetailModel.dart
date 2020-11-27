@@ -7,7 +7,8 @@ class SaleDetailModel {
       _point,
       _sku,
       _price,
-      _weight;
+      _weight,
+      _status;
 
   int _currentSaleNum;
 
@@ -21,7 +22,13 @@ class SaleDetailModel {
       this._sku,
       this._price,
       this._weight,
-      this._currentSaleNum);
+      this._currentSaleNum,);
+
+  get status => _status;
+
+  set status(value) {
+    _status = value;
+  }
 
   get currentSaleNum => _currentSaleNum;
 
@@ -85,6 +92,6 @@ class SaleDetailModel {
 
   @override
   String toString() {
-    return 'SaleDetailModel{_id: $_id, _idSale: $_idSale, _idProduct: $_idProduct, _productName: $_productName, _saleNumber: $_saleNumber, _point: $_point, _sku: $_sku, _price: $_price, _weight: $_weight, _currentSaleNum: $_currentSaleNum}';
+    return 'SaleDetailModel{_id: $_id, _idSale: $_idSale, _idProduct: $_idProduct, _productName: $_productName, _saleNumber: $_saleNumber, _point: $_point, _sku: $_sku, _price: $_price, _weight: $_weight, _currentSaleNum: $_currentSaleNum}, _status: $_status}';
   }
 }
