@@ -33,4 +33,10 @@ class FontHelper {
   static TextStyle bodyLight;
   static TextStyle bodyBold =
       TextStyle(color: AppTheme.text_light, fontWeight: FontWeight.w400);
+
+  static TextStyle textError = TextStyle(
+      color: AppTheme.red, fontWeight: FontWeight.w500);
+
+  static TextStyle textSuccess = TextStyle(
+      color: AppTheme.green, fontWeight: FontWeight.w500);
 }
