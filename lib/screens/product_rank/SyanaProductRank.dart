@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/screens/product_rank/SyanaIngrendientsRank.dart';
+import 'package:syana/screens/product_rank/SyanaOverview.dart';
 import 'package:syana/screens/product_rank/SyanaPackagingRank.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankGlobal.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankGrafikTim.dart';
@@ -33,7 +34,7 @@ class ProductRankState extends State<ProductRank>
     super.initState();
     tabController = TabController(
         vsync: this,
-        length: 12,
+        length: 13,
         initialIndex: widget.shortcutNavigator != null
             ? (widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_FREE
                 ? 0
@@ -64,7 +65,9 @@ class ProductRankState extends State<ProductRank>
                                                  ? 9
                                                   : widget.shortcutNavigator == CustomShortcut.SHORTCUT_INGRENDIENTS_RANK
                                                     ? 10
-                                                    : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PACKAGING_RANK ? 11 : 1)
+                                                    : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PACKAGING_RANK 
+                                                    ? 11
+                                                     : widget.shortcutNavigator == CustomShortcut.SHORTCUT_OVERVIEW ? 12 : 1)
             : 1);
   }
 
@@ -176,6 +179,13 @@ class ProductRankState extends State<ProductRank>
                             style: TextStyle(fontSize: 13),
                           ),
                         ), 
+                        Container(
+                          child: Text(
+                            'Overview',
+                            softWrap: false,
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ), 
                       ],
                     ),
                   ),
@@ -200,6 +210,7 @@ class ProductRankState extends State<ProductRank>
                     SyanaProductRankTop50Customer(),
                     SyanaIngrendientsRank(),
                     SyanaPackagingRank(),
+                    SyanaOverview(),
                   ],
                 ),
               ),
