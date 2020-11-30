@@ -58,7 +58,7 @@ class ProductModel {
 
   ProductModel.productSuggestions(this._id, this._name, this._sku);
 
-  ProductModel.materialRank(this._name, this._createAt, this._totalItem);
+  ProductModel.materialRank(this._name, this._createAt, this._sku, this._totalItem);
 
   ProductModel.init(
       this._id,
