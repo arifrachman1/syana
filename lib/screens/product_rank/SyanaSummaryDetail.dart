@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:syana/models/SaleDetailModel.dart';
+import 'package:syana/models/SummaryModel.dart';
+import 'package:syana/utils/AppTheme.dart';
 
 class SyanaSummaryDetail extends StatefulWidget {
+  SummaryModel _model;
+
+  SyanaSummaryDetail(this._model);
+
   @override
   _SyanaSummaryDetailState createState() => _SyanaSummaryDetailState();
 }
@@ -46,84 +53,111 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text("Summary Detail"), backgroundColor: Colors.lightGreen),
+          backgroundColor: Colors.lightGreen[200],
+          title: Text('Detail'),
+        ),
         backgroundColor: Colors.lightGreen[200],
         body: _isLoading
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : Center(
-              child: Column(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    //color: Colors.red,
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          child: Text(
-                          "Sales : ",
-                          style: TextStyle(
-                            fontSize: 21,
+                : Container(
+          decoration: AppTheme.appBackground(),
+          child: Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        //color: Colors.red,
+                        width: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.8,
+                        height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.08,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 0.2,
+                              child: Text(
+                                "Sales : ",
+                                style: TextStyle(
+                                  fontSize: 21,
+                                ),
+                              ),
                             ),
-                          ),
+                            Container(
+                              width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width * 0.4,
+                              child: Text(
+                                "${widget._model.cashierName}",
+                                style: TextStyle(
+                                  fontSize: 21,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: Text(
-                          "Ari",
-                          style: TextStyle(
-                            fontSize: 21,
-                          ),
+                      ),
+                      Container(
+                        width: MediaQuery
+                                .of(context)
+                                .size
+                                .width * 0.8,
+                        height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.07,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Packaging : ",
+                              style: TextStyle(
+                                fontSize: 21,
+                              ),
+                            ),
+                            Text(
+                              "${widget._model.packerName}",
+                              style: TextStyle(
+                                fontSize: 21,
+                              ),
+                            ),
+                          ],
                         ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    child: Row(
-                      children: [
-                        Text(
-                          "Packaging : ",
-                          style: TextStyle(
-                            fontSize: 21,
-                          ),
-                        ),
-                        Text(
-                          "Dita",
-                          style: TextStyle(
-                            fontSize: 21,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    child: Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      //color: Colors.red,
-                      child: ListView.builder(
-                            itemCount: _item.length,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                  padding: EdgeInsets.all(7.0),
-                                  margin: EdgeInsets.all(7.0),
-                                  child: Text(
-                                    _item[index],
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                    ),
-                                  ));
-                            }))),
-                  
-                ],
-              )
-              )
-        );
+                      ),
+                      Container(
+                        child: Text("Detail penjualan : "),
+                      ),
+                      Flexible(
+                              child: Container(
+                                      width: MediaQuery
+                                              .of(context)
+                                              .size
+                                              .width * 0.8,
+                                      //color: Colors.red,
+                                      child: ListView.builder(
+                                              itemCount: widget._model.transDetails.length,
+                                              itemBuilder: (context, index) {
+                                                SaleDetailModel _details = widget._model.transDetails[index];
+                                                return ListTile(
+                                                  title: Text(
+                                                    "${_details.productName} | omzet : ${_details.omzet} | profit netto : ${_details.profitNetto}",
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                  subtitle: Text("Terjual : ${_details.saleNumber} | Free : ${_details.freeNumber}"),
+                                                );
+                                              }))),
+                    ],
+                  )),
+        ));
   }
 }

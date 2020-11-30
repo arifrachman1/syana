@@ -28,8 +28,8 @@ class CustomShortcut {
       SHORTCUT_EMPTY = 99,
       SHORTCUT_INGRENDIENTS_RANK = 20,
       SHORTCUT_PACKAGING_RANK = 21,
-      SHORTCUT_OVERVIEW = 22;
-
+		  SHORTCUT_OVERVIEW = 22,
+		  SHORTCUT_SUMMARY = 23;
 
   static getShortcut(menu, context) {
     switch (menu) {
@@ -130,7 +130,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_FREE,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_FREE,
+	                );
                 },
               ),
             );
@@ -148,7 +150,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_BEST_SELLING,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_BEST_SELLING,
+	                );
                 },
               ),
             );
@@ -166,7 +170,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_BEST,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_BEST,
+	                );
                 },
               ),
             );
@@ -184,7 +190,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_GLOBAL_CHART,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_GLOBAL_CHART,
+	                );
                 },
               ),
             );
@@ -202,7 +210,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_TEAM_CHART,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_TEAM_CHART,
+	                );
                 },
               ),
             );
@@ -220,7 +230,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_PRODUCT_CHART,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_PRODUCT_CHART,
+	                );
                 },
               ),
             );
@@ -238,7 +250,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_RETURNS,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_RETURNS,
+	                );
                 },
               ),
             );
@@ -256,7 +270,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_COURIERS,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_COURIERS,
+	                );
                 },
               ),
             );
@@ -274,7 +290,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_LOCATIONS,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_LOCATIONS,
+	                );
                 },
               ),
             );
@@ -292,7 +310,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_CUSTOMERS,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_PRODUCT_RANK_TOP_CUSTOMERS,
+	                );
                 },
               ),
             );
@@ -320,8 +340,8 @@ class CustomShortcut {
           },
         );
         break;
-        
-        case SHORTCUT_INGRENDIENTS_RANK:
+
+	    case SHORTCUT_INGRENDIENTS_RANK:
         return IconButton(
           icon: Icon(Icons.insert_chart),
           onPressed: () {
@@ -329,7 +349,9 @@ class CustomShortcut {
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
-                  return ProductRank(shortcutNavigator: SHORTCUT_INGRENDIENTS_RANK,);
+	                return ProductRank(
+		                shortcutNavigator: SHORTCUT_INGRENDIENTS_RANK,
+	                );
                 },
               ),
             );
