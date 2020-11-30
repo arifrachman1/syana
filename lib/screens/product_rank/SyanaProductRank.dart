@@ -12,6 +12,7 @@ import 'package:syana/screens/product_rank/SyanaProductRankTopFree.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTopKurir.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTopLokasi.dart';
 import 'package:syana/screens/product_rank/SyanaProductRankTopReturn.dart';
+import 'package:syana/screens/product_rank/SyanaSummary.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
 import 'package:syana/widgets/CustomShortcut.dart';
@@ -25,8 +26,7 @@ class ProductRank extends StatefulWidget {
   ProductRankState createState() => ProductRankState();
 }
 
-class ProductRankState extends State<ProductRank>
-    with SingleTickerProviderStateMixin {
+class ProductRankState extends State<ProductRank> with SingleTickerProviderStateMixin {
   TabController tabController;
 
   @override
@@ -34,7 +34,7 @@ class ProductRankState extends State<ProductRank>
     super.initState();
     tabController = TabController(
         vsync: this,
-        length: 13,
+            length: 14,
         initialIndex: widget.shortcutNavigator != null
             ? (widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_FREE
                 ? 0
@@ -46,28 +46,23 @@ class ProductRankState extends State<ProductRank>
                             ? 3
                             : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TEAM_CHART
                                 ? 4
-                                : widget.shortcutNavigator ==
-                                        CustomShortcut
-                                            .SHORTCUT_PRODUCT_RANK_PRODUCT_CHART
+                : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_PRODUCT_CHART
                                     ? 5
-                                    : widget.shortcutNavigator ==
-                                            CustomShortcut
-                                                .SHORTCUT_PRODUCT_RANK_TOP_RETURNS
+                : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_RETURNS
                                         ? 6
-                                        : widget.shortcutNavigator ==
-                                                CustomShortcut
-                                                    .SHORTCUT_PRODUCT_RANK_TOP_COURIERS
+                : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_COURIERS
                                             ? 7
-                                            : widget.shortcutNavigator ==
-                                                    CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_LOCATIONS
+                : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_LOCATIONS
                                                 ? 8
                                                 : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PRODUCT_RANK_TOP_CUSTOMERS
-                                                 ? 9
-                                                  : widget.shortcutNavigator == CustomShortcut.SHORTCUT_INGRENDIENTS_RANK
-                                                    ? 10
-                                                    : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PACKAGING_RANK 
-                                                    ? 11
-                                                     : widget.shortcutNavigator == CustomShortcut.SHORTCUT_OVERVIEW ? 12 : 1)
+                ? 9
+                : widget.shortcutNavigator == CustomShortcut.SHORTCUT_INGRENDIENTS_RANK
+                ? 10
+                : widget.shortcutNavigator == CustomShortcut.SHORTCUT_PACKAGING_RANK
+                ? 11
+                : widget.shortcutNavigator == CustomShortcut.SHORTCUT_OVERVIEW
+                ? 12
+                : widget.shortcutNavigator == CustomShortcut.SHORTCUT_OVERVIEW ? 13 : 1)
             : 1);
   }
 
@@ -178,14 +173,21 @@ class ProductRankState extends State<ProductRank>
                             softWrap: false,
                             style: TextStyle(fontSize: 13),
                           ),
-                        ), 
+                        ),
                         Container(
                           child: Text(
                             'Overview',
                             softWrap: false,
                             style: TextStyle(fontSize: 13),
                           ),
-                        ), 
+                        ),
+                        Container(
+                          child: Text(
+                            'Summary',
+                            softWrap: false,
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -211,6 +213,7 @@ class ProductRankState extends State<ProductRank>
                     SyanaIngrendientsRank(),
                     SyanaPackagingRank(),
                     SyanaOverview(),
+                    SyanaSummary()
                   ],
                 ),
               ),

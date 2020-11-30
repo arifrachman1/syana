@@ -1,28 +1,21 @@
 class SaleDetailModel {
-  String _id,
-      _idSale,
-      _idProduct,
-      _productName,
-      _saleNumber,
-      _point,
-      _sku,
-      _price,
-      _weight,
-      _status;
+	String _id, _idSale, _idProduct, _productName, _saleNumber, _freeNumber, _point, _sku, _price, _weight, _status;
 
-  int _currentSaleNum;
+	int _currentSaleNum, _profitBruto, _profitNetto, _omzet, _cost;
 
-  SaleDetailModel.init(
-      this._id,
-      this._idSale,
-      this._idProduct,
-      this._productName,
-      this._saleNumber,
-      this._point,
-      this._sku,
-      this._price,
-      this._weight,
-      this._currentSaleNum,);
+  SaleDetailModel.init(this._id,
+                       this._idSale,
+                       this._idProduct,
+                       this._productName,
+                       this._saleNumber,
+                       this._point,
+                       this._sku,
+                       this._price,
+                       this._weight,
+                       this._currentSaleNum,);
+
+
+	SaleDetailModel.initSummary(this._id, this._idSale, this._saleNumber, this._freeNumber, this._profitBruto, this._profitNetto, this._omzet, this._productName, this._cost);
 
   get status => _status;
 
@@ -90,8 +83,35 @@ class SaleDetailModel {
     _id = value;
   }
 
+
+	get freeNumber => _freeNumber;
+
+	set freeNumber(value) {
+		_freeNumber = value;
+	}
+
+	get profitBruto => _profitBruto;
+
+	set profitBruto(value) {
+		_profitBruto = value;
+	}
+
+	get profitNetto => _profitNetto;
+
+	set profitNetto(value) {
+		_profitNetto = value;
+	}
+
+	get omzet => _omzet;
+
+	set omzet(value) {
+		_omzet = value;
+	}
+
   @override
   String toString() {
     return 'SaleDetailModel{_id: $_id, _idSale: $_idSale, _idProduct: $_idProduct, _productName: $_productName, _saleNumber: $_saleNumber, _point: $_point, _sku: $_sku, _price: $_price, _weight: $_weight, _currentSaleNum: $_currentSaleNum}, _status: $_status}';
   }
+
+
 }
