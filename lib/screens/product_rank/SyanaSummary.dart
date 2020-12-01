@@ -10,6 +10,7 @@ import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 
 class SyanaSummary extends StatefulWidget {
+
   @override
   _SyanaSummaryState createState() => _SyanaSummaryState();
 }
@@ -97,7 +98,7 @@ class _SyanaSummaryState extends State<SyanaSummary> {
   }
 
   showsDatePicker(index) {
-    if (index == 7) {
+    if (index == 6) {
       return Container(
         padding: EdgeInsets.only(left: 10),
         width: double.infinity,

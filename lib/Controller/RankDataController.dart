@@ -711,10 +711,16 @@ class RankDataController {
     setLoadingState();
   }
 
-  getSummary(context, setData, setLoadingState, idTeam, idEcommerce) async {
+  getSummary(context, setData, setLoadingState, idTeam, idEcommerce, filterTime, dateFrom, dateTo) async {
     setLoadingState();
 
-    var params = GlobalFunctions.generateMapParam(['id_team', 'id_ecommerce'], [idTeam, idEcommerce]);
+    var params = GlobalFunctions.generateMapParam(['id_team', 'id_ecommerce', 'filter_time', 'time_from', 'time_to'], [
+      idTeam,
+      idEcommerce,
+      filterTime,
+      dateFrom,
+      dateTo
+    ]);
 
     _userModel = await GlobalFunctions.getPersistence();
 
