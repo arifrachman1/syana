@@ -92,7 +92,7 @@ class _State extends State<SyanaIngrendientsRank> {
   }
 
   showsDatePicker(index) {
-    if (index == 7) {
+    if (index == 6) {
       return Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -437,7 +437,7 @@ class _State extends State<SyanaIngrendientsRank> {
                                         fontSize: 15,
                                       ),
                                     ),
-                                    Text(
+                                    /*Text(
                                       _rankIngrendients[index].createAt ?? "-",
                                       softWrap: true,
                                       style: TextStyle(
@@ -446,7 +446,7 @@ class _State extends State<SyanaIngrendientsRank> {
                                             : AppTheme.text_light,
                                         fontSize: 15,
                                       ),
-                                    ),
+                                    ),*/
                                   ],
                                 ),
                               ),
