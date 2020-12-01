@@ -242,6 +242,7 @@ class RankDataController {
             element['create_at'],
             element['sku'],
             element['total_item'],
+            element['code_satuan'],
           ));
         });
         if (_rankIngrendientsProducts.isNotEmpty) {
@@ -290,6 +291,7 @@ class RankDataController {
             element['create_at'],
             element['sku'],
             element['total_item'],
+            element['code_satuan'],
           ));
         });
         if (_rankpackagingProducts.isNotEmpty) {

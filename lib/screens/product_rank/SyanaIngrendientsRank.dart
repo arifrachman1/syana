@@ -458,7 +458,9 @@ class _State extends State<SyanaIngrendientsRank> {
                               child: Container(
                                 alignment: Alignment.center,
                                 child: Text(
-                                  _rankIngrendients[index].totalItem ?? "-",
+                                  _rankIngrendients[index].totalItem +
+                                          _rankIngrendients[index].type ??
+                                      "-",
                                   softWrap: true,
                                   style: TextStyle(
                                     color: index < 3
