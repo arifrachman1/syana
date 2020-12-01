@@ -94,7 +94,7 @@ class _State extends State<SyanaPackagingRank> {
   }
 
   showsDatePicker(index) {
-    if (index == 7) {
+    if (index == 6) {
       return Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -439,7 +439,7 @@ class _State extends State<SyanaPackagingRank> {
                                         fontSize: 15,
                                       ),
                                     ),
-                                    Text(
+                                    /*Text(
                                       _rankPackaging[index].createAt ?? "-",
                                       softWrap: true,
                                       style: TextStyle(
@@ -448,7 +448,7 @@ class _State extends State<SyanaPackagingRank> {
                                             : AppTheme.text_light,
                                         fontSize: 15,
                                       ),
-                                    ),
+                                    ),*/
                                   ],
                                 ),
                               ),

@@ -162,7 +162,7 @@ class ProductRankState extends State<ProductRank> with SingleTickerProviderState
                         ),
                         Container(
                           child: Text(
-                            'Ingrendients Rank',
+                            'Ingredients Rank',
                             softWrap: false,
                             style: TextStyle(fontSize: 13),
                           ),
