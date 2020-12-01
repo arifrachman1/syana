@@ -56,7 +56,7 @@ class _State extends State<SyanaPackagingRank> {
       _rankPackaging.clear();
       setLoadingState();
       await _rankDataController.getPackagingRank(context, setLoadingState,
-          setData, _currentTime, _dateFrom, _dateTo, "2", _currentTeams);
+          setData, _currentTime, _dateFrom, _dateTo, _currentTeams);
       setLoadingState();
     }
   }
@@ -88,7 +88,7 @@ class _State extends State<SyanaPackagingRank> {
       _rankPackaging.clear();
       setLoadingState();
       await _rankDataController.getPackagingRank(context, setLoadingState,
-          setData, _currentTime, _dateFrom, _dateTo, "2", _currentTeams);
+          setData, _currentTime, _dateFrom, _dateTo, _currentTeams);
       setLoadingState();
     }
   }
@@ -250,7 +250,7 @@ class _State extends State<SyanaPackagingRank> {
   initDataRank() async {
     setLoadingState();
     await _rankDataController.getPackagingRank(context, setLoadingState,
-        setData, _currentTime, _dateFrom, _dateTo, "2", _currentTeams);
+        setData, _currentTime, _dateFrom, _dateTo, _currentTeams);
     await _inventoryController.getTeams(
         context, setLoadingState, setDropdownData, true);
     print("List: " + _rankPackaging.length.toString());
@@ -289,7 +289,7 @@ class _State extends State<SyanaPackagingRank> {
       _rankPackaging.clear();
       setLoadingState();
       await _rankDataController.getPackagingRank(context, setLoadingState,
-          setData, _currentTime, _dateFrom, _dateTo, "2", _currentTeams);
+          setData, _currentTime, _dateFrom, _dateTo, _currentTeams);
       setLoadingState();
     }
     print(_selectedTime);
@@ -430,6 +430,16 @@ class _State extends State<SyanaPackagingRank> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
+                                      _rankPackaging[index].sku ?? "-",
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: index < 3
+                                            ? AppTheme.text_darker
+                                            : AppTheme.text_light,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    Text(
                                       _rankPackaging[index].createAt ?? "-",
                                       softWrap: true,
                                       style: TextStyle(
@@ -448,7 +458,9 @@ class _State extends State<SyanaPackagingRank> {
                               child: Container(
                                 alignment: Alignment.center,
                                 child: Text(
-                                  _rankPackaging[index].totalItem ?? "-",
+                                  _rankPackaging[index].totalItem +
+                                          _rankPackaging[index].type ??
+                                      "-",
                                   softWrap: true,
                                   style: TextStyle(
                                     color: index < 3

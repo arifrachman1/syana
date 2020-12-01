@@ -35,15 +35,20 @@ class RankDataController {
   }
 
   /*get rank*/
-  getRankProducts(context, loadingStateCallback, setDataCallback, dataType, filterTime, timeFrom, timeTo, idTeam) async {
+  getRankProducts(context, loadingStateCallback, setDataCallback, dataType,
+      filterTime, timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-            ["data_type", "filter_time", "time_from", "time_to", "id_team"], [dataType, filterTime, timeFrom, timeTo, idTeam]);
+        ["data_type", "filter_time", "time_from", "time_to", "id_team"],
+        [dataType, filterTime, timeFrom, timeTo, idTeam]);
 
-    final data = await GlobalFunctions.dioGetCall(path: GlobalVars.apiUrl + "get-product-rank", context: context, params: params);
+    final data = await GlobalFunctions.dioGetCall(
+        path: GlobalVars.apiUrl + "get-product-rank",
+        context: context,
+        params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -51,7 +56,12 @@ class RankDataController {
         List<ProductModel> rankProducts = new List();
 
         rankFromApi.forEach((element) {
-          rankProducts.add(new ProductModel.productRank(element['id'], element['name'], element['image'], element['sku'], element['rank_value']));
+          rankProducts.add(new ProductModel.productRank(
+              element['id'],
+              element['name'],
+              element['image'],
+              element['sku'],
+              element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -198,7 +208,8 @@ class RankDataController {
   }
 
   /* Get Ingrendients Rank */
-  getIngrendientsRank(context, loadingStateCallback, setDataCallback, filterTime, timeFrom, timeTo, materialType, idTeam) async {
+  getIngrendientsRank(context, loadingStateCallback, setDataCallback,
+      filterTime, timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -206,14 +217,18 @@ class RankDataController {
     var options = Options(headers: {"Authorization": "Bearer " + _userModel.accessToken.toString()});
 
     var params = GlobalFunctions.generateMapParam(
-            ["filter_time", "time_from", "time_to", "material_type", "id_team"], [filterTime, timeFrom, timeTo, materialType, idTeam]);
+        ["filter_time", "time_from", "time_to", "id_team"],
+        [filterTime, timeFrom, timeTo, idTeam]);
 
     FormData formData = FormData.fromMap(params);
 
-    final data =
-    await GlobalFunctions.dioPostCall(context: context, options: options, path: GlobalVars.rankUrl + "get-rank-materials", params: formData);
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        options: options,
+        path: GlobalVars.rankUrl + "get-rank-ingredient",
+        params: formData);
 
-    print(GlobalVars.rankUrl + "get-rank-materials");
+    print(GlobalVars.rankUrl + "get-rank-ingredient");
     print(params);
 
     if (data != null) {
@@ -225,7 +240,9 @@ class RankDataController {
           _rankIngrendientsProducts.add(new ProductModel.materialRank(
             element['nama_bahan'],
             element['create_at'],
+            element['sku'],
             element['total_item'],
+            element['code_satuan'],
           ));
         });
         if (_rankIngrendientsProducts.isNotEmpty) {
@@ -240,7 +257,8 @@ class RankDataController {
   }
 
   /* Get Packaging Rank */
-  getPackagingRank(context, loadingStateCallback, setDataCallback, filterTime, timeFrom, timeTo, materialType, idTeam) async {
+  getPackagingRank(context, loadingStateCallback, setDataCallback, filterTime,
+      timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -248,14 +266,18 @@ class RankDataController {
     var options = Options(headers: {"Authorization": "Bearer " + _userModel.accessToken.toString()});
 
     var params = GlobalFunctions.generateMapParam(
-            ["filter_time", "time_from", "time_to", "material_type", "id_team"], [filterTime, timeFrom, timeTo, materialType, idTeam]);
+        ["filter_time", "time_from", "time_to", "id_team"],
+        [filterTime, timeFrom, timeTo, idTeam]);
 
     FormData formData = FormData.fromMap(params);
 
-    final data =
-    await GlobalFunctions.dioPostCall(context: context, options: options, path: GlobalVars.rankUrl + "get-rank-materials", params: formData);
+    final data = await GlobalFunctions.dioPostCall(
+        context: context,
+        options: options,
+        path: GlobalVars.rankUrl + "get-rank-packaging",
+        params: formData);
 
-    print(GlobalVars.rankUrl + "get-rank-materials");
+    print(GlobalVars.rankUrl + "get-rank-packaging");
     print(params);
 
     if (data != null) {
@@ -267,7 +289,9 @@ class RankDataController {
           _rankpackagingProducts.add(new ProductModel.materialRank(
             element['nama_bahan'],
             element['create_at'],
+            element['sku'],
             element['total_item'],
+            element['code_satuan'],
           ));
         });
         if (_rankpackagingProducts.isNotEmpty) {
