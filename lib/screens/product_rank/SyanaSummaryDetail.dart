@@ -1,20 +1,23 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:syana/DefaultView.dart';
+import 'package:syana/models/BookmarkModel.dart';
 import 'package:syana/models/SaleDetailModel.dart';
 import 'package:syana/models/SummaryModel.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/GlobalFunctions.dart';
 
 class SyanaSummaryDetail extends StatefulWidget {
-  SummaryModel _model;
+  SummaryModel model;
 
-  SyanaSummaryDetail(this._model);
+  SyanaSummaryDetail(this.model);
 
-  @override
   _SyanaSummaryDetailState createState() => _SyanaSummaryDetailState();
 }
 
-class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
+class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
   List<String> _item = new List();
 
   bool _isLoading = false;
@@ -51,6 +54,8 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
     });
   }
 
+  List<BookmarkModel> _bookmarkModel = new List();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,12 +69,22 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
                     PopupMenuItem(
                       child: Text("Simpan Bookmark"),
                       value: 1,
+                    ),
+                    PopupMenuItem(
+                      child: Text("Show Bookmarks"),
+                      value: 2,
                     )
                   ],
                   onSelected: (value) {
                     switch (value) {
                       case 1:
-                        log("save bookmark data");
+                        Map _payload = GlobalFunctions.generateMapParam(
+                                ['sale_id', 'transaction_number'], [getWidget().model.id, getWidget().model.transactionNumber]);
+                        _bookmarkModel.add(new BookmarkModel.init(getWidget().model.id, BookmarkType.summaryDetail, json.encode(_payload)));
+                        break;
+                      case 2:
+                        log("bookmark data :\n${_bookmarkModel.toString()}");
+                        log("bookmark payload : ${_bookmarkModel.last.payloadToMap().toString()}");
                         break;
                     }
                   },
@@ -117,7 +132,7 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
                                           .size
                                           .width * 0.4,
                                   child: Text(
-                                    "${widget._model.cashierName}",
+                                    "${getWidget().model.cashierName}",
                                     style: TextStyle(
                                       fontSize: 21,
                                     ),
@@ -144,7 +159,7 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
                                   ),
                                 ),
                                 Text(
-                                  "${widget._model.packerName}",
+                                  "${getWidget().model.packerName}",
                                   style: TextStyle(
                                     fontSize: 21,
                                   ),
@@ -163,12 +178,13 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
                                                   .width * 0.8,
                                           //color: Colors.red,
                                           child: ListView.builder(
-                                                  itemCount: widget._model.transDetails.length,
+                                                  itemCount: getWidget().model.transDetails.length,
                                                   itemBuilder: (context, index) {
-                                                    SaleDetailModel _details = widget._model.transDetails[index];
+                                                    SaleDetailModel _details = getWidget().model.transDetails[index];
                                                     return ListTile(
                                                       title: Text(
-                                                        "${_details.productName} | omzet : ${_details.omzet} | profit netto : ${_details.profitNetto}",
+                                                        "${_details.productName} | omzet : ${_details.omzet} | profit netto : ${_details
+                                                                .profitNetto}",
                                                         style: TextStyle(
                                                           fontSize: 14,
                                                         ),
@@ -179,5 +195,11 @@ class _SyanaSummaryDetailState extends State<SyanaSummaryDetail> {
                         ],
                       )),
             ));
+  }
+
+  @override
+  setData(data) {
+    // TODO: implement setData
+    throw UnimplementedError();
   }
 }
