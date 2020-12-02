@@ -11,6 +11,10 @@ import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 
 class SyanaSummary extends StatefulWidget {
+  bool launchedFromBookmark;
+
+  SyanaSummary({@required this.launchedFromBookmark});
+
   @override
   _SyanaSummaryState createState() => _SyanaSummaryState();
 }
@@ -203,12 +207,6 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
     }
   }
 
-  void setLoadingState() {
-    setState(() {
-      _isLoading = !_isLoading;
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -278,7 +276,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   Widget build(BuildContext context) {
     return Container(
       decoration: AppTheme.appBackground(),
-      child: _isLoading
+      child: isLoading
               ? Center(
         child: CircularProgressIndicator(),
       )

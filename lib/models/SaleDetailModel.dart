@@ -1,87 +1,89 @@
+import 'dart:convert';
+
 class SaleDetailModel {
 	String _id, _idSale, _idProduct, _productName, _saleNumber, _freeNumber, _point, _sku, _price, _weight, _status;
 
 	int _currentSaleNum, _profitBruto, _profitNetto, _omzet, _cost;
 
-  SaleDetailModel.init(this._id,
-                       this._idSale,
-                       this._idProduct,
-                       this._productName,
-                       this._saleNumber,
-                       this._point,
-                       this._sku,
-                       this._price,
-                       this._weight,
-                       this._currentSaleNum,);
+	SaleDetailModel.init(this._id,
+	                     this._idSale,
+	                     this._idProduct,
+	                     this._productName,
+	                     this._saleNumber,
+	                     this._point,
+	                     this._sku,
+	                     this._price,
+	                     this._weight,
+	                     this._currentSaleNum,);
 
 
 	SaleDetailModel.initSummary(this._id, this._idSale, this._saleNumber, this._freeNumber, this._profitBruto, this._profitNetto, this._omzet, this._productName, this._cost);
 
-  get status => _status;
+	get status => _status;
 
-  set status(value) {
-    _status = value;
-  }
+	set status(value) {
+		_status = value;
+	}
 
-  get currentSaleNum => _currentSaleNum;
+	get currentSaleNum => _currentSaleNum;
 
-  set currentSaleNum(value) {
-    _currentSaleNum = value;
-  }
+	set currentSaleNum(value) {
+		_currentSaleNum = value;
+	}
 
-  get weight => _weight;
+	get weight => _weight;
 
-  set weight(value) {
-    _weight = value;
-  }
+	set weight(value) {
+		_weight = value;
+	}
 
-  get price => _price;
+	get price => _price;
 
-  set price(value) {
-    _price = value;
-  }
+	set price(value) {
+		_price = value;
+	}
 
-  get sku => _sku;
+	get sku => _sku;
 
-  set sku(value) {
-    _sku = value;
-  }
+	set sku(value) {
+		_sku = value;
+	}
 
-  get point => _point;
+	get point => _point;
 
-  set point(value) {
-    _point = value;
-  }
+	set point(value) {
+		_point = value;
+	}
 
-  get saleNumber => _saleNumber;
+	get saleNumber => _saleNumber;
 
-  set saleNumber(value) {
-    _saleNumber = value;
-  }
+	set saleNumber(value) {
+		_saleNumber = value;
+	}
 
-  get productName => _productName;
+	get productName => _productName;
 
-  set productName(value) {
-    _productName = value;
-  }
+	set productName(value) {
+		_productName = value;
+	}
 
-  get idProduct => _idProduct;
+	get idProduct => _idProduct;
 
-  set idProduct(value) {
-    _idProduct = value;
-  }
+	set idProduct(value) {
+		_idProduct = value;
+	}
 
-  get idSale => _idSale;
+	get idSale => _idSale;
 
-  set idSale(value) {
-    _idSale = value;
-  }
+	set idSale(value) {
+		_idSale = value;
+	}
 
-  String get id => _id;
+	String get id => _id;
 
-  set id(String value) {
-    _id = value;
-  }
+	set id(String value) {
+		_id = value;
+	}
 
 
 	get freeNumber => _freeNumber;
@@ -108,10 +110,39 @@ class SaleDetailModel {
 		_omzet = value;
 	}
 
-  @override
-  String toString() {
-    return 'SaleDetailModel{_id: $_id, _idSale: $_idSale, _idProduct: $_idProduct, _productName: $_productName, _saleNumber: $_saleNumber, _point: $_point, _sku: $_sku, _price: $_price, _weight: $_weight, _currentSaleNum: $_currentSaleNum}, _status: $_status}';
-  }
+	get cost => _cost;
+
+	set cost(value) {
+		_cost = value;
+	}
+
+	toJson() {
+		Map model = {
+			"id": _id,
+			"id_sale": _idSale,
+			"id_product": _idProduct,
+			"product_name": _productName,
+			"sale_number": _saleNumber,
+			"free_number": _freeNumber,
+			"point": _point,
+			"sku": _sku,
+			"price": _price,
+			"weight": _weight,
+			"status": _status,
+			"current_sale_num": _currentSaleNum,
+			"profit_bruto": _profitBruto,
+			"profit_netto": _profitNetto,
+			"omzet": _omzet,
+			"cost": _cost
+		};
+
+		return json.encode(model);
+	}
+
+	@override
+	String toString() {
+		return 'SaleDetailModel{_id: $_id, _idSale: $_idSale, _idProduct: $_idProduct, _productName: $_productName, _saleNumber: $_saleNumber, _point: $_point, _sku: $_sku, _price: $_price, _weight: $_weight, _currentSaleNum: $_currentSaleNum}, _status: $_status}';
+	}
 
 
 }
