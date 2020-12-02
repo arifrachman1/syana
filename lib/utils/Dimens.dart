@@ -10,6 +10,12 @@ class Dimens{
   static double fontLarge = 18;
   static double fontXtraLarge = 22;
 
+  static double margin_xs = 8;
+  static double margin_s = 16;
+  static double margin_m = 32;
+  static double margin_l = 64;
+  static double margin_xl = 72;
+
   static buttonRatio(){
     return 7/2;
   }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:syana/Controller/InventoryController.dart';
-import 'package:syana/Controller/RankDataController.dart';
-import 'package:syana/Controller/SaleController.dart';
+import 'package:syana/controller/InventoryController.dart';
+import 'package:syana/controller/RankDataController.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
-import 'package:syana/widgets/CustomImage.dart';
 
 class SyanaIngrendientsRank extends StatefulWidget {
   _State createState() => _State();
@@ -94,7 +92,7 @@ class _State extends State<SyanaIngrendientsRank> {
   }
 
   showsDatePicker(index) {
-    if (index == 7) {
+    if (index == 6) {
       return Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -439,7 +437,7 @@ class _State extends State<SyanaIngrendientsRank> {
                                         fontSize: 15,
                                       ),
                                     ),
-                                    Text(
+                                    /*Text(
                                       _rankIngrendients[index].createAt ?? "-",
                                       softWrap: true,
                                       style: TextStyle(
@@ -448,7 +446,7 @@ class _State extends State<SyanaIngrendientsRank> {
                                             : AppTheme.text_light,
                                         fontSize: 15,
                                       ),
-                                    ),
+                                    ),*/
                                   ],
                                 ),
                               ),

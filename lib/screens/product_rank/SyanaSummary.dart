@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:syana/DefaultView.dart';
 import 'package:syana/controller/RankDataController.dart';
 import 'package:syana/models/SummaryModel.dart';
 import 'package:syana/screens/product_rank/SyanaSummaryDetail.dart';
@@ -13,8 +15,23 @@ class SyanaSummary extends StatefulWidget {
   _SyanaSummaryState createState() => _SyanaSummaryState();
 }
 
-class _SyanaSummaryState extends State<SyanaSummary> {
+class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   bool _isLoading = false;
+
+  DateTime selectedDateFrom = DateTime.now();
+  DateTime selectedDateTo = DateTime.now();
+
+  DateFormat formatDate = DateFormat("yyyy-MM-dd");
+
+  String dayFrom = "DD";
+  String monthFrom = "MM";
+  String yearFrom = "YY";
+
+  String dayTo = "DD";
+  String monthTo = "MM";
+  String yearTo = "YY";
+  String _dateFrom = "";
+  String _dateTo = "";
 
   RankDataController _rankDataController;
 
@@ -24,28 +41,173 @@ class _SyanaSummaryState extends State<SyanaSummary> {
   List<SummaryModel> _list = new List();
   int _selectedteam, _selectedEcommerce;
 
+  Future<Null> selectDateFrom(BuildContext context) async {
+    final DateTime picked =
+    await showDatePicker(context: context, initialDate: selectedDateFrom, firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDateFrom)
+      setState(
+                () {
+          selectedDateFrom = picked;
+          var toSplit = picked.toString();
+          getDay(val) {
+            String dayTime = val.split('-')[2];
+            String day = dayTime.split(' ')[0];
+            return day;
+          }
+
+          dayFrom = getDay(toSplit);
+          monthFrom = toSplit.split('-')[1];
+          yearFrom = toSplit.split('-')[0];
+        },
+      );
+    _dateFrom = formatDate.format(selectedDateFrom);
+    if (_dateFrom != "" && _dateTo != "") {
+      _list.clear();
+      setLoadingState();
+      await _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
+      setLoadingState();
+    }
+  }
+
+  Future<Null> selectDateTo(BuildContext context) async {
+    final DateTime picked =
+    await showDatePicker(context: context, initialDate: selectedDateTo, firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDateTo)
+      setState(
+                () {
+          selectedDateTo = picked;
+          var toSplit = picked.toString();
+          getDay(val) {
+            String dayTime = val.split('-')[2];
+            String day = dayTime.split(' ')[0];
+            return day;
+          }
+
+          dayTo = getDay(toSplit);
+          monthTo = toSplit.split('-')[1];
+          yearTo = toSplit.split('-')[0];
+        },
+      );
+    _dateTo = formatDate.format(selectedDateTo);
+    if (_dateFrom != "" && _dateTo != "") {
+      _list.clear();
+      setLoadingState();
+      await _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
+      setLoadingState();
+    }
+  }
+
+  showsDatePicker(index) {
+    if (index == 6) {
+      return Container(
+        padding: EdgeInsets.only(left: 10),
+        margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Flexible(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Text(
+                          'From',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      // margin: EdgeInsets.only(top: 10),
+                      // padding: EdgeInsets.only(left: 10),
+                      decoration: AppTheme.dateDecorationShadow(),
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Icon(
+                            Icons.date_range,
+                            color: AppTheme.white,
+                          ),
+                          Text(
+                            dayFrom + ' - ' + monthFrom + ' - ' + yearFrom,
+                            style: TextStyle(color: AppTheme.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      selectDateFrom(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.03,
+            ),
+            Flexible(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: Text(
+                          'To',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      decoration: AppTheme.dateDecorationShadow(),
+                      height: 30,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Icon(
+                            Icons.date_range,
+                            color: AppTheme.white,
+                          ),
+                          Text(
+                            dayTo + ' - ' + monthTo + ' - ' + yearTo,
+                            style: TextStyle(color: AppTheme.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap: () {
+                      selectDateTo(context);
+                    },
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      return Container();
+    }
+  }
+
   void setLoadingState() {
     setState(() {
       _isLoading = !_isLoading;
     });
   }
-
-  String selectedToko;
-  String selectedEcommerce;
-
-  List _toko = [
-    'Toko A (100|80|20)',
-    'Toko B (100|80|20)',
-    'Toko C (100|80|20)',
-    'Toko D (100|80|20)',
-  ];
-
-  List _ecommerce = [
-    'Shoope (10|8|2)',
-    'Tokopedia (10|8|2)',
-    'Bukalapak (10|8|2)',
-    'JD.ID (10|8|2)',
-  ];
 
   @override
   void initState() {
@@ -72,7 +234,7 @@ class _SyanaSummaryState extends State<SyanaSummary> {
             _listOfEcommerce = data['payload'];
             _selectedEcommerce = _listOfEcommerce[0].value;
           });
-          _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce);
+          _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, "0", "", "");
           break;
         case RankDataKey.summary:
           setState(() {
@@ -87,6 +249,31 @@ class _SyanaSummaryState extends State<SyanaSummary> {
     await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState);
   }
 
+  String _selectedTime = "Hari ini";
+  String _currentTimes = "0";
+
+  List<String> waktu = ['Hari ini', 'Minggu ini', 'Bulan ini', 'Minggu lalu', 'Bulan lalu', 'Grand Total', 'Tentukan sendiri'];
+
+  String getFilterTime(String filterTime) {
+    String filterTemp = "";
+    if (filterTime == "Hari ini") {
+      filterTemp = "0";
+    } else if (filterTime == "Minggu ini") {
+      filterTemp = "1";
+    } else if (filterTime == "Bulan ini") {
+      filterTemp = "2";
+    } else if (filterTime == "Minggu lalu") {
+      filterTemp = "3";
+    } else if (filterTime == "Bulan lalu") {
+      filterTemp = "4";
+    } else if (filterTime == "Grand Total") {
+      filterTemp = "5";
+    } else if (filterTime == "Tentukan sendiri") {
+      filterTemp = "6";
+    }
+    return filterTemp;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -99,64 +286,37 @@ class _SyanaSummaryState extends State<SyanaSummary> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: 20,
-            alignment: Alignment.bottomLeft,
-            child: Text(
-              'Filter Toko',
-              style: TextStyle(
-                color: AppTheme.text_darker,
-                fontSize: 12,
-                //fontWeight: FontWeight.bold
-              ),
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.1,
-            //alignment: ,
-            child: Expanded(
-              child: Container(
-                decoration: BoxDecoration(),
-                // padding: EdgeInsets.only(left: 10),
-                //decoration: AppTheme.inputDecorationShadow(),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    value: _selectedteam,
-                    items: _listOfTeams,
-                    onChanged: (item) {
-                      setState(() {
-                        _selectedteam = item;
-                      });
-                      _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item);
-                    },
-                  ),
+            padding: EdgeInsets.only(left: 10),
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
+            decoration: AppTheme.inputDecorationShadow(),
+            child: Container(
+              decoration: BoxDecoration(),
+              // padding: EdgeInsets.only(left: 10),
+              //decoration: AppTheme.inputDecorationShadow(),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: _selectedteam,
+                  items: _listOfTeams,
+                  onChanged: (item) {
+                    setState(() {
+                      _selectedteam = item;
+                    });
+                    _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item);
+                  },
                 ),
               ),
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: 20,
-            alignment: Alignment.bottomLeft,
-            child: Text(
-              'Filter E-Commerce',
-              style: TextStyle(
-                color: AppTheme.text_darker,
-                fontSize: 12,
-                //fontWeight: FontWeight.bold
-              ),
-            ),
-          ),
-          Container(
-            //alignment: ,
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.1,
-            child: Expanded(
-              child: Container(
-                // width: 150,
-                //padding: EdgeInsets.only(left: 10),
-                //decoration: AppTheme.inputDecorationShadow(),
+            padding: EdgeInsets.only(left: 10),
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
+            decoration: AppTheme.inputDecorationShadow(),
+            child: Container(
+              // width: 150,
+              //padding: EdgeInsets.only(left: 10),
+              //decoration: AppTheme.inputDecorationShadow(),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                           value: _selectedEcommerce,
@@ -166,18 +326,59 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                               setState(() {
                                 _selectedEcommerce = item;
                               });
-                              _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, item);
+                              _rankDataController
+                                      .getSummary(context, setData, setLoadingState, _selectedteam, item, _currentTimes, _dateFrom, _dateTo);
                             }
                           },
                         ),
                       )),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10),
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
+            decoration: AppTheme.inputDecorationShadow(),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                value: _selectedTime,
+                items: waktu.map(
+                          (String val) {
+                    return DropdownMenuItem(
+                      value: val,
+                      child: Text(
+                        val,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    );
+                  },
+                ).toList(),
+                onChanged: (String value) {
+                  setState(() {
+                    _selectedTime = value;
+                    _currentTimes = getFilterTime(value);
+                    _dateFrom = "";
+                    _dateTo = "";
+                  });
+
+                  if (_currentTimes != "7") {
+                    _list.clear();
+                    _rankDataController.getSummary(
+                            context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
+                  }
+                },
+              ),
             ),
+          ),
+          showsDatePicker(
+            int.parse(_currentTimes),
           ),
           Container(
             margin: EdgeInsets.only(bottom: 10),
             padding: EdgeInsets.only(left: 10, right: 10),
           ),
-          Expanded(
+          Flexible(
             child: Container(
               margin: EdgeInsets.only(top: 10, right: 10, left: 10),
               child: ListView.builder(

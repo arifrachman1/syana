@@ -7,9 +7,7 @@ import 'package:syana/Controller/RankDataController.dart';
 import 'package:syana/models/CustomerModel.dart';
 import 'package:syana/models/OverviewModel.dart';
 import 'package:syana/models/RankDataModel.dart';
-import 'package:syana/screens/product_rank/SyanaProductRankDetailCustomer.dart';
 import 'package:syana/utils/AppTheme.dart';
-import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 
 class SyanaOverview extends StatefulWidget {
@@ -103,7 +101,7 @@ class SyanaOverviewState extends State<SyanaOverview> {
   }
 
   showsDatePicker(index) {
-    if (index == 7) {
+    if (index == 6) {
       return Container(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -293,7 +291,7 @@ class SyanaOverviewState extends State<SyanaOverview> {
   void onChangedWaktu(value) async {
     setState(() {
       this.selectedTime = value;
-      _currentTimes = getFilterTime(selectedTime);
+      _currentTimes = getFilterTime(value);
       _dateFrom = "";
       _dateTo = "";
     });

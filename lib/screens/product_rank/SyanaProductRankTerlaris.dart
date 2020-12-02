@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syana/Controller/InventoryController.dart';
 import 'package:syana/Controller/SaleController.dart';
+import 'package:syana/DefaultView.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
@@ -12,7 +13,7 @@ class SyanaProductRankTerlaris extends StatefulWidget {
   RankState createState() => RankState();
 }
 
-class RankState extends State<SyanaProductRankTerlaris> {
+class RankState extends DefaultView<SyanaProductRankTerlaris> {
   // *
   // *
   // *
