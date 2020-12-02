@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:syana/DefaultView.dart';
-import 'package:syana/models/BookmarkModel.dart';
+//import 'package:syana/models/BookmarkModel.dart';
 import 'package:syana/models/SaleDetailModel.dart';
 import 'package:syana/models/SummaryModel.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -54,7 +54,7 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
     });
   }
 
-  List<BookmarkModel> _bookmarkModel = new List();
+  //List<BookmarkModel> _bookmarkModel = new List();
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
                       value: 2,
                     )
                   ],
-                  onSelected: (value) {
+                  /* onSelected: (value) {
                     switch (value) {
                       case 1:
                         Map _payload = GlobalFunctions.generateMapParam(
@@ -87,7 +87,7 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
                         log("bookmark payload : ${_bookmarkModel.last.payloadToMap().toString()}");
                         break;
                     }
-                  },
+                  }, */
                 )
               ],
             ),
