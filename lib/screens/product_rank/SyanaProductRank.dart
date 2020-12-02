@@ -339,7 +339,7 @@ class ProductRankState extends State<ProductRank> with SingleTickerProviderState
 							      SyanaIngrendientsRank(),
 							      SyanaPackagingRank(),
 							      SyanaOverview(),
-							      SyanaSummary()
+							      SyanaSummary(launchedFromBookmark: false)
 						      ],
 					      )
 							      : TabBarView(

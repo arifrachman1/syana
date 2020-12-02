@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:syana/DefaultView.dart';
 import 'package:syana/controller/RankDataController.dart';
 import 'package:syana/models/SummaryModel.dart';
 import 'package:syana/screens/product_rank/SyanaSummaryDetail.dart';
@@ -10,12 +11,15 @@ import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 
 class SyanaSummary extends StatefulWidget {
+  bool launchedFromBookmark;
+
+  SyanaSummary({@required this.launchedFromBookmark});
 
   @override
   _SyanaSummaryState createState() => _SyanaSummaryState();
 }
 
-class _SyanaSummaryState extends State<SyanaSummary> {
+class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   bool _isLoading = false;
 
   DateTime selectedDateFrom = DateTime.now();
@@ -101,13 +105,11 @@ class _SyanaSummaryState extends State<SyanaSummary> {
     if (index == 6) {
       return Container(
         padding: EdgeInsets.only(left: 10),
-        width: double.infinity,
         margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Expanded(
-              flex: 1,
+            Flexible(
               child: Column(
                 children: <Widget>[
                   Row(
@@ -156,7 +158,7 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                       .size
                       .width * 0.03,
             ),
-            Expanded(
+            Flexible(
               child: Column(
                 children: <Widget>[
                   Row(
@@ -205,12 +207,6 @@ class _SyanaSummaryState extends State<SyanaSummary> {
     }
   }
 
-  void setLoadingState() {
-    setState(() {
-      _isLoading = !_isLoading;
-    });
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -254,15 +250,7 @@ class _SyanaSummaryState extends State<SyanaSummary> {
   String _selectedTime = "Hari ini";
   String _currentTimes = "0";
 
-  List<String> waktu = [
-    'Hari ini',
-    'Minggu ini',
-    'Bulan ini',
-    'Minggu lalu',
-    'Bulan lalu',
-    'Grand Total',
-    'Tentukan sendiri'
-  ];
+  List<String> waktu = ['Hari ini', 'Minggu ini', 'Bulan ini', 'Minggu lalu', 'Bulan lalu', 'Grand Total', 'Tentukan sendiri'];
 
   String getFilterTime(String filterTime) {
     String filterTemp = "";
@@ -288,7 +276,7 @@ class _SyanaSummaryState extends State<SyanaSummary> {
   Widget build(BuildContext context) {
     return Container(
       decoration: AppTheme.appBackground(),
-      child: _isLoading
+      child: isLoading
               ? Center(
         child: CircularProgressIndicator(),
       )
@@ -300,22 +288,20 @@ class _SyanaSummaryState extends State<SyanaSummary> {
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
             decoration: AppTheme.inputDecorationShadow(),
-            child: Expanded(
-              child: Container(
-                decoration: BoxDecoration(),
-                // padding: EdgeInsets.only(left: 10),
-                //decoration: AppTheme.inputDecorationShadow(),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    value: _selectedteam,
-                    items: _listOfTeams,
-                    onChanged: (item) {
-                      setState(() {
-                        _selectedteam = item;
-                      });
-                      _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item);
-                    },
-                  ),
+            child: Container(
+              decoration: BoxDecoration(),
+              // padding: EdgeInsets.only(left: 10),
+              //decoration: AppTheme.inputDecorationShadow(),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  value: _selectedteam,
+                  items: _listOfTeams,
+                  onChanged: (item) {
+                    setState(() {
+                      _selectedteam = item;
+                    });
+                    _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item);
+                  },
                 ),
               ),
             ),
@@ -325,11 +311,10 @@ class _SyanaSummaryState extends State<SyanaSummary> {
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
             decoration: AppTheme.inputDecorationShadow(),
-            child: Expanded(
-              child: Container(
-                // width: 150,
-                //padding: EdgeInsets.only(left: 10),
-                //decoration: AppTheme.inputDecorationShadow(),
+            child: Container(
+              // width: 150,
+              //padding: EdgeInsets.only(left: 10),
+              //decoration: AppTheme.inputDecorationShadow(),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
                           value: _selectedEcommerce,
@@ -345,7 +330,6 @@ class _SyanaSummaryState extends State<SyanaSummary> {
                           },
                         ),
                       )),
-            ),
           ),
           Container(
             padding: EdgeInsets.only(left: 10),
@@ -378,8 +362,8 @@ class _SyanaSummaryState extends State<SyanaSummary> {
 
                   if (_currentTimes != "7") {
                     _list.clear();
-                    _rankDataController
-                            .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
+                    _rankDataController.getSummary(
+                            context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
                   }
                 },
               ),
@@ -392,7 +376,7 @@ class _SyanaSummaryState extends State<SyanaSummary> {
             margin: EdgeInsets.only(bottom: 10),
             padding: EdgeInsets.only(left: 10, right: 10),
           ),
-          Expanded(
+          Flexible(
             child: Container(
               margin: EdgeInsets.only(top: 10, right: 10, left: 10),
               child: ListView.builder(
