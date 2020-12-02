@@ -122,6 +122,7 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
                                   child: Text(
                                     "Sales : ",
                                     style: TextStyle(
+                                      color: AppTheme.text_light,
                                       fontSize: 21,
                                     ),
                                   ),
@@ -134,6 +135,7 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
                                   child: Text(
                                     "${getWidget().model.cashierName}",
                                     style: TextStyle(
+                                      color: AppTheme.text_light,
                                       fontSize: 21,
                                     ),
                                   ),
@@ -155,12 +157,14 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
                                 Text(
                                   "Packaging : ",
                                   style: TextStyle(
+                                    color: AppTheme.text_light,
                                     fontSize: 21,
                                   ),
                                 ),
                                 Text(
                                   "${getWidget().model.packerName}",
                                   style: TextStyle(
+                                    color: AppTheme.text_light,
                                     fontSize: 21,
                                   ),
                                 ),
@@ -168,7 +172,12 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
                             ),
                           ),
                           Container(
-                            child: Text("Detail penjualan : "),
+                            child: Text(
+                              "Detail penjualan : ",
+                              style: TextStyle(
+                                color: AppTheme.text_light,
+                              ),
+                            ),
                           ),
                           Flexible(
                                   child: Container(
@@ -182,14 +191,26 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
                                                   itemBuilder: (context, index) {
                                                     SaleDetailModel _details = getWidget().model.transDetails[index];
                                                     return ListTile(
+                                                      leading: Text(
+                                                        (index + 1).toString(),
+                                                        style: TextStyle(
+                                                          color: AppTheme.text_light,
+                                                        ),
+                                                      ),
                                                       title: Text(
                                                         "${_details.productName} | omzet : ${_details.omzet} | profit netto : ${_details
                                                                 .profitNetto}",
                                                         style: TextStyle(
+                                                          color: AppTheme.text_light,
                                                           fontSize: 14,
                                                         ),
                                                       ),
-                                                      subtitle: Text("Terjual : ${_details.saleNumber} | Free : ${_details.freeNumber}"),
+                                                      subtitle: Text(
+                                                        "Terjual : ${_details.saleNumber} | Free : ${_details.freeNumber}",
+                                                        style: TextStyle(
+                                                          color: AppTheme.text_light,
+                                                        ),
+                                                      ),
                                                     );
                                                   }))),
                         ],
