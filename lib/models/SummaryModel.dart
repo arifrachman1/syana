@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:syana/models/SaleDetailModel.dart';
 
 class SummaryModel {
@@ -7,7 +9,7 @@ class SummaryModel {
   List<SaleDetailModel> _transDetails;
 
   SummaryModel.init(this._id, this._status, this._omzet, this._profitBruto, this._profitNetto, this._transactionNumber, this._cashierName,
-      this._packerName, this._transDetails, this._costTotal);
+                    this._packerName, this._transDetails, this._costTotal);
 
   List<SaleDetailModel> get transDetails => _transDetails;
 
@@ -67,6 +69,22 @@ class SummaryModel {
 
   set costTotal(value) {
     _costTotal = value;
+  }
+
+  toJson() {
+    Map model = {
+      "id": _id,
+      "status": _status,
+      "profit_bruto": _profitBruto,
+      "profit_netto": _profitNetto,
+      "cost_total": _costTotal,
+      "transaction_number": _transactionNumber,
+      "cashier_name": _cashierName,
+      "packer_name": _packerName,
+      "details": _transDetails
+    };
+
+    return json.encode(model);
   }
 
   @override
