@@ -28,12 +28,14 @@ class ProfileController {
     loadingStateCallback();
 
     DateTime _joinDate,
-        _now = new DateTime(DateTime.now().year, DateTime.now().month),
-        _diffDate;
+            _now = new DateTime(DateTime
+                    .now()
+                    .year, DateTime
+                    .now()
+                    .month),
+            _diffDate;
 
-    _joinDate = GlobalFunctions.getDateTimeFromString(
-        targetDateTime: _userModel.dateTimeJoined,
-        intendedFormat: GlobalFunctions.FORMAT_YYYY_MM_DD);
+    _joinDate = GlobalFunctions.getDateTimeFromString(targetDateTime: _userModel.dateTimeJoined, intendedFormat: GlobalFunctions.FORMAT_YYYY_MM_DD);
 
     int _yearDiff = _now.year - _joinDate.year, _montDiff = 0;
     if (_joinDate.month > _now.month) {
@@ -64,12 +66,8 @@ class ProfileController {
     Map myPoints = new Map();
 
     loadingStateCallback();
-    var params =
-        GlobalFunctions.generateMapParam(['id_employee'], [_userModel.id]);
-    final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-my-points",
-        params: params,
-        context: context);
+    var params = GlobalFunctions.generateMapParam(['id_employee'], [_userModel.id]);
+    final data = await GlobalFunctions.dioGetCall(path: GlobalVars.apiUrl + "get-my-points", params: params, context: context);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -91,12 +89,8 @@ class ProfileController {
 
     loadingStateCallback();
 
-    var params =
-        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
-    final data = await GlobalFunctions.dioGetCall(
-        context: context,
-        path: GlobalVars.apiUrl + "get-syana-trip",
-        params: params);
+    var params = GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    final data = await GlobalFunctions.dioGetCall(context: context, path: GlobalVars.apiUrl + "get-syana-trip", params: params);
     if (data != null) {
       if (data['status'] == 1) {
         List tripsFromApi = data['favourite'];
@@ -183,45 +177,54 @@ class ProfileController {
 
     loadingStateCallBack();
 
-    var params = GlobalFunctions.generateMapParam(
-        ["id_employee", "password_old", "password_new"],
-        [_userModel.id.toString(), oldPassword, newPassword]);
+    var params =
+    GlobalFunctions.generateMapParam(["id_employee", "password_old", "password_new"], [_userModel.id.toString(), oldPassword, newPassword]);
 
     FormData formData = FormData.fromMap(params);
 
-    final data = await GlobalFunctions.dioPostCall(
-        context: context,
-        path: GlobalVars.apiUrl + "change-password",
-        params: formData);
+    final data = await GlobalFunctions.dioPostCall(context: context, path: GlobalVars.apiUrl + "change-password", params: formData);
 
     if (data != null) {
       if (data['status'] == 1) {
-        CustomDialog.getDialog(
-            title: Strings.DIALOG_TITLE_SUCCESS,
-            message: Strings.DIALOG_MESSAGE_PASSWORD_CHANGED,
-            context: context,
-            popCount: 2);
+        CustomDialog.getDialog(title: Strings.DIALOG_TITLE_SUCCESS, message: Strings.DIALOG_MESSAGE_PASSWORD_CHANGED, context: context, popCount: 2);
       }
     }
 
     loadingStateCallBack();
   }
 
-  logout(context) async {
-	  await clearPersistence();
-	  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
-		  return Login();
-	  }), (route) => false);
+  logout(context, setLoadingState) async {
+    setLoadingState();
+    _userModel = await GlobalFunctions.getPersistence();
+
+    Map params = GlobalFunctions.generateMapParam(['employee_id'], [_userModel.id]);
+
+    final data = await GlobalFunctions.dioPostCall(context: context, path: GlobalVars.apiUrl + "logout", params: params);
+
+    if (data != null) {
+      if (data['status'] == 200) {
+        await clearPersistence();
+
+        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
+          return Login();
+        }), (route) => false);
+      } else {
+        CustomDialog.getDialog(title: Strings.DIALOG_TITLE_WARNING, message: data['message'], context: context, popCount: 1);
+      }
+    } else {
+      CustomDialog.getDialog(title: Strings.DIALOG_TITLE_WARNING, message: "Proses logout gagal.", context: context, popCount: 1);
+    }
+    setLoadingState();
   }
 
   clearPersistence() async {
-	  final SharedPreferences prefs = await SharedPreferences.getInstance();
-	  prefs.remove(GlobalVars.idKey);
-	  prefs.remove(GlobalVars.nameKey);
-	  prefs.remove(GlobalVars.fullNameKey);
-	  prefs.remove(GlobalVars.dateTimeJoinedKey);
-	  prefs.remove(GlobalVars.idRoleKey);
-	  prefs.remove(GlobalVars.idTeamKey);
-	  prefs.remove(GlobalVars.accessTokenKey);
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(GlobalVars.idKey);
+    prefs.remove(GlobalVars.nameKey);
+    prefs.remove(GlobalVars.fullNameKey);
+    prefs.remove(GlobalVars.dateTimeJoinedKey);
+    prefs.remove(GlobalVars.idRoleKey);
+    prefs.remove(GlobalVars.idTeamKey);
+    prefs.remove(GlobalVars.accessTokenKey);
   }
 }

@@ -692,11 +692,20 @@ class RankDataController {
     setLoadingState();
   }
 
-  getSummary(context, setData, setLoadingState, idTeam, idEcommerce, filterTime, dateFrom, dateTo) async {
+  getSummary(context, setData, setLoadingState, idTeam, idEcommerce, filterTime, dateFrom, dateTo, status) async {
     setLoadingState();
 
+    String finale = status == 0 ? "3" : status == 1 ? "0" : "1";
+
     var params = GlobalFunctions.generateMapParam(
-            ['id_team', 'id_ecommerce', 'filter_time', 'time_from', 'time_to'], [idTeam, idEcommerce, filterTime, dateFrom, dateTo]);
+            ['id_team', 'id_ecommerce', 'filter_time', 'time_from', 'time_to', 'status'], [
+      idTeam,
+      idEcommerce,
+      filterTime,
+      dateFrom,
+      dateTo,
+      finale
+    ]);
 
     _userModel = await GlobalFunctions.getPersistence();
 

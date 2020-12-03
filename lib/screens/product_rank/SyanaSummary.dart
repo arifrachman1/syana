@@ -257,7 +257,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   List<String> statusTransaksi = ['Semua', 'Belum Proses Packing', 'Sudah Proses Packing'];
 
   int _selectedStatus = 0;
-  s
+
 
   String getFilterTime(String filterTime) {
     String filterTemp = "";
