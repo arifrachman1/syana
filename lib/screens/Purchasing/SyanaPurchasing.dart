@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:syana/screens/Purchasing/HistoryDetail.dart';
-import 'package:syana/screens/Purchasing/PurchasingDetail.dart';
+import 'package:syana/screens/Purchasing/SyanaHistoryDetail.dart';
+import 'package:syana/screens/Purchasing/SyanaPlansDetail.dart';
+import 'package:syana/screens/Purchasing/SyanaPurchasingDetail.dart';
 import 'package:syana/utils/AppTheme.dart';
 
-class Purchasing extends StatefulWidget {
+class SyanaPurchasing extends StatefulWidget {
   @override
-  _PurchasingState createState() => _PurchasingState();
+  _SyanaPurchasingState createState() => _SyanaPurchasingState();
 }
 
-class _PurchasingState extends State<Purchasing> {
+class _SyanaPurchasingState extends State<SyanaPurchasing> {
   bool _isLoading = false;
 
   void setLoadingState() {
@@ -36,7 +37,13 @@ class _PurchasingState extends State<Purchasing> {
                     Container(
                       margin: EdgeInsets.all(13.0),
                       child: RaisedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyanaPlansDetail()),
+                          );
+                        },
                         color: Colors.white,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
@@ -57,7 +64,7 @@ class _PurchasingState extends State<Purchasing> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => PurchasingDetail()),
+                                builder: (context) => SyanaPurchasingDetail()),
                           );
                         },
                         color: Colors.white,
@@ -80,7 +87,7 @@ class _PurchasingState extends State<Purchasing> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => HistoryDetail()),
+                                builder: (context) => SyanaHistoryDetail()),
                           );
                         },
                         color: Colors.white,

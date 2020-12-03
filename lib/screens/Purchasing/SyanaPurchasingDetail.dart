@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
 
-class HistoryDetail extends StatefulWidget {
+class SyanaPurchasingDetail extends StatefulWidget {
   @override
-  _HistoryDetailState createState() => _HistoryDetailState();
+  _SyanaPurchasingDetailState createState() => _SyanaPurchasingDetailState();
 }
 
-class _HistoryDetailState extends State<HistoryDetail> {
+class _SyanaPurchasingDetailState extends State<SyanaPurchasingDetail> {
   List<String> _icon = new List();
   List<String> _nama = new List();
   List<String> _tanggal = new List();
@@ -43,6 +43,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
     namaItem();
     tanggalItem();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +55,7 @@ class _HistoryDetailState extends State<HistoryDetail> {
           Container(
             alignment: Alignment.centerLeft,
             padding: EdgeInsets.all(15.0),
-            child: Text("History",
+            child: Text("Purchasing",
                 style: TextStyle(
                   color: AppTheme.white,
                   fontSize: 40,
@@ -69,41 +70,42 @@ class _HistoryDetailState extends State<HistoryDetail> {
                           //color: Colors.red,
                           decoration: BoxDecoration(
                               border: Border(
-                                  bottom: BorderSide(width: 1.0, color: Colors.white),
+                                  bottom: BorderSide(width: 1.0, color: AppTheme.white,),
                               ),
                           ),
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all(5.0),
-                          margin: EdgeInsets.all(7.0),
+                          padding: EdgeInsets.all(2.0),
+                          margin: EdgeInsets.all(5.0),
                           //height: 50,
                           //width: 50,
                           child: Row(
                             children: [
+                              
                               IconButton(
                                 //alignment: Alignment(,1),
                                 icon: Icon(
                                   Icons.brightness_1,
-                                  color: AppTheme.btn_success
+                                  color: AppTheme.btn_success,
                                 ),
                               ),
                               Text(
                                 _nama[index],
                                 style: TextStyle(
                                   fontSize: 18,
-                                  color: AppTheme.white
+                                  color: AppTheme.white,
                                 ),
                               ),
                               Text(
                                 ", ",
                                 style: TextStyle(
-                                  color: AppTheme.white
+                                  color: AppTheme.white,
                                 ),
                               ),
                               Text(
                                 _tanggal[index],
                                 style: TextStyle(
                                   fontSize: 18,
-                                  color: AppTheme.white
+                                  color: AppTheme.white,
                                 ),
                               )
                             ],
