@@ -339,11 +339,12 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                 child: DropdownButton(
                   value: _selectedteam,
                   items: _listOfTeams,
-                  onChanged: (item) {
+	                onChanged: (item) async {
                     setState(() {
                       _selectedteam = item;
                     });
-                    _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item, _currentTimes, _dateFrom, _dateTo);
+                    await _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item, _currentTimes, _dateFrom, _dateTo);
+
                   },
                 ),
               ),

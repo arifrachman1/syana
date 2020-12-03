@@ -35,20 +35,15 @@ class RankDataController {
   }
 
   /*get rank*/
-  getRankProducts(context, loadingStateCallback, setDataCallback, dataType,
-      filterTime, timeFrom, timeTo, idTeam) async {
+  getRankProducts(context, loadingStateCallback, setDataCallback, dataType, filterTime, timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ["data_type", "filter_time", "time_from", "time_to", "id_team"],
-        [dataType, filterTime, timeFrom, timeTo, idTeam]);
+            ["data_type", "filter_time", "time_from", "time_to", "id_team"], [dataType, filterTime, timeFrom, timeTo, idTeam]);
 
-    final data = await GlobalFunctions.dioGetCall(
-        path: GlobalVars.apiUrl + "get-product-rank",
-        context: context,
-        params: params);
+    final data = await GlobalFunctions.dioGetCall(path: GlobalVars.apiUrl + "get-product-rank", context: context, params: params);
 
     if (data != null) {
       if (data['status'] == 1) {
@@ -56,12 +51,7 @@ class RankDataController {
         List<ProductModel> rankProducts = new List();
 
         rankFromApi.forEach((element) {
-          rankProducts.add(new ProductModel.productRank(
-              element['id'],
-              element['name'],
-              element['image'],
-              element['sku'],
-              element['rank_value']));
+          rankProducts.add(new ProductModel.productRank(element['id'], element['name'], element['image'], element['sku'], element['rank_value']));
         });
 
         if (rankProducts.isNotEmpty) {
@@ -208,25 +198,19 @@ class RankDataController {
   }
 
   /* Get Ingrendients Rank */
-  getIngrendientsRank(context, loadingStateCallback, setDataCallback,
-      filterTime, timeFrom, timeTo, idTeam) async {
+  getIngrendientsRank(context, loadingStateCallback, setDataCallback, filterTime, timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var options = Options(headers: {"Authorization": "Bearer " + _userModel.accessToken.toString()});
 
-    var params = GlobalFunctions.generateMapParam(
-        ["filter_time", "time_from", "time_to", "id_team"],
-        [filterTime, timeFrom, timeTo, idTeam]);
+    var params = GlobalFunctions.generateMapParam(["filter_time", "time_from", "time_to", "id_team"], [filterTime, timeFrom, timeTo, idTeam]);
 
     FormData formData = FormData.fromMap(params);
 
-    final data = await GlobalFunctions.dioPostCall(
-        context: context,
-        options: options,
-        path: GlobalVars.rankUrl + "get-rank-ingredient",
-        params: formData);
+    final data =
+    await GlobalFunctions.dioPostCall(context: context, options: options, path: GlobalVars.rankUrl + "get-rank-ingredient", params: formData);
 
     print(GlobalVars.rankUrl + "get-rank-ingredient");
     print(params);
@@ -257,25 +241,19 @@ class RankDataController {
   }
 
   /* Get Packaging Rank */
-  getPackagingRank(context, loadingStateCallback, setDataCallback, filterTime,
-      timeFrom, timeTo, idTeam) async {
+  getPackagingRank(context, loadingStateCallback, setDataCallback, filterTime, timeFrom, timeTo, idTeam) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var options = Options(headers: {"Authorization": "Bearer " + _userModel.accessToken.toString()});
 
-    var params = GlobalFunctions.generateMapParam(
-        ["filter_time", "time_from", "time_to", "id_team"],
-        [filterTime, timeFrom, timeTo, idTeam]);
+    var params = GlobalFunctions.generateMapParam(["filter_time", "time_from", "time_to", "id_team"], [filterTime, timeFrom, timeTo, idTeam]);
 
     FormData formData = FormData.fromMap(params);
 
-    final data = await GlobalFunctions.dioPostCall(
-        context: context,
-        options: options,
-        path: GlobalVars.rankUrl + "get-rank-packaging",
-        params: formData);
+    final data =
+    await GlobalFunctions.dioPostCall(context: context, options: options, path: GlobalVars.rankUrl + "get-rank-packaging", params: formData);
 
     print(GlobalVars.rankUrl + "get-rank-packaging");
     print(params);
@@ -623,13 +601,17 @@ class RankDataController {
     } else {}
   }
 
-  getTeamsWithSummary(context, setData, setLoadingState) async {
+  getTeamsWithSummary(context, setData, setLoadingState, timeFilter, dateFrom, dateTo) async {
     setLoadingState();
     _userModel = await GlobalFunctions.getPersistence();
+
+    Map _param =
+    GlobalFunctions.generateMapParam(['id_team', 'filter_time', 'time_from', 'time_to'], [_userModel.idTeam, timeFilter, dateFrom, dateTo]);
 
     final data = await GlobalFunctions.dioPostCall(
             context: context,
             path: GlobalVars.summaryUrl + "get-team-with-summary",
+            params: _param,
             options: Options(headers: {"Authorization": "Bearer " + _userModel.accessToken.toString()}));
 
     if (data != null) {
@@ -665,10 +647,10 @@ class RankDataController {
     setLoadingState();
   }
 
-  getEcommerceWithSummary(context, setData, setLoadingState, idTeam) async {
+  getEcommerceWithSummary(context, setData, setLoadingState, idTeam, timeFilter, dateFrom, dateTo) async {
     setLoadingState();
 
-    var params = GlobalFunctions.generateMapParam(['id_team'], [idTeam]);
+    var params = GlobalFunctions.generateMapParam(['id_team', 'filter_time', 'time_from', 'time_to'], [idTeam, timeFilter, dateFrom, dateTo]);
 
     _userModel = await GlobalFunctions.getPersistence();
 
@@ -713,13 +695,8 @@ class RankDataController {
   getSummary(context, setData, setLoadingState, idTeam, idEcommerce, filterTime, dateFrom, dateTo) async {
     setLoadingState();
 
-    var params = GlobalFunctions.generateMapParam(['id_team', 'id_ecommerce', 'filter_time', 'time_from', 'time_to'], [
-      idTeam,
-      idEcommerce,
-      filterTime,
-      dateFrom,
-      dateTo
-    ]);
+    var params = GlobalFunctions.generateMapParam(
+            ['id_team', 'id_ecommerce', 'filter_time', 'time_from', 'time_to'], [idTeam, idEcommerce, filterTime, dateFrom, dateTo]);
 
     _userModel = await GlobalFunctions.getPersistence();
 
@@ -759,9 +736,18 @@ class RankDataController {
                     int.parse(elementDetail['product']['cost_total'])));
           }
 
-          _list.add(new SummaryModel.init(int.parse(element['id']), int.parse(element['status']),
-                  omzet, profitBruto, profitNetto, element['transaction_number'], element['employee']['full_name'],
-		          element['employeePacking'] != null ? element['employeePacking']['full_name'] : "-", _details, costTotal, _numbering + 1));
+          _list.add(new SummaryModel.init(
+                  int.parse(element['id']),
+                  int.parse(element['status']),
+                  omzet,
+                  profitBruto,
+                  profitNetto,
+                  element['transaction_number'],
+                  element['employee']['full_name'],
+                  element['employeePacking'] != null ? element['employeePacking']['full_name'] : "-",
+                  _details,
+                  costTotal,
+                  _numbering + 1));
 
           _numbering++;
         }
