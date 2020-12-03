@@ -2,6 +2,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/HomePackingController.dart';
 import 'package:syana/models/SaleModel.dart';
+import 'package:syana/screens/packing/PackingScanQR.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/FontHelper.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
@@ -19,6 +20,8 @@ class _PackingDetailState extends State<PackingDetail> {
   double totalWeight = 0;
   HomePackingController _homePackingController;
   bool _isLoading = false;
+
+  ScrollController _scrollcontroller = ScrollController();
 
   @override
   void dispose() {
@@ -96,6 +99,7 @@ class _PackingDetailState extends State<PackingDetail> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
+              margin: EdgeInsets.only(top: 10),
               child: Text(
                 "Transaksi",
                 style: FontHelper.textTitle,
@@ -111,10 +115,16 @@ class _PackingDetailState extends State<PackingDetail> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(left: 10, right: 10),
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  Container(
+                    child: Text(
+                      "No",
+                      style: FontHelper.bodyBold,
+                    ),
+                  ),
                   Container(
                     child: Text(
                       "Nama dan SKU",
@@ -142,16 +152,24 @@ class _PackingDetailState extends State<PackingDetail> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 200,
+            Expanded(
+                // height: 200,
+                child: Scrollbar(
+                  isAlwaysShown: true,
+              controller: _scrollcontroller,
+              thickness: 8,
               child: ListView.builder(
                   itemCount: widget.data.saleDetails.length,
                   itemBuilder: (_, index) {
                     return Container(
-                      margin: EdgeInsets.only(left: 10, right: 10),
+                      margin: EdgeInsets.only(left: 10, right: 20, bottom: 5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
+                          Text(
+                            (index + 1).toString() + ".",
+                            style: FontHelper.body,
+                          ),
                           Container(
                             child: Text(
                               widget.data.saleDetails[index].productName +
@@ -159,7 +177,7 @@ class _PackingDetailState extends State<PackingDetail> {
                                   widget.data.saleDetails[index].sku,
                               style: FontHelper.body,
                             ),
-                            width: 110,
+                            width: 100,
                           ),
                           Text(
                             widget.data.saleDetails[index].currentSaleNum
@@ -177,6 +195,7 @@ class _PackingDetailState extends State<PackingDetail> {
                             style: FontHelper.body,
                           ),
                           IconButton(
+                              iconSize: 50,
                               icon: Icon(
                                 Icons.qr_code_scanner,
                                 color: widget.data.saleDetails[index]
@@ -199,22 +218,25 @@ class _PackingDetailState extends State<PackingDetail> {
                       ),
                     );
                   }),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Text(
-                  "Total Berat",
-                  style: FontHelper.bodyBold,
-                ),
-                Text(
-                  totalWeight.toString(),
-                  style: FontHelper.bodyBold,
-                )
-              ],
+            )),
+            Container(
+              margin: EdgeInsets.only(top: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text(
+                    "Total Berat",
+                    style: FontHelper.bodyBold,
+                  ),
+                  Text(
+                    totalWeight.toString(),
+                    style: FontHelper.bodyBold,
+                  )
+                ],
+              ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 20, bottom: 20),
               child: RaisedButton(
                 shape: StadiumBorder(),
                 color: AppTheme.yellow,
@@ -226,7 +248,7 @@ class _PackingDetailState extends State<PackingDetail> {
                     : null,
                 child: Text("PACKING"),
               ),
-            )
+            ),
           ],
         ),
       ),
