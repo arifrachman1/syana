@@ -2,7 +2,6 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/HomePackingController.dart';
 import 'package:syana/models/SaleModel.dart';
-import 'package:syana/screens/packing/PackingScanQR.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/FontHelper.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
@@ -25,13 +24,11 @@ class _PackingDetailState extends State<PackingDetail> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _homePackingController = new HomePackingController();
     _initData();
@@ -86,7 +83,6 @@ class _PackingDetailState extends State<PackingDetail> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen[200],
@@ -197,7 +193,7 @@ class _PackingDetailState extends State<PackingDetail> {
                           IconButton(
                               iconSize: 50,
                               icon: Icon(
-                                Icons.qr_code_scanner,
+                                Icons.camera_alt,
                                 color: widget.data.saleDetails[index]
                                             .currentSaleNum
                                             .toString() !=

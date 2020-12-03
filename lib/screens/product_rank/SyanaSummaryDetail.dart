@@ -43,7 +43,6 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     itemSummary();
   }
@@ -220,7 +219,6 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
 
   @override
   setData(data) {
-    // TODO: implement setData
     throw UnimplementedError();
   }
 }

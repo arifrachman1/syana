@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/LoginController.dart';
 import 'package:syana/utils/AppTheme.dart';
-import 'package:syana/utils/GlobalVars.dart';
-import 'package:syana/utils/MessagingService.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomButton.dart';
@@ -21,13 +19,11 @@ class LoginState extends State<Login> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loginController = new LoginController();
     // MessagingService.getNotification(GlobalVars.firebaseMessaging, context);
@@ -54,7 +50,6 @@ class LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       width: ScreenSizeHelper.getDisplayWidth(context),
       height: ScreenSizeHelper.getDisplayHeight(

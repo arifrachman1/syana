@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/ProfileController.dart';
 import 'package:syana/models/TripsModel.dart';
-import 'package:syana/screens/profile/SyanaTripsVideo.dart';
-import 'package:syana/screens/profile/SyanaTripsYoutubePlayer.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/ScreenSizeHelper.dart';
@@ -30,7 +28,6 @@ class SyanaTripsState extends State<SyanaTrips> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

@@ -52,7 +52,6 @@ class _PackingState extends State<SyanaHomePacking> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
         decoration: AppTheme.appBackground(),
         child: Scaffold(

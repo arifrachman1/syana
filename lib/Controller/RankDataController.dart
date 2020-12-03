@@ -666,7 +666,6 @@ class RankDataController {
   }
 
   getEcommerceWithSummary(context, setData, setLoadingState, idTeam) async {
-    /*TODO implement get ecommerce with summary*/
     setLoadingState();
 
     var params = GlobalFunctions.generateMapParam(['id_team'], [idTeam]);
@@ -741,7 +740,7 @@ class RankDataController {
                   profitBruto = 0,
                   omzet = 0,
                   costTotal = 0;
-
+          int _numbering = 0;
           for (var elementDetail in element['saleDetails']) {
             profitNetto += int.parse(elementDetail['profit_netto']);
             profitBruto += int.parse(elementDetail['profit_bruto']);
@@ -762,7 +761,9 @@ class RankDataController {
 
           _list.add(new SummaryModel.init(int.parse(element['id']), int.parse(element['status']),
                   omzet, profitBruto, profitNetto, element['transaction_number'], element['employee']['full_name'],
-                  element['employeePacking'] != null ? element['employeePacking']['full_name'] : "-", _details, costTotal));
+		          element['employeePacking'] != null ? element['employeePacking']['full_name'] : "-", _details, costTotal, _numbering + 1));
+
+          _numbering++;
         }
 
         Map _toSend = GlobalFunctions.generateMapParam(['key', 'payload'], [RankDataKey.summary, _list]);

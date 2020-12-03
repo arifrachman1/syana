@@ -21,13 +21,11 @@ class SyanaMyPointsState extends State<SyanaMyPoints> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _profileController = new ProfileController();
     _initData();

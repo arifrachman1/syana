@@ -1,16 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:syana/Controller/CustomerController.dart';
 import 'package:syana/models/CustomerModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
-import 'package:syana/utils/ScreenSizeHelper.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
-import '../../main.dart';
 
 class CustomerInput extends StatefulWidget {
   @override
@@ -28,13 +25,11 @@ class CustomerInputState extends State<CustomerInput> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _customerController = new CustomerController();
   }

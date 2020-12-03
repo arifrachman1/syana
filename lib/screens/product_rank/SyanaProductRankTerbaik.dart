@@ -238,13 +238,11 @@ class SyanaProductRankTerbaikState extends State<SyanaProductRankTerbaik> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _saleController = new SaleController();
     _inventoryController = new InventoryController();

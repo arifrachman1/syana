@@ -4,7 +4,6 @@ import 'package:syana/models/ProductModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
-import '../../main.dart';
 
 class Confirmation extends StatefulWidget {
   List<ProductModel> selectedProducts;
@@ -51,7 +50,6 @@ class ConfirmationState extends State<Confirmation> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PromoController.dart';
 import 'package:syana/models/PromoModel.dart';
@@ -27,13 +25,11 @@ class SyanaPromoState extends State<SyanaPromo> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _promoController = new PromoController();
     _initData();

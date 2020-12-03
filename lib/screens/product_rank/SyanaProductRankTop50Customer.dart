@@ -246,13 +246,11 @@ class SyanaProductRankTop50CustomerState
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _inventoryController = new InventoryController();
     _customerController = new CustomerController();

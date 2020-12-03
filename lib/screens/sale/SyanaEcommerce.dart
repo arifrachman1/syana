@@ -3,13 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/EcommerceModel.dart';
 import 'package:syana/screens/sale/SyanaCustomerInput.dart';
-import 'package:syana/screens/sale/SyanaSale.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
-import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/widgets/CustomBottomNav.dart';
-import '../../main.dart';
 
 class SyanaEcommerce extends StatefulWidget {
   @override
@@ -26,7 +23,6 @@ class EcommerceState extends State<SyanaEcommerce> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 

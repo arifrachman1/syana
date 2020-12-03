@@ -209,7 +209,6 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _rankDataController = new RankDataController();
     _init();

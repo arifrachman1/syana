@@ -15,7 +15,6 @@ abstract class DefaultView<T extends StatefulWidget> extends State {
 
   @override
   void setState(fn) {
-    // TODO: implement setState
     if (mounted) {
       super.setState(fn);
     } else {
