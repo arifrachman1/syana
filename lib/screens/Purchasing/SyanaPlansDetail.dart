@@ -56,7 +56,8 @@ class _SyanaPlansDetailState extends State<SyanaPlansDetail> {
                             ),
                           ),
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all(2.0),
+                          padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 4.0),
+                          //padding: EdgeInsets.all(5.0),
                           margin: EdgeInsets.all(5.0),
                           child: Row(
                             children: [

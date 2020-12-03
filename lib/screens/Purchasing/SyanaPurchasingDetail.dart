@@ -47,23 +47,17 @@ class _SyanaPurchasingDetailState extends State<SyanaPurchasingDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
+      appBar: AppBar(
+          backgroundColor: Colors.lightGreen[300],
+           title: Text(
+            "Purchasing",
+            ), 
+      ),
+      body: Container(
       decoration: AppTheme.appBackground(),
-      child: Column(
-        children: <Widget>[
-          Padding(padding: EdgeInsets.all(30)),
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.all(15.0),
-            child: Text("Purchasing",
-                style: TextStyle(
-                  color: AppTheme.white,
-                  fontSize: 40,
-                  )),
-          ),
-          Flexible(
-              child: Container(
-                  child: ListView.builder(
+      child: Expanded(
+                    child: Container(
+                      child: ListView.builder(
                       itemCount: _nama.length,
                       itemBuilder: (context, index) {
                         return Container(
@@ -74,17 +68,19 @@ class _SyanaPurchasingDetailState extends State<SyanaPurchasingDetail> {
                               ),
                           ),
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all(2.0),
+                          padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 4.0),
+                          //padding: EdgeInsets.all(5.0),
                           margin: EdgeInsets.all(5.0),
                           //height: 50,
                           //width: 50,
                           child: Row(
                             children: [
-                              
                               IconButton(
                                 //alignment: Alignment(,1),
                                 icon: Icon(
-                                  Icons.brightness_1,
+                                  //Icons.dangerous,
+                                  //Icons.check_circle,
+                                  Icons.av_timer,
                                   color: AppTheme.btn_success,
                                 ),
                               ),
@@ -111,9 +107,11 @@ class _SyanaPurchasingDetailState extends State<SyanaPurchasingDetail> {
                             ],
                           ),
                         );
-                      })))
-        ],
+                      }
+                    )
+                  )
+                )
       ),
-    ));
+    );
   }
 }
