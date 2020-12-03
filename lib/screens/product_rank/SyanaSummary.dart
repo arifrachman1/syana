@@ -27,7 +27,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
 
   DateFormat formatDate = DateFormat("yyyy-MM-dd");
 
-  String dayFrom = "DD";
+ /*  String dayFrom = "DD";
   String monthFrom = "MM";
   String yearFrom = "YY";
 
@@ -35,7 +35,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   String monthTo = "MM";
   String yearTo = "YY";
   String _dateFrom = "";
-  String _dateTo = "";
+  String _dateTo = ""; */
 
   RankDataController _rankDataController;
 
@@ -45,7 +45,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   List<SummaryModel> _list = new List();
   int _selectedteam, _selectedEcommerce;
 
-  Future<Null> selectDateFrom(BuildContext context) async {
+  /* Future<Null> selectDateFrom(BuildContext context) async {
     final DateTime picked =
     await showDatePicker(context: context, initialDate: selectedDateFrom, firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateFrom)
@@ -72,9 +72,9 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
               .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
       setLoadingState();
     }
-  }
+  } */
 
-  Future<Null> selectDateTo(BuildContext context) async {
+  /* Future<Null> selectDateTo(BuildContext context) async {
     final DateTime picked =
     await showDatePicker(context: context, initialDate: selectedDateTo, firstDate: DateTime(2015, 8), lastDate: DateTime(2101));
     if (picked != null && picked != selectedDateTo)
@@ -82,16 +82,16 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                 () {
           selectedDateTo = picked;
           var toSplit = picked.toString();
-          getDay(val) {
+           getDay(val) {
             String dayTime = val.split('-')[2];
             String day = dayTime.split(' ')[0];
             return day;
-          }
+          } 
 
           dayTo = getDay(toSplit);
           monthTo = toSplit.split('-')[1];
           yearTo = toSplit.split('-')[0];
-        },
+        }, 
       );
     _dateTo = formatDate.format(selectedDateTo);
     if (_dateFrom != "" && _dateTo != "") {
@@ -101,7 +101,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
               .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
       setLoadingState();
     }
-  }
+  } */
 
   showsDatePicker(index) {
     if (index == 6) {
@@ -140,16 +140,16 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                             Icons.date_range,
                             color: AppTheme.white,
                           ),
-                          Text(
+                          /* Text(
                             dayFrom + ' - ' + monthFrom + ' - ' + yearFrom,
                             style: TextStyle(color: AppTheme.white),
-                          ),
+                          ), */
                         ],
                       ),
                     ),
-                    onTap: () {
+                    /* onTap: () {
                       selectDateFrom(context);
-                    },
+                    }, */
                   ),
                 ],
               ),
