@@ -224,14 +224,14 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
             _listOfTeams = data['payload'];
             _selectedteam = _listOfTeams[0].value;
           });
-          _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, _selectedteam);
+          _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, _selectedteam, _currentTimes, _dateFrom, _dateTo);
           break;
         case RankDataKey.ecommerceWithSummary:
           setState(() {
             _listOfEcommerce = data['payload'];
             _selectedEcommerce = _listOfEcommerce[0].value;
           });
-          _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, "0", "", "");
+          _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
           break;
         case RankDataKey.summary:
           setState(() {
@@ -243,7 +243,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   }
 
   _init() async {
-    await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState);
+	  await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState, _currentTimes, _dateFrom, _dateTo);
   }
 
   String _selectedTime = "Hari ini";
@@ -303,7 +303,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                     );
                   },
                 ).toList(),
-                onChanged: (String value) {
+	              onChanged: (String value) async {
                   setState(() {
                     _selectedTime = value;
                     _currentTimes = getFilterTime(value);
@@ -313,8 +313,11 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
 
                   if (_currentTimes != "7") {
                     _list.clear();
-                    _rankDataController.getSummary(
-                            context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
+
+                    await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState, _currentTimes, _dateFrom, _dateTo);
+
+	                  /*await _rankDataController.getSummary(
+                            context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);*/
                   }
                 },
               ),
@@ -340,7 +343,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                     setState(() {
                       _selectedteam = item;
                     });
-                    _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item);
+                    _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item, _currentTimes, _dateFrom, _dateTo);
                   },
                 ),
               ),
