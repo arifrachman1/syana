@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/TransactionHistoryModel.dart';
 import 'package:syana/utils/AppTheme.dart';
-import '../../main.dart';
 
 class PenjualanTimHariIni extends StatefulWidget {
   @override
@@ -22,13 +21,11 @@ class PenjualanState extends State<PenjualanTimHariIni> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _saleController = new SaleController();
     initDataHistories();

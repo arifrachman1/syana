@@ -13,13 +13,11 @@ class _BroadcastState extends State<BroadcastMessage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -29,7 +27,6 @@ class _BroadcastState extends State<BroadcastMessage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.lightGreen[200],

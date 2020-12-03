@@ -1,16 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:syana/Controller/CustomerController.dart';
 import 'package:syana/Controller/SaleController.dart';
-import 'package:syana/models/CustomerModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
-import '../../main.dart';
 
 class SyanaHomeTraceInput extends StatefulWidget {
   DateTime date;
@@ -34,13 +29,11 @@ class SyanaHomeTraceInputState extends State<SyanaHomeTraceInput> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _saleController = new SaleController();
     _selectedDate = formatDate.format(widget.date);

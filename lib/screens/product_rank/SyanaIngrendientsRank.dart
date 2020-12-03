@@ -228,13 +228,11 @@ class _State extends State<SyanaIngrendientsRank> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _rankDataController = new RankDataController();
     _inventoryController = new InventoryController();
@@ -324,7 +322,6 @@ class _State extends State<SyanaIngrendientsRank> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return _isLoading
         ? Center(
             child: CircularProgressIndicator(),

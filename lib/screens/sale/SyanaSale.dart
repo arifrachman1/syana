@@ -36,7 +36,6 @@ class SaleState extends State<Sale> with SingleTickerProviderStateMixin {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     tabs.clear();
     pages.clear();
@@ -278,13 +277,11 @@ class _SaleInnerState extends State<SaleInnerWidget> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     widget.promoController.getPromoForSales(context, setLoadingState, setPromos);
@@ -493,7 +490,6 @@ class _SaleInnerState extends State<SaleInnerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     print(searchFilter);
     if (searchFilter.isNotEmpty) {
       List<ProductModel> temp = new List();

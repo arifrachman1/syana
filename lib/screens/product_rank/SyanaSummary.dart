@@ -209,7 +209,6 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _rankDataController = new RankDataController();
     _init();
@@ -288,6 +287,47 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
             width: double.infinity,
             margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
             decoration: AppTheme.inputDecorationShadow(),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                value: _selectedTime,
+                items: waktu.map(
+                          (String val) {
+                    return DropdownMenuItem(
+                      value: val,
+                      child: Text(
+                        val,
+                        style: TextStyle(
+                          fontSize: 15,
+                        ),
+                      ),
+                    );
+                  },
+                ).toList(),
+                onChanged: (String value) {
+                  setState(() {
+                    _selectedTime = value;
+                    _currentTimes = getFilterTime(value);
+                    _dateFrom = "";
+                    _dateTo = "";
+                  });
+
+                  if (_currentTimes != "7") {
+                    _list.clear();
+                    _rankDataController.getSummary(
+                            context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
+                  }
+                },
+              ),
+            ),
+          ),
+          showsDatePicker(
+            int.parse(_currentTimes),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10),
+            width: double.infinity,
+            margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
+            decoration: AppTheme.inputDecorationShadow(),
             child: Container(
               decoration: BoxDecoration(),
               // padding: EdgeInsets.only(left: 10),
@@ -332,47 +372,6 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                       )),
           ),
           Container(
-            padding: EdgeInsets.only(left: 10),
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
-            decoration: AppTheme.inputDecorationShadow(),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                value: _selectedTime,
-                items: waktu.map(
-                          (String val) {
-                    return DropdownMenuItem(
-                      value: val,
-                      child: Text(
-                        val,
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    );
-                  },
-                ).toList(),
-                onChanged: (String value) {
-                  setState(() {
-                    _selectedTime = value;
-                    _currentTimes = getFilterTime(value);
-                    _dateFrom = "";
-                    _dateTo = "";
-                  });
-
-                  if (_currentTimes != "7") {
-                    _list.clear();
-                    _rankDataController.getSummary(
-                            context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
-                  }
-                },
-              ),
-            ),
-          ),
-          showsDatePicker(
-            int.parse(_currentTimes),
-          ),
-          Container(
             margin: EdgeInsets.only(bottom: 10),
             padding: EdgeInsets.only(left: 10, right: 10),
           ),
@@ -399,15 +398,13 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                             flex: 5,
                             child: Container(
                               alignment: Alignment.center,
-                              /* child: Text(
-                                    (index + 1).toString(),
+                              child: Text(
+                                "${_list[index].numbering.toString()}.",
                                     style: TextStyle(
-                                      color: index < 3
-                                          ? AppTheme.text_darker
-                                          : AppTheme.text_light,
+                                      color: AppTheme.text_light,
                                       fontSize: 15,
                                     ),
-                                  ),  */
+                              ),
                             ),
                           ),
                           Flexible(
@@ -415,11 +412,11 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                             fit: FlexFit.tight,
                             child: Container(
                               child: Text(
-                                _list[index].transactionNumber
+                                "${_list[index].transactionNumber}"
                                 /* rankBestProducts[index].name, */,
                                 softWrap: true,
                                 style: TextStyle(
-                                  //color: AppTheme.
+                                  color: AppTheme.text_light,
                                   fontSize: 20,
                                   //fontWeight: FontWeight.bold
                                 ),
@@ -439,7 +436,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                                     /* rankBestProducts[index].name, */,
                                     softWrap: true,
                                     style: TextStyle(
-                                      //color: AppTheme.
+                                      color: AppTheme.text_light,
                                       fontSize: 13,
                                       //fontWeight: FontWeight.bold
                                     ),
@@ -449,7 +446,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                                     /* rankBestProducts[index].name, */,
                                     softWrap: true,
                                     style: TextStyle(
-                                      //color: AppTheme.
+                                      color: AppTheme.text_light,
                                       fontSize: 13,
                                       //fontWeight: FontWeight.bold
                                     ),

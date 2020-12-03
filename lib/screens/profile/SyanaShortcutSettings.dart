@@ -17,13 +17,11 @@ class _ShortcutState extends State<ShortcutSettings> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _shortcutController = new ShortcutController();
     _initData();
@@ -60,7 +58,6 @@ class _ShortcutState extends State<ShortcutSettings> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

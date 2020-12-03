@@ -27,13 +27,11 @@ class _DetailState extends State<SyanaPromoDetail> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _promoController = new PromoController();
     _initData();
@@ -79,7 +77,6 @@ class _DetailState extends State<SyanaPromoDetail> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(

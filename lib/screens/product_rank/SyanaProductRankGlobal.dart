@@ -109,13 +109,11 @@ class GrafikGlobalState extends State<GrafikGlobal> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _saleController = new SaleController();
     _currentTimeStart = formatDate.format(DateTime.now());

@@ -8,7 +8,6 @@ class Bookmark extends StatefulWidget {
 class _State extends DefaultView<Bookmark> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

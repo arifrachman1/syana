@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/HomeOwnerController.dart';
 import 'package:syana/Controller/ProfileController.dart';
-import 'package:syana/Controller/HomeOwnerController.dart';
 import 'package:syana/screens/profile/SyanaChangePassword.dart';
 import 'package:syana/screens/profile/SyanaShortcutSettings.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -22,13 +21,11 @@ class SyanaProfileState extends State<SyanaProfile> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _profileController = new ProfileController();
 

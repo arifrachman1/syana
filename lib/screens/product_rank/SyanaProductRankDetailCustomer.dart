@@ -28,7 +28,6 @@ class SyanaProductRankDetailCustomerState
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _customerController = new CustomerController();
     initDataCustomer();
@@ -63,7 +62,6 @@ class SyanaProductRankDetailCustomerState
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         backgroundColor: Colors.lightGreen[200],
         appBar: AppBar(

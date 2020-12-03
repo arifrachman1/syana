@@ -85,7 +85,6 @@ class HomeDataDetailModel implements Comparable {
   * to compare each values*/
   @override
   int compareTo(other) {
-    // TODO: implement compareTo
     if (other is HomeDataDetailModel) {
       int a = int.parse(this.packageThisMonth.toString()),
           b = int.parse(other.packageThisMonth.toString());

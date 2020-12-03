@@ -10,7 +10,6 @@ class SyanaTripsVideo extends StatefulWidget {
 class TripsVideoState extends State<SyanaTripsVideo> {
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.transparent,
 

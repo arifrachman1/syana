@@ -1,16 +1,13 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/classes/event_list.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
+		show CalendarCarousel;
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/TraceModel.dart';
 import 'package:syana/screens/trace/SyanaTraceInput.dart';
 import 'package:syana/utils/AppTheme.dart';
-import '../../main.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
-    show CalendarCarousel;
-import 'package:flutter_calendar_carousel/classes/event.dart';
-import 'package:flutter_calendar_carousel/classes/event_list.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 class SyanaHomeTrace extends StatefulWidget {
   @override
@@ -75,7 +72,6 @@ class SyanaHomeTraceState extends State<SyanaHomeTrace> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
