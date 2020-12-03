@@ -154,7 +154,7 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
                             child: Row(
                               children: [
                                 Text(
-                                  "Packaging : ",
+                                  "Packer : ",
                                   style: TextStyle(
                                     color: AppTheme.text_light,
                                     fontSize: 21,
