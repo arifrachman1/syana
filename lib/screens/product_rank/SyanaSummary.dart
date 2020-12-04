@@ -244,11 +244,11 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
       }
     }
   }
-/* 
-  _init() async {
+
+  /* _init() async {
     await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState, _currentTimes, _dateFrom, _dateTo);
-  } */
-/* 
+  }  */
+
   String _selectedTime = "Hari ini";
   String _currentTimes = "0";
 
@@ -257,8 +257,8 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   List<String> statusTransaksi = ['Semua', 'Belum Proses Packing', 'Sudah Proses Packing'];
 
   int _selectedStatus = 0;
-  s
- */
+
+
   String getFilterTime(String filterTime) {
     String filterTemp = "";
     if (filterTime == "Hari ini") {

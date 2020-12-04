@@ -88,7 +88,7 @@ class LoginController {
       } else {
         CustomDialog.getDialog(
             title: Strings.DIALOG_TITLE_WARNING,
-            message: Strings.DIALOG_MESSAGE_INVALID_EMAIL_OR_PASSWORD,
+		        message: data['message'],
             context: context,
             popCount: 1);
       }
