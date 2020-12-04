@@ -68,7 +68,8 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
     if (_dateFrom != "" && _dateTo != "") {
       _list.clear();
       setLoadingState();
-      await _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
+      await _rankDataController
+              .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
       setLoadingState();
     }
   }
@@ -96,7 +97,8 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
     if (_dateFrom != "" && _dateTo != "") {
       _list.clear();
       setLoadingState();
-      await _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
+      await _rankDataController
+              .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
       setLoadingState();
     }
   }
@@ -224,14 +226,15 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
             _listOfTeams = data['payload'];
             _selectedteam = _listOfTeams[0].value;
           });
-          _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, _selectedteam);
+          _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, _selectedteam, _currentTimes, _dateFrom, _dateTo);
           break;
         case RankDataKey.ecommerceWithSummary:
           setState(() {
             _listOfEcommerce = data['payload'];
             _selectedEcommerce = _listOfEcommerce[0].value;
           });
-          _rankDataController.getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, "0", "", "");
+          _rankDataController
+                  .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
           break;
         case RankDataKey.summary:
           setState(() {
@@ -243,13 +246,18 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   }
 
   _init() async {
-    await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState);
+    await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState, _currentTimes, _dateFrom, _dateTo);
   }
 
   String _selectedTime = "Hari ini";
   String _currentTimes = "0";
 
   List<String> waktu = ['Hari ini', 'Minggu ini', 'Bulan ini', 'Minggu lalu', 'Bulan lalu', 'Grand Total', 'Tentukan sendiri'];
+
+  List<String> statusTransaksi = ['Semua', 'Belum Proses Packing', 'Sudah Proses Packing'];
+
+  int _selectedStatus = 0;
+
 
   String getFilterTime(String filterTime) {
     String filterTemp = "";
@@ -282,43 +290,89 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
               : Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(left: 10),
-            width: double.infinity,
-            margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
-            decoration: AppTheme.inputDecorationShadow(),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                value: _selectedTime,
-                items: waktu.map(
-                          (String val) {
-                    return DropdownMenuItem(
-                      value: val,
-                      child: Text(
-                        val,
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                    );
-                  },
-                ).toList(),
-                onChanged: (String value) {
-                  setState(() {
-                    _selectedTime = value;
-                    _currentTimes = getFilterTime(value);
-                    _dateFrom = "";
-                    _dateTo = "";
-                  });
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
+                  decoration: AppTheme.inputDecorationShadow(),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: _selectedTime,
+                      items: waktu.map(
+                                (String val) {
+                          return DropdownMenuItem(
+                            value: val,
+                            child: Text(
+                              val,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (String value) async {
+                        setState(() {
+                          _selectedTime = value;
+                          _currentTimes = getFilterTime(value);
+                          _dateFrom = "";
+                          _dateTo = "";
+                        });
 
-                  if (_currentTimes != "7") {
-                    _list.clear();
-                    _rankDataController.getSummary(
-                            context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);
-                  }
-                },
+                        if (_currentTimes != "7") {
+                          _list.clear();
+
+                          await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState, _currentTimes, _dateFrom, _dateTo);
+
+                          /*await _rankDataController.getSummary(
+                            context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);*/
+                        }
+                      },
+                    ),
+                  ),
+                ),
               ),
-            ),
+              Flexible(
+                flex: 1,
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  width: double.infinity,
+                  margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
+                  decoration: AppTheme.inputDecorationShadow(),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                      value: _selectedStatus,
+                      items: statusTransaksi.map(
+                                (String val) {
+                          return DropdownMenuItem(
+                            value: statusTransaksi.indexOf(val),
+                            child: Text(
+                              val,
+                              style: TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedStatus = value;
+                        });
+                        _rankDataController
+                                .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
+                        log(value.toString());
+                      },
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
           showsDatePicker(
             int.parse(_currentTimes),
@@ -336,11 +390,12 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                 child: DropdownButton(
                   value: _selectedteam,
                   items: _listOfTeams,
-                  onChanged: (item) {
+                  onChanged: (item) async {
                     setState(() {
                       _selectedteam = item;
                     });
-                    _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, item);
+                    await _rankDataController.getEcommerceWithSummary(
+                            context, setData, setLoadingState, item, _currentTimes, _dateFrom, _dateTo);
                   },
                 ),
               ),
@@ -365,7 +420,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                                 _selectedEcommerce = item;
                               });
                               _rankDataController
-                                      .getSummary(context, setData, setLoadingState, _selectedteam, item, _currentTimes, _dateFrom, _dateTo);
+                                      .getSummary(context, setData, setLoadingState, _selectedteam, item, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
                             }
                           },
                         ),
@@ -399,11 +454,11 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                             child: Container(
                               alignment: Alignment.center,
                               child: Text(
-                                "${_list[index].numbering.toString()}.",
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 15,
-                                    ),
+                                "${(index + 1).toString()}.",
+                                style: TextStyle(
+                                  color: AppTheme.text_light,
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
                           ),

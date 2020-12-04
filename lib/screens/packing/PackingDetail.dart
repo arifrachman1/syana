@@ -55,7 +55,7 @@ class _PackingDetailState extends State<PackingDetail> {
       var result = await BarcodeScanner.scan();
       String scan = result;
       GlobalFunctions.log(message: scan, name: "packing");
-      if (scan == widget.data.saleDetails[index].idProduct) {
+      if (scan == widget.data.saleDetails[index].sku) {
         setState(() {
           widget.data.saleDetails[index].currentSaleNum++;
         });

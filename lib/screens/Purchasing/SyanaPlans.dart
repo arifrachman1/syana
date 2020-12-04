@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:syana/screens/Plans/SyanaPlansAdd.dart';
+import 'package:syana/screens/Purchasing/SyanaPlansAdd.dart';
 import 'package:syana/utils/AppTheme.dart';
 
 class SyanaPlans extends StatefulWidget {
@@ -69,7 +69,8 @@ class _SyanaPlansState extends State<SyanaPlans> {
                             ),
                           ),
                           alignment: Alignment.center,
-                          padding: EdgeInsets.all(2.0),
+                          padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 4.0),
+                          //padding: EdgeInsets.all(5.0),
                           margin: EdgeInsets.all(5.0),
                           child: Row(
                             children: [
