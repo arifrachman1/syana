@@ -43,12 +43,11 @@ class _SyanaPlansDetailState extends State<SyanaPlansDetail> {
           color: Colors.white,
         ),
         backgroundColor: Colors.green,
-      ),
+      ), 
       body: Container(
         decoration: AppTheme.appBackground(),
         child: Expanded(
-            child: Container(
-                child: ListView.builder(
+            child: ListView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
                     physics: ClampingScrollPhysics(),
@@ -63,7 +62,7 @@ class _SyanaPlansDetailState extends State<SyanaPlansDetail> {
                               color: AppTheme.white,
                             ),
                           ),
-                        ),
+                        ), 
                         alignment: Alignment.center,
                         padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 4.0),
                         //padding: EdgeInsets.all(5.0),
@@ -94,7 +93,7 @@ class _SyanaPlansDetailState extends State<SyanaPlansDetail> {
                           ],
                         ),
                       );
-                    }))),
+                    })), 
       ),
     );
   }
