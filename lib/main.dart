@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         highlightColor: Colors.green
       ),
-      home: SplashScreen(),
+      home: SyanaPurchasing(),
       debugShowCheckedModeBanner: false,
     );
   }

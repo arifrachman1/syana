@@ -187,16 +187,16 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                             Icons.date_range,
                             color: AppTheme.white,
                           ),
-                          Text(
+                          /* Text(
                             dayTo + ' - ' + monthTo + ' - ' + yearTo,
                             style: TextStyle(color: AppTheme.white),
-                          ),
+                          ), */
                         ],
                       ),
                     ),
-                    onTap: () {
+                    /* onTap: () {
                       selectDateTo(context);
-                    },
+                    }, */
                   ),
                 ],
               ),
@@ -212,8 +212,8 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
   @override
   void initState() {
     super.initState();
-    _rankDataController = new RankDataController();
-    _init();
+    /* _rankDataController = new RankDataController();
+    _init(); */
   }
 
   setData(data) {
@@ -226,15 +226,15 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
             _listOfTeams = data['payload'];
             _selectedteam = _listOfTeams[0].value;
           });
-          _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, _selectedteam, _currentTimes, _dateFrom, _dateTo);
+         // _rankDataController.getEcommerceWithSummary(context, setData, setLoadingState, _selectedteam, _currentTimes, _dateFrom, _dateTo);
           break;
         case RankDataKey.ecommerceWithSummary:
           setState(() {
             _listOfEcommerce = data['payload'];
             _selectedEcommerce = _listOfEcommerce[0].value;
           });
-          _rankDataController
-                  .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
+          //_rankDataController
+           //       .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
           break;
         case RankDataKey.summary:
           setState(() {
@@ -244,11 +244,11 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
       }
     }
   }
-
+/* 
   _init() async {
     await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState, _currentTimes, _dateFrom, _dateTo);
-  }
-
+  } */
+/* 
   String _selectedTime = "Hari ini";
   String _currentTimes = "0";
 
@@ -258,7 +258,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
 
   int _selectedStatus = 0;
   s
-
+ */
   String getFilterTime(String filterTime) {
     String filterTemp = "";
     if (filterTime == "Hari ini") {
@@ -300,7 +300,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                   width: double.infinity,
                   margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
                   decoration: AppTheme.inputDecorationShadow(),
-                  child: DropdownButtonHideUnderline(
+                  /* child: DropdownButtonHideUnderline(
                     child: DropdownButton(
                       value: _selectedTime,
                       items: waktu.map(
@@ -324,17 +324,17 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                           _dateTo = "";
                         });
 
-                        if (_currentTimes != "7") {
+                        /* if (_currentTimes != "7") {
                           _list.clear();
 
                           await _rankDataController.getTeamsWithSummary(context, setData, setLoadingState, _currentTimes, _dateFrom, _dateTo);
 
                           /*await _rankDataController.getSummary(
                             context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo);*/
-                        }
+                        } */
                       },
                     ),
-                  ),
+                  ), */
                 ),
               ),
               Flexible(
@@ -345,7 +345,7 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                   margin: EdgeInsets.symmetric(horizontal: Dimens.margin_m, vertical: Dimens.margin_s),
                   decoration: AppTheme.inputDecorationShadow(),
                   child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
+                    /* child: DropdownButton(
                       value: _selectedStatus,
                       items: statusTransaksi.map(
                                 (String val) {
@@ -364,19 +364,19 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                         setState(() {
                           _selectedStatus = value;
                         });
-                        _rankDataController
+                        /* _rankDataController
                                 .getSummary(context, setData, setLoadingState, _selectedteam, _selectedEcommerce, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
-                        log(value.toString());
+                        log(value.toString()); */
                       },
-                    ),
+                    ), */
                   ),
                 ),
               )
             ],
           ),
-          showsDatePicker(
+          /* showsDatePicker(
             int.parse(_currentTimes),
-          ),
+          ), */
           Container(
             padding: EdgeInsets.only(left: 10),
             width: double.infinity,
@@ -394,8 +394,8 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                     setState(() {
                       _selectedteam = item;
                     });
-                    await _rankDataController.getEcommerceWithSummary(
-                            context, setData, setLoadingState, item, _currentTimes, _dateFrom, _dateTo);
+                    /* await _rankDataController.getEcommerceWithSummary(
+                            context, setData, setLoadingState, item, _currentTimes, _dateFrom, _dateTo); */
                   },
                 ),
               ),
@@ -419,9 +419,9 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                               setState(() {
                                 _selectedEcommerce = item;
                               });
-                              _rankDataController
+                             /*  _rankDataController
                                       .getSummary(context, setData, setLoadingState, _selectedteam, item, _currentTimes, _dateFrom, _dateTo, _selectedStatus);
-                            }
+ */                            }
                           },
                         ),
                       )),
