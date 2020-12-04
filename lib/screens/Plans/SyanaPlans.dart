@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:syana/screens/Plans/SyanaPlansAdd.dart';
 import 'package:syana/utils/AppTheme.dart';
 
-class SyanaPlansDetail extends StatefulWidget {
+class SyanaPlans extends StatefulWidget {
   @override
-  _SyanaPlansDetailState createState() => _SyanaPlansDetailState();
+  _SyanaPlansState createState() => _SyanaPlansState();
 }
 
-class _SyanaPlansDetailState extends State<SyanaPlansDetail> {
+class _SyanaPlansState extends State<SyanaPlans> {
   List<String> _nama = new List();
 
   namaItem() {
@@ -14,6 +15,24 @@ class _SyanaPlansDetailState extends State<SyanaPlansDetail> {
       _nama.add("Ads Fb");
       _nama.add("Instagram");
       _nama.add("Whatsapp");
+      _nama.add("Ads Fb");
+      _nama.add("Instagram");
+      _nama.add("Whatsapp");
+      _nama.add("Ads Fb");
+      _nama.add("Instagram");
+      _nama.add("Whatsapp");
+      _nama.add("Ads Fb");
+      _nama.add("Instagram");
+      _nama.add("Whatsapp");
+      _nama.add("Ads Fb");
+      _nama.add("Instagram");
+      _nama.add("Whatsapp");
+      _nama.add("Ads Fb");
+      _nama.add("Instagram");
+      _nama.add("Whatsapp");
+      _nama.add("Ads Fb");
+      _nama.add("Instagram");
+      _nama.add("Whatsapps");
     });
   }
 
@@ -26,20 +45,14 @@ class _SyanaPlansDetailState extends State<SyanaPlansDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       appBar: AppBar(
+        title: Text("Plans"),
+        backgroundColor: Colors.lightGreen[300]
+      ),
         body: Container(
       decoration: AppTheme.appBackground(),
       child: Column(
         children: <Widget>[
-          Padding(padding: EdgeInsets.all(30)),
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: EdgeInsets.all(15.0),
-            child: Text("Plans",
-                style: TextStyle(
-                  color: AppTheme.white,
-                  fontSize: 40,
-                )),
-          ),
           Flexible(
               child: Container(
                   child: ListView.builder(
@@ -85,12 +98,14 @@ class _SyanaPlansDetailState extends State<SyanaPlansDetail> {
                           ),
                         );
                       }))),
-          Container(
+        Container(
             alignment: Alignment.bottomCenter,
             height: MediaQuery.of(context).size.height * 0.12,
             child: Center(
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>SyanaPlansAdd()));
+                },
                 textColor: Colors.white,
                 padding: EdgeInsets.all(0.0),
                 shape: StadiumBorder(),
