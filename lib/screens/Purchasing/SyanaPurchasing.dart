@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/screens/Purchasing/SyanaHistoryDetail.dart';
-import 'package:syana/screens/Purchasing/SyanaPlansDetail.dart';
+import 'package:syana/screens/Purchasing/SyanaPlans.dart';
 import 'package:syana/screens/Purchasing/SyanaPurchasingDetail.dart';
 import 'package:syana/utils/AppTheme.dart';
 
@@ -41,7 +41,7 @@ class _SyanaPurchasingState extends State<SyanaPurchasing> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SyanaPlansDetail()),
+                                builder: (context) => SyanaPlans()),
                           );
                         },
                         color: Colors.white,
