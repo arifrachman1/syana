@@ -439,7 +439,9 @@ class _SyanaSummaryState extends DefaultView<SyanaSummary> {
                 itemCount: _list.length,
                 itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => SyanaSummaryDetail(_list[index]))),
+                    onTap: () =>
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_) =>
+                                    SyanaSummaryDetail(_list[index], doesLaunchedFromBookmark: false,))),
                     child: Container(
                       decoration: BoxDecoration(
                         color: AppTheme.teal,

@@ -73,6 +73,17 @@ class _SyanaPlansState extends State<SyanaPlans> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SyanaPlansAdd()),
+            );
+          },
+          label: Text('Tambah Plan'),
+          icon: Icon(Icons.add_circle),
+          backgroundColor: AppTheme.btn_success,
+        ),
         appBar: AppBar(
             title: Text("Plans"), backgroundColor: Colors.lightGreen[300]),
         body: Container(

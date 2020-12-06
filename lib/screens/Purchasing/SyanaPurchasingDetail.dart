@@ -48,24 +48,27 @@ class _SyanaPurchasingDetailState extends State<SyanaPurchasingDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.lightGreen[300],
-           title: Text(
-            "Purchasing",
-            ), 
+        backgroundColor: Colors.lightGreen[300],
+        title: Text(
+          "Purchasing",
+        ),
       ),
       body: Container(
-      decoration: AppTheme.appBackground(),
-      child: Expanded(
-                    child: Container(
-                      child: ListView.builder(
+          decoration: AppTheme.appBackground(),
+          child: Expanded(
+              child: Container(
+                  child: ListView.builder(
                       itemCount: _nama.length,
                       itemBuilder: (context, index) {
                         return Container(
                           //color: Colors.red,
                           decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(width: 1.0, color: AppTheme.white,),
+                            border: Border(
+                              bottom: BorderSide(
+                                width: 1.0,
+                                color: AppTheme.white,
                               ),
+                            ),
                           ),
                           alignment: Alignment.center,
                           padding: EdgeInsets.fromLTRB(8.0, 5.0, 5.0, 4.0),
@@ -107,11 +110,7 @@ class _SyanaPurchasingDetailState extends State<SyanaPurchasingDetail> {
                             ],
                           ),
                         );
-                      }
-                    )
-                  )
-                )
-      ),
+                      })))),
     );
   }
 }

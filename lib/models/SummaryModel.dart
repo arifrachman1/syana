@@ -8,7 +8,10 @@ class SummaryModel {
 
   List<SaleDetailModel> _transDetails;
 
-  SummaryModel.init(this._id, this._status, this._omzet, this._profitBruto, this._profitNetto, this._transactionNumber, this._cashierName,
+
+    SummaryModel();
+
+    SummaryModel.init(this._id, this._status, this._omzet, this._profitBruto, this._profitNetto, this._transactionNumber, this._cashierName,
                     this._packerName, this._transDetails, this._costTotal, this._numbering);
 
 
@@ -93,6 +96,29 @@ class SummaryModel {
 
     return json.encode(model);
   }
+
+    fromJson(Map<String, dynamic> jsonParam) {
+      List _details = jsonParam['details'];
+
+      this.transDetails = new List();
+
+      _details.forEach((element) {
+        Map _decodedJson = json.decode(element);
+
+        SaleDetailModel _model = new SaleDetailModel();
+        _model.fromJson(_decodedJson);
+        this.transDetails.add(_model);
+      });
+
+      this.id = jsonParam['id'];
+      this.status = jsonParam['status'];
+      this.profitBruto = jsonParam['profit_bruto'];
+      this.profitNetto = jsonParam['profit_netto'];
+      this.costTotal = jsonParam['cost_total'];
+      this.transactionNumber = jsonParam['transaction_number'];
+      this.cashierName = jsonParam['cashier_name'];
+      this.packerName = jsonParam['packer_name'];
+    }
 
   @override
   String toString() {

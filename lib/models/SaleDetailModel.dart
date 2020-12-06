@@ -5,6 +5,9 @@ class SaleDetailModel {
 
 	int _currentSaleNum, _profitBruto, _profitNetto, _omzet, _cost;
 
+
+	SaleDetailModel();
+
 	SaleDetailModel.init(this._id,
 	                     this._idSale,
 	                     this._idProduct,
@@ -137,6 +140,25 @@ class SaleDetailModel {
 		};
 
 		return json.encode(model);
+	}
+
+	fromJson(Map<String, dynamic> json) {
+		this.id = json['id'];
+		this.idSale = json['id_sale'];
+		this.idProduct = json['id_product'];
+		this.productName = json['product_name'];
+		this.saleNumber = json['sale_number'];
+		this.freeNumber = json['free_number'];
+		this.point = json['point'];
+		this.sku = json['sku'];
+		this.price = json['price'];
+		this.weight = json['weight'];
+		this.status = json['status'];
+		this.currentSaleNum = json['current_sale_num'] != null ? int.parse(json['current_sale_num'].toString()) : null;
+		this.profitBruto = int.parse(json['profit_bruto'].toString());
+		this.profitNetto = int.parse(json['profit_netto'].toString());
+		this.omzet = int.parse(json['omzet'].toString());
+		this.cost = int.parse(json['cost'].toString());
 	}
 
 	@override

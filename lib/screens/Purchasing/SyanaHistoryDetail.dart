@@ -119,7 +119,7 @@ class _SyanaHistoryDetailState extends State<SyanaHistoryDetail> {
                         IconButton(
                           //alignment: Alignment(0, 1),
                           icon: Icon(//Icons.brightness_1,
-                              Icons.dangerous,
+		                          Icons.error,
                               //Icons.check_circle,
                               //Icons.av_timer,
                               color: AppTheme.btn_success),

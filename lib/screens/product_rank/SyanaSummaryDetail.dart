@@ -1,24 +1,24 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:syana/DefaultView.dart';
-//import 'package:syana/models/BookmarkModel.dart';
+import 'package:syana/controller/BookmarkController.dart';
+import 'package:syana/models/BookmarkModel.dart';
 import 'package:syana/models/SaleDetailModel.dart';
 import 'package:syana/models/SummaryModel.dart';
 import 'package:syana/utils/AppTheme.dart';
-import 'package:syana/utils/GlobalFunctions.dart';
 
 class SyanaSummaryDetail extends StatefulWidget {
   SummaryModel model;
+  bool doesLaunchedFromBookmark;
 
-  SyanaSummaryDetail(this.model);
+  SyanaSummaryDetail(this.model, {@required this.doesLaunchedFromBookmark});
 
   _SyanaSummaryDetailState createState() => _SyanaSummaryDetailState();
 }
 
 class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
   List<String> _item = new List();
+
+  BookmarkController _bookmarkController;
 
   bool _isLoading = false;
 
@@ -44,6 +44,7 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
   @override
   void initState() {
     super.initState();
+    _bookmarkController = new BookmarkController();
     itemSummary();
   }
 
@@ -62,31 +63,22 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
               backgroundColor: Colors.lightGreen[200],
               title: Text('Detail'),
               actions: [
-                PopupMenuButton(
+                getWidget().doesLaunchedFromBookmark ?
+                Container() : PopupMenuButton(
                   itemBuilder: (context) =>
                   [
                     PopupMenuItem(
                       child: Text("Simpan Bookmark"),
                       value: 1,
                     ),
-                    PopupMenuItem(
-                      child: Text("Show Bookmarks"),
-                      value: 2,
-                    )
                   ],
-                  /* onSelected: (value) {
+                  onSelected: (value) {
                     switch (value) {
                       case 1:
-                        Map _payload = GlobalFunctions.generateMapParam(
-                                ['sale_id', 'transaction_number'], [getWidget().model.id, getWidget().model.transactionNumber]);
-                        _bookmarkModel.add(new BookmarkModel.init(getWidget().model.id, BookmarkType.summaryDetail, json.encode(_payload)));
-                        break;
-                      case 2:
-                        log("bookmark data :\n${_bookmarkModel.toString()}");
-                        log("bookmark payload : ${_bookmarkModel.last.payloadToMap().toString()}");
+                        _bookmarkController.setBookmark(context, setLoadingState, BookmarkType.summaryDetail, getWidget().model.toJson());
                         break;
                     }
-                  }, */
+                  },
                 )
               ],
             ),
