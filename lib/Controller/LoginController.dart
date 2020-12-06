@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syana/models/UserModel.dart';
+import 'package:syana/screens/Purchasing/SyanaPurchasing.dart';
 import 'package:syana/screens/home/SyanaHomeOwner.dart';
 import 'package:syana/screens/home/SyanaHomePacking.dart';
 import 'package:syana/screens/home/SyanaHomeStarSeller.dart';
@@ -80,6 +81,10 @@ class LoginController {
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
             return SyanaHomePacking();
           }));
+        } else if (_userModel.idRole == 9) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+            return SyanaPurchasing();
+          }));
         } else {
           Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
             return SyanaHomeOwner();
@@ -88,7 +93,7 @@ class LoginController {
       } else {
         CustomDialog.getDialog(
             title: Strings.DIALOG_TITLE_WARNING,
-		        message: data['message'],
+            message: data['message'],
             context: context,
             popCount: 1);
       }
