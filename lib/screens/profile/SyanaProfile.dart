@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:syana/Controller/HomeOwnerController.dart';
 import 'package:syana/Controller/ProfileController.dart';
 import 'package:syana/DefaultView.dart';
+import 'package:syana/models/UserModel.dart';
+import 'package:syana/screens/bookmark/Bookmark.dart';
 import 'package:syana/screens/profile/SyanaChangePassword.dart';
 import 'package:syana/screens/profile/SyanaShortcutSettings.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -19,6 +21,7 @@ class SyanaProfileState extends DefaultView<SyanaProfile> {
   ProfileController _profileController;
   Map _personalInfo = new Map();
   HomeOwnerController _homeOwnerController;
+  UserModel _userModel;
 
   bool _isLoading = false;
 
@@ -37,6 +40,7 @@ class SyanaProfileState extends DefaultView<SyanaProfile> {
 
   _initData() async {
     await _profileController.getPersonalInfo(context, setLoadingState, setData);
+    _userModel = await GlobalFunctions.getPersistence();
   }
 
   @override
@@ -77,10 +81,34 @@ class SyanaProfileState extends DefaultView<SyanaProfile> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
+                _userModel.idRole == 2
+                        ? Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        alignment: Alignment.bottomRight,
+                        height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.06,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.bookmark,
+                            size: 35,
+                            color: AppTheme.white,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                              return Bookmark();
+                            }));
+                          },
+                        ))
+                        : Container(),
                 Container(
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         alignment: Alignment.bottomRight,
-                        height: MediaQuery.of(context).size.height * 0.06,
+                        height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.06,
                         child: IconButton(
                           icon: Icon(
                             Icons.lock_outline,
@@ -88,8 +116,7 @@ class SyanaProfileState extends DefaultView<SyanaProfile> {
                             color: AppTheme.white,
                           ),
                           onPressed: () {
-                            Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (_) {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
                               return SyanaChangePassword();
                             }));
                           },
@@ -97,11 +124,13 @@ class SyanaProfileState extends DefaultView<SyanaProfile> {
                 Container(
                         margin: EdgeInsets.symmetric(horizontal: 10),
                         alignment: Alignment.bottomRight,
-                        height: MediaQuery.of(context).size.height * 0.06,
+                        height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.06,
                         child: IconButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (_) {
+                            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
                               return ShortcutSettings();
                             }));
                           },
@@ -114,7 +143,10 @@ class SyanaProfileState extends DefaultView<SyanaProfile> {
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 10),
                   alignment: Alignment.bottomRight,
-                  height: MediaQuery.of(context).size.height * 0.06,
+                  height: MediaQuery
+                          .of(context)
+                          .size
+                          .height * 0.06,
                   child: IconButton(
                     onPressed: logout,
                     icon: Icon(
@@ -127,7 +159,10 @@ class SyanaProfileState extends DefaultView<SyanaProfile> {
               ],
             ),
             Container(
-              height: MediaQuery.of(context).size.height * 0.65,
+              height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.65,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -147,9 +182,7 @@ class SyanaProfileState extends DefaultView<SyanaProfile> {
                     child: Text(
                       'Anda bergabung pada ' +
                               GlobalFunctions.getStringFromDate(
-                                      targetDateTime: _personalInfo['joinDate'],
-                                      intendedFormat:
-                                      GlobalFunctions.FORMAT_MMMMM_YYYY),
+                                      targetDateTime: _personalInfo['joinDate'], intendedFormat: GlobalFunctions.FORMAT_MMMMM_YYYY),
                       style: TextStyle(
                         color: AppTheme.text_light,
                         fontSize: 16,
