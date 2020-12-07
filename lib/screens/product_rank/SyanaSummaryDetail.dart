@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syana/DefaultView.dart';
-import 'package:syana/controller/BookmarkController.dart';
+import 'package:syana/Controller/BookmarkController.dart';
 import 'package:syana/models/BookmarkModel.dart';
 import 'package:syana/models/SaleDetailModel.dart';
 import 'package:syana/models/SummaryModel.dart';
@@ -59,154 +59,138 @@ class _SyanaSummaryDetailState extends DefaultView<SyanaSummaryDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.lightGreen[200],
-              title: Text('Detail'),
-              actions: [
-                getWidget().doesLaunchedFromBookmark ?
-                Container() : PopupMenuButton(
-                  itemBuilder: (context) =>
-                  [
-                    PopupMenuItem(
-                      child: Text("Simpan Bookmark"),
-                      value: 1,
-                    ),
-                  ],
-                  onSelected: (value) {
-                    switch (value) {
-                      case 1:
-                        _bookmarkController.setBookmark(context, setLoadingState, BookmarkType.summaryDetail, getWidget().model.toJson());
-                        break;
-                    }
-                  },
-                )
-              ],
-            ),
-            backgroundColor: Colors.lightGreen[200],
-            body: _isLoading
-                    ? Center(
-              child: CircularProgressIndicator(),
-            )
-                    : Container(
-              decoration: AppTheme.appBackground(),
-              child: Center(
-                      child: Column(
+        appBar: AppBar(
+          backgroundColor: Colors.lightGreen[200],
+          title: Text('Detail'),
+          actions: [
+            getWidget().doesLaunchedFromBookmark
+                ? Container()
+                : PopupMenuButton(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Text("Simpan Bookmark"),
+                        value: 1,
+                      ),
+                    ],
+                    onSelected: (value) {
+                      switch (value) {
+                        case 1:
+                          _bookmarkController.setBookmark(
+                              context,
+                              setLoadingState,
+                              BookmarkType.summaryDetail,
+                              getWidget().model.toJson());
+                          break;
+                      }
+                    },
+                  )
+          ],
+        ),
+        backgroundColor: Colors.lightGreen[200],
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Container(
+                decoration: AppTheme.appBackground(),
+                child: Center(
+                    child: Column(
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      //color: Colors.red,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.08,
+                      child: Row(
                         children: [
                           Container(
-                            alignment: Alignment.center,
-                            //color: Colors.red,
-                            width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 0.8,
-                            height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .height * 0.08,
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width * 0.2,
-                                  child: Text(
-                                    "Sales : ",
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 21,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery
-                                          .of(context)
-                                          .size
-                                          .width * 0.4,
-                                  child: Text(
-                                    "${getWidget().model.cashierName}",
-                                    style: TextStyle(
-                                      color: AppTheme.text_light,
-                                      fontSize: 21,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          Container(
-                            width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width * 0.8,
-                            height: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .height * 0.07,
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Packer : ",
-                                  style: TextStyle(
-                                    color: AppTheme.text_light,
-                                    fontSize: 21,
-                                  ),
-                                ),
-                                Text(
-                                  "${getWidget().model.packerName}",
-                                  style: TextStyle(
-                                    color: AppTheme.text_light,
-                                    fontSize: 21,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
+                            width: MediaQuery.of(context).size.width * 0.2,
                             child: Text(
-                              "Detail penjualan : ",
+                              "Sales : ",
                               style: TextStyle(
                                 color: AppTheme.text_light,
+                                fontSize: 21,
                               ),
                             ),
                           ),
-                          Flexible(
-                                  child: Container(
-                                          width: MediaQuery
-                                                  .of(context)
-                                                  .size
-                                                  .width * 0.8,
-                                          //color: Colors.red,
-                                          child: ListView.builder(
-                                                  itemCount: getWidget().model.transDetails.length,
-                                                  itemBuilder: (context, index) {
-                                                    SaleDetailModel _details = getWidget().model.transDetails[index];
-                                                    return ListTile(
-                                                      leading: Text(
-                                                        (index + 1).toString(),
-                                                        style: TextStyle(
-                                                          color: AppTheme.text_light,
-                                                        ),
-                                                      ),
-                                                      title: Text(
-                                                        "${_details.productName} | omzet : ${_details.omzet} | profit netto : ${_details
-                                                                .profitNetto}",
-                                                        style: TextStyle(
-                                                          color: AppTheme.text_light,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                      subtitle: Text(
-                                                        "Terjual : ${_details.saleNumber} | Free : ${_details.freeNumber}",
-                                                        style: TextStyle(
-                                                          color: AppTheme.text_light,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }))),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Text(
+                              "${getWidget().model.cashierName}",
+                              style: TextStyle(
+                                color: AppTheme.text_light,
+                                fontSize: 21,
+                              ),
+                            ),
+                          )
                         ],
-                      )),
-            ));
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      child: Row(
+                        children: [
+                          Text(
+                            "Packer : ",
+                            style: TextStyle(
+                              color: AppTheme.text_light,
+                              fontSize: 21,
+                            ),
+                          ),
+                          Text(
+                            "${getWidget().model.packerName}",
+                            style: TextStyle(
+                              color: AppTheme.text_light,
+                              fontSize: 21,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Text(
+                        "Detail penjualan : ",
+                        style: TextStyle(
+                          color: AppTheme.text_light,
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            //color: Colors.red,
+                            child: ListView.builder(
+                                itemCount:
+                                    getWidget().model.transDetails.length,
+                                itemBuilder: (context, index) {
+                                  SaleDetailModel _details =
+                                      getWidget().model.transDetails[index];
+                                  return ListTile(
+                                    leading: Text(
+                                      (index + 1).toString(),
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      "${_details.productName} | omzet : ${_details.omzet} | profit netto : ${_details.profitNetto}",
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      "Terjual : ${_details.saleNumber} | Free : ${_details.freeNumber}",
+                                      style: TextStyle(
+                                        color: AppTheme.text_light,
+                                      ),
+                                    ),
+                                  );
+                                }))),
+                  ],
+                )),
+              ));
   }
 
   @override

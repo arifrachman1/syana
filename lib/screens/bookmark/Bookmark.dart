@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:syana/DefaultView.dart';
-import 'package:syana/controller/BookmarkController.dart';
+import 'package:syana/Controller/BookmarkController.dart';
 import 'package:syana/models/BookmarkModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 
@@ -44,53 +44,57 @@ class _State extends DefaultView<Bookmark> {
       body: Container(
         decoration: AppTheme.appBackground(),
         child: isLoading
-                ? Center(
-          child: CircularProgressIndicator(),
-        )
-                : Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: SizedBox(
-                child: ListView.builder(
-                  itemCount: _list.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(_list[index].title),
-                      subtitle: Text(_list[index].date),
-                      onTap: () {
-                        log("translate and navigate to");
-                        _bookmarkController.translateAndNavigateTo(_list[index], context);
-                      },
-                      trailing: PopupMenuButton(
-                        itemBuilder: (context) =>
-                        [
-                          PopupMenuItem(
-                            child: Text("Hapus Bookmark"),
-                            value: 1,
-                          ),
-                        ],
-                        onSelected: (value) async {
-                          switch (value) {
-                            case 1:
-                              var result = await _bookmarkController.removeBookmark(context, setLoadingState, _list[index].idBookmark);
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: SizedBox(
+                      child: ListView.builder(
+                        itemCount: _list.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(_list[index].title),
+                            subtitle: Text(_list[index].date),
+                            onTap: () {
+                              log("translate and navigate to");
+                              _bookmarkController.translateAndNavigateTo(
+                                  _list[index], context);
+                            },
+                            trailing: PopupMenuButton(
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                  child: Text("Hapus Bookmark"),
+                                  value: 1,
+                                ),
+                              ],
+                              onSelected: (value) async {
+                                switch (value) {
+                                  case 1:
+                                    var result = await _bookmarkController
+                                        .removeBookmark(
+                                            context,
+                                            setLoadingState,
+                                            _list[index].idBookmark);
 
-                              log(result.toString());
+                                    log(result.toString());
 
-                              if (result == 200) {
-                                _init();
-                              }
-                              break;
-                          }
+                                    if (result == 200) {
+                                      _init();
+                                    }
+                                    break;
+                                }
+                              },
+                            ),
+                          );
                         },
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
       ),
     );
   }
