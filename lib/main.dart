@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:syana/screens/Purchasing/CreateHistoryDetail.dart';
+import 'package:syana/screens/Purchasing/CreatePurchasingDetail.dart';
 import 'package:syana/screens/credentials/SplashScreen.dart';
 
 void main() => runApp(MyApp());
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         highlightColor: Colors.green
       ),
-      home: SplashScreen(),
+      home: CreateHistoryDetail(),
       debugShowCheckedModeBanner: false,
     );
   }
