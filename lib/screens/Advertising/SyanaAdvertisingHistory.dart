@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:syana/utils/AppTheme.dart';
 
-class SyanaHistory extends StatefulWidget {
+class SyanaAdvertisingHistory extends StatefulWidget {
   @override
-  _SyanaHistoryState createState() => _SyanaHistoryState();
+  _SyanaAdvertisingHistoryState createState() => _SyanaAdvertisingHistoryState();
 }
 
-class _SyanaHistoryState extends State<SyanaHistory> {
+class _SyanaAdvertisingHistoryState extends State<SyanaAdvertisingHistory> {
   List<String> _icon = new List();
   List<String> _nama = new List();
   List<String> _tanggal = new List();

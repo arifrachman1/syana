@@ -138,6 +138,38 @@ class PurchasingController {
     }
   }
 
+  setApprovalPurchasing(context, loadingStateCallback, setDataCallback,
+      idPurchasingSub, statusApproval) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    var params = GlobalFunctions.generateMapParam(
+        ['id_purchasing_submission', 'status_approval'],
+        [idPurchasingSub, statusApproval]);
+
+    FormData formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+      context: context,
+      params: formData,
+      options: Options(
+          headers: {"Authorization": "Bearer " + _userModel.accessToken}),
+      path: GlobalVars.baseUrl + "syana/purchasing/approval-purchasing",
+    );
+
+    if (data != null) {
+      if (data['status'] == 200) {
+        Navigator.pop(context);
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_SUCCESS,
+            message: Strings.DIALOG_MESSAGE_CUSTOMER_SAVED,
+            context: context,
+            popCount: 1);
+      }
+    }
+  }
+
   sendData(context, detailPurchasing, picture) async {
     if (_userModel == null) {
       await _getPersistence();

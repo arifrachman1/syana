@@ -22,7 +22,7 @@ class GlobalVars {
  // static final String bookmarkUrl = baseUrl + "bookmark/";
  // static final String saleUrl = baseUrl + "sale/";
 
-	static final String imageUrl = baseUrl + "syana/products/";
+  static final String imageUrl = baseUrl + "syana/products/";
 
  // static final String imageUrl = baseUrl + "products/";
 
