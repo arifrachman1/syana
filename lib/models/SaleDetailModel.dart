@@ -13,6 +13,7 @@ class SaleDetailModel {
 	                     this._idProduct,
 	                     this._productName,
 	                     this._saleNumber,
+	                     this._freeNumber,
 	                     this._point,
 	                     this._sku,
 	                     this._price,

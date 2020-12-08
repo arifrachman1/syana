@@ -37,7 +37,8 @@ class _PackingDetailState extends State<PackingDetail> {
   /*calculate weight*/
   _initData() {
     widget.data.saleDetails.forEach((element) {
-      double itemWeight = double.parse(element.weight.toString());
+      int totalItem = int.parse(element.saleNumber) + int.parse(element.freeNumber);
+      double itemWeight = double.parse(element.weight.toString()) * double.parse(totalItem.toString());
       setState(() {
         totalWeight += itemWeight;
       });
@@ -73,8 +74,10 @@ class _PackingDetailState extends State<PackingDetail> {
 
   bool checkSaleNumber() {
     bool isTrue = true;
+    int grandTotal;
     widget.data.saleDetails.forEach((element) {
-      if (element.currentSaleNum != int.parse(element.saleNumber)) {
+      grandTotal = int.parse(element.saleNumber) + int.parse(element.freeNumber);
+      if (element.currentSaleNum != grandTotal) {
         isTrue = false;
       }
     });
@@ -157,6 +160,10 @@ class _PackingDetailState extends State<PackingDetail> {
               child: ListView.builder(
                   itemCount: widget.data.saleDetails.length,
                   itemBuilder: (_, index) {
+                    int totalItem = int.parse(widget.data.saleDetails[index].saleNumber);
+                    int freeItem = int.parse(widget.data.saleDetails[index].freeNumber);
+                    int grandTotal = totalItem + freeItem;
+                    double totalWeightItem = double.parse(widget.data.saleDetails[index].weight) * grandTotal;
                     return Container(
                       margin: EdgeInsets.only(left: 10, right: 20, bottom: 5),
                       child: Row(
@@ -179,15 +186,15 @@ class _PackingDetailState extends State<PackingDetail> {
                             widget.data.saleDetails[index].currentSaleNum
                                     .toString() +
                                 "/" +
-                                widget.data.saleDetails[index].saleNumber,
+                                grandTotal.toString(),
                             style: widget.data.saleDetails[index].currentSaleNum
                                         .toString() !=
-                                    widget.data.saleDetails[index].saleNumber
+                                    grandTotal.toString()
                                 ? FontHelper.textError
                                 : FontHelper.textSuccess,
                           ),
                           Text(
-                            widget.data.saleDetails[index].weight,
+                            totalWeightItem.toString(),
                             style: FontHelper.body,
                           ),
                           IconButton(
@@ -197,15 +204,14 @@ class _PackingDetailState extends State<PackingDetail> {
                                 color: widget.data.saleDetails[index]
                                             .currentSaleNum
                                             .toString() !=
-                                        widget
-                                            .data.saleDetails[index].saleNumber
+                                        grandTotal.toString()
                                     ? Colors.black
                                     : Colors.grey,
                               ),
                               onPressed: widget.data.saleDetails[index]
                                           .currentSaleNum
                                           .toString() !=
-                                      widget.data.saleDetails[index].saleNumber
+                                      grandTotal.toString()
                                   ? () {
                                       scan(index);
                                     }

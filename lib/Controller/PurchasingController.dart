@@ -6,6 +6,8 @@ import 'package:syana/models/PurchasingModel.dart';
 import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
+import 'package:syana/utils/Strings.dart';
+import 'package:syana/widgets/CustomDialog.dart';
 
 class PurchasingController {
   BuildContext _context;
@@ -97,15 +99,14 @@ class PurchasingController {
     }
   }
 
-  getMaterialData(context,setDataCallback, type) async {
+  getMaterialData(context, setDataCallback, type) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     FormData formData;
 
-    Map param =
-        GlobalFunctions.generateMapParam(["material_type"], [type]);
+    Map param = GlobalFunctions.generateMapParam(["material_type"], [type]);
     formData = FormData.fromMap(param);
     print(formData.fields);
 
@@ -135,5 +136,95 @@ class PurchasingController {
         }
       }
     }
+  }
+
+  sendData(context, detailPurchasing, picture) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    FormData formData;
+
+    Map param = GlobalFunctions.generateMapParam(
+        ["id_employee", "purchasing_detail", "purchasing_image"],
+        [_userModel.id, detailPurchasing, picture]);
+    formData = FormData.fromMap(param);
+    print(formData.fields);
+
+    final data = await GlobalFunctions.dioPostCall(
+        params: formData,
+        path: GlobalVars.baseUrl + "syana/purchasing/submit-purchasing",
+        options: Options(
+            headers: {"Authorization": "Bearer " + _userModel.accessToken}),
+        context: context);
+
+    if (data != null) {
+      print(data);
+      if (data['status'] == 200) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_SUCCESS,
+            message: data['message'],
+            context: context,
+            popCount: 1);
+      } else {
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_ERROR,
+            message: data['message'],
+            context: context,
+            popCount: 1);
+        print(data['message']);
+      }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
+    }
+  }
+
+  getDetailPurchasing(
+      context, loadingStateCallback, setDataCallback, idPurchasing) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+    loadingStateCallback();
+    FormData formData;
+
+    Map param = GlobalFunctions.generateMapParam(
+        ["list_type"], [idPurchasing]);
+    formData = FormData.fromMap(param);
+    print(formData.fields);
+
+    final data = await GlobalFunctions.dioPostCall(
+        path: GlobalVars.baseUrl + "syana/purchasing/get-detail-purchasing",
+        params: formData,
+        options: Options(
+            headers: {"Authorization": "Bearer " + _userModel.accessToken}),
+        context: context);
+
+    if (data != null) {
+      if (data['status'] == 200) {
+        List purchasingFromApi = data['data'];
+        List<PurchasingModel> purchasing = new List();
+
+        purchasingFromApi.forEach((element) {
+          purchasing.add(new PurchasingModel.listPurchasing(
+              element['id_purchasing_submission'],
+              element['submitted_by'],
+              element['id_product'],
+              element['status'],
+              element['created_at'],
+              element['full_name']));
+        });
+
+        if (purchasing.isNotEmpty) {
+          setDataCallback(purchasing);
+        }
+      }
+    } else {}
+    loadingStateCallback();
   }
 }

@@ -34,7 +34,7 @@ class _PackingState extends State<SyanaHomePacking> {
   }
 
   void logout() {
-    _homePackingController.logout(context);
+    _homePackingController.logout(context, setLoadingState);
   }
 
   scan() async {

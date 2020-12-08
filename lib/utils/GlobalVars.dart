@@ -4,7 +4,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 class GlobalVars {
   /*urls*/
-	static final String baseUrl = "http://192.168.1.67:8080/";
+  // static final String baseUrl = "http://192.168.100.207/";
+	static final String baseUrl = "http://arsyad-wew.ddns.net/";
 //  static final String baseUrl = "http://syana.mamorasoft.com/";
 //  static final String baseUrl = "http://hq.syana.co.id/";
   static final String apiUrl = baseUrl + "syana/api/";
@@ -12,16 +13,18 @@ class GlobalVars {
   static final String siteUrl = baseUrl + "syana/site/";
   static final String summaryUrl = baseUrl + "syana/summary/";
 	static final String bookmarkUrl = baseUrl + "syana/bookmark/";
+ 	static final String saleUrl = baseUrl + "syana/sale/";
 
-//  static final String apiUrl = baseUrl + "api/";
-//  static final String rankUrl = baseUrl + "rank/";
-//  static final String siteUrl = baseUrl + "site/";
-//  static final String summaryUrl = baseUrl + "summary/";
-//  static final String bookmarkUrl = baseUrl + "bookmark/";
+ // static final String apiUrl = baseUrl + "api/";
+ // static final String rankUrl = baseUrl + "rank/";
+ // static final String siteUrl = baseUrl + "site/";
+ // static final String summaryUrl = baseUrl + "summary/";
+ // static final String bookmarkUrl = baseUrl + "bookmark/";
+ // static final String saleUrl = baseUrl + "sale/";
 
 	static final String imageUrl = baseUrl + "syana/products/";
 
-//  static final String imageUrl = baseUrl + "products/";
+ // static final String imageUrl = baseUrl + "products/";
 
   static final String thumbnailUrl = baseUrl + "syana/thumbnail/";
 
