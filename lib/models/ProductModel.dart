@@ -1,3 +1,5 @@
+import 'package:syana/models/PurchasingModel.dart';
+
 class ProductModel {
   String _id,
       _status,
@@ -18,6 +20,17 @@ class ProductModel {
       _rankValue,
       _createAt,
       _totalItem;
+
+  List<PurchasingModel> _lisPurchasingDetail = new List();
+
+  ProductModel.productPurchasing(
+      this._id, this._name, this._type, this._lisPurchasingDetail);
+
+  List<PurchasingModel> get lisPurchasingDetail => _lisPurchasingDetail;
+
+  set lisPurchasingDetail(List<PurchasingModel> value) {
+    _lisPurchasingDetail = value;
+  }
 
   ProductModel() {
     _freeNumber = "0";
@@ -58,7 +71,8 @@ class ProductModel {
 
   ProductModel.productSuggestions(this._id, this._name, this._sku);
 
-  ProductModel.materialRank(this._name, this._createAt, this._sku, this._totalItem, this._type);
+  ProductModel.materialRank(
+      this._name, this._createAt, this._sku, this._totalItem, this._type);
 
   ProductModel.init(
       this._id,
@@ -208,7 +222,7 @@ class ProductModel {
       "free_number": this._freeNumber,
       "rank_value": this._rankValue,
       "create_at": this._createAt,
-      "total_item": this._totalItem,
+      "total_item": this._totalItem
     };
   }
 

@@ -66,8 +66,9 @@ class _SyanaPlansState extends State<SyanaPlans> {
     initData();
   }
 
-  initData() async{
-    await purchasingController.getListPurchasing(context, setLoadingState, setData, 0);
+  initData() async {
+    await purchasingController.getListPurchasing(
+        context, setLoadingState, setData, 0);
   }
 
   @override
@@ -133,35 +134,6 @@ class _SyanaPlansState extends State<SyanaPlans> {
                                   ),
                                 ));
                           }))),
-              Container(
-                alignment: Alignment.bottomCenter,
-                height: MediaQuery.of(context).size.height * 0.12,
-                child: Center(
-                  child: RaisedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SyanaPlansAdd()));
-                    },
-                    textColor: Colors.white,
-                    padding: EdgeInsets.all(0.0),
-                    shape: StadiumBorder(),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(25.0),
-                        color: Colors.green[300],
-                      ),
-                      child: Text(
-                        'Tambah Plan',
-                        style: TextStyle(fontSize: 15.0),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 100.0, vertical: 15.0),
-                    ),
-                  ),
-                ),
-              )
             ],
           ),
         ));
