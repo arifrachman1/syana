@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:syana/screens/Purchasing/CreateHistoryDetail.dart';
-import 'package:syana/screens/Purchasing/CreatePurchasingDetail.dart';
-import 'package:syana/screens/Purchasing/SyanaPlans.dart';
 import 'package:syana/screens/credentials/SplashScreen.dart';
 
 void main() => runApp(MyApp());

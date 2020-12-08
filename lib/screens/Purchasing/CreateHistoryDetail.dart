@@ -34,8 +34,9 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage('images/papuma.jpg'),
-                              fit: BoxFit.fill),
-                          shape: BoxShape.rectangle),
+                              fit: BoxFit.fill,),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),),
                     ),
                     Container(
                         padding: EdgeInsets.all(5.0),
@@ -50,7 +51,7 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                             child: Text(
                               "Natuna Essential",
                               style: TextStyle(
-                                  fontSize: 25, color: AppTheme.white),
+                                  fontSize: 20, color: AppTheme.white),
                             ),
                           ),
                           Container(
@@ -58,7 +59,7 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                             child: Text(
                               "10 Pcs",
                               style: TextStyle(
-                                  fontSize: 15, color: AppTheme.white),
+                                  fontSize: 12, color: AppTheme.white),
                             ),
                           ),
                           Container(
@@ -66,7 +67,7 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                             child: Text(
                               "Rp. 50.000,00",
                               style: TextStyle(
-                                  fontSize: 15, color: AppTheme.white),
+                                  fontSize: 12, color: AppTheme.white),
                             ),
                           ),
                           Container(
@@ -76,14 +77,14 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                                   Text(
                                     "Approved/Reject By : ",
                                     style: TextStyle(
-                                      fontSize: 15,
+                                      fontSize: 12,
                                       color: AppTheme.white,
                                     ),
                                   ),
                                   Text(
                                     "Admin",
                                     style: TextStyle(
-                                        fontSize: 15, color: AppTheme.white),
+                                        fontSize: 12, color: AppTheme.white),
                                   ),
                                 ],
                               )),
@@ -107,6 +108,10 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                   alignment: Alignment.topLeft,
                   child: Text(
                     "Gambar",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12
+                    ),
                   )),
               Container(
                 
@@ -127,7 +132,8 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                               image: DecorationImage(
                                   image: AssetImage('images/city.jpg'),
                                   fit: BoxFit.fill),
-                              shape: BoxShape.rectangle),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -138,7 +144,8 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                               image: DecorationImage(
                                   image: AssetImage('images/flower.jpg'),
                                   fit: BoxFit.fill),
-                              shape: BoxShape.rectangle),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),),
                         ),
                       ],
                     ),
@@ -153,7 +160,8 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                               image: DecorationImage(
                                   image: AssetImage('images/mountain.jpg'),
                                   fit: BoxFit.fill),
-                              shape: BoxShape.rectangle),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -164,7 +172,8 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                               image: DecorationImage(
                                   image: AssetImage('images/papuma.jpg'),
                                   fit: BoxFit.fill),
-                              shape: BoxShape.rectangle),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),),
                         ),
                       ],
                     )

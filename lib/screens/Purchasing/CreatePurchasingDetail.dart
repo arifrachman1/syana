@@ -26,14 +26,16 @@ class _CreatePurchasingDetailState extends State<CreatePurchasingDetail> {
                   children: [
                     Container(
                       //color: AppTheme.white,
-                      alignment: Alignment.topLeft,
+                      //alignment: Alignment.topLeft,
                       width: MediaQuery.of(context).size.width * 0.4,
                       height: MediaQuery.of(context).size.height * 0.2,
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage('images/papuma.jpg'),
                               fit: BoxFit.fill),
-                          shape: BoxShape.rectangle),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),),
+                          
                     ),
                     Container(
                         padding: EdgeInsets.all(5.0),
