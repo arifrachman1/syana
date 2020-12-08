@@ -41,9 +41,7 @@ class HomePackingController {
         params: formData,
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
-        path: GlobalVars.baseUrl +
-            "syana/sale/" +
-            "get-sales-by-airway-bill-number");
+        path: GlobalVars.saleUrl + "get-sales-by-airway-bill-number");
 
     print(data);
     print("WOIII");
@@ -65,6 +63,7 @@ class HomePackingController {
             element['id_product'].toString(),
             element['product_name'].toString(),
             element['sale_number'].toString(),
+            element['free_number'].toString(),
             element['point'].toString(),
             element['sku'].toString(),
             element['price'].toString(),
@@ -113,7 +112,7 @@ class HomePackingController {
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioPostCall(
-        path: GlobalVars.baseUrl + "syana/sale/" + "packing-acc-sales",
+        path: GlobalVars.saleUrl + "packing-acc-sales",
         params: formData,
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
@@ -155,10 +154,38 @@ class HomePackingController {
     prefs.remove(GlobalVars.accessTokenKey);
   }
 
-  logout(context) async {
-    await clearPersistence();
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) {
-      return Login();
-    }), (route) => false);
+  logout(context, setLoadingState) async {
+    setLoadingState();
+    _userModel = await GlobalFunctions.getPersistence();
+
+    Map params =
+        GlobalFunctions.generateMapParam(['employee_id'], [_userModel.id]);
+
+    final data = await GlobalFunctions.dioPostCall(
+        context: context, path: GlobalVars.apiUrl + "logout", params: params);
+
+    if (data != null) {
+      if (data['status'] == 200) {
+        await clearPersistence();
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) {
+          return Login();
+        }), (route) => false);
+      } else {
+        CustomDialog.getDialog(
+            title: Strings.DIALOG_TITLE_WARNING,
+            message: data['message'],
+            context: context,
+            popCount: 1);
+      }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_WARNING,
+          message: "Proses logout gagal.",
+          context: context,
+          popCount: 1);
+    }
+    setLoadingState();
   }
 }

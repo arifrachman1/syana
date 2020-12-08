@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:searchable_dropdown/searchable_dropdown.dart';
@@ -27,13 +28,15 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
   String _selectedType;
   List<String> _selectMaterial = new List();
   List<String> _selectedFirstMaterial = new List();
+  List<String> _selectedNameMaterial = new List();
+
   List<int> _selectedTypeMaterial = new List();
   List<TextEditingController> nameItem = new List();
   List<TextEditingController> totalItem = new List();
   List<TextEditingController> priceItem = new List();
   List<TextEditingController> totalPriceItem = new List();
   List<TextEditingController> _firstRequiredMaterial = new List();
-  List _typeProduct = ["Produk Sendiri", "Produk Jadi"];
+  List _typeProduct = ["Bahan Mentah", "Produk Jadi"];
   List _materialType = ["Ingredient", "Packaging"];
   List<Widget> _listProduct = new List();
   List<Widget> _listMaterial = new List();
@@ -43,6 +46,8 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
   List<PurchasingModel> purchasing = new List();
   List<MaterialModel> materialList = new List();
   List<MaterialModel> _selectedMaterial = new List();
+
+  List<MultipartFile> _filesToSend = new List();
   List<File> _filesFromDevice = new List();
 
   TextEditingController _firstRequiredProduct = new TextEditingController();
@@ -92,6 +97,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
       totalPriceItem.add(new TextEditingController());
       _selectedFirstMaterial.add("SKU");
       _selectMaterial.add("Ingredient");
+      _selectedNameMaterial.add("");
 
       _selectedTypeMaterial.add(1);
       _selectedMaterial
@@ -112,6 +118,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
       totalPriceItem.add(new TextEditingController());
 
       _selectedFirstMaterial.add("SKU");
+      _selectedNameMaterial.add("");
 
       _selectedTypeMaterial.add(1);
       _selectedMaterial
@@ -176,10 +183,25 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
     });
   }
 
-  void _sendPurchasing() {
+  _sendPurchasing() async {
     String listPurchasing;
     listPurchasing = json.encode(purchasing);
     print(listPurchasing);
+    await _supplyFiles();
+    _filesToSend.forEach((element) {
+      print(element.filename);
+    });
+    if (purchasing.isNotEmpty && _filesToSend.isNotEmpty) {
+      await purchasingController.sendData(
+          context, listPurchasing, _filesToSend);
+    } else {
+      CustomDialog.getDialog(
+          title: "Peringatan",
+          message:
+              "Harap isi minimal satu plan purchasing dan satu bukti lampiran.",
+          context: context,
+          popCount: 1);
+    }
   }
 
   void _openFileExplorer() async {
@@ -207,8 +229,6 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                 message: "Ukuran file melebihi batas.",
                 context: context,
                 popCount: 1);
-            // CustomDialog.getDialog(CustomDialog.WARNING_TITLE,
-            //     CustomDialog.WARNING_FILE_SIZE_OVER_LIMIT, context);
           } else {
             setState(() {
               _filesFromDevice.add(file);
@@ -249,6 +269,12 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
     }
   }
 
+  _supplyFiles() async {
+    for (int i = 0; i < _filesFromDevice.length; i++) {
+      _filesToSend.add(await MultipartFile.fromFile(_filesFromDevice[i].path));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -281,9 +307,11 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                   itemBuilder: (context, position) {
                     return Card(
                       child: ListTile(
-                        title: Text(_listProductModel[position].name),
+                        title: Text((position + 1).toString() +
+                            " " +
+                            _listProductModel[position].type),
                         onTap: () {
-                          buildListRencana(position);
+                          // buildListRencana(position);
                         },
                       ),
                     );
@@ -309,13 +337,15 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                   : Container(),
               isCreate
                   ? RaisedButton(
+                      shape: StadiumBorder(),
+                      color: AppTheme.btn_default,
                       onPressed: () {
                         setState(() {
                           isCreate = false;
                         });
                         buildProduct();
                       },
-                      child: Text("Tambah Produk"),
+                      child: Text("Buat Planing"),
                     )
                   : Container()
             ],
@@ -328,7 +358,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
         margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: Colors.grey, borderRadius: BorderRadius.circular(8)),
+            color: Colors.white70, borderRadius: BorderRadius.circular(8)),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +367,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               Container(
                   child: Row(children: [
                 Text(
-                  "Pilih Jenis Produk",
+                  "Pilih Jenis",
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                 )
               ])),
@@ -351,14 +381,14 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                       border: Border.all()),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      hint: Text("Jenis Produk"),
+                      hint: Text("Pilih Jenis"),
                       value: _selectedType,
                       items: _dropDownType,
                       onChanged: (value) async {
                         setState(() {
                           _selectedType = value;
                         });
-                        if (_selectedType == "Produk Sendiri") {
+                        if (_selectedType == "Bahan Mentah") {
                           setState(() {
                             isSelfProduct = true;
                             isLoaded = true;
@@ -375,24 +405,33 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                     ),
                   )),
               Padding(padding: EdgeInsets.only(top: 15.0)),
-              Container(
-                  child: Row(children: [
-                Text(
-                  "Cari Produk",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                )
-              ])),
-              Container(
-                child: CustomTextInput.getCustomAutoCompleteField(
-                    context: context,
-                    controller: _firstRequiredProduct,
-                    hint: "SKU Produk",
-                    textInputType: TextInputType.text,
-                    itemBuilderCallback: _productItemBuilder,
-                    suggestionCallback: _onProductChanged,
-                    onSuggestionSelectedCallback:
-                        _onFirstRequiredProductSelected),
-              ),
+              isLoaded
+                  ? Visibility(
+                      visible: !isSelfProduct,
+                      child: Container(
+                          child: Text(
+                        "Cari Produk",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )),
+                    )
+                  : Container(),
+              isLoaded
+                  ? Visibility(
+                      visible: !isSelfProduct,
+                      child: Container(
+                        child: CustomTextInput.getCustomAutoCompleteField(
+                            context: context,
+                            controller: _firstRequiredProduct,
+                            hint: "SKU Produk",
+                            textInputType: TextInputType.text,
+                            itemBuilderCallback: _productItemBuilder,
+                            suggestionCallback: _onProductChanged,
+                            onSuggestionSelectedCallback:
+                                _onFirstRequiredProductSelected),
+                      ),
+                    )
+                  : Container(),
               Visibility(
                 visible: isLoaded,
                 child: Container(
@@ -408,47 +447,40 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                   ),
                 ),
               ),
-              Container(
-                child: Row(
-                  children: [
-                    IconButton(
-                        icon: Icon(
-                          Icons.add,
-                          color: Colors.blue,
-                        ),
-                        onPressed: () {
-                          addNewMaterials();
-                        }),
-                    IconButton(
-                        icon: Icon(
-                          Icons.remove,
-                          color: AppTheme.red,
-                        ),
-                        onPressed: () {
-                          removeNewMaterials();
-                        }),
-                  ],
-                ),
-              ),
-              RaisedButton(
-                onPressed: () {
-                  print(totalItem.length);
-                  for (int i = 0; i < totalItem.length; i++) {
-                    if (_selectedType == "Produk Jadi") {
-                      purchasing.add(new PurchasingModel.listDetailPurchasing(
-                          _selectedFirstProduct,
-                          null,
-                          null,
-                          nameItem[i].text,
-                          totalItem[i].text,
-                          priceItem[i].text,
-                          totalItem[i].text,
-                          "0"));
-                    } else {
-                      if (_selectedTypeMaterial[i] == 1) {
+              isSelfProduct
+                  ? Container(
+                      child: Row(
+                        children: [
+                          IconButton(
+                              icon: Icon(
+                                Icons.add,
+                                color: Colors.blue,
+                              ),
+                              onPressed: () {
+                                addNewMaterials();
+                              }),
+                          IconButton(
+                              icon: Icon(
+                                Icons.remove,
+                                color: AppTheme.red,
+                              ),
+                              onPressed: () {
+                                removeNewMaterials();
+                              }),
+                        ],
+                      ),
+                    )
+                  : Container(),
+              Visibility(
+                visible: isLoaded,
+                child: RaisedButton.icon(
+                  onPressed: () {
+                    print(totalItem.length);
+                    for (int i = 0; i < totalItem.length; i++) {
+                      if (_selectedType == "Produk Jadi") {
                         purchasing.add(new PurchasingModel.listDetailPurchasing(
                             _selectedFirstProduct,
-                            _selectedFirstMaterial[i],
+                            null,
                             null,
                             nameItem[i].text,
                             totalItem[i].text,
@@ -456,57 +488,55 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                             totalItem[i].text,
                             "0"));
                       } else {
-                        purchasing.add(new PurchasingModel.listDetailPurchasing(
-                            _selectedFirstProduct,
-                            null,
-                            _selectedFirstMaterial[i],
-                            nameItem[i].text,
-                            totalItem[i].text,
-                            priceItem[i].text,
-                            totalItem[i].text,
-                            "0"));
+                        if (_selectedTypeMaterial[i] == 1) {
+                          purchasing.add(
+                              new PurchasingModel.listDetailPurchasing(
+                                  null,
+                                  _selectedFirstMaterial[i],
+                                  null,
+                                  nameItem[i].text,
+                                  totalItem[i].text,
+                                  priceItem[i].text,
+                                  totalItem[i].text,
+                                  "0"));
+                        } else {
+                          purchasing.add(
+                              new PurchasingModel.listDetailPurchasing(
+                                  null,
+                                  null,
+                                  _selectedFirstMaterial[i],
+                                  nameItem[i].text,
+                                  totalItem[i].text,
+                                  priceItem[i].text,
+                                  totalItem[i].text,
+                                  "0"));
+                        }
                       }
                     }
-                  }
-                  setState(() {
-                    _listProductModel.add(new ProductModel.productPurchasing(
-                        _selectedFirstProduct,
-                        _firstRequiredProduct.text,
-                        _selectedType,
-                        purchasing));
-                  });
-                  print(purchasing.length.toString());
-                  clearPurchasing();
-                  addMaterials();
-                },
-                child: Text("Tambahkan Bahan"),
+                    setState(() {
+                      _listProductModel.add(new ProductModel.productPurchasing(
+                          _selectedFirstProduct,
+                          _firstRequiredProduct.text,
+                          _selectedType,
+                          purchasing));
+                    });
+                    print(purchasing.length.toString());
+                    clearPurchasing();
+                    addMaterials();
+                  },
+                  label: Text(
+                    "Add Plan",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  icon: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                  shape: StadiumBorder(),
+                  color: Colors.blue,
+                ),
               ),
               Padding(padding: EdgeInsets.only(top: 15.0)),
-              // Container(
-              //     child: Row(children: [
-              //       Text(
-              //         "Upload Gambar",
-              //         style: TextStyle(
-              //             fontSize: 15, fontWeight: FontWeight.bold),
-              //       )
-              //     ])),
-              // Padding(padding: EdgeInsets.only(top: 10.0)),
-              // RaisedButton.icon(
-              //   icon: Padding(
-              //     padding:
-              //     EdgeInsets.only(top: 10, bottom: 1s0, right: 10),
-              //     child: Icon(
-              //       Icons.add_a_photo,
-              //       color: Colors.white,
-              //     ),
-              //   ),
-              //   color: AppTheme.btn_success,
-              //   onPressed: () {},
-              //   label: Text(
-              //     "Gambar",
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              // )
             ],
           ),
         ));
@@ -580,36 +610,44 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                       )
                     ])),
                     Padding(padding: EdgeInsets.only(top: 10.0)),
-                    SearchableDropdown.single(
-                      items: materialList.map((MaterialModel materials) {
-                        return DropdownMenuItem<MaterialModel>(
-                          value: materials,
-                          child: Text(
-                            '(' + materials.sku + ')' + " " + materials.name,
-                            style: TextStyle(color: Colors.black),
+                    _selectedNameMaterial[indexChild] != ""
+                        ? Text(_selectedNameMaterial[indexChild])
+                        : SearchableDropdown.single(
+                            items: materialList.map((MaterialModel materials) {
+                              return DropdownMenuItem<MaterialModel>(
+                                value: materials,
+                                child: Text(
+                                  '(' +
+                                      materials.sku +
+                                      ')' +
+                                      " " +
+                                      materials.name,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              );
+                            }).toList(),
+                            value: _selectedMaterial[indexChild],
+                            hint: "Pilih Bahan",
+                            searchHint: "Cari SKU Bahan",
+                            onClear: () {
+                              setState(() {
+                                _selectedMaterial[indexChild] = null;
+                              });
+                            },
+                            onChanged: (MaterialModel value) async {
+                              if (value != null) {
+                                print(value.id);
+                                setState(() {
+                                  _selectedMaterial[indexChild] = value;
+                                  _selectedNameMaterial[indexChild] =
+                                      value.name;
+                                  _selectedFirstMaterial[indexChild] =
+                                      value.id.toString();
+                                });
+                              }
+                            },
+                            isExpanded: true,
                           ),
-                        );
-                      }).toList(),
-                      value: _selectedMaterial[indexChild],
-                      hint: "Pilih Bahan",
-                      searchHint: "Cari SKU Bahan",
-                      onClear: () {
-                        setState(() {
-                          _selectedMaterial[indexChild] = null;
-                        });
-                      },
-                      onChanged: (MaterialModel value) async {
-                        if (value != null) {
-                          print(value.id);
-                          setState(() {
-                            _selectedMaterial[indexChild] = value;
-                            _selectedFirstMaterial[indexChild] =
-                                value.id.toString();
-                          });
-                        }
-                      },
-                      isExpanded: true,
-                    ),
                     Padding(padding: EdgeInsets.only(top: 15.0)),
                   ],
                 ),
@@ -722,8 +760,10 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
         ),
         SizedBox(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.25,
+          height: MediaQuery.of(context).size.height * 0.15,
           child: ListView.builder(
+            physics: ClampingScrollPhysics(),
+            shrinkWrap: true,
             itemCount: _filesFromDevice.length,
             itemBuilder: (context, index) {
               return ListTile(
@@ -747,6 +787,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
         Container(
           alignment: Alignment.center,
           child: RaisedButton(
+            shape: StadiumBorder(),
             padding: EdgeInsets.only(left: 50, right: 50),
             onPressed: () {
               _openFileExplorer();
@@ -755,7 +796,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               "Tambah Bukti",
               style: TextStyle(color: AppTheme.white),
             ),
-            color: AppTheme.btn_default,
+            color: AppTheme.teal,
           ),
         ),
       ],

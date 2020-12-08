@@ -91,6 +91,24 @@ class _SyanaPlansState extends State<SyanaPlans> {
           decoration: AppTheme.appBackground(),
           child: Column(
             children: <Widget>[
+              Padding(padding: EdgeInsets.only(top: 10)),
+              Container(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                width: 320,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30.0),
+                  color: Colors.white,
+                ),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: "Search",
+                    fillColor: Colors.white,
+                    border: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                ),
+              ),
+              Padding(padding: EdgeInsets.only(top: 10)),
               Flexible(
                   child: Container(
                       child: ListView.builder(
