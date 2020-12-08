@@ -34,8 +34,9 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: AssetImage('images/papuma.jpg'),
-                              fit: BoxFit.fill),
-                          shape: BoxShape.rectangle),
+                              fit: BoxFit.fill,),
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(10.0),),
                     ),
                     Container(
                         padding: EdgeInsets.all(5.0),
@@ -127,7 +128,8 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                               image: DecorationImage(
                                   image: AssetImage('images/city.jpg'),
                                   fit: BoxFit.fill),
-                              shape: BoxShape.rectangle),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -138,7 +140,8 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                               image: DecorationImage(
                                   image: AssetImage('images/flower.jpg'),
                                   fit: BoxFit.fill),
-                              shape: BoxShape.rectangle),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),),
                         ),
                       ],
                     ),
@@ -153,7 +156,8 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                               image: DecorationImage(
                                   image: AssetImage('images/mountain.jpg'),
                                   fit: BoxFit.fill),
-                              shape: BoxShape.rectangle),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),),
                         ),
                         Container(
                           margin: const EdgeInsets.all(8),
@@ -164,7 +168,8 @@ class _CreateHistoryDetailState extends State<CreateHistoryDetail> {
                               image: DecorationImage(
                                   image: AssetImage('images/papuma.jpg'),
                                   fit: BoxFit.fill),
-                              shape: BoxShape.rectangle),
+                              shape: BoxShape.rectangle,
+                              borderRadius: BorderRadius.circular(10.0),),
                         ),
                       ],
                     )
