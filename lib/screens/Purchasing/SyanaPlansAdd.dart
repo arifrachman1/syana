@@ -1,6 +1,18 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
+import 'package:syana/Controller/PurchasingController.dart';
+import 'package:syana/models/MaterialModel.dart';
+import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/PurchasingModel.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/widgets/CustomDialog.dart';
+import 'package:syana/widgets/CustomTextInput.dart';
+import 'package:image/image.dart' as imgLib;
 
 class SyanaPlansAdd extends StatefulWidget {
   @override
@@ -8,26 +20,45 @@ class SyanaPlansAdd extends StatefulWidget {
 }
 
 class _SyanaPlansAddState extends State<SyanaPlansAdd> {
-  int _count = 0, _indexProduct = 0, _indexMaterial = 0;
+  int _indexProduct = 0,
+      _indexMaterial = 0,
+      _indexWidgetMaterial = 0,
+      typeProduct = 0;
   String _selectedType;
-  List<String> _selectMaterial, _selectedProduct = new List();
+  List<String> _selectMaterial = new List();
+  List<String> _selectedFirstMaterial = new List();
+  List<int> _selectedTypeMaterial = new List();
   List<TextEditingController> nameItem = new List();
   List<TextEditingController> totalItem = new List();
   List<TextEditingController> priceItem = new List();
   List<TextEditingController> totalPriceItem = new List();
-  List _product = ["Product 1", "Product 2", "Product 3", "Product 4"];
+  List<TextEditingController> _firstRequiredMaterial = new List();
   List _typeProduct = ["Produk Sendiri", "Produk Jadi"];
   List _materialType = ["Ingredient", "Packaging"];
   List<Widget> _listProduct = new List();
   List<Widget> _listMaterial = new List();
   List<PurchasingModel> _listDetail = new List();
+  List<ProductModel> _listProductModel = new List();
   List<DropdownMenuItem<String>> _dropDownType;
+  List<PurchasingModel> purchasing = new List();
+  List<MaterialModel> materialList = new List();
+  List<MaterialModel> _selectedMaterial = new List();
+  List<File> _filesFromDevice = new List();
+
+  TextEditingController _firstRequiredProduct = new TextEditingController();
+  PurchasingController purchasingController;
+
+  String _selectedFirstProduct = "";
+
+  bool isCreate = true;
+  bool isSelfProduct = false;
+  bool isLoaded = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    buildProduct();
+    purchasingController = new PurchasingController();
     _dropDownType = getDropDownMenuItems(_typeProduct);
   }
 
@@ -39,45 +70,54 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
     return items;
   }
 
-  void buildProduct(){
+  void buildProduct() {
     setState(() {
-      _selectedProduct.add("Product 1");
-      _listProduct.add(_addProduct(_indexProduct));
+      _listProduct.add(_addProduct(_indexWidgetMaterial));
     });
     addMaterials();
   }
 
-  void addNewProduct(){
+  void addNewProduct() {
     setState(() {
-      _indexProduct++;
-      _selectedProduct.add("Product 1");
-      _listProduct.add(_addProduct(_indexProduct));
+      _indexMaterial++;
+      _listProduct.add(_addMaterials(_indexWidgetMaterial));
     });
-    // addMaterials();
   }
 
   void addMaterials() {
     setState(() {
-      // _selectMaterial.add("Ingredient");
       nameItem.add(new TextEditingController());
       totalItem.add(new TextEditingController());
       priceItem.add(new TextEditingController());
       totalPriceItem.add(new TextEditingController());
+      _selectedFirstMaterial.add("SKU");
+      _selectMaterial.add("Ingredient");
 
-      _listMaterial.add(_addMaterials(_indexMaterial));
+      _selectedTypeMaterial.add(1);
+      _selectedMaterial
+          .add(new MaterialModel.listMaterial("0", "0", "0", "0", "0"));
+
+      _listMaterial.add(_addMaterials(_indexWidgetMaterial));
     });
   }
 
   void addNewMaterials() {
     setState(() {
       _indexMaterial++;
-      // _selectMaterial.add("Ingredient");
+
+      _selectMaterial.add("Ingredient");
       nameItem.add(new TextEditingController());
       totalItem.add(new TextEditingController());
       priceItem.add(new TextEditingController());
       totalPriceItem.add(new TextEditingController());
 
-      _listMaterial.add(_addMaterials(_indexMaterial));
+      _selectedFirstMaterial.add("SKU");
+
+      _selectedTypeMaterial.add(1);
+      _selectedMaterial
+          .add(new MaterialModel.listMaterial("0", "0", "0", "0", "0"));
+
+      _listMaterial.add(_addMaterials(_indexWidgetMaterial));
     });
   }
 
@@ -85,7 +125,6 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
     print("decrease more");
     setState(() {
       if (_indexMaterial > 0) {
-        _selectMaterial.removeAt(_indexMaterial);
         nameItem.removeAt(_indexMaterial);
         totalItem.removeAt(_indexMaterial);
         priceItem.removeAt(_indexMaterial);
@@ -95,6 +134,119 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
         _indexMaterial = _indexMaterial - 1;
       }
     });
+  }
+
+  FutureOr<Iterable<dynamic>> _onProductChanged(pattern) async {
+    if (pattern.toString().length >= 3) {
+      return await purchasingController.getProductData(context, pattern);
+    }
+  }
+
+  _onFirstRequiredProductSelected(suggestion) {
+    print(suggestion);
+    if (suggestion is ProductModel) {
+      setState(() {
+        _firstRequiredProduct.text =
+            suggestion.name + " (" + suggestion.sku + ") ";
+        _selectedFirstProduct = suggestion.id;
+      });
+    }
+  }
+
+  Widget _productItemBuilder(context, item) {
+    return ListTile(
+      title: Text(item.name),
+      subtitle: Text(item.sku),
+    );
+  }
+
+  void clearPurchasing() {
+    setState(() {
+      nameItem.clear();
+      totalItem.clear();
+      priceItem.clear();
+      totalPriceItem.clear();
+      _listMaterial.clear();
+      _selectedFirstMaterial.clear();
+      _firstRequiredMaterial.clear();
+      _selectedTypeMaterial.clear();
+      _selectedMaterial.clear();
+      _firstRequiredProduct.clear();
+      _indexWidgetMaterial = 0;
+    });
+  }
+
+  void _sendPurchasing() {
+    String listPurchasing;
+    listPurchasing = json.encode(purchasing);
+    print(listPurchasing);
+  }
+
+  void _openFileExplorer() async {
+    print("trying to load...");
+    // trying to load
+    FilePickerResult result = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ["jpg", "jpeg", "png"]);
+    if (result != null) {
+      File file = File(result.files.single.path);
+      print(file.path);
+      String _fileExtension = file.path.split(".").last;
+
+      if (_fileExtension.toLowerCase() == "jpeg" ||
+          _fileExtension.toLowerCase() == "jpg" ||
+          _fileExtension.toLowerCase() == "png") {
+        if (file.lengthSync() > 5000000) {
+          imgLib.Image tempImage = imgLib.decodeImage(file.readAsBytesSync());
+          imgLib.Image compressedImage =
+              imgLib.copyResize(tempImage, width: 768);
+          imgLib.Image rotatedImage = imgLib.copyRotate(compressedImage, 0);
+          File(file.path).writeAsBytesSync(imgLib.encodeJpg(rotatedImage));
+          if (file.lengthSync() > 5000000) {
+            CustomDialog.getDialog(
+                title: "Peringatan",
+                message: "Ukuran file melebihi batas.",
+                context: context,
+                popCount: 1);
+            // CustomDialog.getDialog(CustomDialog.WARNING_TITLE,
+            //     CustomDialog.WARNING_FILE_SIZE_OVER_LIMIT, context);
+          } else {
+            setState(() {
+              _filesFromDevice.add(file);
+            });
+            _filesFromDevice.forEach((element) {
+              print(element.path);
+            });
+          }
+        } else {
+          setState(() {
+            _filesFromDevice.add(file);
+          });
+          _filesFromDevice.forEach((element) {
+            print(element.path);
+          });
+        }
+      }
+    } else {
+      print("object null");
+    }
+    print("finished loading...");
+    if (!mounted) return;
+  }
+
+  void _removeImagesFromDevice(int position) {
+    setState(() {
+      _filesFromDevice.removeAt(position);
+    });
+  }
+
+  setData(data) {
+    // TODO: implement setData
+    if (data is List<MaterialModel> && data.isNotEmpty) {
+      setState(() {
+        materialList = data;
+      });
+      print(materialList.length);
+    }
   }
 
   @override
@@ -109,7 +261,9 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                 'Submit',
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
-              onPressed: () => debugPrint('FlatButton di tekan'),
+              onPressed: () {
+                _sendPurchasing();
+              },
             )
           ],
         ),
@@ -121,7 +275,25 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               Container(
                 margin: EdgeInsets.only(bottom: 10),
                 child: ListView.builder(
-                  physics: ClampingScrollPhysics(),
+                  physics: ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: _listProductModel.length,
+                  itemBuilder: (context, position) {
+                    return Card(
+                      child: ListTile(
+                        title: Text(_listProductModel[position].name),
+                        onTap: () {
+                          buildListRencana(position);
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 10),
+                child: ListView.builder(
+                  physics: ScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: _listProduct.length,
                   itemBuilder: (context, position) {
@@ -130,21 +302,33 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                   },
                 ),
               ),
-              RaisedButton(onPressed: (){
-                addNewProduct();
-              }, child: Text("Tambah Produk"),)
+              !isCreate
+                  ? Container(
+                      child: buildFileWidget(),
+                    )
+                  : Container(),
+              isCreate
+                  ? RaisedButton(
+                      onPressed: () {
+                        setState(() {
+                          isCreate = false;
+                        });
+                        buildProduct();
+                      },
+                      child: Text("Tambah Produk"),
+                    )
+                  : Container()
             ],
           ),
         ));
   }
 
-  Widget _addProduct(int indexProduct){
+  Widget _addProduct(int index) {
     return Container(
+        margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(8)
-        ),
+            color: Colors.grey, borderRadius: BorderRadius.circular(8)),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,12 +336,11 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               Padding(padding: EdgeInsets.only(top: 15.0)),
               Container(
                   child: Row(children: [
-                    Text(
-                      "Pilih Jenis Produk",
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                    )
-                  ])),
+                Text(
+                  "Pilih Jenis Produk",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                )
+              ])),
               Padding(padding: EdgeInsets.only(top: 10.0)),
               Container(
                   width: 320,
@@ -168,60 +351,61 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                       border: Border.all()),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                      hint: Text("Tipe Produk"),
+                      hint: Text("Jenis Produk"),
                       value: _selectedType,
                       items: _dropDownType,
-                      onChanged: (value) {
+                      onChanged: (value) async {
                         setState(() {
                           _selectedType = value;
                         });
+                        if (_selectedType == "Produk Sendiri") {
+                          setState(() {
+                            isSelfProduct = true;
+                            isLoaded = true;
+                          });
+                          await purchasingController.getMaterialData(
+                              context, setData, 1);
+                        } else {
+                          setState(() {
+                            isSelfProduct = false;
+                            isLoaded = true;
+                          });
+                        }
                       },
                     ),
                   )),
               Padding(padding: EdgeInsets.only(top: 15.0)),
               Container(
                   child: Row(children: [
-                    Text(
-                      "Pilih Produk",
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                    )
-                  ])),
-              Padding(padding: EdgeInsets.only(top: 10.0)),
+                Text(
+                  "Cari Produk",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                )
+              ])),
               Container(
-                  width: 320,
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white,
-                      border: Border.all()),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      hint: Text("Pilih Produk"),
-                      value: _selectedProduct[indexProduct],
-                      items: _product.map((value) {
-                        return DropdownMenuItem(
-                          child: Text(value),
-                          value: value,
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedProduct[indexProduct] = value;
-                        });
-                      },
-                    ),
-                  )),
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: ListView.builder(
-                  physics: ClampingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _listMaterial.length,
-                  itemBuilder: (context, position) {
-                    _indexMaterial = position;
-                    return _addMaterials(position);
-                  },
+                child: CustomTextInput.getCustomAutoCompleteField(
+                    context: context,
+                    controller: _firstRequiredProduct,
+                    hint: "SKU Produk",
+                    textInputType: TextInputType.text,
+                    itemBuilderCallback: _productItemBuilder,
+                    suggestionCallback: _onProductChanged,
+                    onSuggestionSelectedCallback:
+                        _onFirstRequiredProductSelected),
+              ),
+              Visibility(
+                visible: isLoaded,
+                child: Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: ListView.builder(
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: _listMaterial.length,
+                    itemBuilder: (context, position) {
+                      _indexMaterial = position;
+                      return _addMaterials(position);
+                    },
+                  ),
                 ),
               ),
               Container(
@@ -246,38 +430,89 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                   ],
                 ),
               ),
+              RaisedButton(
+                onPressed: () {
+                  print(totalItem.length);
+                  for (int i = 0; i < totalItem.length; i++) {
+                    if (_selectedType == "Produk Jadi") {
+                      purchasing.add(new PurchasingModel.listDetailPurchasing(
+                          _selectedFirstProduct,
+                          null,
+                          null,
+                          nameItem[i].text,
+                          totalItem[i].text,
+                          priceItem[i].text,
+                          totalItem[i].text,
+                          "0"));
+                    } else {
+                      if (_selectedTypeMaterial[i] == 1) {
+                        purchasing.add(new PurchasingModel.listDetailPurchasing(
+                            _selectedFirstProduct,
+                            _selectedFirstMaterial[i],
+                            null,
+                            nameItem[i].text,
+                            totalItem[i].text,
+                            priceItem[i].text,
+                            totalItem[i].text,
+                            "0"));
+                      } else {
+                        purchasing.add(new PurchasingModel.listDetailPurchasing(
+                            _selectedFirstProduct,
+                            null,
+                            _selectedFirstMaterial[i],
+                            nameItem[i].text,
+                            totalItem[i].text,
+                            priceItem[i].text,
+                            totalItem[i].text,
+                            "0"));
+                      }
+                    }
+                  }
+                  setState(() {
+                    _listProductModel.add(new ProductModel.productPurchasing(
+                        _selectedFirstProduct,
+                        _firstRequiredProduct.text,
+                        _selectedType,
+                        purchasing));
+                  });
+                  print(purchasing.length.toString());
+                  clearPurchasing();
+                  addMaterials();
+                },
+                child: Text("Tambahkan Bahan"),
+              ),
               Padding(padding: EdgeInsets.only(top: 15.0)),
-              Container(
-                  child: Row(children: [
-                    Text(
-                      "Upload Gambar",
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                    )
-                  ])),
-              Padding(padding: EdgeInsets.only(top: 10.0)),
-              RaisedButton.icon(
-                icon: Padding(
-                  padding:
-                  EdgeInsets.only(top: 10, bottom: 10, right: 10),
-                  child: Icon(
-                    Icons.add_a_photo,
-                    color: Colors.white,
-                  ),
-                ),
-                color: AppTheme.btn_success,
-                onPressed: () {},
-                label: Text(
-                  "Gambar",
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
+              // Container(
+              //     child: Row(children: [
+              //       Text(
+              //         "Upload Gambar",
+              //         style: TextStyle(
+              //             fontSize: 15, fontWeight: FontWeight.bold),
+              //       )
+              //     ])),
+              // Padding(padding: EdgeInsets.only(top: 10.0)),
+              // RaisedButton.icon(
+              //   icon: Padding(
+              //     padding:
+              //     EdgeInsets.only(top: 10, bottom: 1s0, right: 10),
+              //     child: Icon(
+              //       Icons.add_a_photo,
+              //       color: Colors.white,
+              //     ),
+              //   ),
+              //   color: AppTheme.btn_success,
+              //   onPressed: () {},
+              //   label: Text(
+              //     "Gambar",
+              //     style: TextStyle(color: Colors.white),
+              //   ),
+              // )
             ],
           ),
         ));
   }
 
-  Widget _addMaterials(int index) {
+  Widget _addMaterials(int indexChild) {
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.all(10),
@@ -287,62 +522,98 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(padding: EdgeInsets.only(top: 5.0)),
-          Container(
-              child: Row(children: [
-            Text(
-              "Pilih Jenis Bahan",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            )
-          ])),
-          Padding(padding: EdgeInsets.only(top: 10.0)),
-          // Container(
-          //     width: 320,
-          //     padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-          //     decoration: BoxDecoration(
-          //         borderRadius: BorderRadius.circular(10.0),
-          //         color: Colors.white,
-          //         border: Border.all()),
-          //     child: DropdownButtonHideUnderline(
-          //       child: DropdownButton(
-          //         hint: Text("Pilih Jenis Bahan"),
-          //         value: _selectMaterial[index],
-          //         items: _materialType.map((value) {
-          //           return DropdownMenuItem(
-          //             child: Text(value),
-          //             value: value,
-          //           );
-          //         }).toList(),
-          //         onChanged: (value) {
-          //           setState(() {
-          //             _selectMaterial[index] = value;
-          //           });
-          //         },
-          //       ),
-          //     )),
-          Padding(padding: EdgeInsets.only(top: 15.0)),
-          Container(
-              child: Row(children: [
-            Text(
-              "Nama Item",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            )
-          ])),
-          Padding(padding: EdgeInsets.only(top: 10.0)),
-          Container(
-            padding: EdgeInsets.only(left: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: Colors.white,
-                border: Border.all()),
-            child: TextField(
-              keyboardType: TextInputType.numberWithOptions(),
-              decoration: InputDecoration(
-                hintText: "Masukkan Nama Item",
-                fillColor: Colors.white,
-              ),
-            ),
-          ),
-          Padding(padding: EdgeInsets.only(top: 15.0)),
+          Visibility(
+              visible: isSelfProduct,
+              child: Container(
+                child: Column(
+                  children: [
+                    Container(
+                        child: Row(children: [
+                      Text(
+                        "Pilih Jenis Bahan",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )
+                    ])),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    Container(
+                        width: 320,
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.white,
+                            border: Border.all()),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            hint: Text("Pilih Jenis Bahan"),
+                            value: _selectMaterial[indexChild],
+                            items: _materialType.map((value) {
+                              return DropdownMenuItem(
+                                child: Text(value),
+                                value: value,
+                              );
+                            }).toList(),
+                            onChanged: (value) async {
+                              setState(() {
+                                _selectMaterial[indexChild] = value;
+                                if (_selectMaterial[indexChild] ==
+                                    "Ingredient") {
+                                  _selectedTypeMaterial[indexChild] = 1;
+                                } else {
+                                  _selectedTypeMaterial[indexChild] = 2;
+                                }
+                              });
+                              await purchasingController.getMaterialData(
+                                  context,
+                                  setData,
+                                  _selectedTypeMaterial[indexChild]);
+                            },
+                          ),
+                        )),
+                    Padding(padding: EdgeInsets.only(top: 15.0)),
+                    Container(
+                        child: Row(children: [
+                      Text(
+                        "Nama Item",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )
+                    ])),
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    SearchableDropdown.single(
+                      items: materialList.map((MaterialModel materials) {
+                        return DropdownMenuItem<MaterialModel>(
+                          value: materials,
+                          child: Text(
+                            '(' + materials.sku + ')' + " " + materials.name,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        );
+                      }).toList(),
+                      value: _selectedMaterial[indexChild],
+                      hint: "Pilih Bahan",
+                      searchHint: "Cari SKU Bahan",
+                      onClear: () {
+                        setState(() {
+                          _selectedMaterial[indexChild] = null;
+                        });
+                      },
+                      onChanged: (MaterialModel value) async {
+                        if (value != null) {
+                          print(value.id);
+                          setState(() {
+                            _selectedMaterial[indexChild] = value;
+                            _selectedFirstMaterial[indexChild] =
+                                value.id.toString();
+                          });
+                        }
+                      },
+                      isExpanded: true,
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 15.0)),
+                  ],
+                ),
+              )),
           Container(
               child: Row(children: [
             Text(
@@ -358,12 +629,20 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                 color: Colors.white,
                 border: Border.all()),
             child: TextField(
-              controller: totalItem[index],
+              controller: totalItem[indexChild],
               keyboardType: TextInputType.numberWithOptions(),
               decoration: InputDecoration(
                 hintText: "Masukkan Jumlah Item",
                 fillColor: Colors.white,
               ),
+              onChanged: (content) {
+                int total = 0;
+                int item = int.parse(totalItem[indexChild].text);
+                int price = int.parse(priceItem[indexChild].text);
+                total = item * price;
+                // listTotal[position] = total;
+                totalPriceItem[indexChild].text = total.toString();
+              },
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 15.0)),
@@ -382,12 +661,20 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                 color: Colors.white,
                 border: Border.all()),
             child: TextField(
-              controller: priceItem[index],
+              controller: priceItem[indexChild],
               keyboardType: TextInputType.numberWithOptions(),
               decoration: InputDecoration(
                 hintText: "Masukkan Harga",
                 fillColor: Colors.white,
               ),
+              onChanged: (content) {
+                int total = 0;
+                int item = int.parse(totalItem[indexChild].text);
+                int price = int.parse(priceItem[indexChild].text);
+                total = item * price;
+                // listTotal[position] = total;
+                totalPriceItem[indexChild].text = total.toString();
+              },
             ),
           ),
           Padding(padding: EdgeInsets.only(top: 15.0)),
@@ -406,7 +693,8 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                 color: Colors.white,
                 border: Border.all()),
             child: TextField(
-              controller: totalPriceItem[index],
+              enabled: false,
+              controller: totalPriceItem[indexChild],
               keyboardType: TextInputType.numberWithOptions(),
               decoration: InputDecoration(
                 hintText: "Total Cost",
@@ -417,5 +705,84 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
         ],
       ),
     );
+  }
+
+  Widget buildFileWidget() {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.topLeft,
+          child: Text(
+            'Berkas Bukti',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height * 0.25,
+          child: ListView.builder(
+            itemCount: _filesFromDevice.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: Text((index + 1).toString()),
+                title: Text(_filesFromDevice[index].path.split("/").last ??
+                    "File Path"),
+                trailing: RaisedButton(
+                    child: Text(
+                      "Hapus",
+                      style: TextStyle(color: AppTheme.white),
+                    ),
+                    color: AppTheme.red,
+                    onPressed: () {
+                      // remove image
+                      _removeImagesFromDevice(index);
+                    }),
+              );
+            },
+          ),
+        ),
+        Container(
+          alignment: Alignment.center,
+          child: RaisedButton(
+            padding: EdgeInsets.only(left: 50, right: 50),
+            onPressed: () {
+              _openFileExplorer();
+            },
+            child: Text(
+              "Tambah Bukti",
+              style: TextStyle(color: AppTheme.white),
+            ),
+            color: AppTheme.btn_default,
+          ),
+        ),
+      ],
+    );
+  }
+
+  void buildListRencana(int position) {
+    // edit_rencana = true;
+    clearPurchasing();
+    setState(() {
+      _listDetail = _listProductModel[position].lisPurchasingDetail;
+      // print("list aktifasi: " + list_aktifitas_rencana.length.toString());
+      _indexWidgetMaterial = _listDetail.length;
+      print(_indexWidgetMaterial.toString());
+      for (int i = 0; i < _indexWidgetMaterial; i++) {
+        nameItem.add(new TextEditingController());
+        totalItem.add(new TextEditingController());
+        priceItem.add(new TextEditingController());
+        totalPriceItem.add(new TextEditingController());
+        _listMaterial.add(_addMaterials(i));
+
+        nameItem[i].text = _listDetail[i].name;
+        totalItem[i].text = _listDetail[i].totalItem;
+        priceItem[i].text = _listDetail[i].priceItem;
+        totalPriceItem[i].text = _listDetail[i].priceTotalItem;
+      }
+      _indexMaterial -= 1;
+    });
   }
 }

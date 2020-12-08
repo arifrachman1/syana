@@ -1,13 +1,21 @@
 class PurchasingModel{
   String _idPurchasingSubmission, _submittedBy, _idProduct, _statusSubmission, _createdAt, _name, _sku;
   String _idIngredient, _idPackaging, _totalItem, _priceItem, _priceTotalItem;
+  String _value;
 
   PurchasingModel.listPurchasing(this._idPurchasingSubmission, this._submittedBy,
       this._idProduct, this._statusSubmission, this._createdAt, this._name);
 
 
   PurchasingModel.listDetailPurchasing(this._idProduct, this._idIngredient, this._idPackaging,
-      this._totalItem, this._priceItem, this._priceTotalItem);
+      this._name, this._totalItem, this._priceItem, this._priceTotalItem, this._value);
+
+
+  String get value => _value;
+
+  set value(String value) {
+    _value = value;
+  }
 
   String get idIngredient => _idIngredient;
 
@@ -79,5 +87,16 @@ class PurchasingModel{
 
   set priceTotalItem(value) {
     _priceTotalItem = value;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id_product": this._idProduct,
+      "id_ingredient": this._idIngredient,
+      "id_packaging": this._idPackaging,
+      "total_item": this._totalItem,
+      "price_item": this._priceItem,
+      "total_price_item": this._priceTotalItem,
+    };
   }
 }
