@@ -108,6 +108,13 @@ class _PackingDetailState extends State<PackingDetail> {
               ),
             ),
             Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Text(
+                "Nama Sales : "+widget.data.salesName.toString(),
+                style: FontHelper.textSuccess,
+              ),
+            ),
+            Container(
               margin: EdgeInsets.symmetric(vertical: 15),
               child: Divider(
                 height: 1,

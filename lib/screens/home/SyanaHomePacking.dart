@@ -1,6 +1,7 @@
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/HomePackingController.dart';
+import 'package:syana/models/UserModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/GlobalFunctions.dart';
 import 'package:syana/utils/GlobalVars.dart';
@@ -15,6 +16,8 @@ class _PackingState extends State<SyanaHomePacking> {
   HomePackingController _homePackingController;
   bool _isLoading = false;
   TextEditingController _noResi = new TextEditingController();
+  UserModel _userModel;
+  String packerName = "";
 
   @override
   void dispose() {
@@ -25,6 +28,14 @@ class _PackingState extends State<SyanaHomePacking> {
   void initState() {
     super.initState();
     _homePackingController = new HomePackingController();
+    initModelUser();
+  }
+
+  initModelUser() async {
+        _userModel = await GlobalFunctions.getPersistence();
+       setState(() {
+            packerName = _userModel.fullName.toString();
+          });
   }
 
   void setLoadingState() {
@@ -72,7 +83,7 @@ class _PackingState extends State<SyanaHomePacking> {
               Container(
                 alignment: Alignment.center,
                 child: Text(
-                  "Selamat datang, Username",
+                  "Selamat datang, "+packerName,
                   style: TextStyle(color: AppTheme.white),
                 ),
               ),

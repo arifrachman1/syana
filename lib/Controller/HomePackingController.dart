@@ -81,6 +81,7 @@ class HomePackingController {
           data['data']['sale']['name_ecommerce'].toString(),
           saleDetailModels,
           data['data']['sale']['status'].toString(),
+          data['data']['sale']['sales_name'].toString(),
         );
 
         if (saleModel.status != "1") {
