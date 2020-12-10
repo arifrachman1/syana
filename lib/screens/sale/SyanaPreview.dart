@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/screens/sale/SyanaCustomerInput.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
 
@@ -43,11 +44,6 @@ class PreviewState extends State<Preview> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        backgroundColor: Colors.lightGreen[200],
-        title: Text("Preview QR Code"),
-      ),
       body: Container(
         decoration: AppTheme.appBackground(),
         height: MediaQuery.of(context).size.height,
@@ -56,48 +52,64 @@ class PreviewState extends State<Preview> {
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18)),
-                margin: EdgeInsets.all(10),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        child: Text(
-                          "No. Resi",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      CustomTextInput.getCustomTextField(
-                        context: context,
-                        controller: _airwayBillController,
-                        textInputType: TextInputType.text,
-                        isPasswordField: false,
-                        enabled: false,
-                      ),
-                    ],
+              Container(
+                child: Text(
+                  "No. Resi",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.white,
                   ),
                 ),
+              ),
+              CustomTextInput.getCustomTextField(
+                context: context,
+                controller: _airwayBillController,
+                textInputType: TextInputType.text,
+                isPasswordField: false,
+                enabled: false,
+                hint: "No. Resi",
               ),
               Container(height: 15),
               Container(
                 margin: EdgeInsets.only(top: 10),
-                child: RaisedButton(
-                  child: Text("Lanjut"),
-                  shape: AppTheme.roundButton(),
-                  color: AppTheme.yellow,
-                  onPressed: () async {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-                      return CustomerInput();
-                    }));
-                  },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: Dimens.buttonWidth(context),
+                      child: AspectRatio(
+                        aspectRatio: Dimens.buttonRatio(),
+                        child: RaisedButton(
+                          child: Text('Kembali'),
+                          shape: AppTheme.roundButton(),
+                          color: AppTheme.btn_default,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: Dimens.buttonWidth(context),
+                      child: AspectRatio(
+                        aspectRatio: Dimens.buttonRatio(),
+                        child: RaisedButton(
+                          child: Text('Lanjut'),
+                          shape: AppTheme.roundButton(),
+                          color: AppTheme.yellow,
+                          onPressed: () async {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (_) {
+                              return CustomerInput();
+                            }));
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
