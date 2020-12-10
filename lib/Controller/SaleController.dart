@@ -7,6 +7,7 @@ import 'package:syana/models/ChartDataModel.dart';
 import 'package:syana/models/CourierModel.dart';
 import 'package:syana/models/EcommerceModel.dart';
 import 'package:syana/models/ProductModel.dart';
+import 'package:syana/models/SaleModel.dart';
 import 'package:syana/models/TeamModel.dart';
 import 'package:syana/models/TraceModel.dart';
 import 'package:syana/models/TransactionHistoryModel.dart';
@@ -807,5 +808,50 @@ class SaleController {
         setDataCallback(dateMaxMin);
       }
     } else {}
+  }
+
+  /* Get Waiting List Order */
+  getWaitingListOrder(context, loadingStateCallback, setDataCallback) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+
+    FormData formData;
+
+    var params =
+        GlobalFunctions.generateMapParam(["id_employee"], [_userModel.id]);
+    formData = FormData.fromMap(params);
+    print(formData.fields);
+
+    loadingStateCallback();
+    final data = await GlobalFunctions.dioPostCall(
+      context: context,
+      params: formData,
+      options: Options(
+          headers: {"Authorization": "Bearer " + _userModel.accessToken}),
+      path: GlobalVars.baseUrl + "syana/sale/get-waiting-list-order",
+    );
+
+    if (data != null) {
+      print(data);
+      if (data['status'] == 200) {
+        List waitingFromApi = data['data'];
+        List<SaleModel> waitingListOrder = new List();
+
+        waitingFromApi.forEach((element) {
+          waitingListOrder.add(new SaleModel.waitingList(
+              element['id'].toString(),
+              element['transaction_number'].toString(),
+              element['status'].toString()));
+        });
+
+        if (waitingListOrder.isNotEmpty) {
+          setDataCallback(waitingListOrder);
+        }
+      }
+    } else {
+      print('False');
+    }
+    loadingStateCallback();
   }
 }

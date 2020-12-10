@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Dimens{
+class Dimens {
   //===========================geometri widget=================================================
   static double formHeight = 56;
 
@@ -16,35 +16,39 @@ class Dimens{
   static double margin_l = 64;
   static double margin_xl = 72;
 
-  static buttonRatio(){
-    return 7/2;
+  static buttonRatio() {
+    return 7 / 2;
   }
 
-  static buttonRatioWide(){
-    return 11/3;
+  static buttonRatioWide() {
+    return 11 / 3;
   }
 
-  static buttonWidth(context){
-    return MediaQuery.of(context).size.width *0.36;
+  static buttonWidth(context) {
+    return MediaQuery.of(context).size.width * 0.36;
   }
 
-  static buttonWidthWide(context){
-    return MediaQuery.of(context).size.width *0.39;
+  static buttonWidthWide(context) {
+    return MediaQuery.of(context).size.width * 0.39;
   }
 
-  static listHeight(context){
-    return MediaQuery.of(context).size.height *0.20;
+  static listHeight(context) {
+    return MediaQuery.of(context).size.height * 0.20;
   }
 
-  static listHeightSmall(context){
-    return MediaQuery.of(context).size.height *0.15;
+  static listHeightExtraSmall(context) {
+    return MediaQuery.of(context).size.height * 0.10;
   }
 
-  static listHeightLarge(context){
-    return MediaQuery.of(context).size.height *0.25;
+  static listHeightSmall(context) {
+    return MediaQuery.of(context).size.height * 0.15;
   }
 
-  static grafikHeight(context){
+  static listHeightLarge(context) {
+    return MediaQuery.of(context).size.height * 0.25;
+  }
+
+  static grafikHeight(context) {
     return MediaQuery.of(context).size.height * 0.4;
   }
 }
