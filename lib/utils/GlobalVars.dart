@@ -24,6 +24,8 @@ class GlobalVars {
 
   // static final String imageUrl = baseUrl + "syana/products/";
 
+  static final String purchasingUrl = baseUrl + "purchasing/";
+
   static final String imageUrl = baseUrl + "products/";
 
   static final String thumbnailUrl = baseUrl + "syana/thumbnail/";
