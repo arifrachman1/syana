@@ -17,6 +17,8 @@ import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 
+enum CancelOrderKey { list }
+
 class SaleController {
   BuildContext _context;
   UserModel _userModel;
@@ -461,7 +463,7 @@ class SaleController {
 
     loadingStateCallback();
     final data = await GlobalFunctions.dioPostCall(
-        path: GlobalVars.baseUrl + "syana/sale/" + "sale-product",
+        path: GlobalVars.saleUrl + "sale-product",
         params: formData,
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
@@ -475,7 +477,7 @@ class SaleController {
             title: Strings.DIALOG_TITLE_SUCCESS,
             message: Strings.DIALOG_MESSAGE_TRANSACTION_SUCCESS,
             context: context,
-            popCount: 1);
+            popCount: 2);
       } else {
         CustomDialog.getDialog(
             title: Strings.DIALOG_TITLE_ERROR,
@@ -851,6 +853,38 @@ class SaleController {
       }
     } else {
       print('False');
+    }
+    loadingStateCallback();
+  }
+
+  setCancelOrder(context, loadingStateCallback, idSale) async {
+    loadingStateCallback();
+
+    _userModel = await GlobalFunctions.getPersistence();
+
+    var params = GlobalFunctions.generateMapParam(['id_sale'], [idSale]);
+
+    FormData formData = FormData.fromMap(params);
+
+    final data = await GlobalFunctions.dioPostCall(
+      context: context,
+      params: formData,
+      options: Options(
+          headers: {"Authorization": "Bearer " + _userModel.accessToken}),
+      path: GlobalVars.saleUrl + "cancel-order",
+    );
+
+    if (data != null) {
+      if (data['status'] == 200) {
+        log(data['message'].toString());
+        loadingStateCallback();
+
+        return 200;
+      } else {
+        log(data['message'].toString());
+      }
+    } else {
+      log("data is null");
     }
     loadingStateCallback();
   }

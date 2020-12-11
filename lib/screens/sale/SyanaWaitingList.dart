@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/SaleModel.dart';
 import 'package:syana/utils/AppTheme.dart';
@@ -16,6 +19,9 @@ class WaitingListState extends State<WaitingList> {
   SaleController _saleController;
   List<SaleModel> waitingList = new List();
 
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   void setLoadingState() {
     setState(() {
@@ -30,7 +36,14 @@ class WaitingListState extends State<WaitingList> {
 
   @override
   void initState() {
+    super.initState();
     _saleController = new SaleController();
+
+    _init();
+  }
+
+  _init() async {
+    waitingList.clear();
     _saleController.getWaitingListOrder(
         context, setLoadingState, setWaitingList);
   }
@@ -49,36 +62,46 @@ class WaitingListState extends State<WaitingList> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen[200],
-        title: Text("Waiting List Transactions"),
+        title: Text("Waiting List Transaction"),
       ),
-      body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Container(
-              decoration: AppTheme.appBackground(),
-              child: Column(
-                children: [
-                  Container(height: 15),
-                  Expanded(
-                    child: Container(
-                      margin: EdgeInsets.only(right: 8, left: 8),
-                      child: ListView.builder(
-                        itemCount: waitingList.length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            child: _waitingList(index),
-                            onTap: () {
-                              print("Detail List");
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+      body: Container(
+        decoration: AppTheme.appBackground(),
+        child: Column(
+          children: [
+            Container(height: 15),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.only(right: 8, left: 8),
+                child: SmartRefresher(
+                  controller: _refreshController,
+                  enablePullDown: true,
+                  header: ClassicHeader(),
+                  onRefresh: () async {
+                    await Future.delayed(Duration(seconds: 1));
+                    _init();
+                    _refreshController.refreshCompleted();
+                  },
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
+                          itemCount: waitingList.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              child: _waitingList(index),
+                              onTap: () {
+                                print("Detail List");
+                              },
+                            );
+                          },
+                        ),
+                ),
               ),
             ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -135,19 +158,31 @@ class WaitingListState extends State<WaitingList> {
             child: Container(
               child: Row(
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.black87,
-                    ),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.cancel,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {},
+                  PopupMenuButton(
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Text("Edit"),
+                        value: 1,
+                      ),
+                      PopupMenuItem(
+                        child: Text("Cancel"),
+                        value: 2,
+                      ),
+                    ],
+                    onSelected: (value) async {
+                      switch (value) {
+                        case 2:
+                          var result = await _saleController.setCancelOrder(
+                              context, setLoadingState, waitingList[index].id);
+
+                          log(result.toString());
+
+                          if (result == 200) {
+                            _init();
+                          }
+                          break;
+                      }
+                    },
                   ),
                 ],
               ),
@@ -156,5 +191,21 @@ class WaitingListState extends State<WaitingList> {
         ],
       ),
     );
+  }
+
+  @override
+  setData(data) {
+    // TODO: implement setData
+    log("data received!\n${data.toString()}");
+
+    if (data is Map) {
+      switch (data['key']) {
+        case CancelOrderKey.list:
+          setState(() {
+            waitingList = data['payload'];
+          });
+          break;
+      }
+    }
   }
 }

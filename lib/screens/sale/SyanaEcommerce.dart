@@ -4,6 +4,7 @@ import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/EcommerceModel.dart';
 import 'package:syana/screens/sale/SyanaCustomerInput.dart';
 import 'package:syana/screens/sale/SyanaPreview.dart';
+import 'package:syana/screens/sale/SyanaWaitingList.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalVars.dart';
@@ -187,6 +188,27 @@ class EcommerceState extends State<SyanaEcommerce> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 100),
+                      width: MediaQuery.of(context).size.width / 2.2,
+                      child: AspectRatio(
+                        aspectRatio: Dimens.buttonRatio(),
+                        child: RaisedButton(
+                          child: Text(
+                            'Waiting List Transactions',
+                            textAlign: TextAlign.center,
+                          ),
+                          shape: AppTheme.roundButton(),
+                          color: AppTheme.yellow,
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (_) {
+                              return WaitingList();
+                            }));
+                          },
+                        ),
                       ),
                     ),
                   ],

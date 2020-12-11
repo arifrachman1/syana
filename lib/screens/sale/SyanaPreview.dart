@@ -119,27 +119,6 @@ class PreviewState extends State<Preview> {
                   ),
                 ],
               ),
-              Container(
-                margin: EdgeInsets.only(top: 100),
-                width: MediaQuery.of(context).size.width / 2.2,
-                child: AspectRatio(
-                  aspectRatio: Dimens.buttonRatio(),
-                  child: RaisedButton(
-                    child: Text(
-                      'Waiting List Transactions',
-                      textAlign: TextAlign.center,
-                    ),
-                    shape: AppTheme.roundButton(),
-                    color: AppTheme.btn_default,
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) {
-                        return WaitingList();
-                      }));
-                    },
-                  ),
-                ),
-              ),
             ],
           ),
         ),
