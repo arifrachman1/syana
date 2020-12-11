@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:syana/Controller/ProfileController.dart';
 import 'package:syana/screens/Purchasing/SyanaHistoryDetail.dart';
 import 'package:syana/screens/Purchasing/SyanaPlans.dart';
 import 'package:syana/screens/Purchasing/SyanaPurchasingDetail.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/GlobalVars.dart';
 
 class SyanaPurchasing extends StatefulWidget {
   @override
@@ -11,11 +15,24 @@ class SyanaPurchasing extends StatefulWidget {
 
 class _SyanaPurchasingState extends State<SyanaPurchasing> {
   bool _isLoading = false;
+  ProfileController _profileController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _profileController = new ProfileController();
+  }
 
   void setLoadingState() {
     setState(() {
       _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
     });
+  }
+
+  void logout() {
+    log("button pressed");
+    _profileController.logout(context, setLoadingState);
   }
 
   @override
@@ -30,6 +47,15 @@ class _SyanaPurchasingState extends State<SyanaPurchasing> {
                 child: Center(
                     child: Column(
                   children: <Widget>[
+                    GlobalVars.isDevMode
+                        ? Container(
+                            child: IconButton(
+                              onPressed: logout,
+                              icon: Icon(Icons.exit_to_app),
+                              color: Colors.white,
+                            ),
+                          )
+                        : Container(),
                     Container(
                       margin: EdgeInsets.all(10.0),
                       height: MediaQuery.of(context).size.height * 0.2,

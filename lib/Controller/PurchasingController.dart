@@ -35,7 +35,7 @@ class PurchasingController {
     print(formData.fields);
 
     final data = await GlobalFunctions.dioPostCall(
-        path: GlobalVars.baseUrl + "syana/purchasing/get-list-purchasing",
+        path: GlobalVars.purchasingUrl + "get-list-purchasing",
         params: formData,
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
@@ -77,7 +77,7 @@ class PurchasingController {
 
     final data = await GlobalFunctions.dioPostCall(
         params: formData,
-        path: GlobalVars.baseUrl + "syana/purchasing/get-product-by-sku",
+        path: GlobalVars.purchasingUrl + "get-product-by-sku",
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
         context: context);
@@ -112,7 +112,7 @@ class PurchasingController {
 
     final data = await GlobalFunctions.dioPostCall(
         params: formData,
-        path: GlobalVars.baseUrl + "syana/purchasing/get-material-by-type",
+        path: GlobalVars.purchasingUrl + "get-material-by-type",
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
         context: context);
@@ -155,7 +155,7 @@ class PurchasingController {
       params: formData,
       options: Options(
           headers: {"Authorization": "Bearer " + _userModel.accessToken}),
-      path: GlobalVars.baseUrl + "syana/purchasing/approval-purchasing",
+      path: GlobalVars.purchasingUrl + "approval-purchasing",
     );
 
     if (data != null) {
@@ -185,7 +185,7 @@ class PurchasingController {
 
     final data = await GlobalFunctions.dioPostCall(
         params: formData,
-        path: GlobalVars.baseUrl + "syana/purchasing/submit-purchasing",
+        path: GlobalVars.purchasingUrl + "submit-purchasing",
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
         context: context);
@@ -231,7 +231,7 @@ class PurchasingController {
     print(formData.fields);
 
     final data = await GlobalFunctions.dioPostCall(
-        path: GlobalVars.baseUrl + "syana/purchasing/get-detail-purchasing",
+        path: GlobalVars.purchasingUrl + "get-detail-purchasing",
         params: formData,
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
