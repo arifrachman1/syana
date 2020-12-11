@@ -14,6 +14,7 @@ class GlobalVars {
   static final String summaryUrl = baseUrl + "syana/summary/";
 	static final String bookmarkUrl = baseUrl + "syana/bookmark/";
  	static final String saleUrl = baseUrl + "syana/sale/";
+  static final String purchasingUrl = baseUrl + "syana/purchasing/";
 
  // static final String apiUrl = baseUrl + "api/";
  // static final String rankUrl = baseUrl + "rank/";
@@ -21,6 +22,7 @@ class GlobalVars {
  // static final String summaryUrl = baseUrl + "summary/";
  // static final String bookmarkUrl = baseUrl + "bookmark/";
  // static final String saleUrl = baseUrl + "sale/";
+ //  static final String purchasingUrl = baseUrl + "purchasing/";
 
   static final String imageUrl = baseUrl + "syana/products/";
 
