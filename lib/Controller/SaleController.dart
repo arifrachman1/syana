@@ -829,7 +829,7 @@ class SaleController {
       params: formData,
       options: Options(
           headers: {"Authorization": "Bearer " + _userModel.accessToken}),
-      path: GlobalVars.baseUrl + "syana/sale/get-waiting-list-order",
+      path: GlobalVars.saleUrl + "get-waiting-list-order",
     );
 
     if (data != null) {
