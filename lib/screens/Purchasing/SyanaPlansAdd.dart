@@ -194,6 +194,9 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
     if (purchasing.isNotEmpty && _filesToSend.isNotEmpty) {
       await purchasingController.sendData(
           context, listPurchasing, _filesToSend);
+      setState(() {
+        _filesToSend.clear();
+      });
     } else {
       CustomDialog.getDialog(
           title: "Peringatan",
