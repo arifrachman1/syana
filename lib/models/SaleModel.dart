@@ -1,11 +1,31 @@
 import 'package:syana/models/SaleDetailModel.dart';
 
-class SaleModel{
-  String _id, _transactionNumber, _totalPoint, _date, _customer, _ecommerce, _status, _seller, _packer, _salesName;
+class SaleModel {
+  String _id,
+      _idEmployee,
+      _transactionNumber,
+      _totalPoint,
+      _date,
+      _customer,
+      _ecommerce,
+      _status,
+      _seller,
+      _packer,
+      _salesName;
   List<SaleDetailModel> _saleDetails;
 
-  SaleModel.init(this._id, this._transactionNumber, this._totalPoint,
-      this._date, this._customer, this._ecommerce, this._saleDetails, this._status, this._salesName);
+  SaleModel.init(
+      this._id,
+      this._transactionNumber,
+      this._totalPoint,
+      this._date,
+      this._customer,
+      this._ecommerce,
+      this._saleDetails,
+      this._status,
+      this._salesName);
+
+  SaleModel.waitingList(this._id, this._transactionNumber, this._status);
 
   get seller => _seller;
 
@@ -23,6 +43,12 @@ class SaleModel{
 
   set id(String value) {
     _id = value;
+  }
+
+  String get idEmployee => _idEmployee;
+
+  set idEmployee(String value) {
+    _idEmployee = value;
   }
 
   get transactionNumber => _transactionNumber;
@@ -55,7 +81,6 @@ class SaleModel{
     _transactionNumber = value;
   }
 
-
   List<SaleDetailModel> get saleDetails => _saleDetails;
 
   set saleDetails(List<SaleDetailModel> value) {
@@ -64,7 +89,7 @@ class SaleModel{
 
   @override
   String toString() {
-    return 'SaleModel{_id: $_id, _transactionNumber: $_transactionNumber, _totalPoint: $_totalPoint, _date: $_date, _customer: $_customer, _ecommerce: $_ecommerce, _saleDetails: $_saleDetails}';
+    return 'SaleModel{_id: $_id, _idEmployee: $_idEmployee, _transactionNumber: $_transactionNumber, _totalPoint: $_totalPoint, _date: $_date, _customer: $_customer, _ecommerce: $_ecommerce, _saleDetails: $_saleDetails}';
   }
 
   get packer => _packer;

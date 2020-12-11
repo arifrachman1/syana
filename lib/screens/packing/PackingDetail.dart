@@ -101,7 +101,7 @@ class _PackingDetailState extends State<PackingDetail> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 10, bottom: 10),
               child: Text(
                 "Transaksi",
                 style: FontHelper.textTitle,
@@ -110,7 +110,14 @@ class _PackingDetailState extends State<PackingDetail> {
             Container(
               margin: EdgeInsets.only(top: 10),
               child: Text(
-                "Nama Sales : "+widget.data.salesName.toString(),
+                "Nomor Resi : " + widget.data.transactionNumber.toString(),
+                style: FontHelper.textSuccess,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Text(
+                "Nama Sales : " + widget.data.salesName.toString(),
                 style: FontHelper.textSuccess,
               ),
             ),
