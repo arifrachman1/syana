@@ -5,9 +5,15 @@ class PurchasingModel {
       _statusSubmission,
       _createdAt,
       _name,
-      _sku;
+      _id,
+      _sku,
+      _type,
+      _status;
   String _idIngredient, _idPackaging, _totalItem, _priceItem, _priceTotalItem;
   String _value;
+
+  PurchasingModel.purchasing(this._idPurchasingSubmission, this._submittedBy,
+      this._createdAt, this._status);
 
   PurchasingModel.listPurchasing(
       this._idPurchasingSubmission,
@@ -26,6 +32,12 @@ class PurchasingModel {
       this._priceItem,
       this._priceTotalItem,
       this._value);
+
+  get status => _status;
+
+  set status(value) {
+    _status = value;
+  }
 
   String get value => _value;
 

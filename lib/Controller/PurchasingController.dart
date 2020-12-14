@@ -163,7 +163,7 @@ class PurchasingController {
         Navigator.pop(context);
         CustomDialog.getDialog(
             title: Strings.DIALOG_TITLE_SUCCESS,
-            message: Strings.DIALOG_MESSAGE_CUSTOMER_SAVED,
+            message: data['message'],
             context: context,
             popCount: 1);
       }
@@ -226,7 +226,7 @@ class PurchasingController {
     FormData formData;
 
     Map param = GlobalFunctions.generateMapParam(
-        ["list_type"], [idPurchasing]);
+        ["id_purchasing_submission"], [idPurchasing]);
     formData = FormData.fromMap(param);
     print(formData.fields);
 
