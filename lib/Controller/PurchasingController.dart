@@ -9,6 +9,8 @@ import 'package:syana/utils/GlobalVars.dart';
 import 'package:syana/utils/Strings.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 
+import 'dart:developer' as dev;
+
 class PurchasingController {
   BuildContext _context;
   UserModel _userModel;
@@ -255,6 +257,86 @@ class PurchasingController {
         if (purchasing.isNotEmpty) {
           setDataCallback(purchasing);
         }
+      }
+    } else {}
+    loadingStateCallback();
+  }
+
+  getDetailPurchasingNew(
+      context, loadingStateCallback, setDataCallback, idPurchasing) async {
+    if (_userModel == null) {
+      await _getPersistence();
+    }
+    loadingStateCallback();
+
+    FormData formData;
+
+    Map param = GlobalFunctions.generateMapParam(
+        ['id_purchasing_submission'], [idPurchasing]);
+
+    formData = FormData.fromMap(param);
+    print(formData.fields);
+
+    final data = await GlobalFunctions.dioPostCall(
+      path: GlobalVars.purchasingUrl + "get-detail-purchasing-new",
+      params: formData,
+      options: Options(
+          headers: {"Authorization": "Bearer " + _userModel.accessToken}),
+      context: context,
+    );
+
+    if (data != null) {
+      if (data['status'] == 200) {
+        PurchasingModel purchasing = new PurchasingModel.purchasing(
+            data['data']['purchasing']['id_purchasing_submission'],
+            data['data']['purchasing']['created_at'],
+            data['data']['purchasing']['submitted_by'],
+            data['data']['purchasing']['status']);
+
+        List purchasingDetailFromApi = data['data']['purchasing_detail'];
+        List<PurchasingModel> purchasingDetail = new List();
+
+        purchasingDetailFromApi.forEach((element) {
+          purchasingDetail.add(new PurchasingModel.listDetailPurchasing(
+            element['id'],
+            element['tipe'],
+            element['nama'],
+            element['sku'],
+            element['jumlah'],
+            element['harga'],
+            element['harga_master'],
+            element['total_harga'],
+          ));
+        });
+
+        List purchasingStatusFromApi = data['data']['purchasing_status'];
+        List<PurchasingModel> purchasingStatus = new List();
+
+        purchasingStatusFromApi.forEach((element) {
+          purchasingStatus.add(new PurchasingModel.listStatusPurchasing(
+            element['id_purchasing_status'],
+            element['status'],
+            element['approved_at'],
+            element['note'],
+            element['idx_purchasing_submission'],
+          ));
+        });
+
+        List purchasingImageFromApi = data['data']['purchasing_image'];
+        List<PurchasingModel> purchasingImage = new List();
+
+        purchasingImageFromApi.forEach((element) {
+          purchasingImage.add(new PurchasingModel.listImagePurchasing(
+            element['id_purchasing_image'],
+            element['image'],
+            element['status'],
+            element['idx_purchasing_status'],
+          ));
+        });
+
+        dev.log(purchasing.toString(), name: "PurchasingController");
+        setDataCallback(
+            purchasing, purchasingDetail, purchasingStatus, purchasingImage);
       }
     } else {}
     loadingStateCallback();

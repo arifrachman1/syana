@@ -1,5 +1,6 @@
 class PurchasingModel {
   String _idPurchasingSubmission,
+      _idxPurchasingSubmission,
       _submittedBy,
       _idProduct,
       _statusSubmission,
@@ -11,6 +12,11 @@ class PurchasingModel {
       _status;
   String _idIngredient, _idPackaging, _totalItem, _priceItem, _priceTotalItem;
   String _value;
+  String _idPurchasingStatus, _approvedAt, _note, _idPurchasingImage, _image;
+
+  List<PurchasingModel> listDetail = new List();
+  List<PurchasingModel> listImage = new List();
+  List<PurchasingModel> listStatus = new List();
 
   PurchasingModel.purchasing(this._idPurchasingSubmission, this._submittedBy,
       this._createdAt, this._status);
@@ -32,6 +38,21 @@ class PurchasingModel {
       this._priceItem,
       this._priceTotalItem,
       this._value);
+
+  PurchasingModel.listStatusPurchasing(
+    this._idPurchasingStatus,
+    this._status,
+    this._approvedAt,
+    this._note,
+    this._idxPurchasingSubmission,
+  );
+
+  PurchasingModel.listImagePurchasing(
+    this._idPurchasingImage,
+    this._image,
+    this._status,
+    this._idxPurchasingSubmission,
+  );
 
   get status => _status;
 
@@ -63,6 +84,12 @@ class PurchasingModel {
     _createdAt = value;
   }
 
+  get approvedAt => _approvedAt;
+
+  set approvedAt(value) {
+    _approvedAt = value;
+  }
+
   get statusSubmission => _statusSubmission;
 
   set statusSubmission(value) {
@@ -73,6 +100,36 @@ class PurchasingModel {
 
   set idProduct(value) {
     _idProduct = value;
+  }
+
+  get idPurchasingStatus => _idPurchasingStatus;
+
+  set idPurchasingStatus(value) {
+    _idPurchasingStatus = value;
+  }
+
+  get idPurchasingImage => _idPurchasingImage;
+
+  set idPurchasingImage(value) {
+    _idPurchasingImage = value;
+  }
+
+  get idxPurchasingSubmission => _idxPurchasingSubmission;
+
+  set idxPurchasingSubmission(value) {
+    _idxPurchasingSubmission = value;
+  }
+
+  get note => _note;
+
+  set note(value) {
+    _note = value;
+  }
+
+  get image => _image;
+
+  set image(value) {
+    _image = value;
   }
 
   get submittedBy => _submittedBy;
