@@ -85,7 +85,7 @@ class EcommerceState extends State<SyanaEcommerce> {
 
   executeManualAirwayBillEntry() {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return CustomerInput();
+      return CustomerInput(tipe: 1);
     }));
   }
 
