@@ -297,7 +297,7 @@ class PurchasingController {
         List<PurchasingModel> purchasingDetail = new List();
 
         purchasingDetailFromApi.forEach((element) {
-          purchasingDetail.add(new PurchasingModel.listDetailPurchasing(
+          purchasingDetail.add(new PurchasingModel.detailPurchasing(
             element['id'],
             element['tipe'],
             element['nama'],
@@ -334,9 +334,11 @@ class PurchasingController {
           ));
         });
 
+        PurchasingModel purchasingMaster = new PurchasingModel.masterDetail(
+            purchasing, purchasingDetail, purchasingImage, purchasingStatus);
+
         dev.log(purchasing.toString(), name: "PurchasingController");
-        setDataCallback(
-            purchasing, purchasingDetail, purchasingStatus, purchasingImage);
+        setDataCallback(purchasingMaster);
       }
     } else {}
     loadingStateCallback();

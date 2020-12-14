@@ -10,13 +10,19 @@ class PurchasingModel {
       _sku,
       _type,
       _status;
-  String _idIngredient, _idPackaging, _totalItem, _priceItem, _priceTotalItem;
+  String _idIngredient,
+      _idPackaging,
+      _totalItem,
+      _priceItem,
+      _priceTotalItem,
+      _priceMaster;
   String _value;
   String _idPurchasingStatus, _approvedAt, _note, _idPurchasingImage, _image;
 
-  List<PurchasingModel> listDetail = new List();
-  List<PurchasingModel> listImage = new List();
-  List<PurchasingModel> listStatus = new List();
+  PurchasingModel _purchasingModel;
+  List<PurchasingModel> _listDetail = new List();
+  List<PurchasingModel> _listImage = new List();
+  List<PurchasingModel> _listStatus = new List();
 
   PurchasingModel.purchasing(this._idPurchasingSubmission, this._submittedBy,
       this._createdAt, this._status);
@@ -53,6 +59,31 @@ class PurchasingModel {
     this._status,
     this._idxPurchasingSubmission,
   );
+
+  PurchasingModel.detailPurchasing(
+      this._idProduct,
+      this._type,
+      this._name,
+      this._sku,
+      this._totalItem,
+      this._priceItem,
+      this._priceTotalItem,
+      this._priceMaster);
+
+  PurchasingModel.masterDetail(this._purchasingModel, this._listDetail,
+      this._listImage, this._listStatus);
+
+  PurchasingModel get purchasingModel => _purchasingModel;
+
+  set purchasingModel(PurchasingModel value) {
+    _purchasingModel = value;
+  }
+
+  get id => _id;
+
+  set id(value) {
+    _id = value;
+  }
 
   get status => _status;
 
@@ -183,5 +214,35 @@ class PurchasingModel {
       "price_item": this._priceItem,
       "total_price_item": this._priceTotalItem,
     };
+  }
+
+  get type => _type;
+
+  set type(value) {
+    _type = value;
+  }
+
+  get priceMaster => _priceMaster;
+
+  set priceMaster(value) {
+    _priceMaster = value;
+  }
+
+  List<PurchasingModel> get listDetail => _listDetail;
+
+  set listDetail(List<PurchasingModel> value) {
+    _listDetail = value;
+  }
+
+  List<PurchasingModel> get listImage => _listImage;
+
+  set listImage(List<PurchasingModel> value) {
+    _listImage = value;
+  }
+
+  List<PurchasingModel> get listStatus => _listStatus;
+
+  set listStatus(List<PurchasingModel> value) {
+    _listStatus = value;
   }
 }
