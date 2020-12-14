@@ -82,8 +82,8 @@ class CustomerController {
     }
   }
 
-  saveCustomer(
-      context, loadingStateCallback, phoneNumber, fullName, zipCode) async {
+  saveCustomer(context, loadingStateCallback, phoneNumber, fullName, zipCode,
+      tipe) async {
     if (_userModel == null) {
       await _getPersistence();
     }
@@ -123,7 +123,7 @@ class CustomerController {
             popCount: 1);*/
 
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return Sale();
+          return Sale(tipe: tipe);
         }));
       }
     }

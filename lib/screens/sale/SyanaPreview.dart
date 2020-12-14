@@ -108,7 +108,7 @@ class PreviewState extends State<Preview> {
                               onPressed: () async {
                                 Navigator.of(context)
                                     .push(MaterialPageRoute(builder: (_) {
-                                  return CustomerInput();
+                                  return CustomerInput(tipe: 2);
                                 }));
                               },
                             ),

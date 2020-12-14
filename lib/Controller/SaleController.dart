@@ -436,8 +436,8 @@ class SaleController {
     }
   }
 
-  setSale(context, loadingStateCallback, transNumber, courierId,
-      List details) async {
+  setSale(context, loadingStateCallback, transNumber, courierId, List details,
+      tipe) async {
     FormData formData;
     print(details);
     String paramDetail =
@@ -470,14 +470,26 @@ class SaleController {
         context: context);
     if (data != null) {
       if (data['status'] == 200) {
-        Navigator.pop(context);
-        Navigator.pop(context);
-        Navigator.pop(context);
-        CustomDialog.getDialog(
-            title: Strings.DIALOG_TITLE_SUCCESS,
-            message: Strings.DIALOG_MESSAGE_TRANSACTION_SUCCESS,
-            context: context,
-            popCount: 2);
+        if (tipe == 1) {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          CustomDialog.getDialog(
+              title: Strings.DIALOG_TITLE_SUCCESS,
+              message: Strings.DIALOG_MESSAGE_TRANSACTION_SUCCESS,
+              context: context,
+              popCount: 1);
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          CustomDialog.getDialog(
+              title: Strings.DIALOG_TITLE_SUCCESS,
+              message: Strings.DIALOG_MESSAGE_TRANSACTION_SUCCESS,
+              context: context,
+              popCount: 1);
+        }
       } else {
         CustomDialog.getDialog(
             title: Strings.DIALOG_TITLE_ERROR,

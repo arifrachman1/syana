@@ -10,12 +10,15 @@ import 'package:syana/widgets/CustomDialog.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
 
 class CustomerInput extends StatefulWidget {
+  int tipe;
+  CustomerInput({this.tipe});
   @override
   CustomerInputState createState() => CustomerInputState();
 }
 
 class CustomerInputState extends State<CustomerInput> {
   int selectedButton = 0;
+
   TextEditingController _phoneNumberController = new TextEditingController(),
       _nameController = new TextEditingController(),
       _zipCodeController = new TextEditingController();
@@ -96,7 +99,8 @@ class CustomerInputState extends State<CustomerInput> {
           setLoadingState,
           _phoneNumberController.text,
           _nameController.text,
-          _zipCodeController.text);
+          _zipCodeController.text,
+          widget.tipe);
     } else {
       CustomDialog.getDialog(
           title: Strings.DIALOG_TITLE_WARNING,
@@ -199,16 +203,15 @@ class CustomerInputState extends State<CustomerInput> {
                       child: AspectRatio(
                         aspectRatio: Dimens.buttonRatio(),
                         child: RaisedButton(
-                          child: Text(
-                            'SIMPAN',
-                            style: TextStyle(
-                              color: AppTheme.text_light,
+                            child: Text(
+                              'SIMPAN',
+                              style: TextStyle(
+                                color: AppTheme.text_light,
+                              ),
                             ),
-                          ),
-                          shape: AppTheme.roundButton(),
-                          color: AppTheme.btn_success,
-                          onPressed: save
-                        ),
+                            shape: AppTheme.roundButton(),
+                            color: AppTheme.btn_success,
+                            onPressed: save),
                       ),
                     ),
                   ],
