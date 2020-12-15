@@ -15,12 +15,12 @@ import 'package:syana/widgets/CustomDialog.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
 import 'package:image/image.dart' as imgLib;
 
-class SyanaPlansAdd extends StatefulWidget {
+class EditPurchasingSubmission extends StatefulWidget {
   @override
-  _SyanaPlansAddState createState() => _SyanaPlansAddState();
+  _EditPurchasingSubmissionState createState() => _EditPurchasingSubmissionState();
 }
 
-class _SyanaPlansAddState extends State<SyanaPlansAdd> {
+class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
   int _indexProduct = 0,
       _indexMaterial = 0,
       _indexWidgetMaterial = 0,
@@ -201,7 +201,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
       CustomDialog.getDialog(
           title: "Peringatan",
           message:
-              "Harap isi minimal satu plan purchasing dan satu bukti lampiran.",
+          "Harap isi minimal satu plan purchasing dan satu bukti lampiran.",
           context: context,
           popCount: 1);
     }
@@ -223,7 +223,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
         if (file.lengthSync() > 5000000) {
           imgLib.Image tempImage = imgLib.decodeImage(file.readAsBytesSync());
           imgLib.Image compressedImage =
-              imgLib.copyResize(tempImage, width: 768);
+          imgLib.copyResize(tempImage, width: 768);
           imgLib.Image rotatedImage = imgLib.copyRotate(compressedImage, 0);
           File(file.path).writeAsBytesSync(imgLib.encodeJpg(rotatedImage));
           if (file.lengthSync() > 5000000) {
@@ -314,7 +314,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                             " " +
                             _listProductModel[position].type),
                         onTap: () {
-                          // buildListRencana(position);
+                          buildListRencana(position);
                         },
                       ),
                     );
@@ -335,21 +335,21 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               ),
               !isCreate
                   ? Container(
-                      child: buildFileWidget(),
-                    )
+                child: buildFileWidget(),
+              )
                   : Container(),
               isCreate
                   ? RaisedButton(
-                      shape: StadiumBorder(),
-                      color: AppTheme.btn_default,
-                      onPressed: () {
-                        setState(() {
-                          isCreate = false;
-                        });
-                        buildProduct();
-                      },
-                      child: Text("Buat Planing"),
-                    )
+                shape: StadiumBorder(),
+                color: AppTheme.btn_default,
+                onPressed: () {
+                  setState(() {
+                    isCreate = false;
+                  });
+                  buildProduct();
+                },
+                child: Text("Buat Planing"),
+              )
                   : Container()
             ],
           ),
@@ -369,11 +369,11 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               Padding(padding: EdgeInsets.only(top: 15.0)),
               Container(
                   child: Row(children: [
-                Text(
-                  "Pilih Jenis",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                )
-              ])),
+                    Text(
+                      "Pilih Jenis",
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    )
+                  ])),
               Padding(padding: EdgeInsets.only(top: 10.0)),
               Container(
                   width: 320,
@@ -410,30 +410,30 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               Padding(padding: EdgeInsets.only(top: 15.0)),
               isLoaded
                   ? Visibility(
-                      visible: !isSelfProduct,
-                      child: Container(
-                          child: Text(
-                        "Cari Produk",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )),
-                    )
+                visible: !isSelfProduct,
+                child: Container(
+                    child: Text(
+                      "Cari Produk",
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.bold),
+                    )),
+              )
                   : Container(),
               isLoaded
                   ? Visibility(
-                      visible: !isSelfProduct,
-                      child: Container(
-                        child: CustomTextInput.getCustomAutoCompleteField(
-                            context: context,
-                            controller: _firstRequiredProduct,
-                            hint: "SKU Produk",
-                            textInputType: TextInputType.text,
-                            itemBuilderCallback: _productItemBuilder,
-                            suggestionCallback: _onProductChanged,
-                            onSuggestionSelectedCallback:
-                                _onFirstRequiredProductSelected),
-                      ),
-                    )
+                visible: !isSelfProduct,
+                child: Container(
+                  child: CustomTextInput.getCustomAutoCompleteField(
+                      context: context,
+                      controller: _firstRequiredProduct,
+                      hint: "SKU Produk",
+                      textInputType: TextInputType.text,
+                      itemBuilderCallback: _productItemBuilder,
+                      suggestionCallback: _onProductChanged,
+                      onSuggestionSelectedCallback:
+                      _onFirstRequiredProductSelected),
+                ),
+              )
                   : Container(),
               Visibility(
                 visible: isLoaded,
@@ -452,27 +452,27 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               ),
               isSelfProduct
                   ? Container(
-                      child: Row(
-                        children: [
-                          IconButton(
-                              icon: Icon(
-                                Icons.add,
-                                color: Colors.blue,
-                              ),
-                              onPressed: () {
-                                addNewMaterials();
-                              }),
-                          IconButton(
-                              icon: Icon(
-                                Icons.remove,
-                                color: AppTheme.red,
-                              ),
-                              onPressed: () {
-                                removeNewMaterials();
-                              }),
-                        ],
-                      ),
-                    )
+                child: Row(
+                  children: [
+                    IconButton(
+                        icon: Icon(
+                          Icons.add,
+                          color: Colors.blue,
+                        ),
+                        onPressed: () {
+                          addNewMaterials();
+                        }),
+                    IconButton(
+                        icon: Icon(
+                          Icons.remove,
+                          color: AppTheme.red,
+                        ),
+                        onPressed: () {
+                          removeNewMaterials();
+                        }),
+                  ],
+                ),
+              )
                   : Container(),
               Visibility(
                 visible: isLoaded,
@@ -562,12 +562,12 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                   children: [
                     Container(
                         child: Row(children: [
-                      Text(
-                        "Pilih Jenis Bahan",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )
-                    ])),
+                          Text(
+                            "Pilih Jenis Bahan",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ])),
                     Padding(padding: EdgeInsets.only(top: 10.0)),
                     Container(
                         width: 320,
@@ -606,62 +606,62 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                     Padding(padding: EdgeInsets.only(top: 15.0)),
                     Container(
                         child: Row(children: [
-                      Text(
-                        "Nama Item",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )
-                    ])),
+                          Text(
+                            "Nama Item",
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          )
+                        ])),
                     Padding(padding: EdgeInsets.only(top: 10.0)),
                     _selectedNameMaterial[indexChild] != ""
                         ? Text(_selectedNameMaterial[indexChild])
                         : SearchableDropdown.single(
-                            items: materialList.map((MaterialModel materials) {
-                              return DropdownMenuItem<MaterialModel>(
-                                value: materials,
-                                child: Text(
-                                  '(' +
-                                      materials.sku +
-                                      ')' +
-                                      " " +
-                                      materials.name,
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
-                            value: _selectedMaterial[indexChild],
-                            hint: "Pilih Bahan",
-                            searchHint: "Cari SKU Bahan",
-                            onClear: () {
-                              setState(() {
-                                _selectedMaterial[indexChild] = null;
-                              });
-                            },
-                            onChanged: (MaterialModel value) async {
-                              if (value != null) {
-                                print(value.id);
-                                setState(() {
-                                  _selectedMaterial[indexChild] = value;
-                                  _selectedNameMaterial[indexChild] =
-                                      value.name;
-                                  _selectedFirstMaterial[indexChild] =
-                                      value.id.toString();
-                                });
-                              }
-                            },
-                            isExpanded: true,
+                      items: materialList.map((MaterialModel materials) {
+                        return DropdownMenuItem<MaterialModel>(
+                          value: materials,
+                          child: Text(
+                            '(' +
+                                materials.sku +
+                                ')' +
+                                " " +
+                                materials.name,
+                            style: TextStyle(color: Colors.black),
                           ),
+                        );
+                      }).toList(),
+                      value: _selectedMaterial[indexChild],
+                      hint: "Pilih Bahan",
+                      searchHint: "Cari SKU Bahan",
+                      onClear: () {
+                        setState(() {
+                          _selectedMaterial[indexChild] = null;
+                        });
+                      },
+                      onChanged: (MaterialModel value) async {
+                        if (value != null) {
+                          print(value.id);
+                          setState(() {
+                            _selectedMaterial[indexChild] = value;
+                            _selectedNameMaterial[indexChild] =
+                                value.name;
+                            _selectedFirstMaterial[indexChild] =
+                                value.id.toString();
+                          });
+                        }
+                      },
+                      isExpanded: true,
+                    ),
                     Padding(padding: EdgeInsets.only(top: 15.0)),
                   ],
                 ),
               )),
           Container(
               child: Row(children: [
-            Text(
-              "Jumlah Item",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            )
-          ])),
+                Text(
+                  "Jumlah Item",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                )
+              ])),
           Padding(padding: EdgeInsets.only(top: 10.0)),
           Container(
             padding: EdgeInsets.only(left: 10),
@@ -689,11 +689,11 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
           Padding(padding: EdgeInsets.only(top: 15.0)),
           Container(
               child: Row(children: [
-            Text(
-              "Harga Item",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            )
-          ])),
+                Text(
+                  "Harga Item",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                )
+              ])),
           Padding(padding: EdgeInsets.only(top: 10.0)),
           Container(
             padding: EdgeInsets.only(left: 10),
@@ -721,11 +721,11 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
           Padding(padding: EdgeInsets.only(top: 15.0)),
           Container(
               child: Row(children: [
-            Text(
-              "Total Cost",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-            )
-          ])),
+                Text(
+                  "Total Cost",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                )
+              ])),
           Padding(padding: EdgeInsets.only(top: 10.0)),
           Container(
             padding: EdgeInsets.only(left: 10),

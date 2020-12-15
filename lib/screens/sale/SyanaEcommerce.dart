@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:syana/Controller/SaleController.dart';
 import 'package:syana/models/EcommerceModel.dart';
 import 'package:syana/screens/sale/SyanaCustomerInput.dart';
+import 'package:syana/screens/sale/SyanaPreview.dart';
+import 'package:syana/screens/sale/SyanaWaitingList.dart';
 import 'package:syana/utils/AppTheme.dart';
 import 'package:syana/utils/Dimens.dart';
 import 'package:syana/utils/GlobalVars.dart';
@@ -30,7 +32,7 @@ class EcommerceState extends State<SyanaEcommerce> {
   void initState() {
     _saleController = new SaleController();
     _saleController.getEcommerce(context, setLoadingState, setEcommerce);
-    if(GlobalVars.selectedEcommerce != 0){
+    if (GlobalVars.selectedEcommerce != 0) {
       selectedEcommerce = GlobalVars.selectedEcommerce;
     }
   }
@@ -59,11 +61,11 @@ class EcommerceState extends State<SyanaEcommerce> {
         });
       });
 
-      if(GlobalVars.selectedEcommerce != 0){
+      if (GlobalVars.selectedEcommerce != 0) {
         setState(() {
           selectedEcommerce = GlobalVars.selectedEcommerce;
         });
-      }else{
+      } else {
         GlobalVars.selectedEcommerce = data[0].id;
         setState(() {
           selectedEcommerce = data[0].id;
@@ -82,13 +84,13 @@ class EcommerceState extends State<SyanaEcommerce> {
   }
 
   executeManualAirwayBillEntry() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_){
-      return CustomerInput();
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return CustomerInput(tipe: 1);
     }));
   }
 
   executeAutoAirwayBillEntry() async {
-    try{
+    try {
       var result = await BarcodeScanner.scan();
       String airwayBillNumber = result;
       print(airwayBillNumber);
@@ -96,10 +98,10 @@ class EcommerceState extends State<SyanaEcommerce> {
       GlobalVars.clearAirwayBillNumber();
       GlobalVars.airwayBillNumber = airwayBillNumber;
 
-      Navigator.of(context).push(MaterialPageRoute(builder: (_){
-        return CustomerInput();
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        return Preview();
       }));
-    }catch (e){
+    } catch (e) {
       print(e);
     }
   }
@@ -133,10 +135,9 @@ class EcommerceState extends State<SyanaEcommerce> {
                             decoration: AppTheme.inputDecoration(),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton(
-                                value: selectedEcommerce,
-                                items: ecommerceDropdownMenu,
-                                onChanged: onEcommerceChange
-                              ),
+                                  value: selectedEcommerce,
+                                  items: ecommerceDropdownMenu,
+                                  onChanged: onEcommerceChange),
                             ),
                           ),
                         ],
@@ -162,13 +163,12 @@ class EcommerceState extends State<SyanaEcommerce> {
                             child: AspectRatio(
                               aspectRatio: Dimens.buttonRatio(),
                               child: RaisedButton(
-                                child: Text(
-                                  'MANUAL',
-                                ),
-                                shape: AppTheme.roundButton(),
-                                color: AppTheme.btn_default,
-                                onPressed: executeManualAirwayBillEntry
-                              ),
+                                  child: Text(
+                                    'MANUAL',
+                                  ),
+                                  shape: AppTheme.roundButton(),
+                                  color: AppTheme.btn_default,
+                                  onPressed: executeManualAirwayBillEntry),
                             ),
                           ),
                           Container(
@@ -176,19 +176,39 @@ class EcommerceState extends State<SyanaEcommerce> {
                             child: AspectRatio(
                               aspectRatio: Dimens.buttonRatio(),
                               child: RaisedButton(
-                                child: Text(
-                                  'OTOMATIS',
-                                  style: TextStyle(
-                                    color: AppTheme.text_light,
+                                  child: Text(
+                                    'OTOMATIS',
+                                    style: TextStyle(
+                                      color: AppTheme.text_light,
+                                    ),
                                   ),
-                                ),
-                                shape: AppTheme.roundButton(),
-                                color: AppTheme.btn_success,
-                                onPressed: executeAutoAirwayBillEntry
-                              ),
+                                  shape: AppTheme.roundButton(),
+                                  color: AppTheme.btn_success,
+                                  onPressed: executeAutoAirwayBillEntry),
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 100),
+                      width: MediaQuery.of(context).size.width / 2.2,
+                      child: AspectRatio(
+                        aspectRatio: Dimens.buttonRatio(),
+                        child: RaisedButton(
+                          child: Text(
+                            'Waiting List Transactions',
+                            textAlign: TextAlign.center,
+                          ),
+                          shape: AppTheme.roundButton(),
+                          color: AppTheme.yellow,
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (_) {
+                              return WaitingList();
+                            }));
+                          },
+                        ),
                       ),
                     ),
                   ],

@@ -8,8 +8,10 @@ import 'package:syana/widgets/CustomTextInput.dart';
 class Confirmation extends StatefulWidget {
   List<ProductModel> selectedProducts;
   int totalSale, totalFree;
+  int tipe;
 
-  Confirmation(this.selectedProducts, this.totalSale, this.totalFree);
+  Confirmation(
+      this.selectedProducts, this.totalSale, this.totalFree, this.tipe);
 
   @override
   ConfirmationState createState() => ConfirmationState();
@@ -58,7 +60,8 @@ class ConfirmationState extends State<Confirmation> {
     selectedJasa = jasa[0];
     _saleController = new SaleController();
     if (GlobalVars.airwayBillNumber != "") {
-      _airwayBilLController = new TextEditingController(text: GlobalVars.airwayBillNumber);
+      _airwayBilLController =
+          new TextEditingController(text: GlobalVars.airwayBillNumber);
     } else {
       _airwayBilLController = new TextEditingController();
     }
@@ -290,7 +293,8 @@ class ConfirmationState extends State<Confirmation> {
                               setLoadingState,
                               _airwayBilLController.text,
                               _currentCourier.toString(),
-                              widget.selectedProducts),
+                              widget.selectedProducts,
+                              widget.tipe),
                         ),
                       ),
                     ],
