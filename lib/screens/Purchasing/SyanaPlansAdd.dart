@@ -11,6 +11,7 @@ import 'package:syana/models/MaterialModel.dart';
 import 'package:syana/models/ProductModel.dart';
 import 'package:syana/models/PurchasingModel.dart';
 import 'package:syana/utils/AppTheme.dart';
+import 'package:syana/utils/NumberFormatter.dart';
 import 'package:syana/widgets/CustomDialog.dart';
 import 'package:syana/widgets/CustomTextInput.dart';
 import 'package:image/image.dart' as imgLib;
@@ -24,18 +25,20 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
   int _indexProduct = 0,
       _indexMaterial = 0,
       _indexWidgetMaterial = 0,
-      typeProduct = 0;
+      typeProduct = 0,
+      totalPrice = 0;
   String _selectedType;
   List<String> _selectMaterial = new List();
-  List<String> _selectedFirstMaterial = new List();
+  String _selectedFirstMaterial;
   List<String> _selectedNameMaterial = new List();
 
-  List<int> _selectedTypeMaterial = new List();
+  int _selectedTypeMaterial = 1;
+  // List<int> _selectedTypeMaterial = new List();
   List<TextEditingController> nameItem = new List();
   List<TextEditingController> totalItem = new List();
   List<TextEditingController> priceItem = new List();
   List<TextEditingController> totalPriceItem = new List();
-  List<TextEditingController> _firstRequiredMaterial = new List();
+  TextEditingController _firstRequiredMaterial = new TextEditingController();
   List _typeProduct = ["Bahan Mentah", "Produk Jadi"];
   List _materialType = ["Ingredient", "Packaging"];
   List<Widget> _listProduct = new List();
@@ -58,6 +61,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
   bool isCreate = true;
   bool isSelfProduct = false;
   bool isLoaded = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -65,6 +69,12 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
     super.initState();
     purchasingController = new PurchasingController();
     _dropDownType = getDropDownMenuItems(_typeProduct);
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
   }
 
   List<DropdownMenuItem<String>> getDropDownMenuItems(List filters) {
@@ -95,11 +105,9 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
       totalItem.add(new TextEditingController());
       priceItem.add(new TextEditingController());
       totalPriceItem.add(new TextEditingController());
-      _selectedFirstMaterial.add("SKU");
       _selectMaterial.add("Ingredient");
       _selectedNameMaterial.add("");
 
-      _selectedTypeMaterial.add(1);
       _selectedMaterial
           .add(new MaterialModel.listMaterial("0", "0", "0", "0", "0"));
 
@@ -117,10 +125,8 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
       priceItem.add(new TextEditingController());
       totalPriceItem.add(new TextEditingController());
 
-      _selectedFirstMaterial.add("SKU");
       _selectedNameMaterial.add("");
 
-      _selectedTypeMaterial.add(1);
       _selectedMaterial
           .add(new MaterialModel.listMaterial("0", "0", "0", "0", "0"));
 
@@ -149,18 +155,43 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
     }
   }
 
+  FutureOr<Iterable<dynamic>> _onMaterialChanged(pattern) async {
+    if (pattern.toString().length >= 3) {
+      return await purchasingController.getMaterialData(
+          context, pattern, _selectedTypeMaterial);
+    }
+  }
+
   _onFirstRequiredProductSelected(suggestion) {
     print(suggestion);
     if (suggestion is ProductModel) {
       setState(() {
         _firstRequiredProduct.text =
-            suggestion.name + " (" + suggestion.sku + ") ";
+            " (" + suggestion.sku + ") " + suggestion.name;
         _selectedFirstProduct = suggestion.id;
       });
     }
   }
 
+  _onFirstRequiredMaterialSelected(suggestion) {
+    print(suggestion);
+    if (suggestion is MaterialModel) {
+      setState(() {
+        _firstRequiredMaterial.text =
+            " (" + suggestion.sku + ") " + suggestion.name;
+        _selectedFirstMaterial = suggestion.id;
+      });
+    }
+  }
+
   Widget _productItemBuilder(context, item) {
+    return ListTile(
+      title: Text(item.name),
+      subtitle: Text(item.sku),
+    );
+  }
+
+  Widget _materialItemBuilder(context, item) {
     return ListTile(
       title: Text(item.name),
       subtitle: Text(item.sku),
@@ -174,9 +205,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
       priceItem.clear();
       totalPriceItem.clear();
       _listMaterial.clear();
-      _selectedFirstMaterial.clear();
       _firstRequiredMaterial.clear();
-      _selectedTypeMaterial.clear();
       _selectedMaterial.clear();
       _firstRequiredProduct.clear();
       _indexWidgetMaterial = 0;
@@ -185,15 +214,21 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
 
   _sendPurchasing() async {
     String listPurchasing;
-    listPurchasing = json.encode(purchasing);
+    _listProductModel.forEach((element) {
+      setState(() {
+        listPurchasing = json.encode(element.lisPurchasingDetail);
+      });
+    });
+    // listPurchasing = json.encode(purchasing);
     print(listPurchasing);
+    print(_listProductModel.length);
     await _supplyFiles();
     _filesToSend.forEach((element) {
       print(element.filename);
     });
     if (purchasing.isNotEmpty && _filesToSend.isNotEmpty) {
       await purchasingController.sendData(
-          context, listPurchasing, _filesToSend);
+          context, setLoadingState, listPurchasing, _filesToSend);
       setState(() {
         _filesToSend.clear();
       });
@@ -201,7 +236,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
       CustomDialog.getDialog(
           title: "Peringatan",
           message:
-              "Harap isi minimal satu plan purchasing dan satu bukti lampiran.",
+              "Harap isi minimal satu plan purchasing dan satu bukti planning.",
           context: context,
           popCount: 1);
     }
@@ -278,6 +313,16 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
     }
   }
 
+  getTipeSatuan(String tipe) {
+    String satuan;
+    if (tipe == "Ingredient") {
+      satuan = "gr";
+    } else {
+      satuan = "pcs";
+    }
+    return satuan;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -296,64 +341,112 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
             )
           ],
         ),
-        body: Container(
-          decoration: AppTheme.appBackground(),
-          padding: EdgeInsets.all(20.0),
-          child: ListView(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: ListView.builder(
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _listProductModel.length,
-                  itemBuilder: (context, position) {
-                    return Card(
-                      child: ListTile(
-                        title: Text((position + 1).toString() +
-                            " " +
-                            _listProductModel[position].type),
-                        onTap: () {
-                          // buildListRencana(position);
+        body: _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Container(
+                decoration: AppTheme.appBackground(),
+                padding: EdgeInsets.all(20.0),
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: ListView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _listProductModel.length,
+                        itemBuilder: (context, position) {
+                          return Card(
+                              child: Container(
+                            padding: EdgeInsets.only(top: 5, bottom: 5),
+                            child: ListTile(
+                              title: Text((position + 1).toString() +
+                                  ". " +
+                                  _listProductModel[position].name),
+                              subtitle: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(_listProductModel[position].type),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(_listProductModel[position]
+                                                .lisPurchasingDetail[position]
+                                                .totalItem +
+                                            getTipeSatuan(
+                                                _listProductModel[position]
+                                                    .type)),
+                                        Text(NumberFormatter.getCurrency(
+                                                double.parse(
+                                                    _listProductModel[position]
+                                                        .lisPurchasingDetail[
+                                                            position]
+                                                        .priceItem)) +
+                                            "/" +
+                                            getTipeSatuan(
+                                                _listProductModel[position]
+                                                    .type)),
+                                        Text(NumberFormatter.getCurrency(double
+                                            .parse(_listProductModel[position]
+                                                .lisPurchasingDetail[position]
+                                                .priceTotalItem))),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                              trailing: IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  setState(() {
+                                    _listProductModel[position]
+                                        .lisPurchasingDetail
+                                        .removeAt(position);
+                                    _listProductModel.removeAt(position);
+                                  });
+                                },
+                              ),
+                            ),
+                          ));
                         },
                       ),
-                    );
-                  },
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: ListView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _listProduct.length,
+                        itemBuilder: (context, position) {
+                          _indexProduct = position;
+                          return _addProduct(position);
+                        },
+                      ),
+                    ),
+                    !isCreate
+                        ? Container(
+                            child: buildFileWidget(),
+                          )
+                        : Container(),
+                    isCreate
+                        ? RaisedButton(
+                            shape: StadiumBorder(),
+                            color: AppTheme.btn_default,
+                            onPressed: () {
+                              setState(() {
+                                isCreate = false;
+                              });
+                              buildProduct();
+                            },
+                            child: Text("Buat Planing"),
+                          )
+                        : Container()
+                  ],
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: ListView.builder(
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _listProduct.length,
-                  itemBuilder: (context, position) {
-                    _indexProduct = position;
-                    return _addProduct(position);
-                  },
-                ),
-              ),
-              !isCreate
-                  ? Container(
-                      child: buildFileWidget(),
-                    )
-                  : Container(),
-              isCreate
-                  ? RaisedButton(
-                      shape: StadiumBorder(),
-                      color: AppTheme.btn_default,
-                      onPressed: () {
-                        setState(() {
-                          isCreate = false;
-                        });
-                        buildProduct();
-                      },
-                      child: Text("Buat Planing"),
-                    )
-                  : Container()
-            ],
-          ),
-        ));
+              ));
   }
 
   Widget _addProduct(int index) {
@@ -396,8 +489,6 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                             isSelfProduct = true;
                             isLoaded = true;
                           });
-                          await purchasingController.getMaterialData(
-                              context, setData, 1);
                         } else {
                           setState(() {
                             isSelfProduct = false;
@@ -419,11 +510,16 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                       )),
                     )
                   : Container(),
+              Padding(padding: EdgeInsets.only(top: 10.0)),
               isLoaded
                   ? Visibility(
                       visible: !isSelfProduct,
                       child: Container(
-                        child: CustomTextInput.getCustomAutoCompleteField(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.white,
+                            border: Border.all()),
+                        child: CustomTextInput.getAutoCompleteFieldPurchasing(
                             context: context,
                             controller: _firstRequiredProduct,
                             hint: "SKU Produk",
@@ -450,95 +546,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                   ),
                 ),
               ),
-              isSelfProduct
-                  ? Container(
-                      child: Row(
-                        children: [
-                          IconButton(
-                              icon: Icon(
-                                Icons.add,
-                                color: Colors.blue,
-                              ),
-                              onPressed: () {
-                                addNewMaterials();
-                              }),
-                          IconButton(
-                              icon: Icon(
-                                Icons.remove,
-                                color: AppTheme.red,
-                              ),
-                              onPressed: () {
-                                removeNewMaterials();
-                              }),
-                        ],
-                      ),
-                    )
-                  : Container(),
-              Visibility(
-                visible: isLoaded,
-                child: RaisedButton.icon(
-                  onPressed: () {
-                    print(totalItem.length);
-                    for (int i = 0; i < totalItem.length; i++) {
-                      if (_selectedType == "Produk Jadi") {
-                        purchasing.add(new PurchasingModel.listDetailPurchasing(
-                            _selectedFirstProduct,
-                            null,
-                            null,
-                            nameItem[i].text,
-                            totalItem[i].text,
-                            priceItem[i].text,
-                            totalItem[i].text,
-                            "0"));
-                      } else {
-                        if (_selectedTypeMaterial[i] == 1) {
-                          purchasing.add(
-                              new PurchasingModel.listDetailPurchasing(
-                                  null,
-                                  _selectedFirstMaterial[i],
-                                  null,
-                                  nameItem[i].text,
-                                  totalItem[i].text,
-                                  priceItem[i].text,
-                                  totalItem[i].text,
-                                  "0"));
-                        } else {
-                          purchasing.add(
-                              new PurchasingModel.listDetailPurchasing(
-                                  null,
-                                  null,
-                                  _selectedFirstMaterial[i],
-                                  nameItem[i].text,
-                                  totalItem[i].text,
-                                  priceItem[i].text,
-                                  totalItem[i].text,
-                                  "0"));
-                        }
-                      }
-                    }
-                    setState(() {
-                      _listProductModel.add(new ProductModel.productPurchasing(
-                          _selectedFirstProduct,
-                          _firstRequiredProduct.text,
-                          _selectedType,
-                          purchasing));
-                    });
-                    print(purchasing.length.toString());
-                    clearPurchasing();
-                    addMaterials();
-                  },
-                  label: Text(
-                    "Add Plan",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  icon: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                  shape: StadiumBorder(),
-                  color: Colors.blue,
-                ),
-              ),
+              Container(),
               Padding(padding: EdgeInsets.only(top: 15.0)),
             ],
           ),
@@ -546,6 +554,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
   }
 
   Widget _addMaterials(int indexChild) {
+    // totalPriceItem[indexChild].text = totalPrice.toString();
     return Container(
       margin: EdgeInsets.only(top: 10),
       padding: EdgeInsets.all(10),
@@ -570,7 +579,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                     ])),
                     Padding(padding: EdgeInsets.only(top: 10.0)),
                     Container(
-                        width: 320,
+                        width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
@@ -591,15 +600,11 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                                 _selectMaterial[indexChild] = value;
                                 if (_selectMaterial[indexChild] ==
                                     "Ingredient") {
-                                  _selectedTypeMaterial[indexChild] = 1;
+                                  _selectedTypeMaterial = 1;
                                 } else {
-                                  _selectedTypeMaterial[indexChild] = 2;
+                                  _selectedTypeMaterial = 2;
                                 }
                               });
-                              await purchasingController.getMaterialData(
-                                  context,
-                                  setData,
-                                  _selectedTypeMaterial[indexChild]);
                             },
                           ),
                         )),
@@ -613,44 +618,21 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                       )
                     ])),
                     Padding(padding: EdgeInsets.only(top: 10.0)),
-                    _selectedNameMaterial[indexChild] != ""
-                        ? Text(_selectedNameMaterial[indexChild])
-                        : SearchableDropdown.single(
-                            items: materialList.map((MaterialModel materials) {
-                              return DropdownMenuItem<MaterialModel>(
-                                value: materials,
-                                child: Text(
-                                  '(' +
-                                      materials.sku +
-                                      ')' +
-                                      " " +
-                                      materials.name,
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
-                            value: _selectedMaterial[indexChild],
-                            hint: "Pilih Bahan",
-                            searchHint: "Cari SKU Bahan",
-                            onClear: () {
-                              setState(() {
-                                _selectedMaterial[indexChild] = null;
-                              });
-                            },
-                            onChanged: (MaterialModel value) async {
-                              if (value != null) {
-                                print(value.id);
-                                setState(() {
-                                  _selectedMaterial[indexChild] = value;
-                                  _selectedNameMaterial[indexChild] =
-                                      value.name;
-                                  _selectedFirstMaterial[indexChild] =
-                                      value.id.toString();
-                                });
-                              }
-                            },
-                            isExpanded: true,
-                          ),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                          border: Border.all()),
+                      child: CustomTextInput.getAutoCompleteFieldPurchasing(
+                          context: context,
+                          controller: _firstRequiredMaterial,
+                          hint: "SKU Bahan",
+                          textInputType: TextInputType.text,
+                          itemBuilderCallback: _materialItemBuilder,
+                          suggestionCallback: _onMaterialChanged,
+                          onSuggestionSelectedCallback:
+                              _onFirstRequiredMaterialSelected),
+                    ),
                     Padding(padding: EdgeInsets.only(top: 15.0)),
                   ],
                 ),
@@ -683,6 +665,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                 total = item * price;
                 // listTotal[position] = total;
                 totalPriceItem[indexChild].text = total.toString();
+                totalPrice = int.parse(totalPriceItem[indexChild].text);
               },
             ),
           ),
@@ -715,6 +698,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
                 total = item * price;
                 // listTotal[position] = total;
                 totalPriceItem[indexChild].text = total.toString();
+                totalPrice = int.parse(totalPriceItem[indexChild].text);
               },
             ),
           ),
@@ -743,6 +727,105 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
               ),
             ),
           ),
+          Visibility(
+            visible: isLoaded,
+            child: RaisedButton.icon(
+              onPressed: () {
+                print(totalItem.length);
+                String _tipeBahan;
+                String _nama;
+                bool isValid = false;
+                for (int i = 0; i < totalItem.length; i++) {
+                  if (_selectedType == "Produk Jadi") {
+                    print(totalPriceItem[i].text);
+                    if (totalPrice > 0 && _selectedFirstProduct != "") {
+                      print("OK");
+                      purchasing.add(new PurchasingModel.listDetailPurchasing(
+                          _selectedFirstProduct,
+                          null,
+                          null,
+                          nameItem[i].text,
+                          totalItem[i].text,
+                          priceItem[i].text,
+                          totalPriceItem[i].text,
+                          "0"));
+                      _tipeBahan = _selectedType;
+                      _nama = _firstRequiredProduct.text;
+                      setState(() {
+                        isValid = true;
+                      });
+                    } else {
+                      CustomDialog.getDialog(
+                          title: "Peringatan",
+                          message:
+                              "Harap cek kembali field, pastikan data yang diisi valid.",
+                          context: context,
+                          popCount: 1);
+                    }
+                  } else {
+                    if (totalPrice > 0 && _selectedFirstMaterial != "") {
+                      if (_selectedTypeMaterial == 1) {
+                        purchasing.add(new PurchasingModel.listDetailPurchasing(
+                            null,
+                            _selectedFirstMaterial,
+                            null,
+                            nameItem[i].text,
+                            totalItem[i].text,
+                            priceItem[i].text,
+                            totalPriceItem[i].text,
+                            "0"));
+                        _tipeBahan = _selectMaterial[indexChild];
+                        _nama = _firstRequiredMaterial.text;
+                      } else {
+                        print("Packaging");
+                        purchasing.add(new PurchasingModel.listDetailPurchasing(
+                            null,
+                            null,
+                            _selectedFirstMaterial,
+                            nameItem[i].text,
+                            totalItem[i].text,
+                            priceItem[i].text,
+                            totalPriceItem[i].text,
+                            "0"));
+                        _tipeBahan = _selectMaterial[indexChild];
+                        _nama = _firstRequiredMaterial.text;
+                      }
+                      setState(() {
+                        isValid = true;
+                      });
+                    } else {
+                      CustomDialog.getDialog(
+                          title: "Peringatan",
+                          message:
+                              "Harap cek kembali field, pastikan data yang diisi valid.",
+                          context: context,
+                          popCount: 1);
+                    }
+                  }
+                }
+                if (isValid) {
+                  setState(() {
+                    _listProductModel.add(new ProductModel.productPurchasing(
+                        "0", _nama, _tipeBahan, purchasing));
+                    _selectedMaterial[indexChild] = null;
+                    totalPrice = 0;
+                  });
+                  clearPurchasing();
+                  addMaterials();
+                }
+              },
+              label: Text(
+                "Add Plan",
+                style: TextStyle(color: Colors.white),
+              ),
+              icon: Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              shape: StadiumBorder(),
+              color: Colors.blue,
+            ),
+          ),
         ],
       ),
     );
@@ -754,7 +837,7 @@ class _SyanaPlansAddState extends State<SyanaPlansAdd> {
         Container(
           alignment: Alignment.topLeft,
           child: Text(
-            'Berkas Bukti',
+            'Bukti Planning',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
