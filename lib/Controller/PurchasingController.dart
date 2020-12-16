@@ -101,20 +101,20 @@ class PurchasingController {
     }
   }
 
-  getMaterialData(context, setDataCallback, type) async {
+  Future<List> getMaterialData(context, sku, type) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     FormData formData;
 
-    Map param = GlobalFunctions.generateMapParam(["material_type"], [type]);
+    Map param = GlobalFunctions.generateMapParam(["sku","material_type"], [sku,type]);
     formData = FormData.fromMap(param);
     print(formData.fields);
 
     final data = await GlobalFunctions.dioPostCall(
         params: formData,
-        path: GlobalVars.purchasingUrl + "get-material-by-type",
+        path: GlobalVars.purchasingUrl + "get-material-by-sku",
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
         context: context);
@@ -134,7 +134,7 @@ class PurchasingController {
         });
 
         if (materialsSuggestion.isNotEmpty) {
-          setDataCallback(materialsSuggestion);
+          return materialsSuggestion;
         }
       }
     }
@@ -172,10 +172,11 @@ class PurchasingController {
     }
   }
 
-  sendData(context, detailPurchasing, picture) async {
+  sendData(context, loadingStateCallback, detailPurchasing, picture) async {
     if (_userModel == null) {
       await _getPersistence();
     }
+    loadingStateCallback();
 
     FormData formData;
 
@@ -217,6 +218,7 @@ class PurchasingController {
           context: context,
           popCount: 1);
     }
+    loadingStateCallback();
   }
 
   getDetailPurchasing(
@@ -304,8 +306,8 @@ class PurchasingController {
             element['sku'],
             element['jumlah'],
             element['harga'],
-            element['harga_master'],
             element['total_harga'],
+            element['harga_master'],
           ));
         });
 

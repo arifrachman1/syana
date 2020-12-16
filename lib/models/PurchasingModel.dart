@@ -245,4 +245,9 @@ class PurchasingModel {
   set listStatus(List<PurchasingModel> value) {
     _listStatus = value;
   }
+
+  @override
+  String toString() {
+    return 'PurchasingModel{_idPurchasingSubmission: $_idPurchasingSubmission, _idxPurchasingSubmission: $_idxPurchasingSubmission, _submittedBy: $_submittedBy, _idProduct: $_idProduct, _statusSubmission: $_statusSubmission, _createdAt: $_createdAt, _name: $_name, _id: $_id, _sku: $_sku, _type: $_type, _status: $_status, _idIngredient: $_idIngredient, _idPackaging: $_idPackaging, _totalItem: $_totalItem, _priceItem: $_priceItem, _priceTotalItem: $_priceTotalItem, _priceMaster: $_priceMaster, _value: $_value, _idPurchasingStatus: $_idPurchasingStatus, _approvedAt: $_approvedAt, _note: $_note, _idPurchasingImage: $_idPurchasingImage, _image: $_image, _purchasingModel: $_purchasingModel, _listDetail: $_listDetail, _listImage: $_listImage, _listStatus: $_listStatus}';
+  }
 }

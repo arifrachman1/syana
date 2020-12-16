@@ -66,6 +66,36 @@ class CustomTextInput {
     );
   }
 
+  static Widget getAutoCompleteFieldPurchasing(
+      {@required context,
+        @required controller,
+        widthFactor,
+        heightFactor,
+        hint,
+        textInputType,
+        itemBuilderCallback,
+        suggestionCallback,
+        onSuggestionSelectedCallback}) {
+    return Container(
+      width: ScreenSizeHelper.getDisplayWidth(context) * (widthFactor ?? 1),
+      height: 56,
+      decoration: AppTheme.inputDecoration(),
+      child: TypeAheadField(
+          autoFlipDirection: true,
+          textFieldConfiguration: TextFieldConfiguration(
+            controller: controller,
+            keyboardType: textInputType,
+            decoration: InputDecoration(
+                contentPadding: EdgeInsets.only(left: 10.0),
+                border: InputBorder.none,
+                hintText: hint ?? "Text"),
+          ),
+          suggestionsCallback: suggestionCallback,
+          onSuggestionSelected: onSuggestionSelectedCallback,
+          itemBuilder: itemBuilderCallback),
+    );
+  }
+
   static Widget row(CustomerModel customer) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
