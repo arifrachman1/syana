@@ -306,8 +306,8 @@ class PurchasingController {
             element['sku'],
             element['jumlah'],
             element['harga'],
-            element['harga_master'],
             element['total_harga'],
+            element['harga_master'],
           ));
         });
 
