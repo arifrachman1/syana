@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/models/MaterialModel.dart';
@@ -108,7 +110,8 @@ class PurchasingController {
 
     FormData formData;
 
-    Map param = GlobalFunctions.generateMapParam(["sku","material_type"], [sku,type]);
+    Map param =
+        GlobalFunctions.generateMapParam(["sku", "material_type"], [sku, type]);
     formData = FormData.fromMap(param);
     print(formData.fields);
 
@@ -140,17 +143,19 @@ class PurchasingController {
     }
   }
 
-  setApprovalPurchasing(context, loadingStateCallback, setDataCallback,
-      idPurchasingSub, statusApproval) async {
+  setApprovalPurchasing(context, loadingStateCallback, note, idPurchasingSub,
+      statusApproval, tipe) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ['id_purchasing_submission', 'status_approval'],
-        [idPurchasingSub, statusApproval]);
+        ['note', 'id_purchasing_submission', 'status_approval'],
+        [note, idPurchasingSub, statusApproval]);
 
     FormData formData = FormData.fromMap(params);
+
+    loadingStateCallback();
 
     final data = await GlobalFunctions.dioPostCall(
       context: context,
@@ -161,15 +166,40 @@ class PurchasingController {
     );
 
     if (data != null) {
+      print(data);
       if (data['status'] == 200) {
-        Navigator.pop(context);
+        if (tipe == 1) {
+          Navigator.pop(context);
+          CustomDialog.getDialog(
+              title: Strings.DIALOG_TITLE_SUCCESS,
+              message: data['message'],
+              context: context,
+              popCount: 1);
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          CustomDialog.getDialog(
+              title: Strings.DIALOG_TITLE_SUCCESS,
+              message: data['message'],
+              context: context,
+              popCount: 1);
+        }
+      } else {
         CustomDialog.getDialog(
-            title: Strings.DIALOG_TITLE_SUCCESS,
+            title: Strings.DIALOG_TITLE_ERROR,
             message: data['message'],
             context: context,
             popCount: 1);
+        print(data['message']);
       }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
     }
+    loadingStateCallback();
   }
 
   sendData(context, loadingStateCallback, detailPurchasing, picture) async {
