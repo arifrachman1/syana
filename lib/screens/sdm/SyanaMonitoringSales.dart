@@ -43,7 +43,7 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                   child: TextField(
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.search),
-                      hintText: "Cari karyawan...",
+                      hintText: "cari karyawan",
                       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white, width: 32.0),
