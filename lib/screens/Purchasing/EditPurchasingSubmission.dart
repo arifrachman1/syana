@@ -20,7 +20,8 @@ class EditPurchasingSubmission extends StatefulWidget {
   int _idPurchasing;
   EditPurchasingSubmission(this._idPurchasing);
   @override
-  _EditPurchasingSubmissionState createState() => _EditPurchasingSubmissionState();
+  _EditPurchasingSubmissionState createState() =>
+      _EditPurchasingSubmissionState();
 }
 
 class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
@@ -35,7 +36,6 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
   List<String> _selectedNameMaterial = new List();
 
   int _selectedTypeMaterial = 1;
-  // List<int> _selectedTypeMaterial = new List();
   List<TextEditingController> nameItem = new List();
   List<TextEditingController> totalItem = new List();
   List<TextEditingController> priceItem = new List();
@@ -58,6 +58,8 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
   TextEditingController _firstRequiredProduct = new TextEditingController();
   PurchasingController purchasingController;
 
+  PurchasingModel purchasingModel;
+
   String _selectedFirstProduct = "";
 
   bool isCreate = true;
@@ -71,6 +73,48 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
     super.initState();
     purchasingController = new PurchasingController();
     _dropDownType = getDropDownMenuItems(_typeProduct);
+    initData();
+  }
+
+  initData() async {
+    await purchasingController.getDetailPurchasingNew(
+        context, setLoadingState, setData, widget._idPurchasing);
+    purchasingModel.listDetail.forEach((element) {
+      if (element.type == "0") {
+        purchasing.add(new PurchasingModel.listDetailPurchasing(
+            element.idProduct,
+            null,
+            null,
+            element.sku,
+            element.totalItem,
+            element.priceItem,
+            element.priceTotalItem,
+            "0"));
+      } else if (element.type == "1") {
+        purchasing.add(new PurchasingModel.listDetailPurchasing(
+            null,
+            element.idProduct,
+            null,
+            element.sku,
+            element.totalItem,
+            element.priceItem,
+            element.priceTotalItem,
+            "0"));
+      } else {
+        purchasing.add(new PurchasingModel.listDetailPurchasing(
+            null,
+            null,
+            element.idProduct,
+            element.sku,
+            element.totalItem,
+            element.priceItem,
+            element.priceTotalItem,
+            "0"));
+      }
+      _listProductModel.add(new ProductModel.productPurchasing(
+          "0", element.name, getTipeBahan(element.type), purchasing));
+      print(purchasing.toString());
+    });
   }
 
   void setLoadingState() {
@@ -136,21 +180,6 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
     });
   }
 
-  void removeNewMaterials() {
-    print("decrease more");
-    setState(() {
-      if (_indexMaterial > 0) {
-        nameItem.removeAt(_indexMaterial);
-        totalItem.removeAt(_indexMaterial);
-        priceItem.removeAt(_indexMaterial);
-        totalPriceItem.removeAt(_indexMaterial);
-
-        _listMaterial.removeAt(_indexMaterial);
-        _indexMaterial = _indexMaterial - 1;
-      }
-    });
-  }
-
   FutureOr<Iterable<dynamic>> _onProductChanged(pattern) async {
     if (pattern.toString().length >= 3) {
       return await purchasingController.getProductData(context, pattern);
@@ -202,13 +231,11 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
 
   void clearPurchasing() {
     setState(() {
-      nameItem.clear();
       totalItem.clear();
       priceItem.clear();
       totalPriceItem.clear();
       _listMaterial.clear();
       _firstRequiredMaterial.clear();
-      _selectedMaterial.clear();
       _firstRequiredProduct.clear();
       _indexWidgetMaterial = 0;
     });
@@ -238,7 +265,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
       CustomDialog.getDialog(
           title: "Peringatan",
           message:
-          "Harap isi minimal satu plan purchasing dan satu bukti planning.",
+              "Harap isi minimal satu plan purchasing dan satu bukti planning.",
           context: context,
           popCount: 1);
     }
@@ -260,7 +287,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
         if (file.lengthSync() > 5000000) {
           imgLib.Image tempImage = imgLib.decodeImage(file.readAsBytesSync());
           imgLib.Image compressedImage =
-          imgLib.copyResize(tempImage, width: 768);
+              imgLib.copyResize(tempImage, width: 768);
           imgLib.Image rotatedImage = imgLib.copyRotate(compressedImage, 0);
           File(file.path).writeAsBytesSync(imgLib.encodeJpg(rotatedImage));
           if (file.lengthSync() > 5000000) {
@@ -306,6 +333,10 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
         materialList = data;
       });
       print(materialList.length);
+    } else if (data is PurchasingModel && data != null) {
+      setState(() {
+        purchasingModel = data;
+      });
     }
   }
 
@@ -325,16 +356,28 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
     return satuan;
   }
 
+  getTipeBahan(String tipe) {
+    String _bahan;
+    if (tipe == "0") {
+      _bahan = "Produk Jadi";
+    } else if (tipe == "1") {
+      _bahan = "Ingredient";
+    } else {
+      _bahan = "Packaging";
+    }
+    return _bahan;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Tambah Plan"),
+          title: Text("Revisi Plan"),
           backgroundColor: Colors.lightGreen[300],
           actions: <Widget>[
             FlatButton(
               child: Text(
-                'Submit',
+                'Re-Submit',
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
               onPressed: () {
@@ -345,110 +388,136 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
         ),
         body: _isLoading
             ? Center(
-          child: CircularProgressIndicator(),
-        )
+                child: CircularProgressIndicator(),
+              )
             : Container(
-          decoration: AppTheme.appBackground(),
-          padding: EdgeInsets.all(20.0),
-          child: ListView(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: ListView.builder(
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _listProductModel.length,
-                  itemBuilder: (context, position) {
-                    return Card(
-                        child: Container(
-                          padding: EdgeInsets.only(top: 5, bottom: 5),
-                          child: ListTile(
-                            title: Text((position + 1).toString() +
-                                ". " +
-                                _listProductModel[position].name),
-                            subtitle: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(_listProductModel[position].type),
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(_listProductModel[position]
-                                          .lisPurchasingDetail[position]
-                                          .totalItem +
-                                          getTipeSatuan(
+                decoration: AppTheme.appBackground(),
+                padding: EdgeInsets.all(20.0),
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: ListView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _listProductModel.length,
+                        itemBuilder: (context, position) {
+                          return Card(
+                              child: Container(
+                            padding: EdgeInsets.only(top: 5, bottom: 5),
+                            child: ListTile(
+                              title: Text((position + 1).toString() +
+                                  ". " +
+                                  _listProductModel[position].name),
+                              subtitle: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(_listProductModel[position].type),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(_listProductModel[position]
+                                                .lisPurchasingDetail[position]
+                                                .totalItem +
+                                            getTipeSatuan(
+                                                _listProductModel[position]
+                                                    .type)),
+                                        Text(NumberFormatter.getCurrency(
+                                                double.parse(
+                                                    _listProductModel[position]
+                                                        .lisPurchasingDetail[
+                                                            position]
+                                                        .priceItem)) +
+                                            "/" +
+                                            getTipeSatuan(
+                                                _listProductModel[position]
+                                                    .type)),
+                                        Text(NumberFormatter.getCurrency(double
+                                            .parse(_listProductModel[position]
+                                                .lisPurchasingDetail[position]
+                                                .priceTotalItem))),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        RaisedButton.icon(
+                                          color: AppTheme.yellow,
+                                          onPressed: () {
+                                            buildListRencana(position);
+                                          },
+                                          icon: Icon(Icons.edit),
+                                          label: Text("Edit"),
+                                          shape: StadiumBorder(),
+                                        ),
+                                        RaisedButton.icon(
+                                          color: AppTheme.red,
+                                          onPressed: () {
+                                            setState(() {
                                               _listProductModel[position]
-                                                  .type)),
-                                      Text(NumberFormatter.getCurrency(
-                                          double.parse(
-                                              _listProductModel[position]
-                                                  .lisPurchasingDetail[
-                                              position]
-                                                  .priceItem)) +
-                                          "/" +
-                                          getTipeSatuan(
-                                              _listProductModel[position]
-                                                  .type)),
-                                      Text(NumberFormatter.getCurrency(double
-                                          .parse(_listProductModel[position]
-                                          .lisPurchasingDetail[position]
-                                          .priceTotalItem))),
-                                    ],
-                                  )
-                                ],
+                                                  .lisPurchasingDetail
+                                                  .removeAt(position);
+                                              _listProductModel
+                                                  .removeAt(position);
+                                            });
+                                          },
+                                          icon: Icon(
+                                            Icons.cancel,
+                                            color: Colors.white,
+                                          ),
+                                          label: Text(
+                                            "Hapus",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          shape: StadiumBorder(),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  _listProductModel[position]
-                                      .lisPurchasingDetail
-                                      .removeAt(position);
-                                  _listProductModel.removeAt(position);
-                                });
-                              },
-                            ),
-                          ),
-                        ));
-                  },
+                          ));
+                        },
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: ListView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: _listProduct.length,
+                        itemBuilder: (context, position) {
+                          _indexProduct = position;
+                          return _addProduct(position);
+                        },
+                      ),
+                    ),
+                    !isCreate
+                        ? Container(
+                            child: buildFileWidget(),
+                          )
+                        : Container(),
+                    isCreate
+                        ? RaisedButton(
+                            shape: StadiumBorder(),
+                            color: AppTheme.btn_default,
+                            onPressed: () {
+                              setState(() {
+                                isCreate = false;
+                              });
+                              buildProduct();
+                            },
+                            child: Text("Buat Planing"),
+                          )
+                        : Container()
+                  ],
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: ListView.builder(
-                  physics: ScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: _listProduct.length,
-                  itemBuilder: (context, position) {
-                    _indexProduct = position;
-                    return _addProduct(position);
-                  },
-                ),
-              ),
-              !isCreate
-                  ? Container(
-                child: buildFileWidget(),
-              )
-                  : Container(),
-              isCreate
-                  ? RaisedButton(
-                shape: StadiumBorder(),
-                color: AppTheme.btn_default,
-                onPressed: () {
-                  setState(() {
-                    isCreate = false;
-                  });
-                  buildProduct();
-                },
-                child: Text("Buat Planing"),
-              )
-                  : Container()
-            ],
-          ),
-        ));
+              ));
   }
 
   Widget _addProduct(int index) {
@@ -464,11 +533,11 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
               Padding(padding: EdgeInsets.only(top: 15.0)),
               Container(
                   child: Row(children: [
-                    Text(
-                      "Pilih Jenis",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    )
-                  ])),
+                Text(
+                  "Pilih Jenis",
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                )
+              ])),
               Padding(padding: EdgeInsets.only(top: 10.0)),
               Container(
                   width: 320,
@@ -503,35 +572,35 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
               Padding(padding: EdgeInsets.only(top: 15.0)),
               isLoaded
                   ? Visibility(
-                visible: !isSelfProduct,
-                child: Container(
-                    child: Text(
-                      "Cari Produk",
-                      style: TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                    )),
-              )
+                      visible: !isSelfProduct,
+                      child: Container(
+                          child: Text(
+                        "Cari Produk",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )),
+                    )
                   : Container(),
               Padding(padding: EdgeInsets.only(top: 10.0)),
               isLoaded
                   ? Visibility(
-                visible: !isSelfProduct,
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: Colors.white,
-                      border: Border.all()),
-                  child: CustomTextInput.getAutoCompleteFieldPurchasing(
-                      context: context,
-                      controller: _firstRequiredProduct,
-                      hint: "SKU Produk",
-                      textInputType: TextInputType.text,
-                      itemBuilderCallback: _productItemBuilder,
-                      suggestionCallback: _onProductChanged,
-                      onSuggestionSelectedCallback:
-                      _onFirstRequiredProductSelected),
-                ),
-              )
+                      visible: !isSelfProduct,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.white,
+                            border: Border.all()),
+                        child: CustomTextInput.getAutoCompleteFieldPurchasing(
+                            context: context,
+                            controller: _firstRequiredProduct,
+                            hint: "SKU Produk",
+                            textInputType: TextInputType.text,
+                            itemBuilderCallback: _productItemBuilder,
+                            suggestionCallback: _onProductChanged,
+                            onSuggestionSelectedCallback:
+                                _onFirstRequiredProductSelected),
+                      ),
+                    )
                   : Container(),
               Visibility(
                 visible: isLoaded,
@@ -573,12 +642,12 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
                   children: [
                     Container(
                         child: Row(children: [
-                          Text(
-                            "Pilih Jenis Bahan",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )
-                        ])),
+                      Text(
+                        "Pilih Jenis Bahan",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )
+                    ])),
                     Padding(padding: EdgeInsets.only(top: 10.0)),
                     Container(
                         width: MediaQuery.of(context).size.width,
@@ -613,12 +682,12 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
                     Padding(padding: EdgeInsets.only(top: 15.0)),
                     Container(
                         child: Row(children: [
-                          Text(
-                            "Nama Item",
-                            style: TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.bold),
-                          )
-                        ])),
+                      Text(
+                        "Nama Item",
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )
+                    ])),
                     Padding(padding: EdgeInsets.only(top: 10.0)),
                     Container(
                       decoration: BoxDecoration(
@@ -633,7 +702,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
                           itemBuilderCallback: _materialItemBuilder,
                           suggestionCallback: _onMaterialChanged,
                           onSuggestionSelectedCallback:
-                          _onFirstRequiredMaterialSelected),
+                              _onFirstRequiredMaterialSelected),
                     ),
                     Padding(padding: EdgeInsets.only(top: 15.0)),
                   ],
@@ -641,11 +710,11 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
               )),
           Container(
               child: Row(children: [
-                Text(
-                  "Jumlah Item",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                )
-              ])),
+            Text(
+              "Jumlah Item",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            )
+          ])),
           Padding(padding: EdgeInsets.only(top: 10.0)),
           Container(
             padding: EdgeInsets.only(left: 10),
@@ -674,11 +743,11 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
           Padding(padding: EdgeInsets.only(top: 15.0)),
           Container(
               child: Row(children: [
-                Text(
-                  "Harga Item",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                )
-              ])),
+            Text(
+              "Harga Item",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            )
+          ])),
           Padding(padding: EdgeInsets.only(top: 10.0)),
           Container(
             padding: EdgeInsets.only(left: 10),
@@ -707,11 +776,11 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
           Padding(padding: EdgeInsets.only(top: 15.0)),
           Container(
               child: Row(children: [
-                Text(
-                  "Total Cost",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                )
-              ])),
+            Text(
+              "Total Cost",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            )
+          ])),
           Padding(padding: EdgeInsets.only(top: 10.0)),
           Container(
             padding: EdgeInsets.only(left: 10),
@@ -760,7 +829,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
                       CustomDialog.getDialog(
                           title: "Peringatan",
                           message:
-                          "Harap cek kembali field, pastikan data yang diisi valid.",
+                              "Harap cek kembali field, pastikan data yang diisi valid.",
                           context: context,
                           popCount: 1);
                     }
@@ -799,7 +868,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
                       CustomDialog.getDialog(
                           title: "Peringatan",
                           message:
-                          "Harap cek kembali field, pastikan data yang diisi valid.",
+                              "Harap cek kembali field, pastikan data yang diisi valid.",
                           context: context,
                           popCount: 1);
                     }
@@ -895,23 +964,24 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
     // edit_rencana = true;
     clearPurchasing();
     setState(() {
-      _listDetail = _listProductModel[position].lisPurchasingDetail;
-      // print("list aktifasi: " + list_aktifitas_rencana.length.toString());
-      _indexWidgetMaterial = _listDetail.length;
-      print(_indexWidgetMaterial.toString());
-      for (int i = 0; i < _indexWidgetMaterial; i++) {
-        nameItem.add(new TextEditingController());
-        totalItem.add(new TextEditingController());
-        priceItem.add(new TextEditingController());
-        totalPriceItem.add(new TextEditingController());
-        _listMaterial.add(_addMaterials(i));
+      totalItem.add(new TextEditingController());
+      priceItem.add(new TextEditingController());
+      totalPriceItem.add(new TextEditingController());
+      _listMaterial.add(_addMaterials(_indexWidgetMaterial));
+      print(_indexWidgetMaterial);
+      _selectMaterial.add("Ingredient");
 
-        nameItem[i].text = _listDetail[i].name;
-        totalItem[i].text = _listDetail[i].totalItem;
-        priceItem[i].text = _listDetail[i].priceItem;
-        totalPriceItem[i].text = _listDetail[i].priceTotalItem;
-      }
-      _indexMaterial -= 1;
+      _selectMaterial[_indexWidgetMaterial] = _listProductModel[position].type;
+      print(_listProductModel[position].name);
+      // _firstRequiredMaterial.text = " (" + _listProductModel[position].lisPurchasingDetail[position].sku + ") " + _listProductModel[position].name;
+      // print(_firstRequiredMaterial.text);
+      totalItem[_indexWidgetMaterial].text = _listProductModel[position].lisPurchasingDetail[position].totalItem;
+      priceItem[_indexWidgetMaterial].text = _listProductModel[position].lisPurchasingDetail[position].priceItem;
+      totalPriceItem[_indexWidgetMaterial].text = _listProductModel[position].lisPurchasingDetail[position].priceTotalItem;
+      // for (int i = 0; i < _listProductModel[position].lisPurchasingDetail.length; i++) {
+      //
+      // }
+      _indexWidgetMaterial -= 1;
     });
   }
 }
