@@ -63,7 +63,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
   String _selectedFirstProduct = "";
 
   bool isCreate = true;
-  bool isSelfProduct = false;
+  bool isRaw = false;
   bool isLoaded = false;
   bool _isLoading = false;
 
@@ -447,6 +447,17 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
                                         RaisedButton.icon(
                                           color: AppTheme.yellow,
                                           onPressed: () {
+                                            if (_listProductModel[position].type == "Produk Jadi"){
+                                              setState(() {
+                                                isLoaded = true;
+                                              });
+                                            } else {
+                                              setState(() {
+                                                isLoaded = true;
+                                                isRaw = true;
+                                              });
+                                            }
+                                            buildProduct();
                                             buildListRencana(position);
                                           },
                                           icon: Icon(Icons.edit),
@@ -557,12 +568,12 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
                         });
                         if (_selectedType == "Bahan Mentah") {
                           setState(() {
-                            isSelfProduct = true;
+                            isRaw = true;
                             isLoaded = true;
                           });
                         } else {
                           setState(() {
-                            isSelfProduct = false;
+                            isRaw = false;
                             isLoaded = true;
                           });
                         }
@@ -572,7 +583,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
               Padding(padding: EdgeInsets.only(top: 15.0)),
               isLoaded
                   ? Visibility(
-                      visible: !isSelfProduct,
+                      visible: !isRaw,
                       child: Container(
                           child: Text(
                         "Cari Produk",
@@ -584,7 +595,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
               Padding(padding: EdgeInsets.only(top: 10.0)),
               isLoaded
                   ? Visibility(
-                      visible: !isSelfProduct,
+                      visible: !isRaw,
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
@@ -636,7 +647,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
         children: [
           Padding(padding: EdgeInsets.only(top: 5.0)),
           Visibility(
-              visible: isSelfProduct,
+              visible: isRaw,
               child: Container(
                 child: Column(
                   children: [
@@ -962,6 +973,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
 
   void buildListRencana(int position) {
     // edit_rencana = true;
+    print("OIOI");
     clearPurchasing();
     setState(() {
       totalItem.add(new TextEditingController());
@@ -973,7 +985,7 @@ class _EditPurchasingSubmissionState extends State<EditPurchasingSubmission> {
 
       _selectMaterial[_indexWidgetMaterial] = _listProductModel[position].type;
       print(_listProductModel[position].name);
-      // _firstRequiredMaterial.text = " (" + _listProductModel[position].lisPurchasingDetail[position].sku + ") " + _listProductModel[position].name;
+      _firstRequiredMaterial.text = " (" + _listProductModel[position].lisPurchasingDetail[position].name + ") " + _listProductModel[position].name;
       // print(_firstRequiredMaterial.text);
       totalItem[_indexWidgetMaterial].text = _listProductModel[position].lisPurchasingDetail[position].totalItem;
       priceItem[_indexWidgetMaterial].text = _listProductModel[position].lisPurchasingDetail[position].priceItem;
