@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme:
           ThemeData(primarySwatch: Colors.green, highlightColor: Colors.green),
-      home: SyanaMenuSDM(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
