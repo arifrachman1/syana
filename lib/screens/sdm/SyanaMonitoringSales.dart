@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syana/screens/sdm/SyanaMenuMonitoring.dart';
 import 'package:syana/utils/AppTheme.dart';
 
 class SyanaMonitoringSales extends StatefulWidget {
@@ -27,7 +28,13 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                         icon: Icon(Icons.arrow_back),
                         iconSize: 40.0,
                         color: Colors.white,
-                        onPressed: (){},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyanaMenuMonitoring()),
+                          );
+                        },
                       ),
                     ],
                   ),
