@@ -87,6 +87,12 @@ class SaleModel {
     _saleDetails = value;
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      "transaction_number": this._transactionNumber,
+    };
+  }
+
   @override
   String toString() {
     return 'SaleModel{_id: $_id, _idEmployee: $_idEmployee, _transactionNumber: $_transactionNumber, _totalPoint: $_totalPoint, _date: $_date, _customer: $_customer, _ecommerce: $_ecommerce, _saleDetails: $_saleDetails}';
