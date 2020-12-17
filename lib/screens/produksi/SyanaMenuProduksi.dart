@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:syana/screens/produksi/SyanaTambahProduksi.dart';
 import 'package:syana/utils/AppTheme.dart';
 
 class SyanaMenuProduksi extends StatefulWidget {
@@ -21,7 +22,12 @@ class _SyanaMenuProduksiState extends State<SyanaMenuProduksi> {
                 icon: Icon(Icons.arrow_back),
                 iconSize: 40.0,
                 color: Colors.white,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyanaTambahProduksi()));
+                },
               ),
             ),
             Padding(padding: EdgeInsets.only(top: 10.0)),

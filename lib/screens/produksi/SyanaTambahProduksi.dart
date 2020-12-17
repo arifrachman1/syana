@@ -93,7 +93,7 @@ class _SyanaTambahProduksiState extends State<SyanaTambahProduksi> {
             ),
             Container(
               alignment: Alignment.centerRight,
-              margin: EdgeInsets.all(13.0),
+              margin: EdgeInsets.all(15.0),
               child: RaisedButton(
                 textColor: AppTheme.white,
                 onPressed: () {},
