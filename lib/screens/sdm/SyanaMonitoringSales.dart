@@ -16,7 +16,9 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
           margin: EdgeInsets.only(top: 50.0),
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 20.0),
           child: Expanded(
-            child: ListView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
                   child: Row(
@@ -61,9 +63,134 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(top: 40.0)),
-                Container(
-                  child: Column(
+                Expanded(
+                  child: ListView(
                     children: <Widget>[
+                      ListTile(
+                        title: Text('John Doe', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 45', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('Nina Choi', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 80', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('Alex King', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 20', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('John Doe', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 45', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('Nina Choi', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 80', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('Alex King', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 20', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),ListTile(
+                        title: Text('John Doe', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 45', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('Nina Choi', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 80', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('Alex King', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Jumlah Transaksi Order : 20', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
                       ListTile(
                         title: Text('John Doe', style: TextStyle(
                           color: Colors.white,
