@@ -18,17 +18,19 @@ class _SyanaMenuSDMState extends State<SyanaMenuSDM> {
         child: Center(
             child: Column(
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 30.0)),
             Container(
-              alignment: Alignment.bottomLeft,
+              height: MediaQuery.of(context).size.height * 0.05,
+            ),
+            Container(
+              alignment: Alignment.topLeft,
+              margin: EdgeInsets.all(10.0),
               child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                iconSize: 40.0,
+                icon: Icon(Icons.arrow_back_outlined),
                 color: Colors.white,
+                iconSize: 35,
                 onPressed: () {},
               ),
             ),
-            Padding(padding: EdgeInsets.only(top: 10.0)),
             Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 alignment: Alignment.centerLeft,
@@ -68,6 +70,7 @@ class _SyanaMenuSDMState extends State<SyanaMenuSDM> {
                   );
                 },
                 color: AppTheme.teal,
+                textColor: AppTheme.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 child: Container(
@@ -75,7 +78,9 @@ class _SyanaMenuSDMState extends State<SyanaMenuSDM> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   height: MediaQuery.of(context).size.height * 0.09,
                   padding: const EdgeInsets.all(10.0),
-                  child: const Text('Absensi', style: TextStyle(fontSize: 25)),
+                  child: const Text('Absensi',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                 ),
               ),
             ),
@@ -90,6 +95,7 @@ class _SyanaMenuSDMState extends State<SyanaMenuSDM> {
                   );
                 },
                 color: AppTheme.teal,
+                textColor: AppTheme.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8)),
                 child: Container(
@@ -97,8 +103,9 @@ class _SyanaMenuSDMState extends State<SyanaMenuSDM> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   height: MediaQuery.of(context).size.height * 0.09,
                   padding: const EdgeInsets.all(10.0),
-                  child:
-                      const Text('Monitoring', style: TextStyle(fontSize: 25)),
+                  child: const Text('Monitoring',
+                      style:
+                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
                 ),
               ),
             ),

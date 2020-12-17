@@ -14,20 +14,21 @@ class _SyanaSDMAbsensiState extends State<SyanaSDMAbsensi> {
           decoration: AppTheme.appBackground(),
           child: Column(
             children: [
-              Padding(padding: EdgeInsets.only(top: 30.0)),
+              Padding(padding: EdgeInsets.only(top: 40.0)),
               Container(
+                width: MediaQuery.of(context).size.width * 0.9,
                 alignment: Alignment.bottomLeft,
                 child: IconButton(
                   icon: Icon(Icons.arrow_back),
-                  iconSize: 40.0,
+                  iconSize: 35.0,
                   color: Colors.white,
                   onPressed: () {},
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 10.0)),
+              Padding(padding: EdgeInsets.only(top: 5.0)),
               Container(
                 //color: AppTheme.white,
-                width: MediaQuery.of(context).size.width * 0.9,
+                width: MediaQuery.of(context).size.width * 0.8,
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(
                   bottom: 15,
@@ -36,9 +37,9 @@ class _SyanaSDMAbsensiState extends State<SyanaSDMAbsensi> {
                 child: Text(
                   "Absensi",
                   style: TextStyle(
-                    fontSize: 30,
-                    color: AppTheme.white,
-                  ),
+                      fontSize: 30,
+                      color: AppTheme.white,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               Container(

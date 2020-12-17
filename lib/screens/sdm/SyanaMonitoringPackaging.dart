@@ -15,7 +15,8 @@ class _SyanaMonitoringPackagingState extends State<SyanaMonitoringPackaging> {
       body: Container(
         decoration: AppTheme.appBackground(),
         child: Container(
-            padding: EdgeInsets.only(left: 10.0,right: 10.0,top: 25.0, bottom: 5.0),
+            padding: EdgeInsets.only(
+                left: 10.0, right: 10.0, top: 25.0, bottom: 5.0),
             child: Column(
               children: <Widget>[
                 // Container(
@@ -23,18 +24,18 @@ class _SyanaMonitoringPackagingState extends State<SyanaMonitoringPackaging> {
                 // ),
                 Container(
                   alignment: Alignment.topLeft,
-                  margin: EdgeInsets.only(top:10,right: 10),
+                  margin: EdgeInsets.only(top: 10, right: 10),
                   child: IconButton(
                     icon: Icon(Icons.arrow_back_outlined),
                     color: Colors.white,
                     iconSize: 35,
                     onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SyanaMenuMonitoring()),
-                          );
-                        },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SyanaMenuMonitoring()),
+                      );
+                    },
                   ),
                 ),
                 Container(
@@ -43,15 +44,20 @@ class _SyanaMonitoringPackagingState extends State<SyanaMonitoringPackaging> {
                   alignment: Alignment.topLeft,
                   margin: EdgeInsets.only(top: 10, left: 15, right: 10),
                   child: Text('Packaging',
-                      style: TextStyle(fontSize: 25, color: Colors.white)),
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold)),
                 ),
                 Container(
                   child: TextField(
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.search),
                       hintText: "cari karyawan",
-                      contentPadding:
-                          EdgeInsets.only(left: 20.0,right: 20.0,),
+                      contentPadding: EdgeInsets.only(
+                        left: 20.0,
+                        right: 20.0,
+                      ),
                       focusedBorder: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.white, width: 32.0),
