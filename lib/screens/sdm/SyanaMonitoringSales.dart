@@ -43,7 +43,7 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                   child: TextField(
                     decoration: InputDecoration(
                       suffixIcon: Icon(Icons.search),
-                      hintText: "Cari karyawan...",
+                      hintText: "cari karyawan",
                       contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white, width: 32.0),
@@ -70,7 +70,7 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order: 45', style: TextStyle(
+                        subtitle: Text('Jumlah Transaksi Order : 45', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
@@ -84,7 +84,7 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order: 80', style: TextStyle(
+                        subtitle: Text('Jumlah Transaksi Order : 80', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
@@ -98,7 +98,7 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order: 20', style: TextStyle(
+                        subtitle: Text('Jumlah Transaksi Order : 20', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
