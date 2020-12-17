@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:syana/Controller/PurchasingController.dart';
@@ -12,7 +14,6 @@ class Notifications extends StatefulWidget {
 }
 
 class NotificationsState extends State<Notifications> {
-  @override
   bool isLoading = false;
 
   PurchasingController _purchasingController;
@@ -39,6 +40,7 @@ class NotificationsState extends State<Notifications> {
     // TODO: implement initState
     super.initState();
     _purchasingController = new PurchasingController();
+
     _init();
   }
 
@@ -69,6 +71,7 @@ class NotificationsState extends State<Notifications> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Container(height: 15),
             Expanded(
               child: SmartRefresher(
                 controller: _refreshController,
@@ -124,12 +127,18 @@ class NotificationsState extends State<Notifications> {
         ),
         trailing: IconButton(
           icon: Icon(Icons.chevron_right),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
+          onPressed: () async {
+            var result = await Navigator.of(context).push(MaterialPageRoute(
                 builder: (BuildContext context) => CreatePurchasingDetail(
                       idPurchasing:
                           purchasingList[index].idPurchasingSubmission,
                     )));
+
+            log(result.toString());
+
+            if (result == 200) {
+              _init();
+            }
           },
         ),
       ),

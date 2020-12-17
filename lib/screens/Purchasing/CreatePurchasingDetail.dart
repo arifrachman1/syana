@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PurchasingController.dart';
 import 'package:syana/models/PurchasingModel.dart';
@@ -51,7 +53,7 @@ class _CreatePurchasingDetailState extends State<CreatePurchasingDetail> {
 
   void setLoadingState() {
     setState(() {
-      _isLoading = !_isLoading;
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
     });
   }
 
@@ -115,8 +117,17 @@ class _CreatePurchasingDetailState extends State<CreatePurchasingDetail> {
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
-                        onPressed: () {
-                          _showDialog(1);
+                        onPressed: () async {
+                          var result =
+                              await _purchasingController.setApprovalPurchasing(
+                                  context,
+                                  setLoadingState,
+                                  "",
+                                  widget.idPurchasing,
+                                  2,
+                                  1);
+
+                          log(result.toString());
                         },
                         color: AppTheme.btn_success,
                         textColor: AppTheme.white,
@@ -139,7 +150,30 @@ class _CreatePurchasingDetailState extends State<CreatePurchasingDetail> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
                         onPressed: () {
-                          _showDialog(0);
+                          _showDialog(1);
+                        },
+                        color: AppTheme.btn_success,
+                        textColor: AppTheme.white,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              size: 15.0,
+                            ),
+                            Text(" Revisi")
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(5.0),
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      height: MediaQuery.of(context).size.height * 0.05,
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                        onPressed: () {
+                          _showDialog(3);
                         },
                         color: AppTheme.red,
                         textColor: AppTheme.white,
@@ -331,7 +365,7 @@ class _CreatePurchasingDetailState extends State<CreatePurchasingDetail> {
   }
 
   void _showDialog(int approved) {
-    widget.idPurchasing = _purchasingModel.listStatus[0].idPurchasingSubmission;
+    print("id_purchasing: " + widget.idPurchasing);
     showGeneralDialog(
       context: context,
       barrierDismissible: false,
@@ -342,14 +376,18 @@ class _CreatePurchasingDetailState extends State<CreatePurchasingDetail> {
           Animation secondaryAnimation) {
         return Center(
           child: Container(
-            width: MediaQuery.of(context).size.width - 20,
-            height: MediaQuery.of(context).size.height * 0.7,
+            width: MediaQuery.of(context).size.width - 30,
+            height: MediaQuery.of(context).size.height / 2.0,
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: AppTheme.white,
               borderRadius: new BorderRadius.all(Radius.circular(15)),
             ),
-            child: ApprovalPurchasing(),
+            child: ApprovalPurchasing(
+              idPurchasing: widget.idPurchasing,
+              approved: approved,
+              tipe: 2,
+            ),
           ),
         );
       },
