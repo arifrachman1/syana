@@ -1,13 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:syana/Controller/PurchasingController.dart';
 import 'package:syana/models/PurchasingModel.dart';
 import 'package:syana/utils/AppTheme.dart';
 
 class ApprovalPurchasing extends StatefulWidget {
-  int idPurchasing;
-  final int approved;
+  String idPurchasing;
+  int approved;
+  final int tipe;
 
-  ApprovalPurchasing({this.idPurchasing, this.approved});
+  ApprovalPurchasing({this.idPurchasing, this.approved, this.tipe});
 
   @override
   _ApprovalPurchasingState createState() => _ApprovalPurchasingState();
@@ -17,6 +20,19 @@ class _ApprovalPurchasingState extends State<ApprovalPurchasing> {
   bool _isLoading = false;
 
   PurchasingController _purchasingController;
+  TextEditingController _komentarController;
+
+  @override
+  void initState() {
+    super.initState();
+    _purchasingController = new PurchasingController();
+  }
+
+  void setLoadingState() {
+    setState(() {
+      _isLoading = _isLoading ? _isLoading = false : _isLoading = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +58,7 @@ class _ApprovalPurchasingState extends State<ApprovalPurchasing> {
                 ),
               ),
             ),
-            widget.approved == 1 ? headerApprove() : headerDecline(),
+            widget.approved == 1 ? headerRevision() : headerDecline(),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -54,7 +70,7 @@ class _ApprovalPurchasingState extends State<ApprovalPurchasing> {
                       BoxShadow(color: Colors.black12, blurRadius: 5)
                     ]),
                 child: TextField(
-                  // controller: komentar_controller,
+                  controller: _komentarController,
                   maxLines: 8,
                   style: TextStyle(
                     color: AppTheme.text_dark,
@@ -75,7 +91,18 @@ class _ApprovalPurchasingState extends State<ApprovalPurchasing> {
               width: double.infinity,
               padding: EdgeInsets.all(0),
               child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    var result =
+                        await _purchasingController.setApprovalPurchasing(
+                            context,
+                            setLoadingState,
+                            _komentarController,
+                            widget.idPurchasing,
+                            widget.approved,
+                            widget.tipe);
+
+                    log(result.toString());
+                  },
                   color: AppTheme.btn_success,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0)),
@@ -152,7 +179,7 @@ class _ApprovalPurchasingState extends State<ApprovalPurchasing> {
           Container(
             margin: EdgeInsets.only(left: 5, right: 5, bottom: 20),
             child: Text(
-              "Anda telah menolak pengajuan kegiatan ini",
+              "Anda telah menolak pengajuan ini",
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: AppTheme.text_dark,
@@ -164,6 +191,34 @@ class _ApprovalPurchasingState extends State<ApprovalPurchasing> {
             margin: EdgeInsets.only(left: 5, right: 5, bottom: 10),
             child: Text(
               "Mohon tulis alasan anda menolak pengajuan ini",
+              textAlign: TextAlign.center,
+              style: TextStyle(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget headerRevision() {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(left: 5, right: 5, bottom: 20),
+            child: Text(
+              "Anda telah merevisi pengajuan ini",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: AppTheme.text_dark,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(left: 5, right: 5, bottom: 10),
+            child: Text(
+              "Mohon tulis alasan anda merevisi pengajuan ini",
               textAlign: TextAlign.center,
               style: TextStyle(),
             ),
