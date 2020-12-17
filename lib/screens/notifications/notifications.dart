@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:syana/Controller/PurchasingController.dart';
 import 'package:syana/DefaultView.dart';
+import 'package:syana/models/PurchasingModel.dart';
+import 'package:syana/screens/Purchasing/CreatePurchasingDetail.dart';
 import 'package:syana/utils/AppTheme.dart';
 
 class Notifications extends StatefulWidget {
@@ -8,31 +13,49 @@ class Notifications extends StatefulWidget {
   NotificationsState createState() => NotificationsState();
 }
 
-class NotificationsState extends DefaultView<Notifications> {
-  @override
+class NotificationsState extends State<Notifications> {
   bool isLoading = false;
+
+  PurchasingController _purchasingController;
+  List<PurchasingModel> purchasingList = new List();
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
   @override
-  setData(data) {
-    // TODO: implement setData
-    throw UnimplementedError();
-  }
-
-  @override
   setLoadingState() {
     // TODO: implement setLoadingState
     setState(() {
-      isLoading = !isLoading;
+      isLoading = isLoading ? isLoading = false : isLoading = true;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _purchasingController = new PurchasingController();
+
+    _init();
+  }
+
+  _init() async {
+    purchasingList.clear();
+    _purchasingController.getListPurchasing(
+        context, setLoadingState, setPurchasingList, 0);
+  }
+
+  setPurchasingList(purchasingList) {
+    if (purchasingList is List && purchasingList.isNotEmpty) {
+      setState(() {
+        this.purchasingList = purchasingList;
+      });
+    }
   }
 
   @override
@@ -48,50 +71,75 @@ class NotificationsState extends DefaultView<Notifications> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Container(height: 15),
             Expanded(
               child: SmartRefresher(
                 controller: _refreshController,
                 enablePullDown: true,
                 header: ClassicHeader(),
-                onRefresh: () {},
-                child: ListView.builder(
-                  itemCount: 1,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.all(5),
-                      margin: EdgeInsets.all(10),
-                      decoration: AppTheme.inputDecorationShadow(),
-                      child: ListTile(
-                        title: Text(
-                          "Pengajuan Purchasing",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Ada pengajuan purchasing baru"),
-                            Text(
-                              "12 Desember 2020",
-                              style: TextStyle(
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ],
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.chevron_right),
-                          onPressed: () {
-                            print("Klik Navigator");
-                          },
-                        ),
+                onRefresh: () async {
+                  await Future.delayed(Duration(seconds: 1));
+                  _init();
+                  _refreshController.refreshCompleted();
+                },
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : ListView.builder(
+                        itemCount: purchasingList.length,
+                        itemBuilder: (context, index) {
+                          return _purchasingList(index);
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _purchasingList(int index) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.all(5),
+      margin: EdgeInsets.all(10),
+      decoration: AppTheme.inputDecorationShadow(),
+      child: ListTile(
+        title: Text(
+          "Pengajuan Purchasing",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Ada pengajuan purchasing baru oleh " +
+                    purchasingList[index].name ??
+                "-"),
+            Text(
+              purchasingList[index].createdAt ?? "-",
+              style: TextStyle(
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+        ),
+        trailing: IconButton(
+          icon: Icon(Icons.chevron_right),
+          onPressed: () async {
+            var result = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (BuildContext context) => CreatePurchasingDetail(
+                      idPurchasing:
+                          purchasingList[index].idPurchasingSubmission,
+                    )));
+
+            log(result.toString());
+
+            if (result == 200) {
+              _init();
+            }
+          },
         ),
       ),
     );

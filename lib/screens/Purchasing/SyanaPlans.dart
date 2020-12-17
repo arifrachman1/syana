@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syana/Controller/PurchasingController.dart';
 import 'package:syana/DefaultView.dart';
 import 'package:syana/models/PurchasingModel.dart';
+import 'package:syana/screens/Purchasing/EditPurchasingSubmission.dart';
 import 'package:syana/screens/Purchasing/SyanaPlansAdd.dart';
 import 'package:syana/utils/AppTheme.dart';
 
@@ -14,32 +15,6 @@ class _SyanaPlansState extends State<SyanaPlans> {
   List<String> _nama = new List();
   PurchasingController purchasingController;
   List<PurchasingModel> listPlanPurchasing = new List();
-
-  namaItem() {
-    setState(() {
-      _nama.add("Ads Fb");
-      _nama.add("Instagram");
-      _nama.add("Whatsapp");
-      _nama.add("Ads Fb");
-      _nama.add("Instagram");
-      _nama.add("Whatsapp");
-      _nama.add("Ads Fb");
-      _nama.add("Instagram");
-      _nama.add("Whatsapp");
-      _nama.add("Ads Fb");
-      _nama.add("Instagram");
-      _nama.add("Whatsapp");
-      _nama.add("Ads Fb");
-      _nama.add("Instagram");
-      _nama.add("Whatsapp");
-      _nama.add("Ads Fb");
-      _nama.add("Instagram");
-      _nama.add("Whatsapp");
-      _nama.add("Ads Fb");
-      _nama.add("Instagram");
-      _nama.add("Whatsapps");
-    });
-  }
 
   bool isLoading = false;
 
@@ -130,7 +105,17 @@ class _SyanaPlansState extends State<SyanaPlans> {
                                 //padding: EdgeInsets.all(5.0),
                                 margin: EdgeInsets.all(5.0),
                                 child: ListTile(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              EditPurchasingSubmission(
+                                                  int.parse(listPlanPurchasing[
+                                                          index]
+                                                      .idPurchasingSubmission))),
+                                    );
+                                  },
                                   title: Text(
                                     listPlanPurchasing[index].name,
                                     style: TextStyle(

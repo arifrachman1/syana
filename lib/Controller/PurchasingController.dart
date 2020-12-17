@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:syana/models/MaterialModel.dart';
@@ -101,20 +103,21 @@ class PurchasingController {
     }
   }
 
-  getMaterialData(context, setDataCallback, type) async {
+  Future<List> getMaterialData(context, sku, type) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     FormData formData;
 
-    Map param = GlobalFunctions.generateMapParam(["material_type"], [type]);
+    Map param =
+        GlobalFunctions.generateMapParam(["sku", "material_type"], [sku, type]);
     formData = FormData.fromMap(param);
     print(formData.fields);
 
     final data = await GlobalFunctions.dioPostCall(
         params: formData,
-        path: GlobalVars.purchasingUrl + "get-material-by-type",
+        path: GlobalVars.purchasingUrl + "get-material-by-sku",
         options: Options(
             headers: {"Authorization": "Bearer " + _userModel.accessToken}),
         context: context);
@@ -134,23 +137,25 @@ class PurchasingController {
         });
 
         if (materialsSuggestion.isNotEmpty) {
-          setDataCallback(materialsSuggestion);
+          return materialsSuggestion;
         }
       }
     }
   }
 
-  setApprovalPurchasing(context, loadingStateCallback, setDataCallback,
-      idPurchasingSub, statusApproval) async {
+  setApprovalPurchasing(context, loadingStateCallback, note, idPurchasingSub,
+      statusApproval, tipe) async {
     if (_userModel == null) {
       await _getPersistence();
     }
 
     var params = GlobalFunctions.generateMapParam(
-        ['id_purchasing_submission', 'status_approval'],
-        [idPurchasingSub, statusApproval]);
+        ['note', 'id_purchasing_submission', 'status_approval'],
+        [note, idPurchasingSub, statusApproval]);
 
     FormData formData = FormData.fromMap(params);
+
+    loadingStateCallback();
 
     final data = await GlobalFunctions.dioPostCall(
       context: context,
@@ -161,21 +166,47 @@ class PurchasingController {
     );
 
     if (data != null) {
+      print(data);
       if (data['status'] == 200) {
-        Navigator.pop(context);
+        if (tipe == 1) {
+          Navigator.pop(context);
+          CustomDialog.getDialog(
+              title: Strings.DIALOG_TITLE_SUCCESS,
+              message: data['message'],
+              context: context,
+              popCount: 1);
+        } else {
+          Navigator.pop(context);
+          Navigator.pop(context);
+          CustomDialog.getDialog(
+              title: Strings.DIALOG_TITLE_SUCCESS,
+              message: data['message'],
+              context: context,
+              popCount: 1);
+        }
+      } else {
         CustomDialog.getDialog(
-            title: Strings.DIALOG_TITLE_SUCCESS,
+            title: Strings.DIALOG_TITLE_ERROR,
             message: data['message'],
             context: context,
             popCount: 1);
+        print(data['message']);
       }
+    } else {
+      CustomDialog.getDialog(
+          title: Strings.DIALOG_TITLE_ERROR,
+          message: Strings.DIALOG_MESSAGE_API_CALL_FAILED,
+          context: context,
+          popCount: 1);
     }
+    loadingStateCallback();
   }
 
-  sendData(context, detailPurchasing, picture) async {
+  sendData(context, loadingStateCallback, detailPurchasing, picture) async {
     if (_userModel == null) {
       await _getPersistence();
     }
+    loadingStateCallback();
 
     FormData formData;
 
@@ -217,6 +248,7 @@ class PurchasingController {
           context: context,
           popCount: 1);
     }
+    loadingStateCallback();
   }
 
   getDetailPurchasing(
@@ -304,8 +336,8 @@ class PurchasingController {
             element['sku'],
             element['jumlah'],
             element['harga'],
-            element['harga_master'],
             element['total_harga'],
+            element['harga_master'],
           ));
         });
 
