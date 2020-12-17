@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:syana/screens/sdm/SyanaMonitoringPackaging.dart';
+import 'package:syana/screens/sdm/SyanaMonitoringSales.dart';
 import 'package:syana/utils/AppTheme.dart';
 
 class SyanaMenuMonitoring extends StatefulWidget {
@@ -47,6 +49,7 @@ class _SyanaMenuMonitoringState extends State<SyanaMenuMonitoring> {
                       margin: EdgeInsets.all(10),
                       child: Text('Monitoring',
                             style: TextStyle(fontSize: 25, color: Colors.white)),
+                      
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.9,
@@ -59,7 +62,13 @@ class _SyanaMenuMonitoringState extends State<SyanaMenuMonitoring> {
                         textColor: AppTheme.white,
                         child: const Text('Packaging',
                             style: TextStyle(fontSize: 25)),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyanaMonitoringPackaging()),
+                          );
+                        },
                       ),
                     ),
                     Container(
@@ -73,7 +82,13 @@ class _SyanaMenuMonitoringState extends State<SyanaMenuMonitoring> {
                         textColor: AppTheme.white,
                         child:
                             const Text('Sales', style: TextStyle(fontSize: 25)),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SyanaMonitoringSales()),
+                          );
+                        },
                       ),
                     ),
                     Container(
