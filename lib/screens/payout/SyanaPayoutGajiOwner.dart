@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:syana/screens/sdm/SyanaMenuMonitoring.dart';
 import 'package:syana/utils/AppTheme.dart';
 
-class SyanaMonitoringSales extends StatefulWidget {
+class SyanaPayoutGajiOwner extends StatefulWidget {
   @override
-  _SyanaMonitoringSalesState createState() => _SyanaMonitoringSalesState();
+  _SyanaPayoutGajiOwnerState createState() => _SyanaPayoutGajiOwnerState();
 }
 
-class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
+class _SyanaPayoutGajiOwnerState extends State<SyanaPayoutGajiOwner> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +18,7 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
           child: Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   child: Row(
@@ -28,20 +27,14 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                         icon: Icon(Icons.arrow_back),
                         iconSize: 40.0,
                         color: Colors.white,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SyanaMenuMonitoring()),
-                          );
-                        },
+                        onPressed: (){},
                       ),
                     ],
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(top: 40.0)),
                 Container(
-                  child: Text('Sales', style: TextStyle(
+                  child: Text('Payout', style: TextStyle(
                     color: Colors.white,
                     fontSize: 32.0,
                     fontWeight: FontWeight.bold
@@ -79,7 +72,7 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order : 45', style: TextStyle(
+                        subtitle: Text('Gaji Harian : Rp 3.000.000', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
@@ -88,12 +81,12 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                         color: Colors.white,
                       ),
                       ListTile(
-                        title: Text('Nina Choi', style: TextStyle(
+                        title: Text('Adi Wong', style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order : 80', style: TextStyle(
+                        subtitle: Text('Gaji Harian : Rp 2.000.000', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
@@ -102,95 +95,12 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                         color: Colors.white,
                       ),
                       ListTile(
-                        title: Text('Alex King', style: TextStyle(
+                        title: Text('Clara', style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order : 20', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                        )),
-                      ),
-                      Divider(
-                        color: Colors.white,
-                      ),
-                      ListTile(
-                        title: Text('John Doe', style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0
-                        )),
-                        subtitle: Text('Jumlah Transaksi Order : 45', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                        )),
-                      ),
-                      Divider(
-                        color: Colors.white,
-                      ),
-                      ListTile(
-                        title: Text('Nina Choi', style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0
-                        )),
-                        subtitle: Text('Jumlah Transaksi Order : 80', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                        )),
-                      ),
-                      Divider(
-                        color: Colors.white,
-                      ),
-                      ListTile(
-                        title: Text('Alex King', style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0
-                        )),
-                        subtitle: Text('Jumlah Transaksi Order : 20', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                        )),
-                      ),
-                      Divider(
-                        color: Colors.white,
-                      ),ListTile(
-                        title: Text('John Doe', style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0
-                        )),
-                        subtitle: Text('Jumlah Transaksi Order : 45', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                        )),
-                      ),
-                      Divider(
-                        color: Colors.white,
-                      ),
-                      ListTile(
-                        title: Text('Nina Choi', style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0
-                        )),
-                        subtitle: Text('Jumlah Transaksi Order : 80', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 10.0,
-                        )),
-                      ),
-                      Divider(
-                        color: Colors.white,
-                      ),
-                      ListTile(
-                        title: Text('Alex King', style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0
-                        )),
-                        subtitle: Text('Jumlah Transaksi Order : 20', style: TextStyle(
+                        subtitle: Text('Gaji Harian : Rp 2.000.000', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
@@ -204,7 +114,7 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order : 45', style: TextStyle(
+                        subtitle: Text('Gaji Harian : Rp 3.000.000', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
@@ -213,12 +123,12 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                         color: Colors.white,
                       ),
                       ListTile(
-                        title: Text('Nina Choi', style: TextStyle(
+                        title: Text('Adi Wong', style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order : 80', style: TextStyle(
+                        subtitle: Text('Gaji Harian : Rp 2.000.000', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
@@ -227,12 +137,54 @@ class _SyanaMonitoringSalesState extends State<SyanaMonitoringSales> {
                         color: Colors.white,
                       ),
                       ListTile(
-                        title: Text('Alex King', style: TextStyle(
+                        title: Text('Clara', style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 18.0
                         )),
-                        subtitle: Text('Jumlah Transaksi Order : 20', style: TextStyle(
+                        subtitle: Text('Gaji Harian : Rp 2.000.000', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('John Doe', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Gaji Harian : Rp 3.000.000', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('Adi Wong', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Gaji Harian : Rp 2.000.000', style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10.0,
+                        )),
+                      ),
+                      Divider(
+                        color: Colors.white,
+                      ),
+                      ListTile(
+                        title: Text('Clara', style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0
+                        )),
+                        subtitle: Text('Gaji Harian : Rp 2.000.000', style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
                         )),
