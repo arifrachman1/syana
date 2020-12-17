@@ -9,8 +9,6 @@ class SyanaMenuMonitoring extends StatefulWidget {
 class _SyanaMenuMonitoringState extends State<SyanaMenuMonitoring> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return Container();
   }
 }

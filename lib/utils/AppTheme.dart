@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 //theme===============================================
-class AppTheme{
+class AppTheme {
   static var teal_light = Colors.teal[200];
   static var teal = Colors.teal;
   static var teal_dark = Colors.teal[700];
@@ -20,8 +20,6 @@ class AppTheme{
   static var green = Colors.green;
 
   static var orange_light = Colors.orange[200];
-
-
 
   //background aplikasi
   static appBackground() {
@@ -45,9 +43,10 @@ class AppTheme{
     );
   }
 
-	static popupRoundedBackground() {
-		return RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25.0)));
-	}
+  static popupRoundedBackground() {
+    return RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(25.0)));
+  }
 
 //style input
   static inputDecoration() {
@@ -158,6 +157,4 @@ class AppTheme{
       borderRadius: BorderRadius.circular(7),
     );
   }
-
-
 }
