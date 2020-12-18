@@ -197,7 +197,7 @@ class EcommerceState extends State<SyanaEcommerce> {
                         aspectRatio: Dimens.buttonRatio(),
                         child: RaisedButton(
                           child: Text(
-                            'Waiting List Transactions',
+                            'Summary',
                             textAlign: TextAlign.center,
                           ),
                           shape: AppTheme.roundButton(),

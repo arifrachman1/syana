@@ -7,6 +7,14 @@ class SyanaPayoutMonitoringOwner extends StatefulWidget {
       _SyanaPayoutMonitoringOwnerState();
 }
 
+final TextEditingController _controller = new TextEditingController();
+var items = [
+  'trading charter',
+  'Being a lot smarter',
+  'Being a self-starter',
+  'Placed in charge of trading charter',
+];
+
 class _SyanaPayoutMonitoringOwnerState
     extends State<SyanaPayoutMonitoringOwner> {
   @override
@@ -15,7 +23,7 @@ class _SyanaPayoutMonitoringOwnerState
       body: Container(
         decoration: AppTheme.appBackground(),
         child: Container(
-          padding: EdgeInsets.only(left: 15, right: 20, top: 50),
+          padding: EdgeInsets.only(left: 20, right: 20, top: 50),
           child: Flexible(
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,9 +40,9 @@ class _SyanaPayoutMonitoringOwnerState
                   ],
                 ),
               ),
-              Padding(padding: EdgeInsets.only(top: 25.0)),
+              Padding(padding: EdgeInsets.only(top: 20.0)),
               Container(
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 15),
                 child: Text(
                   'Payout',
                   textAlign: TextAlign.left,
@@ -75,12 +83,188 @@ class _SyanaPayoutMonitoringOwnerState
                     children: <Widget>[
                       Padding(padding: EdgeInsets.only(top: 5.0)),
                       Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.green,
-                            width: 276,
+                        width: 350,
+                        height: 450,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                          borderRadius: BorderRadius.circular(12),
+                          color: AppTheme.teal,
+                          elevation: 5,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(20, 20, 20, 10),
+                                child: Container(
+                                  child: Text(
+                                    'Adi Wong',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                                child: Container(
+                                  child: Text(
+                                    'Gaji Harian : Rp 20.000.00',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(20, 0, 20, 5),
+                                child: Container(
+                                  child: Text(
+                                    'Loyalti : Rp 1.000.00',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //button
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: 20.0, left: 20, right: 210),
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  onPressed: () {},
+                                  color: AppTheme.btn_success,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        Text(
+                                          'Tambah Bonus',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //Pilih Kategori
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(20, 30, 20, 5),
+                                child: Container(
+                                    child: TextField(
+                                  autofocus: false,
+                                  enableInteractiveSelection: false,
+                                  // focusNode: FocusNode(),
+                                  controller: _controller,
+                                  style: TextStyle(
+                                      fontSize: 18.0, color: Colors.black),
+                                  decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    hintText: "Pilih Kategori",
+                                    contentPadding: EdgeInsets.fromLTRB(
+                                        20.0, 15.0, 20.0, 15.0),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    border: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    suffixIcon: PopupMenuButton<String>(
+                                      icon: const Icon(Icons.arrow_drop_down),
+                                      onSelected: (String value) {
+                                        _controller.text = value;
+                                      },
+                                      itemBuilder: (BuildContext context) {
+                                        return items.map<PopupMenuItem<String>>(
+                                            (String value) {
+                                          return new PopupMenuItem(
+                                              child: new Text(value),
+                                              value: value);
+                                        }).toList();
+                                      },
+                                    ),
+                                  ),
+                                )),
+                              ),
+                              //Tulis Nominal
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
+                                child: Container(
+                                  child: TextField(
+                                    autofocus: false,
+                                    style: TextStyle(
+                                        fontSize: 18.0, color: Colors.black),
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.white,
+                                      hintText: 'Isi Nominal',
+                                      contentPadding: const EdgeInsets.only(
+                                          left: 20.0, bottom: 8.0, top: 8.0),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      enabledBorder: UnderlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.white),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              //Button Approve
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: 40.0,
+                                  left: 270,
+                                ),
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  onPressed: () {},
+                                  color: AppTheme.btn_success,
+                                  child: Text(
+                                    'Approve',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

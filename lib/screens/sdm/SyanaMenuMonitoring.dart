@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syana/screens/sdm/SyanaMonitoringPackaging.dart';
 import 'package:syana/screens/sdm/SyanaMonitoringSales.dart';
+import 'package:syana/screens/sdm/SyanaPurchasingMonitoring.dart';
 import 'package:syana/utils/AppTheme.dart';
 
 class SyanaMenuMonitoring extends StatefulWidget {
@@ -48,40 +49,45 @@ class _SyanaMenuMonitoringState extends State<SyanaMenuMonitoring> {
                       alignment: Alignment.topLeft,
                       margin: EdgeInsets.all(10),
                       child: Text('Monitoring',
-                            style: TextStyle(fontSize: 25, color: Colors.white)),
-                      
+                          style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold)),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.13,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.09,
                       margin: EdgeInsets.all(20.0),
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
-                        color: const Color(0xff459f7c),
+                        color: AppTheme.teal,
                         textColor: AppTheme.white,
                         child: const Text('Packaging',
-                            style: TextStyle(fontSize: 25)),
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold)),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SyanaMonitoringPackaging()),
+                                builder: (context) =>
+                                    SyanaMonitoringPackaging()),
                           );
                         },
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.13,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.09,
                       margin: EdgeInsets.all(20.0),
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
-                        color: const Color(0xff459f7c),
+                        color: AppTheme.teal,
                         textColor: AppTheme.white,
-                        child:
-                            const Text('Sales', style: TextStyle(fontSize: 25)),
+                        child: const Text('Sales',
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold)),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -92,17 +98,25 @@ class _SyanaMenuMonitoringState extends State<SyanaMenuMonitoring> {
                       ),
                     ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      height: MediaQuery.of(context).size.height * 0.13,
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.09,
                       margin: EdgeInsets.all(20.0),
                       child: RaisedButton(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8)),
-                        color: const Color(0xff459f7c),
+                        color: AppTheme.teal,
                         textColor: AppTheme.white,
                         child: const Text('Purchasing',
-                            style: TextStyle(fontSize: 25)),
-                        onPressed: () {},
+                            style: TextStyle(
+                                fontSize: 25, fontWeight: FontWeight.bold)),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    SyanaPurchasingMonitoring()),
+                          );
+                        },
                       ),
                     ),
                   ],

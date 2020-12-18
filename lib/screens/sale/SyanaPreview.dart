@@ -45,84 +45,88 @@ class PreviewState extends State<Preview> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body: Container(
-        decoration: AppTheme.appBackground(),
-        height: MediaQuery.of(context).size.height,
-        child: Container(
-          margin: EdgeInsets.only(top: 50.0),
-          padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Text(
-                      "No. Resi",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.white,
-                      ),
-                    ),
-                  ),
-                  CustomTextInput.getCustomTextField(
-                    context: context,
-                    controller: _airwayBillController,
-                    textInputType: TextInputType.text,
-                    isPasswordField: false,
-                    enabled: false,
-                    hint: "No. Resi",
-                  ),
-                  SizedBox(height: 15),
-                  Container(
-                    margin: EdgeInsets.only(top: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Container(
+              decoration: AppTheme.appBackground(),
+              height: MediaQuery.of(context).size.height,
+              child: Container(
+                margin: EdgeInsets.only(top: 50.0),
+                padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          width: Dimens.buttonWidth(context),
-                          child: AspectRatio(
-                            aspectRatio: Dimens.buttonRatio(),
-                            child: RaisedButton(
-                              child: Text('Kembali'),
-                              shape: AppTheme.roundButton(),
-                              color: AppTheme.btn_default,
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                          child: Text(
+                            "No. Resi",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.white,
                             ),
                           ),
                         ),
+                        CustomTextInput.getCustomTextField(
+                          context: context,
+                          controller: _airwayBillController,
+                          textInputType: TextInputType.text,
+                          isPasswordField: false,
+                          enabled: false,
+                          hint: "No. Resi",
+                        ),
+                        SizedBox(height: 15),
                         Container(
-                          width: Dimens.buttonWidth(context),
-                          child: AspectRatio(
-                            aspectRatio: Dimens.buttonRatio(),
-                            child: RaisedButton(
-                              child: Text('Lanjut'),
-                              shape: AppTheme.roundButton(),
-                              color: AppTheme.yellow,
-                              onPressed: () async {
-                                Navigator.of(context)
-                                    .push(MaterialPageRoute(builder: (_) {
-                                  return CustomerInput(tipe: 2);
-                                }));
-                              },
-                            ),
+                          margin: EdgeInsets.only(top: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: Dimens.buttonWidth(context),
+                                child: AspectRatio(
+                                  aspectRatio: Dimens.buttonRatio(),
+                                  child: RaisedButton(
+                                    child: Text('Kembali'),
+                                    shape: AppTheme.roundButton(),
+                                    color: AppTheme.btn_default,
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: Dimens.buttonWidth(context),
+                                child: AspectRatio(
+                                  aspectRatio: Dimens.buttonRatio(),
+                                  child: RaisedButton(
+                                    child: Text('Lanjut'),
+                                    shape: AppTheme.roundButton(),
+                                    color: AppTheme.yellow,
+                                    onPressed: () async {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(builder: (_) {
+                                        return CustomerInput(tipe: 2);
+                                      }));
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

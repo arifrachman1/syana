@@ -16,8 +16,14 @@ class WaitingList extends StatefulWidget {
 class WaitingListState extends State<WaitingList> {
   bool isLoading = false;
 
+  String searchFilter = "";
+
   SaleController _saleController;
   List<SaleModel> waitingList = new List();
+  List<SaleModel> filteredList = new List();
+  List<SaleModel> filteredListAll = new List();
+
+  TextEditingController _searchController = new TextEditingController();
 
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
@@ -40,53 +46,124 @@ class WaitingListState extends State<WaitingList> {
     _saleController = new SaleController();
 
     _init();
+    _initSearch();
   }
 
   _init() async {
     waitingList.clear();
+
     _saleController.getWaitingListOrder(
         context, setLoadingState, setWaitingList);
   }
 
-  setWaitingList(waitingList) {
-    if (waitingList is List && waitingList.isNotEmpty) {
+  _initSearch() async {
+    await _saleController.getWaitingListOrder(
+        context, setLoadingState, setWaitingList);
+
+    if (this.mounted) {
       setState(() {
-        this.waitingList = waitingList;
+        filteredList = waitingList;
       });
+    }
+
+    _searchController.addListener(() {
+      if (_searchController.text.isEmpty) {
+        setState(() {
+          searchFilter = "";
+          filteredList = waitingList;
+        });
+      } else {
+        setState(() {
+          searchFilter = _searchController.text;
+        });
+      }
+    });
+  }
+
+  setWaitingList(data) {
+    if (data is List<SaleModel> && data.isNotEmpty) {
+      if (this.mounted) {
+        setState(() {
+          waitingList = data;
+          filteredList = waitingList;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    if (searchFilter.isNotEmpty) {
+      List<SaleModel> temp = new List();
+
+      if (filteredList.isEmpty) {
+        filteredList = filteredListAll;
+      }
+
+      filteredList.forEach((value) {
+        if (value.transactionNumber
+            .toString()
+            .toLowerCase()
+            .contains(searchFilter.toLowerCase())) {
+          temp.add(value);
+          filteredListAll = temp;
+        }
+      });
+      filteredList = temp;
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightGreen[200],
         title: Text("Waiting List Transaction"),
       ),
-      body: Container(
-        decoration: AppTheme.appBackground(),
-        child: Column(
-          children: [
-            Container(height: 15),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(right: 8, left: 8),
-                child: SmartRefresher(
-                  controller: _refreshController,
-                  enablePullDown: true,
-                  header: ClassicHeader(),
-                  onRefresh: () async {
-                    await Future.delayed(Duration(seconds: 1));
-                    _init();
-                    _refreshController.refreshCompleted();
-                  },
-                  child: isLoading
-                      ? Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : ListView.builder(
-                          itemCount: waitingList.length,
+      body: SmartRefresher(
+        controller: _refreshController,
+        enablePullDown: true,
+        header: ClassicHeader(),
+        onRefresh: () async {
+          await Future.delayed(Duration(seconds: 1));
+          _init();
+          _refreshController.refreshCompleted();
+        },
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: AppTheme.appBackground(),
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          padding: EdgeInsets.only(left: 10),
+                          decoration: AppTheme.inputDecorationShadow(),
+                          child: TextField(
+                            controller: _searchController,
+                            textInputAction: TextInputAction.search,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Cari Transaksi',
+                              icon: Icon(
+                                Icons.search,
+                                color: AppTheme.teal,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        child: ListView.builder(
+                          padding: EdgeInsets.all(0),
+                          shrinkWrap: true,
+                          itemCount: filteredList.length,
                           itemBuilder: (context, index) {
                             return InkWell(
                               child: _waitingList(index),
@@ -96,11 +173,11 @@ class WaitingListState extends State<WaitingList> {
                             );
                           },
                         ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -137,12 +214,13 @@ class WaitingListState extends State<WaitingList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "No. Resi : " + waitingList[index].transactionNumber ?? "-",
+                    "No. Resi : " + filteredList[index].transactionNumber ??
+                        "-",
                     softWrap: true,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 5),
-                  waitingList[index].status == "0"
+                  filteredList[index].status == "0"
                       ? Text(
                           "Status : " + "Menunggu Dipacking",
                         )
@@ -173,7 +251,7 @@ class WaitingListState extends State<WaitingList> {
                       switch (value) {
                         case 2:
                           var result = await _saleController.setCancelOrder(
-                              context, setLoadingState, waitingList[index].id);
+                              context, setLoadingState, filteredList[index].id);
 
                           log(result.toString());
 
