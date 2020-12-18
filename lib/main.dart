@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:syana/screens/sdm/SyanaMenuMonitoring.dart';
+import 'package:syana/screens/credentials/SplashScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme:
           ThemeData(primarySwatch: Colors.green, highlightColor: Colors.green),
-      home: SyanaMenuMonitoring(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
