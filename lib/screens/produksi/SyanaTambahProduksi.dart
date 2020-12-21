@@ -40,6 +40,7 @@ class _SyanaTambahProduksiState extends State<SyanaTambahProduksi> {
                 style: TextStyle(
                   fontSize: 30,
                   color: AppTheme.white,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ),

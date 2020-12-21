@@ -39,6 +39,7 @@ class _SyanaMenuHistoryProduksiOwnerState
                 style: TextStyle(
                   fontSize: 30,
                   color: AppTheme.white,
+                  fontWeight: FontWeight.bold
                 ),
               ),
             ),

@@ -44,6 +44,7 @@ class _SyanaMenuProduksiState extends State<SyanaMenuProduksi> {
                 style: TextStyle(
                   fontSize: 30,
                   color: AppTheme.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
